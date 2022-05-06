@@ -1,0 +1,9 @@
+.markdown-body {
+  background-image: url('./demo.png');
+  background-repeat: repeat-y;
+  background-size: 100%;
+}
+
+.markdown-body * {
+  color: green;
+}

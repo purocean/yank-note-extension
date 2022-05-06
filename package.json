@@ -1,0 +1,14 @@
+{
+  "name": "yank-note-extension",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Extension System for Yank Note",
+  "keywords": [],
+  "author": "purocean",
+  "license": "AGPL-3.0",
+  "repository": "git@github.com:purocean/yank-note-extension-example.git",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

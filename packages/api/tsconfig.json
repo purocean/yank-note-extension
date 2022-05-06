@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "target": "ES2015",
+    "module": "ESNext",
+    "declaration": true,
+    "declarationMap": false,
+    "declarationDir": "./types",
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "lib",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "typeRoots": ["node_modules/@types", "global.d.ts"],
+    "baseUrl": ".",
+    "paths": {
+      "vue": ["src/types/third-party/vue"],
+      "vuex": ["src/types/third-party/vuex"],
+      "dayjs": ["src/types/third-party/dayjs"],
+      "crypto-js": ["src/types/third-party/crypto-js"],
+      "turndown": ["src/types/third-party/turndown"],
+      "juice": ["src/types/third-party/juice"],
+      "markdown-it": ["src/types/third-party/markdown-it"],
+      "lodash-es": ["src/types/third-party/lodash-es"],
+      "pako": ["src/types/third-party/pako"],
+      "dom-to-image": ["src/types/third-party/dom-to-image"],
+      "sortablejs": ["src/types/third-party/sortablejs"],
+      "mime": ["src/types/third-party/mime/Mime.ts"],
+      "lodash/*": ["src/types/third-party/lodash/*"],
+      "@vue/*": ["src/types/third-party/vue/*"],
+      "@share/*": ["src/types/share/*"],
+      "@fe/*": ["src/types/renderer/*"],
+      "@main/*": ["src/types/main/*"],
+      "@/*": ["src/*"]
+    },
+    "plugins": [
+      { "transform": "@zerollup/ts-transform-paths" }
+    ]
+  },
+  "exclude": ["node_modules", "types", "lib", "docs"],
+  "compileOnSave": false
+}

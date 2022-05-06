@@ -1,0 +1,3 @@
+[submodule "yn"]
+	path = yn
+	url = https://github.com/purocean/yn.git

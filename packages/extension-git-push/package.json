@@ -1,0 +1,55 @@
+{
+  "name": "yank-note-extension-git-push",
+  "version": "1.0.3",
+  "displayName": "Git Push",
+  "displayName_ZH-CN": "Git 推送",
+  "description": "Run Git commit and push to remote repository. Note: This plugin is not available for Mac App Store downloaded Yank Note.",
+  "description_ZH-CN": "运行 Git 提交并推送到远程仓库。注意：此插件不适用于 Mac App Store 中下载的 Yank Note。",
+  "keywords": [],
+  "author": "purocean",
+  "license": "AGPL-3.0",
+  "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/git-push",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/purocean/yank-note-extension.git"
+  },
+  "main": "./dist/index.js",
+  "icon": "./icon.png",
+  "engines": {
+    "node": ">=14.6.0",
+    "yank-note": "^3.29.0"
+  },
+  "files": [
+    "dist",
+    "types",
+    "icon.png"
+  ],
+  "scripts": {
+    "link-extension": "link-yn-extension",
+    "unlink-extension": "link-yn-extension --unlink",
+    "dev": "vite build --watch",
+    "build": "vue-tsc --noEmit && vite build",
+    "lint": "vue-tsc --noEmit && yarn run eslint '{src,__tests__}/**/*.{js,ts,tsx,vue}'",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.2.1",
+    "@rollup/plugin-replace": "^4.0.0",
+    "@vitejs/plugin-vue": "^2.3.2",
+    "@vue/eslint-config-standard": "^6.1.0",
+    "@vue/eslint-config-typescript": "^10.0.0",
+    "conventional-changelog-cli": "^2.2.2",
+    "dayjs": "^1.11.1",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-vue": "^8.7.1",
+    "typescript": "^4.6.4",
+    "vite": "^2.9.8",
+    "vue": "^3.2.33",
+    "vue-tsc": "^0.34.11",
+    "yank-note-api": "workspace:3.29.8"
+  }
+}

@@ -1,0 +1,1 @@
+import '@fe/others/demo';
