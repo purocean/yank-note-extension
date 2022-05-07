@@ -50,6 +50,6 @@
     "vite": "^2.9.8",
     "vue": "^3.2.33",
     "vue-tsc": "^0.34.11",
-    "yank-note-api": "workspace:3.29.8"
+    "yank-note-api": "workspace:3.29.9"
   }
 }
