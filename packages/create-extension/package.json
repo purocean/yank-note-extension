@@ -1,31 +1,31 @@
 {
-    "name": "create-yank-note-extension",
-    "version": "1.0.1",
-    "license": "MIT",
-    "author": "purocean",
-    "bin": {
-      "create-yank-note-extension": "index.js"
-    },
-    "files": [
-      "index.js",
-      "template-*"
-    ],
-    "main": "index.js",
-    "engines": {
-      "node": ">=14.6.0"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/purocean/yank-note-extension.git",
-      "directory": "packages/create-extension"
-    },
-    "bugs": {
-      "url": "https://github.com/purocean/yank-note-extension/issues"
-    },
-    "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/create-extension#readme",
-    "dependencies": {
-      "kolorist": "^1.5.1",
-      "minimist": "^1.2.6",
-      "prompts": "^2.4.2"
-    }
+  "name": "create-yank-note-extension",
+  "version": "1.0.2",
+  "license": "MIT",
+  "author": "purocean",
+  "bin": {
+    "create-yank-note-extension": "index.js"
+  },
+  "files": [
+    "index.js",
+    "template-*"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=14.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/purocean/yank-note-extension.git",
+    "directory": "packages/create-extension"
+  },
+  "bugs": {
+    "url": "https://github.com/purocean/yank-note-extension/issues"
+  },
+  "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/create-extension#readme",
+  "dependencies": {
+    "kolorist": "^1.5.1",
+    "minimist": "^1.2.6",
+    "prompts": "^2.4.2"
   }
+}
