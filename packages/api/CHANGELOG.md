@@ -1,3 +1,11 @@
+## 3.29.10 (2022-05-07)
+
+
+### Bug Fixes
+
+* fix api types ([9e7cfe9](https://github.com/purocean/yank-note-extension/commit/9e7cfe95f654ce2133d7ff9b9f2f1deccb1a0639))
+
+
 ## 3.29.9 (2022-05-07)
 
 
