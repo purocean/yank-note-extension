@@ -1,45 +1,9 @@
-import type { RegistryHostname } from '@fe/types';
-export declare type Compatible = {
-    value: boolean;
-    reason: string;
-};
-export declare type LoadStatus = {
-    version?: string;
-    themes: boolean;
-    plugin: boolean;
-};
-export interface Extension {
-    id: string;
-    displayName: string;
-    description: string;
-    icon: string;
-    homepage: string;
-    license: string;
-    author: {
-        name: string;
-        email?: string;
-        url?: string;
-    };
-    version: string;
-    themes: {
-        name: string;
-        css: string;
-    }[];
-    compatible: Compatible;
-    main: string;
-    enabled?: boolean;
-    installed: boolean;
-    origin: 'official' | 'registry' | 'unknown';
-    dist: {
-        tarball: string;
-        unpackedSize: number;
-    };
-}
+import type { Extension, ExtensionCompatible, ExtensionLoadStatus, RegistryHostname } from '@fe/types';
 export declare const registries: RegistryHostname[];
-export declare function getLoadStatus(id: string): LoadStatus;
+export declare function getLoadStatus(id: string): ExtensionLoadStatus;
 export declare function getCompatible(engines?: {
     'yank-note': string;
-}): Compatible;
+}): ExtensionCompatible;
 export declare function readInfoFromJson(json: any): Omit<Extension, 'installed'> | null;
 export declare function getInstalledExtension(id: string): Promise<Extension | null>;
 export declare function getInstalledExtensions(): Promise<Extension[]>;

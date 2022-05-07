@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
-cd yn;
+cd ../../yn;
 git checkout develop;
 git pull;
 yarn;
@@ -27,12 +27,15 @@ cp -r node_modules/@types/pako ../packages/api/src/types/third-party/pako;
 cp -r node_modules/@types/mime ../packages/api/src/types/third-party/mime;
 cp -r node_modules/@types/sortablejs ../packages/api/src/types/third-party/sortablejs;
 cp -r node_modules/@types/dom-to-image ../packages/api/src/types/third-party/dom-to-image;
+# cp -r node_modules/@types/semver ../packages/api/src/types/third-party/semver;
 mkdir -p ../packages/api/src/types/third-party/dayjs;
 cp node_modules/dayjs/index.d.ts ../packages/api/src/types/third-party/dayjs/index.d.ts;
 mkdir -p ../packages/api/src/types/third-party/dayjs;
 cp node_modules/dayjs/index.d.ts ../packages/api/src/types/third-party/dayjs/index.d.ts;
 mkdir -p ../packages/api/src/types/third-party/juice;
 cp node_modules/juice/juice.d.ts ../packages/api/src/types/third-party/juice/index.d.ts;
+mkdir -p ../packages/api/src/types/third-party/monaco-editor;
+cp node_modules/monaco-editor/esm/vs/editor/editor.api.d.ts ../packages/api/src/types/third-party/monaco-editor/index.d.ts
 
 cd ../packages/api/src/types;
 rm -r main;

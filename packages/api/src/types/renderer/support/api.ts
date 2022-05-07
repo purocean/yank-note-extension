@@ -153,6 +153,7 @@ export declare function rpc(code: string): Promise<any>;
 export declare function fetchInstalledExtensions(): Promise<{
     id: string;
     enabled: boolean;
+    isDev?: boolean;
 }[]>;
 export declare function installExtension(id: string, url: string): Promise<any>;
 export declare function uninstallExtension(id: string): Promise<any>;

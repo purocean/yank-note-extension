@@ -102,6 +102,46 @@ export declare type RenderEnv = {
     attributes?: Record<string, any>;
     tokens: Token[];
 };
+export declare type ExtensionCompatible = {
+    value: boolean;
+    reason: string;
+};
+export declare type ExtensionLoadStatus = {
+    version?: string;
+    themes: boolean;
+    plugin: boolean;
+    style: boolean;
+    activationTime: number;
+};
+export interface Extension {
+    id: string;
+    displayName: string;
+    description: string;
+    icon: string;
+    homepage: string;
+    license: string;
+    author: {
+        name: string;
+        email?: string;
+        url?: string;
+    };
+    version: string;
+    themes: {
+        name: string;
+        css: string;
+    }[];
+    compatible: ExtensionCompatible;
+    main: string;
+    style: string;
+    enabled?: boolean;
+    installed: boolean;
+    origin: 'official' | 'registry' | 'unknown';
+    dist: {
+        tarball: string;
+        unpackedSize: number;
+    };
+    isDev?: boolean;
+}
 export declare type BuildInSettings = {
     'repos': Repo[];
     'theme': ThemeName;
@@ -300,6 +340,9 @@ export declare type BuildInHookTypes = {
     };
     SETTING_BEFORE_WRITE: {
         settings: BuildInSettings;
+    };
+    EXTENSION_READY: {
+        extensions: Extension[];
     };
 };
 export declare type BuildInIOCTypes = {
