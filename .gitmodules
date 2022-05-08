@@ -1,3 +1,6 @@
 [submodule "yn"]
 	path = yn
 	url = https://github.com/purocean/yn.git
+[submodule "packages/extension-drawio/drawio"]
+	path = packages/extension-drawio/drawio
+	url = https://github.com/jgraph/drawio.git

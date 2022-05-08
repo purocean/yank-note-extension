@@ -1,0 +1,12 @@
+.markdown-view .markdown-body .drawio-wrapper .drawio-action {
+  position: absolute;
+  right: 15px;
+  top: 2px;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+.markdown-view .markdown-body .drawio-wrapper:hover .drawio-action {
+  opacity: 1;
+}
