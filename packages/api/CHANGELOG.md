@@ -1,3 +1,11 @@
+## 3.29.13 (2022-05-08)
+
+
+### Bug Fixes
+
+* fix bugs ([0c70c0e](https://github.com/purocean/yank-note-extension/commit/0c70c0e996c0b1572ff83ece6d458047e5151751))
+
+
 ## 3.29.12 (2022-05-08)
 
 ### Features
