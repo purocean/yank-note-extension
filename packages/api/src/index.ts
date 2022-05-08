@@ -28,7 +28,7 @@ export function registerPlugin (plugin: Plugin<Ctx>) {
 }
 
 export function _t (path: MsgPath, ...args: string[]): string {
-  return globalThis.i18n.t(path, ...args)
+  return ctx.i18n.t(path, ...args)
 }
 
 export const YN_LIBS = {
