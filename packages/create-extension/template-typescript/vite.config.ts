@@ -1,10 +1,13 @@
 import * as path from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { YN_LIBS } from 'yank-note-api'
+import { YN_LIBS, BASE_PATH_PREFIX } from 'yank-note-api'
+
+const OUT_DIR = 'dist'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: path.join(BASE_PATH_PREFIX, process.env.npm_package_name, OUT_DIR),
   plugins: [vue()],
   define: {
     __EXTENSION_VERSION__: JSON.stringify(process.env.npm_package_version),
@@ -23,6 +26,7 @@ export default defineConfig({
       name: process.env.npm_package_name.replace(/[^a-zA-Z0-9_]/g, '_'),
       fileName: () => 'index.js',
     },
+    outDir: OUT_DIR,
     rollupOptions: {
       external: Object.keys(YN_LIBS),
       output: {

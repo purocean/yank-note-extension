@@ -1,5 +1,5 @@
 .markdown-body {
-  background-image: url('./demo.png');
+  background-image: url('../dist/demo.png');
   background-repeat: repeat-y;
   background-size: 100%;
 }

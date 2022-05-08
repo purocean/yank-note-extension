@@ -19,10 +19,11 @@ onBeforeMount(() => {
 </script>
 
 <template>
-<div>
+<div class="yank-note-extension-example">
   <div>Id: {{id}}</div>
   <div>Version: {{version}}</div>
   <div>Time: {{time}}</div>
+  <img src="/demo.png">
 </div>
 </template>
 

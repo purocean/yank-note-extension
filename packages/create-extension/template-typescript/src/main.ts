@@ -1,6 +1,8 @@
 import { registerPlugin } from 'yank-note-api'
 import HelloWorld from '@/components/HelloWorld.vue'
 
+import './style.css'
+
 const extensionName = __EXTENSION_ID__
 
 registerPlugin({
