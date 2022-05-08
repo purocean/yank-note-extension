@@ -1,6 +1,6 @@
 {
   "name": "yank-note-extension-drawio",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "displayName": "Drawio",
   "description": "Drawio integration for Yank Note",
   "displayName_ZH-CN": "Drawio",
@@ -15,7 +15,9 @@
   },
   "main": "./dist/index.js",
   "style": "./dist/style.css",
-  "icon": "./icon.svg",
+  "icon": "https://cdn.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/icon.svg",
+  "readmeUrl": "https://cdn.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/README.md",
+  "changelogUrl": "https://cdn.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/CHANGLOG.md",
   "engines": {
     "node": ">=14.6.0",
     "yank-note": "^3.29.0"
