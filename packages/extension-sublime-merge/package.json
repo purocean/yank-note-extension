@@ -8,7 +8,11 @@
   "author": "Yank Note",
   "license": "MIT",
   "keywords": [],
-  "homepage": "https://github.com/purocean/yn",
+  "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/extension-sublime-merge",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/purocean/yank-note-extension.git"
+  },
   "main": "./dist/index.js",
   "icon": "./icon.png",
   "engines": {

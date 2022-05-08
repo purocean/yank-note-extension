@@ -6,9 +6,9 @@
   "description": "Run Git commit and push to remote repository. Note: This plugin is not available for Mac App Store downloaded Yank Note.",
   "description_ZH-CN": "运行 Git 提交并推送到远程仓库。注意：此插件不适用于 Mac App Store 中下载的 Yank Note。",
   "keywords": [],
-  "author": "purocean",
+  "author": "Yank Note",
   "license": "AGPL-3.0",
-  "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/git-push",
+  "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/extension-git-push",
   "repository": {
     "type": "git",
     "url": "https://github.com/purocean/yank-note-extension.git"

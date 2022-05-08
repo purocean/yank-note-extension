@@ -1,4 +1,4 @@
-# Git Push
+# Git Push Extension
 
 Run Git commit and push to remote repository.
 
