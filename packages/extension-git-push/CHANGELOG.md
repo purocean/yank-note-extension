@@ -1,3 +1,7 @@
+## [1.1.2](https://github.com/purocean/yank-note-extension/compare/extension-git-push-1.1.1...extension-git-push-1.1.2) (2022-05-08)
+
+
+
 # 1.1.1 (2022-05-07)
 
 
