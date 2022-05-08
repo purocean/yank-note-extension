@@ -22,8 +22,13 @@ export interface Ctx extends _Ctx {
 }
 
 export const ctx: Ctx = globalThis.ctx
+
 export function registerPlugin (plugin: Plugin<Ctx>) {
   globalThis.registerPlugin(plugin)
+}
+
+export function _t (path: MsgPath, ...args: string[]): string {
+  return globalThis.i18n.t(path, ...args)
 }
 
 export const YN_LIBS = {
@@ -40,3 +45,5 @@ export const YN_LIBS = {
   'dom-to-image': 'ctx.lib.domtoimage',
   pako: 'ctx.lib.pako',
 }
+
+export const BASE_PATH_PREFIX = '/extensions/'
