@@ -6,7 +6,7 @@
   "displayName_ZH-CN": "Drawio",
   "description_ZH-CN": "Drawio 和 Yank Note 的集成",
   "author": "Yank Note",
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "keywords": [],
   "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/extension-drawio",
   "repository": {

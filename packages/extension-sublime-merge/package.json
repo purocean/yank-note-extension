@@ -6,7 +6,7 @@
   "displayName_ZH-CN": "Sublime Merge",
   "description_ZH-CN": "Sublime Merge 和 Yank Note 的集成",
   "author": "Yank Note",
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "keywords": [],
   "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/extension-sublime-merge",
   "repository": {
