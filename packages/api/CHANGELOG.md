@@ -1,3 +1,10 @@
+## 3.29.11 (2022-05-08)
+
+### Features
+
+* update api ([13eaef4](https://github.com/purocean/yank-note-extension/commit/13eaef46ad9ef64dd818b0bf508938f166238c3d))
+
+
 ## 3.29.10 (2022-05-07)
 
 

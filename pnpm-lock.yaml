@@ -74,7 +74,7 @@ importers:
       vite: ^2.9.8
       vue: ^3.2.33
       vue-tsc: ^0.34.11
-      yank-note-api: workspace:3.29.10
+      yank-note-api: workspace:3.29.11
     devDependencies:
       '@rollup/plugin-node-resolve': 13.2.1
       '@rollup/plugin-replace': 4.0.0
@@ -112,7 +112,7 @@ importers:
       vite: ^2.9.8
       vue: ^3.2.33
       vue-tsc: ^0.34.11
-      yank-note-api: workspace:^3.29.10
+      yank-note-api: workspace:^3.29.11
     devDependencies:
       '@rollup/plugin-node-resolve': 13.3.0
       '@rollup/plugin-replace': 4.0.0
