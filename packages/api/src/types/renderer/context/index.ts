@@ -26,7 +26,10 @@ import * as setting from '@fe/services/setting';
 import * as i18n from '@fe/services/i18n';
 import * as controlCenter from '@fe/services/control-center';
 import * as lib from './lib';
+import * as components from './components';
 declare const ctx: {
+    lib: typeof lib;
+    components: typeof components;
     ioc: typeof ioc;
     base: typeof base;
     api: typeof api;
@@ -76,7 +79,6 @@ declare const ctx: {
     embed: typeof embed;
     setting: typeof setting;
     i18n: typeof i18n;
-    lib: typeof lib;
     env: typeof env;
     utils: typeof utils;
     ui: {

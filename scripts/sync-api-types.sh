@@ -2,7 +2,7 @@
 
 set -e
 
-cd ../../yn;
+cd yn;
 git checkout develop;
 git pull;
 yarn;

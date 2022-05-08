@@ -1,5 +1,6 @@
 import type { Extension, ExtensionCompatible, ExtensionLoadStatus, RegistryHostname } from '@fe/types';
 export declare const registries: RegistryHostname[];
+export declare function getInstalledExtensionFilePath(id: string, filename: string): string;
 export declare function getLoadStatus(id: string): ExtensionLoadStatus;
 export declare function getCompatible(engines?: {
     'yank-note': string;
