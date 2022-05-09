@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeMount, onMounted, ref } from 'vue'
-import { ctx } from 'yank-note-api'
+import { ctx } from '@yank-note/runtime-api'
 const time = ref('')
 const version = __EXTENSION_VERSION__
 const id = __EXTENSION_ID__
