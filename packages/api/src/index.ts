@@ -31,6 +31,10 @@ export function _t (path: MsgPath, ...args: string[]): string {
   return ctx.i18n.t(path, ...args)
 }
 
+export function getExtensionBasePath (id: string): string {
+  return ctx.utils.path.join('/extensions/', id.replace(/\//g, '$'))
+}
+
 export const YN_LIBS = {
   vue: 'ctx.lib.vue',
   semver: 'ctx.lib.semver',
@@ -45,5 +49,3 @@ export const YN_LIBS = {
   'dom-to-image': 'ctx.lib.domtoimage',
   pako: 'ctx.lib.pako',
 }
-
-export const BASE_PATH_PREFIX = '/extensions/'
