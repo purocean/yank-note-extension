@@ -32,7 +32,7 @@ export function _t (path: MsgPath, ...args: string[]): string {
 }
 
 export function getExtensionBasePath (id: string): string {
-  return ctx.utils.path.join('/extensions/', id.replace(/\//g, '$'))
+  return '/extensions/' + id.replace(/\//g, '$')
 }
 
 export const YN_LIBS = {
