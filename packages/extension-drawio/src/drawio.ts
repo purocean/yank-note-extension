@@ -1,4 +1,4 @@
-import { ctx, _t, BASE_PATH_PREFIX } from '@yank-note/runtime-api'
+import { ctx, _t, getExtensionBasePath } from '@yank-note/runtime-api'
 import type Markdown from '@yank-note/runtime-api/types/types/third-party/markdown-it'
 import type { Doc } from '@yank-note/runtime-api/types/types/renderer/types'
 
@@ -19,7 +19,7 @@ type F = { repo?: string; path?: string; url?: string; content: string }
 
 const extensionId = __EXTENSION_ID__
 
-const BASE_URL = location.origin + join(BASE_PATH_PREFIX, extensionId, 'drawio/src/main/webapp')
+const BASE_URL = location.origin + join(getExtensionBasePath(extensionId), 'drawio/src/main/webapp')
 
 ctx.i18n.mergeLanguage('en', {
   [extensionId]: {

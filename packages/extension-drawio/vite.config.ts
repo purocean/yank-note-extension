@@ -1,7 +1,7 @@
 import * as path from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { YN_LIBS, BASE_PATH_PREFIX } from '@yank-note/runtime-api'
+import { YN_LIBS, getExtensionBasePath } from '@yank-note/runtime-api'
 import * as fs from 'fs'
 
 if (!fs.existsSync(path.resolve(__dirname, 'drawio/src/main/webapp/index.html'))) {
@@ -12,7 +12,7 @@ const OUT_DIR = 'dist'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: path.join(BASE_PATH_PREFIX, process.env.npm_package_name, OUT_DIR),
+  base: path.join(getExtensionBasePath(process.env.npm_package_name), OUT_DIR),
   plugins: [vue()],
   define: {
     __EXTENSION_VERSION__: JSON.stringify(process.env.npm_package_version),
