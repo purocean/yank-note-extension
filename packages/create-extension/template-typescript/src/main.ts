@@ -1,4 +1,4 @@
-import { registerPlugin } from 'yank-note-api'
+import { registerPlugin } from '@yank-note/runtime-api'
 import HelloWorld from '@/components/HelloWorld.vue'
 
 import './style.css'

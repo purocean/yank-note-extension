@@ -1,6 +1,6 @@
-import { ctx, _t, BASE_PATH_PREFIX } from 'yank-note-api'
-import type Markdown from 'yank-note-api/types/types/third-party/markdown-it'
-import type { Doc } from 'yank-note-api/types/types/renderer/types'
+import { ctx, _t, BASE_PATH_PREFIX } from '@yank-note/runtime-api'
+import type Markdown from '@yank-note/runtime-api/types/types/third-party/markdown-it'
+import type { Doc } from '@yank-note/runtime-api/types/types/renderer/types'
 
 const api = ctx.api
 const { t, useI18n } = ctx.i18n

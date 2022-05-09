@@ -1,4 +1,4 @@
-import { registerPlugin } from 'yank-note-api'
+import { registerPlugin } from '@yank-note/runtime-api'
 
 const extensionName = __EXTENSION_ID__
 

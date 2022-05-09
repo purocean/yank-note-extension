@@ -1,7 +1,7 @@
 import * as path from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { YN_LIBS, BASE_PATH_PREFIX } from 'yank-note-api'
+import { YN_LIBS, BASE_PATH_PREFIX } from '@yank-note/runtime-api'
 
 const OUT_DIR = 'dist'
 

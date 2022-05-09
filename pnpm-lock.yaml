@@ -63,6 +63,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
+      '@yank-note/runtime-api': workspace:^3.29.14
       conventional-changelog-cli: ^2.2.2
       dayjs: ^1.11.1
       eslint: ^7.32.0
@@ -74,13 +75,13 @@ importers:
       vite: ^2.9.8
       vue: ^3.2.33
       vue-tsc: ^0.34.11
-      yank-note-api: workspace:^3.29.13
     devDependencies:
       '@rollup/plugin-node-resolve': 13.3.0
       '@rollup/plugin-replace': 4.0.0
       '@vitejs/plugin-vue': 2.3.2_vite@2.9.8+vue@3.2.33
       '@vue/eslint-config-standard': 6.1.0_tixguow53u6a3uudjr4t2dcshu
       '@vue/eslint-config-typescript': 10.0.0_yzev4ryi2uowr3tzgilgj3i2em
+      '@yank-note/runtime-api': link:../api
       conventional-changelog-cli: 2.2.2
       dayjs: 1.11.2
       eslint: 7.32.0
@@ -92,7 +93,6 @@ importers:
       vite: 2.9.8
       vue: 3.2.33
       vue-tsc: 0.34.11_typescript@4.6.4
-      yank-note-api: link:../api
 
   packages/extension-git-push:
     specifiers:
@@ -101,6 +101,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
+      '@yank-note/runtime-api': workspace:3.29.14
       conventional-changelog-cli: ^2.2.2
       dayjs: ^1.11.1
       eslint: ^7.32.0
@@ -112,13 +113,13 @@ importers:
       vite: ^2.9.8
       vue: ^3.2.33
       vue-tsc: ^0.34.11
-      yank-note-api: workspace:3.29.13
     devDependencies:
       '@rollup/plugin-node-resolve': 13.2.1
       '@rollup/plugin-replace': 4.0.0
       '@vitejs/plugin-vue': 2.3.2_vite@2.9.8+vue@3.2.33
       '@vue/eslint-config-standard': 6.1.0_tixguow53u6a3uudjr4t2dcshu
       '@vue/eslint-config-typescript': 10.0.0_yzev4ryi2uowr3tzgilgj3i2em
+      '@yank-note/runtime-api': link:../api
       conventional-changelog-cli: 2.2.2
       dayjs: 1.11.1
       eslint: 7.32.0
@@ -130,7 +131,6 @@ importers:
       vite: 2.9.8
       vue: 3.2.33
       vue-tsc: 0.34.11_typescript@4.6.4
-      yank-note-api: link:../api
 
   packages/extension-sublime-merge:
     specifiers:
@@ -139,6 +139,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
+      '@yank-note/runtime-api': workspace:^3.29.14
       conventional-changelog-cli: ^2.2.2
       dayjs: ^1.11.1
       eslint: ^7.32.0
@@ -150,13 +151,13 @@ importers:
       vite: ^2.9.8
       vue: ^3.2.33
       vue-tsc: ^0.34.11
-      yank-note-api: workspace:^3.29.13
     devDependencies:
       '@rollup/plugin-node-resolve': 13.3.0
       '@rollup/plugin-replace': 4.0.0
       '@vitejs/plugin-vue': 2.3.2_vite@2.9.8+vue@3.2.33
       '@vue/eslint-config-standard': 6.1.0_tixguow53u6a3uudjr4t2dcshu
       '@vue/eslint-config-typescript': 10.0.0_yzev4ryi2uowr3tzgilgj3i2em
+      '@yank-note/runtime-api': link:../api
       conventional-changelog-cli: 2.2.2
       dayjs: 1.11.2
       eslint: 7.32.0
@@ -168,7 +169,6 @@ importers:
       vite: 2.9.8
       vue: 3.2.33
       vue-tsc: 0.34.11_typescript@4.6.4
-      yank-note-api: link:../api
 
 packages:
 

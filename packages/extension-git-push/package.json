@@ -1,5 +1,5 @@
 {
-  "name": "yank-note-extension-git-push",
+  "name": "@yank-note/extension-git-push",
   "version": "1.1.2",
   "displayName": "Git Push",
   "displayName_ZH-CN": "Git 推送",
@@ -52,6 +52,6 @@
     "vite": "^2.9.8",
     "vue": "^3.2.33",
     "vue-tsc": "^0.34.11",
-    "yank-note-api": "workspace:3.29.13"
+    "@yank-note/runtime-api": "workspace:3.29.14"
   }
 }

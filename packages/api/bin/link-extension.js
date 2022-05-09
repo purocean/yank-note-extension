@@ -10,7 +10,7 @@ const cwd = process.cwd()
 const packageJson = require(path.join(cwd, '/package.json'))
 
 const isUnlink = process.argv[2] === '--unlink'
-const id = packageJson.name
+const id = packageJson.name.replace(/\//g, '$')
 const extensionDir = path.join(os.homedir(), 'yank-note', 'extensions')
 const extensionPath = path.join(extensionDir, id)
 const extensionBakPath = path.join(extensionDir, id + '.bak')

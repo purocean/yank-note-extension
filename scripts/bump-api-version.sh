@@ -8,10 +8,12 @@ V=$(pnpm version $1 | tail -n 1)
 VERSION=${V//[$'\t\r\n v']}
 echo $VERSION;
 
+PACKAGE_NAME='@yank-note/runtime-api'
+
 cd ../../;
 
-pnpm update -r yank-note-api;
+pnpm update -r "$PACKAGE_NAME";
 
 cd packages/create-extension/template-typescript;
-cat package.json | sed -e 's/"yank-note-api": ".*"/"yank-note-api": "^'$VERSION'"/' > package.json.new \
+cat package.json | sed -e 's/"$PACKAGE_NAME": ".*"/"$PACKAGE_NAME": "^'$VERSION'"/' > package.json.new \
     && rm package.json && mv package.json.new package.json;
