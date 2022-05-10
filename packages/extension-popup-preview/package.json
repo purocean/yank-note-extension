@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-popup-preview",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "Popup Preview",
   "description": "Popup preview in a new window",
   "displayName_ZH-CN": "弹出预览",
