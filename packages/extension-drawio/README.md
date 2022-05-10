@@ -1,6 +1,6 @@
 # Drawio Extension
 
-This extension integrates Draw.io into Yank Note.
+This extension integrates [Draw.io](https://app.diagrams.net/) into Yank Note.
 
 ## Usage
 
