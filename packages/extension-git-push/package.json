@@ -32,7 +32,7 @@
     "build": "vue-tsc --noEmit && vite build",
     "lint": "vue-tsc --noEmit && yarn run eslint '{src,__tests__}/**/*.{js,ts,tsx,vue}'",
     "version": "conventional-changelog -t extension-git-push- --commit-path . -p angular -i CHANGELOG.md -s && npm run tag-version",
-    "tag-version": "git add . && git commit -m 'chore(release): bump api version' && git tag extension-git-push-$npm_package_version",
+    "tag-version": "git add . && git commit -m 'chore(release): bump extension-git-push version' && git tag extension-git-push-$npm_package_version",
     "prepublish": "npm run build"
   },
   "devDependencies": {
