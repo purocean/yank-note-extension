@@ -152,6 +152,7 @@ export declare type BuildInSettings = {
     'custom-css': string;
     'assets-dir': string;
     'shell': string;
+    'envs': string;
     'editor.mouse-wheel-zoom': boolean;
     'editor.font-size': number;
     'editor.tab-size': 2 | 4;

@@ -16,6 +16,12 @@ export declare function getMonaco(): typeof Monaco;
  */
 export declare function getEditor(): Monaco.editor.IStandaloneCodeEditor;
 /**
+ * Highlight given line.
+ * @param line
+ * @returns dispose function
+ */
+export declare function highlightLine(line: number): () => string[];
+/**
  * Get one indent
  * getOneIndent removed https://github.com/microsoft/monaco-editor/issues/1565
  * @returns

@@ -2,6 +2,7 @@ import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/en';
 export * as lodash from 'lodash-es';
 export * as vue from 'vue';
+export { default as yaml } from 'yaml';
 export { default as semver } from 'semver';
 export { default as dayjs } from 'dayjs';
 export { default as cryptojs } from 'crypto-js';

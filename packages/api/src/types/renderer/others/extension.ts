@@ -1,6 +1,7 @@
 import type { Extension, ExtensionCompatible, ExtensionLoadStatus, RegistryHostname } from '@fe/types';
 export declare const registries: RegistryHostname[];
-export declare function getInstalledExtensionFilePath(id: string, filename: string): string;
+export declare function getExtensionPath(id: string, ...paths: string[]): string;
+export declare function getInstalledExtensionFileUrl(id: string, filename: string): string;
 export declare function getLoadStatus(id: string): ExtensionLoadStatus;
 export declare function getCompatible(engines?: {
     'yank-note': string;
@@ -14,6 +15,7 @@ export declare function enable(extension: Extension): Promise<void>;
 export declare function disable(extension: Pick<Extension, 'id'>): Promise<void>;
 export declare function uninstall(extension: Pick<Extension, 'id'>): Promise<void>;
 export declare function install(extension: Extension, registry?: RegistryHostname): Promise<void>;
+export declare function getInitialized(): boolean;
 /**
  * Initialization extension system
  */

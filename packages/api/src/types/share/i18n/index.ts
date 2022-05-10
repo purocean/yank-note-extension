@@ -28,6 +28,7 @@ declare const languages: {
         edit: string;
         outline: string;
         files: string;
+        'install-extension-tips': string;
         premium: {
             'need-purchase': string;
             'buy-license': string;
@@ -338,6 +339,7 @@ declare const languages: {
                 'assets-dir': string;
                 'assets-desc': string;
                 shell: string;
+                envs: string;
                 'auto-save': string;
                 'plantuml-api': string;
                 updater: {
@@ -396,11 +398,6 @@ declare const languages: {
             'run-in-xterm': string;
             running: string;
             clear: string;
-        };
-        drawio: {
-            'edit-diagram': string;
-            'fit-height': string;
-            'create-drawio-file': string;
         };
         'mind-map': {
             'zoom-in': string;
@@ -590,6 +587,7 @@ declare const languages: {
         edit: string;
         outline: string;
         files: string;
+        'install-extension-tips': string;
         premium: {
             'need-purchase': string;
             'buy-license': string;
@@ -900,6 +898,7 @@ declare const languages: {
                 'assets-dir': string;
                 'assets-desc': string;
                 shell: string;
+                envs: string;
                 'auto-save': string;
                 'plantuml-api': string;
                 updater: {
@@ -958,11 +957,6 @@ declare const languages: {
             'run-in-xterm': string;
             running: string;
             clear: string;
-        };
-        drawio: {
-            'edit-diagram': string;
-            'fit-height': string;
-            'create-drawio-file': string;
         };
         'mind-map': {
             'zoom-in': string;

@@ -91,6 +91,7 @@ declare const ctx: {
     showPremium: typeof showPremium;
     showExtensionManager: typeof extension.showManager;
     getExtensionLoadStatus: typeof extension.getLoadStatus;
+    getExtensionInitialized: typeof extension.getInitialized;
     version: string;
 };
 export declare type Ctx = typeof ctx;

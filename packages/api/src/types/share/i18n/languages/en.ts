@@ -26,6 +26,7 @@ declare const data: {
     edit: string;
     outline: string;
     files: string;
+    'install-extension-tips': string;
     premium: {
         'need-purchase': string;
         'buy-license': string;
@@ -336,6 +337,7 @@ declare const data: {
             'assets-dir': string;
             'assets-desc': string;
             shell: string;
+            envs: string;
             'auto-save': string;
             'plantuml-api': string;
             updater: {
@@ -394,11 +396,6 @@ declare const data: {
         'run-in-xterm': string;
         running: string;
         clear: string;
-    };
-    drawio: {
-        'edit-diagram': string;
-        'fit-height': string;
-        'create-drawio-file': string;
     };
     'mind-map': {
         'zoom-in': string;
