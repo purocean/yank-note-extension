@@ -1,0 +1,12 @@
+.markdown-view .markdown-body .lucky-sheet-wrapper .lucky-sheet-action {
+  position: absolute;
+  right: 10px;
+  top: 3px;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+.markdown-view .markdown-body .lucky-sheet-wrapper:hover .lucky-sheet-action {
+  opacity: 1;
+}
