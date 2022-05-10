@@ -1,4 +1,5 @@
-## [1.0.2](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.0.1...extension-pop-preview-1.0.2) (2022-05-10)
+## 1.0.3 (2022-05-10)
+
 
 
 ### Bug Fixes
