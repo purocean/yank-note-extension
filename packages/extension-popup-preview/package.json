@@ -23,7 +23,7 @@
     "dist",
     "themes",
     "*.md",
-    "icon.png"
+    "icon.svg"
   ],
   "scripts": {
     "link-extension": "link-yn-extension",
