@@ -35,7 +35,11 @@ registerPlugin({
         title: ctx.i18n.t(`${extensionName}.popup-preview`),
         onClick: () => {
           if (getWin()) {
-            getWin().close()
+            try {
+              getWin().close()
+            } catch {
+              // do nothing
+            }
           }
 
           const url = new URL(location.origin)
@@ -68,7 +72,7 @@ registerPlugin({
 
     function updateContent () {
       const win = getWin()
-      if (win) {
+      if (win && win.ctx) {
         const _ctx: Ctx = win.ctx
         _ctx.store.state.currentContent = ctx.store.state.currentContent
         win.document.title = ctx.i18n.t(`${extensionName}.popup-preview`)
@@ -77,7 +81,7 @@ registerPlugin({
 
     function updateViewScroll (line: number) {
       const win = getWin()
-      if (win) {
+      if (win && win.ctx) {
         const _ctx: Ctx = win.ctx
         _ctx.view.revealLine(line)
       }
@@ -85,7 +89,7 @@ registerPlugin({
 
     function updateCurrentFile () {
       const win = getWin()
-      if (win) {
+      if (win && win.ctx) {
         const _ctx: Ctx = win.ctx
         _ctx.store.commit('setCurrentFile', JSON.parse(JSON.stringify(ctx.store.state.currentFile)))
       }
@@ -93,7 +97,7 @@ registerPlugin({
 
     function updateCurrentRepo () {
       const win = getWin()
-      if (win) {
+      if (win && win.ctx) {
         const _ctx: Ctx = win.ctx
         _ctx.store.commit('setCurrentRepo', JSON.parse(JSON.stringify(ctx.store.state.currentRepo)))
       }
