@@ -1,0 +1,54 @@
+.markdown-view .markdown-body .mermaid-wrapper {
+  --skip-contain: 1;
+  position: relative;
+}
+
+.markdown-view .markdown-body img.mermaid-image {
+  --skip-contain: 1;
+  background-color: inherit;
+}
+
+.markdown-view .markdown-body .mermaid-wrapper .mermaid-action {
+  --skip-contain: 1;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1;
+  text-align: right;
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+.markdown-view .markdown-body .mermaid-wrapper:hover .mermaid-action {
+  --skip-contain: 1;
+  opacity: 1;
+}
+
+.markdown-view .markdown-body .mermaid-wrapper .mermaid-container {
+  --skip-contain: 1;
+  visibility: hidden;
+}
+
+.markdown-view .markdown-body .mermaid-wrapper .mermaid-container > svg {
+  --skip-contain: 1;
+  display: block;
+}
+
+.markdown-view .markdown-body .mermaid-wrapper .mermaid-error {
+  --skip-contain: 1;
+  display: none;
+  white-space: pre-wrap;
+}
+
+.markdown-view .markdown-body .mermaid-wrapper.error .mermaid-action,
+.markdown-view .markdown-body .mermaid-wrapper.error .mermaid-image {
+  --skip-contain: 1;
+  display: none;
+}
+
+.markdown-view .markdown-body .mermaid-wrapper.error .mermaid-error,
+.markdown-view .markdown-body .mermaid-wrapper.error .mermaid-container {
+  --skip-contain: 1;
+  display: block;
+  visibility: visible;
+}
