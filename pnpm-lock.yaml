@@ -65,7 +65,6 @@ importers:
       '@vue/eslint-config-typescript': ^10.0.0
       '@yank-note/runtime-api': workspace:^3.29.17
       conventional-changelog-cli: ^2.2.2
-      dayjs: ^1.11.1
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
       eslint-plugin-node: ^11.1.0
@@ -83,7 +82,6 @@ importers:
       '@vue/eslint-config-typescript': 10.0.0_yzev4ryi2uowr3tzgilgj3i2em
       '@yank-note/runtime-api': link:../api
       conventional-changelog-cli: 2.2.2
-      dayjs: 1.11.2
       eslint: 7.32.0
       eslint-plugin-import: 2.26.0_eslint@7.32.0
       eslint-plugin-node: 11.1.0_eslint@7.32.0
@@ -103,7 +101,6 @@ importers:
       '@vue/eslint-config-typescript': ^10.0.0
       '@yank-note/runtime-api': workspace:3.29.17
       conventional-changelog-cli: ^2.2.2
-      dayjs: ^1.11.1
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
       eslint-plugin-node: ^11.1.0
@@ -121,7 +118,6 @@ importers:
       '@vue/eslint-config-typescript': 10.0.0_yzev4ryi2uowr3tzgilgj3i2em
       '@yank-note/runtime-api': link:../api
       conventional-changelog-cli: 2.2.2
-      dayjs: 1.11.1
       eslint: 7.32.0
       eslint-plugin-import: 2.26.0_eslint@7.32.0
       eslint-plugin-node: 11.1.0_eslint@7.32.0
@@ -141,7 +137,6 @@ importers:
       '@vue/eslint-config-typescript': ^10.0.0
       '@yank-note/runtime-api': workspace:3.29.17
       conventional-changelog-cli: ^2.2.2
-      dayjs: ^1.11.1
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
       eslint-plugin-node: ^11.1.0
@@ -161,7 +156,6 @@ importers:
       '@vue/eslint-config-typescript': 10.0.0_yzev4ryi2uowr3tzgilgj3i2em
       '@yank-note/runtime-api': link:../api
       conventional-changelog-cli: 2.2.2
-      dayjs: 1.11.2
       eslint: 7.32.0
       eslint-plugin-import: 2.26.0_eslint@7.32.0
       eslint-plugin-node: 11.1.0_eslint@7.32.0
@@ -223,7 +217,6 @@ importers:
       '@vue/eslint-config-typescript': ^10.0.0
       '@yank-note/runtime-api': workspace:^3.29.17
       conventional-changelog-cli: ^2.2.2
-      dayjs: ^1.11.1
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
       eslint-plugin-node: ^11.1.0
@@ -241,7 +234,6 @@ importers:
       '@vue/eslint-config-typescript': 10.0.0_yzev4ryi2uowr3tzgilgj3i2em
       '@yank-note/runtime-api': link:../api
       conventional-changelog-cli: 2.2.2
-      dayjs: 1.11.2
       eslint: 7.32.0
       eslint-plugin-import: 2.26.0_eslint@7.32.0
       eslint-plugin-node: 11.1.0_eslint@7.32.0
@@ -261,7 +253,6 @@ importers:
       '@vue/eslint-config-typescript': ^10.0.0
       '@yank-note/runtime-api': workspace:^3.29.17
       conventional-changelog-cli: ^2.2.2
-      dayjs: ^1.11.1
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
       eslint-plugin-node: ^11.1.0
@@ -279,7 +270,6 @@ importers:
       '@vue/eslint-config-typescript': 10.0.0_yzev4ryi2uowr3tzgilgj3i2em
       '@yank-note/runtime-api': link:../api
       conventional-changelog-cli: 2.2.2
-      dayjs: 1.11.2
       eslint: 7.32.0
       eslint-plugin-import: 2.26.0_eslint@7.32.0
       eslint-plugin-node: 11.1.0_eslint@7.32.0
@@ -1846,10 +1836,6 @@ packages:
 
   /dateformat/3.0.3:
     resolution: {integrity: sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==}
-    dev: true
-
-  /dayjs/1.11.1:
-    resolution: {integrity: sha512-ER7EjqVAMkRRsxNCC5YqJ9d9VQYuWdGt7aiH2qA5R5wt8ZmWaP2dLUSIK6y/kVzLMlmh1Tvu5xUf4M/wdGJ5KA==}
     dev: true
 
   /dayjs/1.11.2:

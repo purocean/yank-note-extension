@@ -45,7 +45,6 @@
     "@vue/eslint-config-typescript": "^10.0.0",
     "@yank-note/runtime-api": "workspace:3.29.17",
     "conventional-changelog-cli": "^2.2.2",
-    "dayjs": "^1.11.1",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
