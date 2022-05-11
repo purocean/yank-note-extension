@@ -2,8 +2,6 @@
 
 This extension integrates [Luckysheet](https://github.com/mengshukeji/Luckysheet) into Yank Note.
 
-*Note: This plugin is not available for Mac App Store downloaded Yank Note.*
-
 ## Usage
 
 The value of the link attribute `link-type` needs to be a `luckysheet` string. The use of the link format will not affect other Markdown resolver resolving.
