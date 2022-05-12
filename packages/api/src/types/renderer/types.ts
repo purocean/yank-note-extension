@@ -24,28 +24,29 @@ export interface Repo {
 }
 export declare namespace Components {
     namespace Modal {
-        type ConfirmModalParams = {
+        interface BaseParams {
             title?: string;
             content?: string;
+            okText?: string;
+            cancelText?: string;
+        }
+        export interface ConfirmModalParams extends BaseParams {
             component?: any;
             action?: any;
-        };
-        type AlertModalParams = {
-            title?: string;
-            content?: string;
+        }
+        export interface AlertModalParams extends BaseParams {
             component?: any;
             action?: any;
-        };
-        type InputModalParams = {
+        }
+        export interface InputModalParams extends BaseParams {
             type?: string;
-            title?: string;
-            content?: string;
             value?: string;
             hint?: string;
             modalWidth?: string;
             readonly?: boolean;
             select?: boolean | [number, number, 'forward' | 'backward' | 'none'];
-        };
+        }
+        export {};
     }
     namespace Toast {
         type ToastType = 'warning' | 'info';
@@ -132,6 +133,10 @@ export interface Extension {
         name: string;
         css: string;
     }[];
+    requirements: {
+        premium?: boolean;
+        terminal?: boolean;
+    };
     compatible: ExtensionCompatible;
     main: string;
     style: string;

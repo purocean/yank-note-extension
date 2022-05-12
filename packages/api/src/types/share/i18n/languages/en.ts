@@ -27,6 +27,8 @@ declare const data: {
     outline: string;
     files: string;
     'install-extension-tips': string;
+    'not-support-mas': string;
+    'learn-more': string;
     premium: {
         'need-purchase': string;
         'buy-license': string;
@@ -431,11 +433,6 @@ declare const data: {
             'delete-col': string;
         };
     };
-    'lucky-sheet': {
-        'saved-at': string;
-        'edit-sheet': string;
-        'create-dialog-title': string;
-    };
     'markdown-link': {
         'convert-to-titled-link': string;
     };
@@ -555,6 +552,8 @@ declare const data: {
         enable: string;
         'uninstall-confirm': string;
         registry: string;
+        'activation-time': string;
+        requirement: string;
     };
 };
 export declare type BaseLanguage = typeof data;

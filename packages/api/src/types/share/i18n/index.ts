@@ -29,6 +29,8 @@ declare const languages: {
         outline: string;
         files: string;
         'install-extension-tips': string;
+        'not-support-mas': string;
+        'learn-more': string;
         premium: {
             'need-purchase': string;
             'buy-license': string;
@@ -433,11 +435,6 @@ declare const languages: {
                 'delete-col': string;
             };
         };
-        'lucky-sheet': {
-            'saved-at': string;
-            'edit-sheet': string;
-            'create-dialog-title': string;
-        };
         'markdown-link': {
             'convert-to-titled-link': string;
         };
@@ -557,6 +554,8 @@ declare const languages: {
             enable: string;
             'uninstall-confirm': string;
             registry: string;
+            'activation-time': string;
+            requirement: string;
         };
     };
     'zh-CN': {
@@ -588,6 +587,8 @@ declare const languages: {
         outline: string;
         files: string;
         'install-extension-tips': string;
+        'not-support-mas': string;
+        'learn-more': string;
         premium: {
             'need-purchase': string;
             'buy-license': string;
@@ -992,11 +993,6 @@ declare const languages: {
                 'delete-col': string;
             };
         };
-        'lucky-sheet': {
-            'saved-at': string;
-            'edit-sheet': string;
-            'create-dialog-title': string;
-        };
         'markdown-link': {
             'convert-to-titled-link': string;
         };
@@ -1116,6 +1112,8 @@ declare const languages: {
             enable: string;
             'uninstall-confirm': string;
             registry: string;
+            'activation-time': string;
+            requirement: string;
         };
     };
 };

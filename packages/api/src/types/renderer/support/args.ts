@@ -5,6 +5,7 @@
 export declare function $args(): URLSearchParams;
 export declare const URL_GITHUB = "https://github.com/purocean/yn";
 export declare const URL_MAS = "https://apps.apple.com/cn/app/yank-note/id1551528618";
+export declare const URL_MAS_LIMITATION = "https://github.com/purocean/yn/issues/65#issuecomment-1065799677";
 export declare const JWT_TOKEN: string;
 export declare const MODE: 'normal' | 'share-preview';
 export declare const FLAG_DISABLE_SHORTCUTS: boolean;

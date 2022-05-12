@@ -27,7 +27,7 @@ import * as i18n from '@fe/services/i18n';
 import * as controlCenter from '@fe/services/control-center';
 import * as lib from './lib';
 import * as components from './components';
-declare const ctx: {
+declare const ctx: Readonly<{
     lib: typeof lib;
     components: typeof components;
     ioc: typeof ioc;
@@ -89,11 +89,12 @@ declare const ctx: {
     removeHook: typeof hook.removeHook;
     triggerHook: typeof hook.triggerHook;
     showPremium: typeof showPremium;
+    getPremium: () => boolean;
     showExtensionManager: typeof extension.showManager;
     getExtensionLoadStatus: typeof extension.getLoadStatus;
     getExtensionInitialized: typeof extension.getInitialized;
     version: string;
-};
+}>;
 export declare type Ctx = typeof ctx;
 export declare type Plugin = plugin.Plugin<Ctx>;
 export default ctx;
