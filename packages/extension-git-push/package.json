@@ -19,6 +19,9 @@
     "node": ">=14.6.0",
     "yank-note": "^3.29.0"
   },
+  "requirements": {
+    "terminal": true
+  },
   "files": [
     "*.md",
     "dist",
