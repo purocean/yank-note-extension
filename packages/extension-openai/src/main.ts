@@ -183,17 +183,19 @@ registerPlugin({
     })
 
     ctx.i18n.mergeLanguage('zh-CN', {
-      'openai-complete': 'OpenAI 自动补全',
-      'api-token': 'Api Token',
-      'api-token-desc': '你可以从 <a target="_blank" href="http://openai.com">openai.com</a> 获取',
-      'engine-id': 'Engine Id',
-      'engine-id-desc': '请参考 <a target="_blank" href="https://beta.openai.com/docs/engines/overview/">Engine Overview</a>',
-      mode: '模式',
-      range: '字符范围',
-      'range-desc': '上下文字符范围',
-      'max-tokens': 'Max Tokens',
-      'args-json': '自定义参数',
-      'args-json-desc': '请求参数，JSON 字符串如 {"temperature": 0.3}',
+      [extensionId]: {
+        'openai-complete': 'OpenAI 自动补全',
+        'api-token': 'Api Token',
+        'api-token-desc': '你可以从 <a target="_blank" href="http://openai.com">openai.com</a> 获取',
+        'engine-id': 'Engine Id',
+        'engine-id-desc': '请参考 <a target="_blank" href="https://beta.openai.com/docs/engines/overview/">Engine Overview</a>',
+        mode: '模式',
+        range: '字符范围',
+        'range-desc': '上下文字符范围',
+        'max-tokens': 'Max Tokens',
+        'args-json': '自定义参数',
+        'args-json-desc': '请求参数，JSON 字符串如 {"temperature": 0.3}',
+      }
     })
 
     ctx.setting.changeSchema((schema) => {
