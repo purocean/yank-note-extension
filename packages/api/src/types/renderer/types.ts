@@ -94,7 +94,7 @@ export declare namespace Components {
 export declare type ThemeName = 'system' | 'dark' | 'light';
 export declare type LanguageName = 'system' | Language;
 export declare type ExportType = 'pdf' | 'docx' | 'html' | 'rst' | 'adoc';
-export declare type SettingGroup = 'repos' | 'appearance' | 'editor' | 'image' | 'proxy' | 'other' | 'openai';
+export declare type SettingGroup = 'repos' | 'appearance' | 'editor' | 'image' | 'proxy' | 'other';
 export declare type RegistryHostname = 'registry.npmjs.org' | 'registry.npmmirror.com';
 export declare type RenderEnv = {
     source: string;
@@ -149,7 +149,7 @@ export interface Extension {
     };
     isDev?: boolean;
 }
-export declare type BuildInSettings = {
+export interface BuildInSettings {
     'repos': Repo[];
     'theme': ThemeName;
     'language': LanguageName;
@@ -185,7 +185,7 @@ export declare type BuildInSettings = {
     'extension.registry': RegistryHostname;
     'keep-running-after-closing-window': boolean;
     'plantuml-api': string;
-};
+}
 export declare type BuildInActions = {
     'view.render-immediately': () => void;
     'view.render': () => void;

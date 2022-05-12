@@ -507,19 +507,6 @@ declare const data: {
         'zoom-out': string;
         'zoom-reset': string;
     };
-    openai: {
-        'openai-complete': string;
-        'api-token': string;
-        'api-token-desc': string;
-        'engine-id': string;
-        'engine-id-desc': string;
-        mode: string;
-        range: string;
-        'range-desc': string;
-        'max-tokens': string;
-        'args-json': string;
-        'args-json-desc': string;
-    };
     extension: {
         'extension-manager': string;
         all: string;
@@ -554,6 +541,7 @@ declare const data: {
         registry: string;
         'activation-time': string;
         requirement: string;
+        'unknown-origin-tips': string;
     };
 };
 export declare type BaseLanguage = typeof data;
