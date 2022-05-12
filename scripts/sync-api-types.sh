@@ -44,3 +44,6 @@ rm -r renderer/plugins;
 rm third-party/*/package.json;
 
 find ./ -depth -name "*.d.ts" -exec sh -c 'mv "$1" "${1%.d.ts}.ts"' _ {} \;
+
+cd ../../;
+pnpm run build;
