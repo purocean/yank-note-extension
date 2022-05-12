@@ -1,10 +1,13 @@
 import type { Ctx as _Ctx } from '@fe/context'
 import type * as _I18n from '@fe/services/i18n'
+import type * as _Setting from '@fe/services/setting'
 import { Ref } from 'vue'
 import type { Plugin } from '@fe/core/plugin'
 import type { MsgPath } from '@share/i18n'
+import { BuildInSettings } from '@fe/types'
 
 type __I18n = typeof _I18n;
+type __Setting = typeof _Setting;
 
 interface I18n extends __I18n {
   t (path: MsgPath, ...args: string[]): string;
@@ -17,8 +20,15 @@ interface I18n extends __I18n {
   };
 }
 
+interface Setting extends __Setting {
+  getSetting<T>(key: string, defaultVal?: T): T;
+  getSetting<T extends keyof BuildInSettings>(key: T, defaultVal: BuildInSettings[T]): BuildInSettings[T];
+  getSetting<T extends keyof BuildInSettings>(key: T, defaultVal?: null): BuildInSettings[T] | null;
+}
+
 export interface Ctx extends _Ctx {
-  i18n: I18n
+  i18n: I18n;
+  setting: Setting;
 }
 
 export const ctx: Ctx = globalThis.ctx
