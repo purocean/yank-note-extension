@@ -1,3 +1,12 @@
+## [3.29.18](https://github.com/purocean/yank-note-extension/compare/api-3.29.17...api-3.29.18) (2022-05-12)
+
+
+### Features
+
+* update api types ([05140d4](https://github.com/purocean/yank-note-extension/commit/05140d454ede86fe4568c48dc34b4b85247bff04))
+
+
+
 ## [3.29.17](https://github.com/purocean/yank-note-extension/compare/api-3.29.16...api-3.29.17) (2022-05-10)
 
 
