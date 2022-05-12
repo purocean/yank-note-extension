@@ -88,8 +88,9 @@ export declare function getSetting<T extends keyof BuildInSettings>(key: T, defa
 export declare function setSetting<T extends keyof BuildInSettings>(key: T, val: BuildInSettings[T]): Promise<void>;
 /**
  * Show setting panel.
+ * @param group
  */
-export declare function showSettingPanel(): void;
+export declare function showSettingPanel(group?: string): void;
 /**
  * Hide setting panel.
  */
