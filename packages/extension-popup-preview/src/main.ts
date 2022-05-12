@@ -1,18 +1,18 @@
 import { Ctx, registerPlugin } from '@yank-note/runtime-api'
 
-const extensionName = __EXTENSION_ID__
+const extensionId = __EXTENSION_ID__
 
 registerPlugin({
-  name: extensionName,
+  name: extensionId,
   register (ctx) {
     ctx.i18n.mergeLanguage('en', {
-      [extensionName]: {
+      [extensionId]: {
         'popup-preview': 'Popup Preview',
       },
     })
 
     ctx.i18n.mergeLanguage('zh-CN', {
-      [extensionName]: {
+      [extensionId]: {
         'popup-preview': '弹窗预览',
       },
     })
@@ -30,10 +30,16 @@ registerPlugin({
 
     ctx.statusBar.tapMenus(menus => {
       menus['status-bar-tool']?.list?.push({
-        id: extensionName,
+        id: extensionId,
         type: 'normal',
-        title: ctx.i18n.t(`${extensionName}.popup-preview`),
+        title: ctx.i18n.t(`${extensionId}.popup-preview`),
         onClick: () => {
+          if (!ctx.getPremium()) {
+            ctx.ui.useToast().show('info', ctx.i18n.t('premium.need-purchase', extensionId))
+            ctx.showPremium()
+            throw new Error('Extension requires premium')
+          }
+
           if (getWin()) {
             try {
               getWin().close()
@@ -75,7 +81,7 @@ registerPlugin({
       if (win && win.ctx) {
         const _ctx: Ctx = win.ctx
         _ctx.store.state.currentContent = ctx.store.state.currentContent
-        win.document.title = ctx.i18n.t(`${extensionName}.popup-preview`)
+        win.document.title = ctx.i18n.t(`${extensionId}.popup-preview`)
       }
     }
 
