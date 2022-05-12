@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-openai",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "displayName": "OpenAI",
   "description": "Your AI writing assistant",
   "displayName_ZH-CN": "OpenAI",
