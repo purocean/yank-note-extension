@@ -3,6 +3,7 @@ import Monaco from '@yank-note/runtime-api/types/types/third-party/monaco-editor
 
 const { getLogger } = ctx.utils
 
+const extensionId = __EXTENSION_ID__
 const actionName = 'plugin.editor-openai.trigger'
 const settingKeyToken = 'plugin.editor-openai.api-token'
 const settingKeyEngine = 'plugin.editor-openai.engine-id'
@@ -11,7 +12,6 @@ const settingKeyMaxTokens = 'plugin.editor-openai.max-tokens'
 const settingKeyRange = 'plugin.editor-openai.range'
 const settingKeyArgs = 'plugin.editor-openai.args-json'
 const defaultEngine = 'text-davinci-002'
-const extensionId = __EXTENSION_ID__
 
 class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
   private readonly monaco: typeof Monaco
@@ -38,7 +38,7 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
 
     this.ctx.ui.useToast().show('info', 'OpenAI: Loading...', 10000)
 
-    const range = this.ctx.setting.getSetting(settingKeyRange, 256)
+    const range = this.ctx.setting.getSetting<number>(settingKeyRange, 256)
 
     let prefix = ''
     let suffix = ''
@@ -90,7 +90,10 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
     const token = this.ctx.setting.getSetting(settingKeyToken, '')
 
     if (token.length < 40) {
-      this.ctx.ui.useToast().show('warning', 'OpenAI: No API token')
+      setTimeout(() => {
+        this.ctx.ui.useToast().show('warning', 'OpenAI: No API token')
+        this.ctx.setting.showSettingPanel('openai')
+      }, 0)
       return []
     }
 
