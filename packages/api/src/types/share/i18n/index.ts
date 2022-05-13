@@ -1093,11 +1093,12 @@ declare const languages: {
         };
     };
 };
-declare type Flat<T extends Record<string, any>, P extends string = ''> = ({
+export declare type Flat<T extends Record<string, any>, P extends string = ''> = ({
     [K in keyof T as (T[K] extends string ? (K extends string ? (P extends '' ? K : `${P}.${K}`) : never) : (K extends string ? keyof Flat<T[K], P extends '' ? K : `${P}.${K}`> : never))]: never;
 });
 export declare type Language = keyof typeof languages;
 export declare type MsgPath = keyof Flat<BaseLanguage>;
+export declare function getText(data: Record<string, any>, path: MsgPath, ...args: string[]): string;
 export declare function translate(lang: Language, path: MsgPath, ...args: string[]): string;
 export declare function mergeLanguage(lang: Language, nls: Record<string, any>): void;
 export {};
