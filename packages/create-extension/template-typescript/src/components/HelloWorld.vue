@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onBeforeMount, onMounted, ref } from 'vue'
 import { ctx } from '@yank-note/runtime-api'
+import i18n from '@/i18n'
+
 const time = ref('')
 const version = __EXTENSION_VERSION__
 const id = __EXTENSION_ID__
@@ -23,6 +25,7 @@ onBeforeMount(() => {
   <div>Id: {{id}}</div>
   <div>Version: {{version}}</div>
   <div>Time: {{time}}</div>
+  <div>{{i18n.$t.value('helloworld')}}</div>
   <img src="/demo.png">
 </div>
 </template>
