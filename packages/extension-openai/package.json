@@ -19,9 +19,6 @@
     "node": ">=14.6.0",
     "yank-note": "^3.29.0"
   },
-  "requirements": {
-    "premium": true
-  },
   "files": [
     "dist",
     "themes",
