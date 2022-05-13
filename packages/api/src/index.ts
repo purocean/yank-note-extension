@@ -1,24 +1,9 @@
 import type { Ctx as _Ctx } from '@fe/context'
-import type * as _I18n from '@fe/services/i18n'
 import type * as _Setting from '@fe/services/setting'
-import { Ref } from 'vue'
 import type { Plugin } from '@fe/core/plugin'
-import type { MsgPath } from '@share/i18n'
 import { BuildInSettings } from '@fe/types'
 
-type __I18n = typeof _I18n;
 type __Setting = typeof _Setting;
-
-interface I18n extends __I18n {
-  t (path: MsgPath, ...args: string[]): string;
-  t (path: string, ...args: string[]): string;
-  useI18n: () => {
-    t: I18n['t'],
-    $t: Ref<I18n['t']>,
-    setLanguage: I18n['setLanguage'],
-    getLanguage: I18n['getLanguage']
-  };
-}
 
 interface Setting extends __Setting {
   getSetting<T>(key: string, defaultVal?: T): T;
@@ -27,7 +12,6 @@ interface Setting extends __Setting {
 }
 
 export interface Ctx extends _Ctx {
-  i18n: I18n;
   setting: Setting;
 }
 
@@ -35,10 +19,6 @@ export const ctx: Ctx = globalThis.ctx
 
 export function registerPlugin (plugin: Plugin<Ctx>) {
   globalThis.registerPlugin(plugin)
-}
-
-export function _t (path: MsgPath, ...args: string[]): string {
-  return ctx.i18n.t(path, ...args)
 }
 
 export function getExtensionBasePath (id: string): string {
