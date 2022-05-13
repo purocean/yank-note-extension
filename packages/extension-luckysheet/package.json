@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-luckysheet",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "Luckysheet",
   "description": "Luckysheet table integration",
   "displayName_ZH-CN": "Luckysheet",
