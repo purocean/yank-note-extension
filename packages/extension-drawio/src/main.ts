@@ -1,5 +1,6 @@
 import { registerPlugin } from '@yank-note/runtime-api'
 import { buildEditorSrcdoc, createDrawioFile, MarkdownItPlugin } from './drawio'
+import i18n from './i18n'
 
 import './style.css'
 
@@ -14,7 +15,7 @@ registerPlugin({
       if (node.path.toLowerCase().includes('.drawio')) {
         const { repo, path, name, type } = node
         const srcdoc = buildEditorSrcdoc({ repo, path, name, type })
-        ctx.env.openWindow(ctx.embed.buildSrc(srcdoc, ctx.i18n.t(`${extensionId}.edit-diagram`, name)), '_blank', { alwaysOnTop: false })
+        ctx.env.openWindow(ctx.embed.buildSrc(srcdoc, i18n.t('edit-diagram', name)), '_blank', { alwaysOnTop: false })
 
         return true
       }
@@ -29,13 +30,13 @@ registerPlugin({
           {
             id: 'create-drawio-drawio',
             type: 'normal',
-            label: ctx.i18n.t(`${extensionId}.create-drawio-file`, '.drawio'),
+            label: i18n.t('create-drawio-file', '.drawio'),
             onClick: () => createDrawioFile(node, '.drawio')
           },
           {
             id: 'create-drawio-png',
             type: 'normal',
-            label: ctx.i18n.t(`${extensionId}.create-drawio-file`, '.png'),
+            label: i18n.t('create-drawio-file', '.png'),
             onClick: () => createDrawioFile(node, '.drawio.png')
           },
         )

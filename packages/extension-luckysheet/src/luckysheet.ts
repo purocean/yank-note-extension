@@ -1,11 +1,13 @@
 import type Markdown from '@yank-note/runtime-api/types/types/third-party/markdown-it'
-import { ctx, getExtensionBasePath, _t } from '@yank-note/runtime-api'
+import { ctx, getExtensionBasePath } from '@yank-note/runtime-api'
 import type { Doc } from '@yank-note/runtime-api/types/types/renderer/types'
+import i18n from './i18n'
 
 const { defineComponent, h, ref, watch } = ctx.lib.vue
+const { t } = i18n
 const { useModal, useToast } = ctx.ui
 const { isElectron, openWindow } = ctx.env
-const { useI18n, t, getCurrentLanguage } = ctx.i18n
+const { useI18n, t: _t, getCurrentLanguage } = ctx.i18n
 const { IFrame, buildSrc } = ctx.embed
 const { Mask } = ctx.components
 const { dirname, join } = ctx.utils.path
@@ -126,7 +128,7 @@ export function buildSrcdoc (repo: string, path: string, full: boolean) {
     <script>
       window.getStatus = () => document.querySelector('.luckysheet_info_detail .luckysheet_info_detail_save').innerText
       window.setStatus = str => document.querySelector('.luckysheet_info_detail .luckysheet_info_detail_save').innerText = str
-      window.saved = () => getStatus().startsWith('${t(`${extensionId}.saved-at`)}') || getStatus() === '${_t('file-status.loaded')}'
+      window.saved = () => getStatus().startsWith('${t('saved-at')}') || getStatus() === '${_t('file-status.loaded')}'
 
       async function readFile (repo, path) {
         try {
@@ -164,7 +166,7 @@ export function buildSrcdoc (repo: string, path: string, full: boolean) {
         try {
           setStatus('${_t('file-status.saving')}...')
           await writeFile(repo, path, JSON.stringify(window.luckysheet.getAllSheets()))
-          setStatus('${t(`${extensionId}.saved-at`)}: ' + (new Date()).toLocaleString())
+          setStatus('${t('saved-at')}: ' + (new Date()).toLocaleString())
           await readFile(repo, path)
         } catch (error) {
           setStatus('${_t('file-status.save-failed')}: ' + error.message)
@@ -200,7 +202,7 @@ export const LuckyComponent = defineComponent({
   setup (props) {
     logger.debug('setup', props)
 
-    useI18n()
+    const { $t } = useI18n()
 
     const srcdoc = ref('')
     const refIFrame = ref<any>()
@@ -277,7 +279,7 @@ export const LuckyComponent = defineComponent({
             class: 'skip-print',
             style: 'position: absolute; right: 10px; margin-top: 15px; z-index: 1;'
           },
-          button(_t('close'), close),
+          button($t.value('close'), close),
         ),
         buildIFrame(true),
       ]),
@@ -287,11 +289,11 @@ export const LuckyComponent = defineComponent({
           'div',
           { class: 'lucky-sheet-action skip-print' },
           [
-            button(_t('reload'), reload),
-            button(_t('edit'), open),
-            button(_t('open-in-new-window'), () => {
+            button($t.value('reload'), reload),
+            button($t.value('edit'), open),
+            button($t.value('open-in-new-window'), () => {
               const html = buildSrcdoc(props.repo!, props.path!, true)
-              openWindow(buildSrc(html, t(`${extensionId}.edit-sheet`), false), '_blank', { alwaysOnTop: false })
+              openWindow(buildSrc(html, t('edit-sheet'), false), '_blank', { alwaysOnTop: false })
             }),
           ]
         ),
@@ -335,7 +337,7 @@ export async function createLuckysheet (node: Doc) {
   const currentPath = node.path
 
   let filename = await useModal().input({
-    title: t(`${extensionId}.create-dialog-title`),
+    title: t('create-dialog-title'),
     hint: _t('document.create-dialog.hint'),
     content: _t('document.current-path', currentPath),
     value: 'new-sheet' + fileExt,
@@ -408,7 +410,7 @@ export async function createLuckysheet (node: Doc) {
   try {
     await ctx.api.writeFile(file, file.content)
     const srcdoc = buildSrcdoc(file.repo, file.path, true)
-    openWindow(buildSrc(srcdoc, t(`${extensionId}.edit-sheet`), false), '_blank', { alwaysOnTop: false })
+    openWindow(buildSrc(srcdoc, t('edit-sheet'), false), '_blank', { alwaysOnTop: false })
     ctx.tree.refreshTree()
   } catch (error: any) {
     useToast().show('warning', error.message)

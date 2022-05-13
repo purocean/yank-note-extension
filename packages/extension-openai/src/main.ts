@@ -156,6 +156,35 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
   }
 }
 
+const i18n = ctx.i18n.createI18n({
+  en: {
+    'openai-complete': 'OpenAI Complete',
+    'api-token': 'Api Token',
+    'api-token-desc': 'You can get your api token from <a target="_blank" href="http://openai.com">openai.com</a>',
+    'engine-id': 'Engine Id',
+    'engine-id-desc': 'Please refer to <a target="_blank" href="https://beta.openai.com/docs/engines/overview/">Engine Overview</a>',
+    mode: 'Mode',
+    range: 'Characters Range',
+    'range-desc': 'Context characters range',
+    'max-tokens': 'Max Tokens',
+    'args-json': 'Custom Arguments',
+    'args-json-desc': 'Query parameters, JSON string like {"temperature": 0.3}',
+  },
+  'zh-CN': {
+    'openai-complete': 'OpenAI 自动补全',
+    'api-token': 'Api Token',
+    'api-token-desc': '你可以从 <a target="_blank" href="http://openai.com">openai.com</a> 获取',
+    'engine-id': 'Engine Id',
+    'engine-id-desc': '请参考 <a target="_blank" href="https://beta.openai.com/docs/engines/overview/">Engine Overview</a>',
+    mode: '模式',
+    range: '字符范围',
+    'range-desc': '上下文字符范围',
+    'max-tokens': 'Max Tokens',
+    'args-json': '自定义参数',
+    'args-json-desc': '请求参数，JSON 字符串如 {"temperature": 0.3}',
+  }
+})
+
 registerPlugin({
   name: extensionId,
   register (ctx) {
@@ -166,43 +195,11 @@ registerPlugin({
       )
     })
 
-    ctx.i18n.mergeLanguage('en', {
-      [extensionId]: {
-        'openai-complete': 'OpenAI Complete',
-        'api-token': 'Api Token',
-        'api-token-desc': 'You can get your api token from <a target="_blank" href="http://openai.com">openai.com</a>',
-        'engine-id': 'Engine Id',
-        'engine-id-desc': 'Please refer to <a target="_blank" href="https://beta.openai.com/docs/engines/overview/">Engine Overview</a>',
-        mode: 'Mode',
-        range: 'Characters Range',
-        'range-desc': 'Context characters range',
-        'max-tokens': 'Max Tokens',
-        'args-json': 'Custom Arguments',
-        'args-json-desc': 'Query parameters, JSON string like {"temperature": 0.3}',
-      },
-    })
-
-    ctx.i18n.mergeLanguage('zh-CN', {
-      [extensionId]: {
-        'openai-complete': 'OpenAI 自动补全',
-        'api-token': 'Api Token',
-        'api-token-desc': '你可以从 <a target="_blank" href="http://openai.com">openai.com</a> 获取',
-        'engine-id': 'Engine Id',
-        'engine-id-desc': '请参考 <a target="_blank" href="https://beta.openai.com/docs/engines/overview/">Engine Overview</a>',
-        mode: '模式',
-        range: '字符范围',
-        'range-desc': '上下文字符范围',
-        'max-tokens': 'Max Tokens',
-        'args-json': '自定义参数',
-        'args-json-desc': '请求参数，JSON 字符串如 {"temperature": 0.3}',
-      }
-    })
-
     ctx.setting.changeSchema((schema) => {
       schema.groups.push({ label: 'OpenAI' as any, value: 'openai' as any })
 
       schema.properties[settingKeyMode] = {
-        title: `T_${extensionId}.mode` as any,
+        title: i18n.$$t('mode'),
         type: 'string',
         defaultValue: 'insert',
         enum: ['insert', 'complete'],
@@ -211,8 +208,8 @@ registerPlugin({
       }
 
       schema.properties[settingKeyEngine] = {
-        title: `T_${extensionId}.engine-id` as any,
-        description: `T_${extensionId}.engine-id-desc` as any,
+        title: i18n.$$t('engine-id'),
+        description: i18n.$$t('engine-id-desc'),
         type: 'string',
         defaultValue: defaultEngine,
         group: 'openai' as any,
@@ -226,8 +223,8 @@ registerPlugin({
       }
 
       schema.properties[settingKeyToken] = {
-        title: `T_${extensionId}.api-token` as any,
-        description: `T_${extensionId}.api-token-desc` as any,
+        title: i18n.$$t('api-token'),
+        description: i18n.$$t('api-token-desc'),
         type: 'string',
         defaultValue: '',
         group: 'openai' as any,
@@ -237,7 +234,7 @@ registerPlugin({
       }
 
       schema.properties[settingKeyMaxTokens] = {
-        title: `T_${extensionId}.max-tokens` as any,
+        title: i18n.$$t('max-tokens'),
         type: 'number',
         defaultValue: 256,
         group: 'openai' as any,
@@ -245,12 +242,12 @@ registerPlugin({
         minimum: 4,
         maximum: 4096,
         options: {
-          inputAttributes: { placeholder: `T_${extensionId}.max-tokens` }
+          inputAttributes: { placeholder: i18n.$$t('max-tokens') }
         },
       }
 
       schema.properties[settingKeyRange] = {
-        title: `T_${extensionId}.range` as any,
+        title: i18n.$$t('range'),
         type: 'number',
         defaultValue: 256,
         group: 'openai' as any,
@@ -258,13 +255,13 @@ registerPlugin({
         minimum: 10,
         maximum: 10240,
         options: {
-          inputAttributes: { placeholder: `T_${extensionId}.range-desc` }
+          inputAttributes: { placeholder: i18n.$$t('range-desc') }
         },
       }
 
       schema.properties[settingKeyArgs] = {
-        title: `T_${extensionId}.args-json` as any,
-        description: `T_${extensionId}.args-json-desc` as any,
+        title: i18n.$$t('args-json'),
+        description: i18n.$$t('args-json-desc'),
         type: 'string',
         defaultValue: '{"temperature": 0.3}',
         group: 'openai' as any,
@@ -293,7 +290,7 @@ registerPlugin({
         {
           id: actionName,
           type: 'normal',
-          title: ctx.i18n.t(`${extensionId}.openai-complete`),
+          title: i18n.t('openai-complete'),
           subTitle: ctx.command.getKeysLabel(actionName),
           onClick: () => ctx.action.getActionHandler(actionName)()
         },

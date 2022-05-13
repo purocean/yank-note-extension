@@ -5,18 +5,15 @@ const extensionName = __EXTENSION_ID__
 registerPlugin({
   name: extensionName,
   register (ctx) {
-    ctx.i18n.mergeLanguage('en', {
-      [extensionName]: {
+    const i18n = ctx.i18n.createI18n({
+      en: {
         'open-in-sublime-merge': 'Open in Sublime Merge',
         'show-history-in-sublime-merge': 'Show History in Sublime Merge',
       },
-    })
-
-    ctx.i18n.mergeLanguage('zh-CN', {
-      [extensionName]: {
+      'zh-CN': {
         'open-in-sublime-merge': '在 Sublime Merge 中打开',
         'show-history-in-sublime-merge': '在 Sublime Merge 中显示历史',
-      },
+      }
     })
 
     ctx.tree.tapContextMenus((items, node) => {
@@ -38,8 +35,8 @@ registerPlugin({
           {
             id: extensionName + '-openInSublimeMerge',
             label: node.type === 'file'
-              ? ctx.i18n.t(`${extensionName}.show-history-in-sublime-merge`)
-              : ctx.i18n.t(`${extensionName}.open-in-sublime-merge`),
+              ? i18n.t('show-history-in-sublime-merge')
+              : i18n.t('open-in-sublime-merge'),
             onClick: openInSublimeMerge
           }
         )

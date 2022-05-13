@@ -1,9 +1,10 @@
-import { ctx, _t, getExtensionBasePath } from '@yank-note/runtime-api'
+import { ctx, getExtensionBasePath } from '@yank-note/runtime-api'
 import type Markdown from '@yank-note/runtime-api/types/types/third-party/markdown-it'
 import type { Doc } from '@yank-note/runtime-api/types/types/renderer/types'
+import i18n from './i18n'
 
 const api = ctx.api
-const { t, useI18n } = ctx.i18n
+const { $t, t } = i18n
 const store = ctx.store
 const { defineComponent, h, ref, watch, onBeforeUnmount } = ctx.lib.vue
 const { buildSrc, IFrame } = ctx.embed
@@ -21,22 +22,6 @@ const extensionId = __EXTENSION_ID__
 
 const BASE_URL = location.origin + join(getExtensionBasePath(extensionId), 'drawio/src/main/webapp')
 
-ctx.i18n.mergeLanguage('en', {
-  [extensionId]: {
-    'edit-diagram': 'Edit Diagram - %s',
-    'fit-height': 'Fit Height',
-    'create-drawio-file': 'Create Drawio File %s',
-  },
-})
-
-ctx.i18n.mergeLanguage('zh-CN', {
-  [extensionId]: {
-    'edit-diagram': '编辑图形 - %s',
-    'fit-height': '适应高度',
-    'create-drawio-file': '创建 Drawio 文件 %s',
-  },
-})
-
 const DrawioComponent = defineComponent({
   name: 'extension-drawio',
   props: {
@@ -46,7 +31,8 @@ const DrawioComponent = defineComponent({
     content: String
   },
   setup (props) {
-    const { t } = useI18n()
+    const { t: _t, $t: _$t } = ctx.i18n.useI18n()
+
     const srcdoc = ref('')
     const xml = ref('')
     const refIFrame = ref<any>()
@@ -149,17 +135,17 @@ const DrawioComponent = defineComponent({
             'div',
             { class: 'drawio-action skip-print' },
             [
-              button(t(`${extensionId}.fit-height`), resize),
-              button(_t('reload'), reload),
+              button($t.value('fit-height'), resize),
+              button(_$t.value('reload'), reload),
               ...(drawioFile
                 ? [
-                    button(_t('edit'), () => { fullScreen.value = true }),
-                    button(_t('open-in-new-window'), () => {
-                      openWindow(buildSrc(buildEditorSrcdoc(drawioFile!), t(`${extensionId}.edit-diagram`, drawioFile!.name)), '_blank', { alwaysOnTop: false })
+                    button(_$t.value('edit'), () => { fullScreen.value = true }),
+                    button(_$t.value('open-in-new-window'), () => {
+                      openWindow(buildSrc(buildEditorSrcdoc(drawioFile!), t('edit-diagram', drawioFile!.name)), '_blank', { alwaysOnTop: false })
                     }),
                   ]
                 : [
-                    button(_t('open-in-new-window'), () => openWindow(buildSrc(srcdoc.value, _t('view-figure')))),
+                    button(_$t.value('open-in-new-window'), () => openWindow(buildSrc(srcdoc.value, _t('view-figure')))),
                   ]
               ),
             ]
@@ -431,9 +417,9 @@ export async function createDrawioFile (node: Doc, fileExt: '.drawio' | '.drawio
   const currentPath = node.path
 
   let filename = await useModal().input({
-    title: t(`${extensionId}.create-drawio-file`, fileExt),
-    hint: _t('document.create-dialog.hint'),
-    content: _t('document.current-path', currentPath),
+    title: t('create-drawio-file', fileExt),
+    hint: ctx.i18n.t('document.create-dialog.hint'),
+    content: ctx.i18n.t('document.current-path', currentPath),
     value: 'new-diagram' + fileExt,
     select: true
   })
@@ -467,7 +453,7 @@ export async function createDrawioFile (node: Doc, fileExt: '.drawio' | '.drawio
   try {
     await api.writeFile(file, content, isBase64)
     const srcdoc = buildEditorSrcdoc(file)
-    openWindow(buildSrc(srcdoc, t(`${extensionId}.edit-diagram`, file.name)), '_blank', { alwaysOnTop: false })
+    openWindow(buildSrc(srcdoc, t('edit-diagram', file.name)), '_blank', { alwaysOnTop: false })
     refreshTree()
   } catch (error: any) {
     useToast().show('warning', error.message)

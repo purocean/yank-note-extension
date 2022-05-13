@@ -5,16 +5,13 @@ const extensionId = __EXTENSION_ID__
 registerPlugin({
   name: extensionId,
   register (ctx) {
-    ctx.i18n.mergeLanguage('en', {
-      [extensionId]: {
+    const i18n = ctx.i18n.createI18n({
+      en: {
         'popup-preview': 'Popup Preview',
       },
-    })
-
-    ctx.i18n.mergeLanguage('zh-CN', {
-      [extensionId]: {
+      'zh-CN': {
         'popup-preview': '弹窗预览',
-      },
+      }
     })
 
     let _win: any = null
@@ -32,7 +29,7 @@ registerPlugin({
       menus['status-bar-tool']?.list?.push({
         id: extensionId,
         type: 'normal',
-        title: ctx.i18n.t(`${extensionId}.popup-preview`),
+        title: i18n.t('popup-preview'),
         onClick: () => {
           if (!ctx.getPremium()) {
             ctx.ui.useToast().show('info', ctx.i18n.t('premium.need-purchase', extensionId))
@@ -81,7 +78,7 @@ registerPlugin({
       if (win && win.ctx) {
         const _ctx: Ctx = win.ctx
         _ctx.store.state.currentContent = ctx.store.state.currentContent
-        win.document.title = ctx.i18n.t(`${extensionId}.popup-preview`)
+        win.document.title = i18n.t('popup-preview')
       }
     }
 
