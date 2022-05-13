@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-sublime-merge",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "displayName": "Sublime Merge",
   "description": "Sublime Merge integration for Yank Note",
   "displayName_ZH-CN": "Sublime Merge",
