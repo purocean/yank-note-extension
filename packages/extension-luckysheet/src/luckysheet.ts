@@ -293,7 +293,10 @@ export const LuckyComponent = defineComponent({
             button($t.value('edit'), open),
             button($t.value('open-in-new-window'), () => {
               const html = buildSrcdoc(props.repo!, props.path!, true)
-              openWindow(buildSrc(html, t('edit-sheet'), false), '_blank', { alwaysOnTop: false })
+              openWindow(buildSrc(html, t('edit-sheet'), false), '_blank', {
+                alwaysOnTop: false,
+                contextIsolation: false,
+              })
             }),
           ]
         ),
@@ -410,7 +413,10 @@ export async function createLuckysheet (node: Doc) {
   try {
     await ctx.api.writeFile(file, file.content)
     const srcdoc = buildSrcdoc(file.repo, file.path, true)
-    openWindow(buildSrc(srcdoc, t('edit-sheet'), false), '_blank', { alwaysOnTop: false })
+    openWindow(buildSrc(srcdoc, t('edit-sheet'), false), '_blank', {
+      alwaysOnTop: false,
+      contextIsolation: false,
+    })
     ctx.tree.refreshTree()
   } catch (error: any) {
     useToast().show('warning', error.message)
