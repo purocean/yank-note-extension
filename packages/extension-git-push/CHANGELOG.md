@@ -1,3 +1,10 @@
+## <small>1.1.7 (2022-05-16)</small>
+
+* fix: fix bugs ([371205f](https://github.com/purocean/yank-note-extension/commit/371205f))
+* chore: bump @yank-note/runtime-api to 3.30.0 ([2fd6e97](https://github.com/purocean/yank-note-extension/commit/2fd6e97))
+
+
+
 ## [1.1.6](https://github.com/purocean/yank-note-extension/compare/extension-git-push-1.1.5...extension-git-push-1.1.6) (2022-05-13)
 
 
