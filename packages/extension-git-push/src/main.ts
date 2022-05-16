@@ -34,7 +34,7 @@ registerPlugin({
           const currentRepo = ctx.store.state.currentRepo
           const path = currentRepo && currentRepo.path
           if (path) {
-            let cmd = `cd '${path}' && git add . && git ci -m 'update' && git push`
+            let cmd = `pushd "${path}" && git add . && git commit -m 'update' && git push`
 
             if (!ctx.store.state.showXterm) {
               cmd += ' && exit'

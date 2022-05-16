@@ -2,6 +2,8 @@ import { registerPlugin } from '@yank-note/runtime-api'
 
 const extensionName = __EXTENSION_ID__
 
+const settingKeySmgPath = 'plugin.sublime-merge.smg-path'
+
 registerPlugin({
   name: extensionName,
   register (ctx) {
@@ -9,10 +11,26 @@ registerPlugin({
       en: {
         'open-in-sublime-merge': 'Open in Sublime Merge',
         'show-history-in-sublime-merge': 'Show History in Sublime Merge',
+        'smerge-command-path': 'Smerge Command Path',
       },
       'zh-CN': {
         'open-in-sublime-merge': '在 Sublime Merge 中打开',
         'show-history-in-sublime-merge': '在 Sublime Merge 中显示历史',
+        'smerge-command-path': 'Smerge 命令路径',
+      }
+    })
+
+    ctx.setting.changeSchema(schema => {
+      if (!schema.groups.some((x: any) => x.value === 'plugin')) {
+        schema.groups.push({ value: 'plugin', label: 'Plugin' } as any)
+      }
+
+      schema.properties[settingKeySmgPath] = {
+        title: i18n.$$t('smerge-command-path'),
+        type: 'string',
+        defaultValue: 'smerge',
+        group: 'plugin',
+        required: true,
       }
     })
 
@@ -21,11 +39,24 @@ registerPlugin({
         const currentRepo = ctx.store.state.currentRepo
         const path = currentRepo ? ctx.utils.path.join(currentRepo.path, node.path) : ''
         if (path && currentRepo) {
-          if (node.type === 'dir') {
-            ctx.api.runCode('bash', `smg '${path}'`)
-          } else {
-            ctx.api.runCode('bash', `cd '${currentRepo.path}' && smg log '${path}'`)
+          const smgPath = ctx.setting.getSetting(settingKeySmgPath, 'smerge')
+
+          const args = [ctx.utils.quote(path)]
+
+          if (node.type === 'file') {
+            args.unshift('`log`')
           }
+
+          ctx.api.rpc(`return require('util').promisify(require('child_process').execFile)(
+            ${ctx.utils.quote(smgPath)},
+            [${args.join(',')}],
+            {
+              cwd: ${ctx.utils.quote(currentRepo.path)},
+            }
+          )`).catch((e: any) => {
+            ctx.ui.useToast().show('warning', e.message)
+            ctx.setting.showSettingPanel('plugin')
+          })
         }
       }
 
