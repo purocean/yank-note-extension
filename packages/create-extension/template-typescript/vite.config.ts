@@ -7,7 +7,7 @@ const OUT_DIR = 'dist/'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: path.join(getExtensionBasePath(process.env.npm_package_name), OUT_DIR),
+  base: path.join(getExtensionBasePath(process.env.npm_package_name), OUT_DIR).replace(/\\/g, '/'),
   plugins: [vue()],
   define: {
     __EXTENSION_VERSION__: JSON.stringify(process.env.npm_package_version),
