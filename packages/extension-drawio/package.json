@@ -15,9 +15,9 @@
   },
   "main": "./dist/index.js",
   "style": "./dist/style.css",
-  "icon": "https://cdn.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/icon.svg",
-  "readmeUrl": "https://cdn.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/README.md",
-  "changelogUrl": "https://cdn.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/CHANGELOG.md",
+  "icon": "https://fastly.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/icon.svg",
+  "readmeUrl": "https://fastly.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/README.md",
+  "changelogUrl": "https://fastly.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/CHANGELOG.md",
   "engines": {
     "node": ">=14.6.0",
     "yank-note": "^3.29.0"
