@@ -76,7 +76,7 @@ JavaScript 入口文件在 `package.json` 中的 `main` 字段中定义。
 
 开发插件时候建议在 Chrome 浏览器中打开 Yank Note，方便调试。打开方法：右键点击托盘图标 --> 点击“浏览器中打开”
 
-1. 使用[脚手架](https://github.com/purocean/yank-note-extension/tree/main/packages/create-extension)创建项目: `yarn create yank-note-extension`
+1. 使用[脚手架](https://github.com/purocean/yank-note-extension/tree/main/packages/create-extension)创建项目: `yarn create yank-note-extension`。包名建议以`yank-note-extension-` 开头。
 2. 进入项目后，安装依赖: `yarn install`
 3. 链接当前目录到 [Yank Note 扩展目录]: `yarn run link-extension`
 4. 启动开发: `yarn run dev`
