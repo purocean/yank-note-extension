@@ -25,6 +25,23 @@ registerPlugin({
       }
     }
 
+    function clickScroll (line?: number) {
+      if (!line) {
+        return
+      }
+
+      if (
+        ctx.store.state.showEditor &&
+        !ctx.store.state.presentation &&
+        window.getSelection()!.toString().length < 1
+      ) {
+        ctx.editor.getEditor().revealLineNearTop(line)
+        setTimeout(ctx.editor.highlightLine(line), 1000)
+      }
+
+      return false
+    }
+
     ctx.statusBar.tapMenus(menus => {
       menus['status-bar-tool']?.list?.push({
         id: extensionId,
@@ -65,6 +82,27 @@ registerPlugin({
               setTimeout(updateContent, 0)
               setTimeout(updateCurrentFile, 0)
               setTimeout(updateCurrentRepo, 0)
+              setTimeout(() => {
+                let clickTimer: number | null = null
+                _win.ctx.registerHook('VIEW_ELEMENT_CLICK', async ({ e }) => {
+                  if (clickTimer) {
+                    clearTimeout(clickTimer)
+                    clickTimer = null
+                  } else {
+                    const target: HTMLElement | null = e.target as HTMLElement
+                    const line = parseInt(target?.dataset?.sourceLine || '0', 10)
+                    if (line) {
+                      clickTimer = setTimeout(() => {
+                        _win.ctx.view.disableSyncScrollAwhile(() => {
+                          clickScroll(line)
+                        })
+
+                        clickTimer = null
+                      }, 200) as any
+                    }
+                  }
+                })
+              }, 800);
             })
           } else {
             console.error('open popup preview window failed')
@@ -86,7 +124,9 @@ registerPlugin({
       const win = getWin()
       if (win && win.ctx) {
         const _ctx: Ctx = win.ctx
-        _ctx.view.revealLine(line)
+        if (_ctx.view.getEnableSyncScroll()) {
+          _ctx.view.revealLine(line)
+        }
       }
     }
 
