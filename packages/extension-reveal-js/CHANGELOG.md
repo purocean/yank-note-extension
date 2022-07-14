@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.0.1...extension-reveal-js-1.1.0) (2022-07-14)
+
+
+### Performance Improvements
+
+* **extension-reveal-js:** optimize performance ([0f9d305](https://github.com/purocean/yank-note-extension/commit/0f9d30585ccd3af6a24ec9e17e28c1e3dcd0fad0))
+
+
+
 ## [1.0.1](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.0.0...extension-reveal-js-1.0.1) (2022-07-14)
 
 
