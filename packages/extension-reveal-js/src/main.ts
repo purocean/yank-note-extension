@@ -42,6 +42,7 @@ registerPlugin({
         <script src="${baseUrl}/dist/reveal.js"></script>
         <script src="${baseUrl}/dist/plugin/highlight/highlight.js"></script>
         <script src="${baseUrl}/dist/plugin/math/math.js"></script>
+        <script> initReveal() </script>
       `
 
       const url = new URL(location.origin + ctx.embed.buildSrc(html, htmlTitle))
@@ -49,16 +50,18 @@ registerPlugin({
         url.searchParams.set('print-pdf', 'true')
       }
 
+      const contentPromise = ctx.view.getContentHtml({
+        inlineLocalImage: true,
+        includeStyle: true,
+      })
+
       const win = ctx.env.openWindow(url.toString(), '_blank', { alwaysOnTop: false })
       if (!win) {
         throw new Error('Failed to open window')
       }
 
-      win.window.addEventListener('load', async () => {
-        const content = await ctx.view.getContentHtml({
-          inlineLocalImage: true,
-          includeStyle: true,
-        })
+      (win.window as any).initReveal = async () => {
+        const content = await contentPromise
 
         const tmp = document.createElement('div')
         tmp.innerHTML = content
@@ -81,7 +84,7 @@ registerPlugin({
         if (print) {
           setTimeout(() => win.window.print(), 500)
         }
-      })
+      }
     }
 
     ctx.statusBar.tapMenus(menus => {
