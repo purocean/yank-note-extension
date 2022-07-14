@@ -50,6 +50,7 @@ registerPlugin({
         url.searchParams.set('print-pdf', 'true')
       }
 
+      await ctx.triggerHook('DOC_BEFORE_EXPORT', { type: 'html' }, { breakable: true })
       const contentPromise = ctx.view.getContentHtml({
         inlineLocalImage: true,
         includeStyle: true,
