@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.1.0...extension-reveal-js-1.1.1) (2022-07-14)
+
+
+### Bug Fixes
+
+* **extension-reveal-js:** fix not work with echarts extension ([a3dba48](https://github.com/purocean/yank-note-extension/commit/a3dba488a1b48365fa0e701f6a5480419bbe3f89))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.0.1...extension-reveal-js-1.1.0) (2022-07-14)
 
 
