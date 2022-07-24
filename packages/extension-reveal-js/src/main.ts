@@ -16,6 +16,8 @@ registerPlugin({
       }
     })
 
+    const logger = ctx.utils.getLogger(extensionId)
+
     async function present (print = false) {
       if (!ctx.getPremium()) {
         ctx.ui.useToast().show('info', ctx.i18n.t('premium.need-purchase', extensionId))
@@ -51,24 +53,33 @@ registerPlugin({
       }
 
       await ctx.triggerHook('DOC_BEFORE_EXPORT', { type: 'html' }, { breakable: true })
-      const contentPromise = ctx.view.getContentHtml({
+      const fileUri = ctx.doc.toUri(ctx.store.state.currentFile)
+
+      const getContentPromise = () => ctx.view.getContentHtml({
         inlineLocalImage: true,
         includeStyle: true,
       })
+
+      const contentPromise = getContentPromise()
 
       const win = ctx.env.openWindow(url.toString(), '_blank', { alwaysOnTop: false })
       if (!win) {
         throw new Error('Failed to open window')
       }
 
-      (win.window as any).initReveal = async () => {
-        const content = await contentPromise
+      (win.window as any).initReveal = async (contentHtml?: string) => {
+        const content = contentHtml || await contentPromise
 
         const tmp = document.createElement('div')
         tmp.innerHTML = content
 
         const slides = win.window.document.getElementById('reveal-slides')
         slides!.innerHTML = tmp.firstElementChild!.innerHTML!
+
+        // update content only
+        if (contentHtml) {
+          return
+        }
 
         const Reveal = (win.window as any).Reveal
         const RevealHighlight = (win.window as any).RevealHighlight
@@ -86,6 +97,24 @@ registerPlugin({
           setTimeout(() => win.window.print(), 500)
         }
       }
+
+      const refreshContent = async ({ doc }) => {
+        if (ctx.doc.toUri(doc) === fileUri) {
+          if (win && win.window) {
+            logger.debug('refresh content', fileUri)
+            const Reveal = (win.window as any).Reveal
+            ;(win.window as any).initReveal(await getContentPromise())
+            const state = Reveal.getState()
+            Reveal.sync()
+            Reveal.slide(state.indexh, state.indexv, state.indexf)
+          } else {
+            logger.debug('remove hook')
+            ctx.removeHook('DOC_SAVED', refreshContent)
+          }
+        }
+      }
+
+      ctx.registerHook('DOC_SAVED', refreshContent)
     }
 
     ctx.statusBar.tapMenus(menus => {
