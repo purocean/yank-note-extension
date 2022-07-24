@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.1.1...extension-reveal-js-1.2.0) (2022-07-24)
+
+
+### Features
+
+* **extension-reveal-js:** support hot update content ([ef98fce](https://github.com/purocean/yank-note-extension/commit/ef98fce1d25d461f124702dc8d016c2ebaef6f93))
+
+
+
 ## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.1.0...extension-reveal-js-1.1.1) (2022-07-14)
 
 
