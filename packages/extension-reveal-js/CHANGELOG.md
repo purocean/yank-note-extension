@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.2.0...extension-reveal-js-1.2.1) (2022-07-25)
+
+
+### Bug Fixes
+
+* **extension-reveal-js:** fix memory leak ([8555464](https://github.com/purocean/yank-note-extension/commit/8555464bb7021cd07e79963647ce232917dd0aa8))
+
+
+
 # [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.1.1...extension-reveal-js-1.2.0) (2022-07-24)
 
 
