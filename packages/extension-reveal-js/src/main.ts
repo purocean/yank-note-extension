@@ -99,18 +99,19 @@ registerPlugin({
       }
 
       const refreshContent = async ({ doc }) => {
+        if (!win || !win.window) {
+          logger.debug('remove hook')
+          ctx.removeHook('DOC_SAVED', refreshContent)
+          return
+        }
+
         if (ctx.doc.toUri(doc) === fileUri) {
-          if (win && win.window) {
-            logger.debug('refresh content', fileUri)
-            const Reveal = (win.window as any).Reveal
-            ;(win.window as any).initReveal(await getContentPromise())
-            const state = Reveal.getState()
-            Reveal.sync()
-            Reveal.slide(state.indexh, state.indexv, state.indexf)
-          } else {
-            logger.debug('remove hook')
-            ctx.removeHook('DOC_SAVED', refreshContent)
-          }
+          logger.debug('refresh content', fileUri)
+          const Reveal = (win.window as any).Reveal
+          ;(win.window as any).initReveal(await getContentPromise())
+          const state = Reveal.getState()
+          Reveal.sync()
+          Reveal.slide(state.indexh, state.indexv, state.indexf)
         }
       }
 
