@@ -28,6 +28,7 @@ export declare const initState: {
         line: number;
         column: number;
     };
+    previewer: string;
 };
 export declare type AppState = typeof initState;
 declare const _default: import("vuex").Store<{
@@ -59,5 +60,6 @@ declare const _default: import("vuex").Store<{
         line: number;
         column: number;
     };
+    previewer: string;
 }>;
 export default _default;

@@ -1,4 +1,4 @@
-import type { BuildInHookTypes, Components } from '@fe/types';
+import type { BuildInHookTypes, Components, Previewer } from '@fe/types';
 export declare type MenuItem = Components.ContextMenu.Item;
 export declare type BuildContextMenu = (items: MenuItem[], e: MouseEvent) => void;
 export declare type Heading = {
@@ -75,6 +75,26 @@ export declare function toggleSyncScroll(flag?: boolean): void;
  * @param fun
  */
 export declare function tapContextMenus(fun: BuildContextMenu): void;
+/**
+ * Switch current previewer
+ * @param name Previewer name
+ */
+export declare function switchPreviewer(name: string): void;
+/**
+ * Register a previewer.
+ * @param previewer Previewer
+ */
+export declare function registerPreviewer(previewer: Previewer): void;
+/**
+ * Remove a previewer.
+ * @param name Previewer name
+ */
+export declare function removePreviewer(name: string): void;
+/**
+ * Get all previewers.
+ * @returns Previewers
+ */
+export declare function getAllPreviewers(): Previewer[];
 /**
  * Get context menus
  * @param e

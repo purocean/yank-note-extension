@@ -124,3 +124,7 @@ export declare function showHistory(doc: Doc): void;
  * hide history panel
  */
 export declare function hideHistory(): void;
+/**
+ * print current document
+ */
+export declare function print(): Promise<void>;

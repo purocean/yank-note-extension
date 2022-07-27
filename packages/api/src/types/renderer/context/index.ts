@@ -63,6 +63,7 @@ declare const ctx: Readonly<{
             line: number;
             column: number;
         };
+        previewer: string;
     }>;
     action: typeof action;
     doc: typeof doc;

@@ -164,6 +164,7 @@ export interface BuildInSettings {
     'editor.ordered-list-completion': 'auto' | 'increase' | 'one';
     'editor.minimap': boolean;
     'editor.line-numbers': 'on' | 'off' | 'relative' | 'interval';
+    'assets.path-type': 'relative' | 'absolute' | 'auto';
     'plugin.image-hosting-picgo.server-url': string;
     'plugin.image-hosting-picgo.enable-paste-image': boolean;
     'license': string;
@@ -210,7 +211,9 @@ export declare type BuildInActions = {
     'file-tabs.close-current': () => void;
     'xterm.run-code': (language: string, code: string, exit: boolean) => void;
     'xterm.run': (code: string) => void;
-    'xterm.init': () => void;
+    'xterm.init': (opts?: {
+        cwd?: string;
+    }) => void;
     'plugin.document-history-stack.back': () => void;
     'plugin.document-history-stack.forward': () => void;
     'plugin.image-hosting-picgo.upload': (file: File) => Promise<string | undefined>;
@@ -266,6 +269,7 @@ export declare type BuildInHookTypes = {
     VIEW_FILE_CHANGE: never;
     VIEW_BEFORE_REFRESH: never;
     VIEW_AFTER_REFRESH: never;
+    VIEW_PREVIEWER_CHANGE: never;
     VIEW_ON_GET_HTML_FILTER_NODE: {
         node: HTMLElement;
         options: {
@@ -347,12 +351,17 @@ export declare type BuildInHookTypes = {
         extensions: Extension[];
     };
 };
+export declare type Previewer = {
+    name: string;
+    component: any;
+};
 export declare type BuildInIOCTypes = {
     [key in keyof BuildInHookTypes]: any;
 } & {
     STATUS_BAR_MENU_TAPPERS: any;
     CONTROL_CENTER_SCHEMA_TAPPERS: any;
     THEME_STYLES: any;
+    VIEW_PREVIEWER: Previewer;
 };
 export declare type FrontMatterAttrs = {
     headingNumber?: boolean;
@@ -360,4 +369,5 @@ export declare type FrontMatterAttrs = {
     enableMacro?: boolean;
     define?: Record<string, boolean>;
     mdOptions?: Record<string, boolean>;
+    defaultPreviewer?: string;
 };

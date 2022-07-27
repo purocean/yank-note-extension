@@ -31,6 +31,8 @@ declare const languages: {
         'install-extension-tips': string;
         'not-support-mas': string;
         'learn-more': string;
+        previewer: string;
+        default: string;
         premium: {
             'need-purchase': string;
             'buy-license': string;
@@ -228,6 +230,8 @@ declare const languages: {
                 'doc-history': string;
                 'share-preview': string;
                 'extension-manager': string;
+                print: string;
+                export: string;
             };
             'document-info': {
                 selected: string;
@@ -340,6 +344,9 @@ declare const languages: {
                 'custom-css': string;
                 'assets-dir': string;
                 'assets-desc': string;
+                assets: {
+                    'path-type': string;
+                };
                 shell: string;
                 envs: string;
                 'auto-save': string;
@@ -577,6 +584,8 @@ declare const languages: {
         'install-extension-tips': string;
         'not-support-mas': string;
         'learn-more': string;
+        previewer: string;
+        default: string;
         premium: {
             'need-purchase': string;
             'buy-license': string;
@@ -774,6 +783,8 @@ declare const languages: {
                 'doc-history': string;
                 'share-preview': string;
                 'extension-manager': string;
+                print: string;
+                export: string;
             };
             'document-info': {
                 selected: string;
@@ -886,6 +897,9 @@ declare const languages: {
                 'custom-css': string;
                 'assets-dir': string;
                 'assets-desc': string;
+                assets: {
+                    'path-type': string;
+                };
                 shell: string;
                 envs: string;
                 'auto-save': string;
