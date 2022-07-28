@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.0.0...extension-markmap-1.0.1) (2022-07-28)
+
+
+### Bug Fixes
+
+* **extension-markmap:** fix buttons ([e64445f](https://github.com/purocean/yank-note-extension/commit/e64445fce1607c56559d953d0b99919f4728b2a5))
+
+
+
 # 1.0.0 (2022-07-28)
 
 
