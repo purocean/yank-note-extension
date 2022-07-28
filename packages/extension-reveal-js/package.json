@@ -14,10 +14,11 @@
     "url": "https://github.com/purocean/yank-note-extension.git"
   },
   "main": "./dist/index.js",
+  "style": "./dist/style.css",
   "icon": "./icon.svg",
   "engines": {
     "node": ">=14.6.0",
-    "yank-note": "^3.32.0"
+    "yank-note": "^3.33.0"
   },
   "requirements": {
     "premium": true

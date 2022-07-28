@@ -9,6 +9,7 @@ This extension integrates [Reveal.js](https://revealjs.com/) into Yank Note.
 
 ~~~markdown
 ---
+defaultPreviewer: 'Reveal.js'
 revealJsOpts: {
     theme: 'moon', # theme https://revealjs.com/themes/
     progress: true, # options https://revealjs.com/config/
