@@ -153,6 +153,7 @@ ctx.lib.vue.onMounted(init)
 
 <style>
 .markmap-preview-wrapper {
+  transform: translateX(0);
   display: flex;
   align-items: center;
   height: 100%;
