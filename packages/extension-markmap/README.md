@@ -5,7 +5,8 @@ This extension integrates [Markmap](https://markmap.js.org/) into Yank Note.
 Visualize your Markdown as mindmaps with Markmap.
 
 ## Screenshots
-TODO
+
+![image](https://user-images.githubusercontent.com/7115690/181574494-38730b79-ab11-4197-b0a3-5225ab72a5b0.png)
 
 ## Usage
 
