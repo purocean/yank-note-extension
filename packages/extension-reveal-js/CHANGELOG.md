@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.2.1...extension-reveal-js-1.3.0) (2022-07-28)
+
+
+### Features
+
+* **extension-reveal-js:** add reveal.js previewer ([322cd7a](https://github.com/purocean/yank-note-extension/commit/322cd7a8b0a589f7962ddc7b40c4efcf9d346676))
+
+
+
 ## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.2.0...extension-reveal-js-1.2.1) (2022-07-25)
 
 
