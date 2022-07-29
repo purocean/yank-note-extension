@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.0.1...extension-markmap-1.1.0) (2022-07-29)
+
+
+### Features
+
+* **extension-markmap:** support macro expression ([0817d07](https://github.com/purocean/yank-note-extension/commit/0817d076f45a653d97ddd03f080de61a3fb406e8))
+
+
+
 ## [1.0.1](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.0.0...extension-markmap-1.0.1) (2022-07-28)
 
 
