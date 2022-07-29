@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.1.0...extension-markmap-1.1.1) (2022-07-29)
+
+
+### Bug Fixes
+
+* fix svg export could be cropped ([7210602](https://github.com/purocean/yank-note-extension/commit/7210602ad85aae9c26bd1598c4cd07fb9579ff6a))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.0.1...extension-markmap-1.1.0) (2022-07-29)
 
 
