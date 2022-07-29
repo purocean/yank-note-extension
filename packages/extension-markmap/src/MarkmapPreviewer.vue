@@ -36,7 +36,7 @@ function newWindow () {
 function render (win?: Window) {
   logger.debug('render')
 
-  const content = ctx.store.state.currentContent
+  const content = ctx.view.getRenderEnv()?.source || ''
   const _win = win || iframe.value?.contentWindow
   if (_win) {
     const transformer: Transformer = (_win as any).transformer
@@ -65,7 +65,7 @@ function render (win?: Window) {
   }
 }
 
-const renderDebounce = ctx.lib.lodash.debounce(render, 1000)
+const renderDebounce = ctx.lib.lodash.debounce(render, 800)
 
 function init () {
   logger.debug('init')
@@ -144,11 +144,15 @@ async function onLoad (win: Window) {
   }
 }
 
-ctx.lib.vue.watch(() => ctx.store.state.currentContent, () => {
-  renderDebounce()
-})
+ctx.registerHook('VIEW_RENDERED', renderDebounce)
+
+function clean () {
+  logger.debug('clean')
+  ctx.removeHook('VIEW_RENDERED', renderDebounce)
+}
 
 ctx.lib.vue.onMounted(init)
+ctx.lib.vue.onBeforeUnmount(clean)
 </script>
 
 <style>
