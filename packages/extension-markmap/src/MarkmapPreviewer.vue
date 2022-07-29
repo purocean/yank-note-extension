@@ -77,7 +77,7 @@ function init () {
   })
 }
 
-async function prepareExport (fun: (el: HTMLElement) => Promise<void>, radio = 2) {
+async function prepareExport (fun: (el: HTMLElement) => Promise<void>, radio = 1) {
   const win = iframe.value?.contentWindow
   if (win) {
     const g = win.document.querySelector('#markmap > g')!
