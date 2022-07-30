@@ -16,7 +16,7 @@ const { isElectron, openWindow } = ctx.env
 const { emitResize } = ctx.layout
 const { Mask } = ctx.components
 
-type F = { repo?: string; path?: string; url?: string; content: string }
+type F = { repo?: string; path?: string; url?: string; content: string; page: number }
 
 const extensionId = __EXTENSION_ID__
 
@@ -28,7 +28,8 @@ const DrawioComponent = defineComponent({
     repo: String,
     path: String,
     name: String,
-    content: String
+    content: String,
+    page: Number,
   },
   setup (props) {
     const { t: _t, $t: _$t } = ctx.i18n.useI18n()
@@ -40,7 +41,12 @@ const DrawioComponent = defineComponent({
     const fullScreen = ref(false)
 
     const init = async () => {
-      const { html, content } = await buildSrcdoc({ repo: props.repo, path: props.path, content: props.content || '' })
+      const { html, content } = await buildSrcdoc({
+        repo: props.repo,
+        path: props.path,
+        content: props.content || '',
+        page: props.page || 1,
+      })
       srcdoc.value = html
       xml.value = content
     }
@@ -170,15 +176,15 @@ const DrawioComponent = defineComponent({
 })
 
 export function MarkdownItPlugin (md: Markdown) {
-  const render = ({ url, content }: any) => {
+  const render = ({ url, content, page = 1 }: any) => {
     if (url) {
       const params = new URLSearchParams(url.replace(/^.*\?/, ''))
       const repo = FLAG_DEMO ? 'help' : (params.get('repo') || store.state.currentFile?.repo || '')
       const path = params.get('path') || ''
-      return h(DrawioComponent, { repo, path, name: basename(path), content })
+      return h(DrawioComponent, { repo, path, name: basename(path), content, page })
     }
 
-    return h(DrawioComponent, { url, content })
+    return h(DrawioComponent, { url, content, page })
   }
 
   const linkTemp = md.renderer.rules.link_open!.bind(md.renderer.rules)
@@ -190,12 +196,13 @@ export function MarkdownItPlugin (md: Markdown) {
     }
 
     const url = token.attrGet('href')
+    const page = parseInt(token.attrGet('page') || '1', 10)
     const nextToken = tokens[idx + 1]
     if (nextToken && nextToken.type === 'text') {
       nextToken.content = ''
     }
 
-    return render({ url }) as any
+    return render({ url, page }) as any
   }
 
   const fenceTemp = md.renderer.rules.fence!.bind(md.renderer.rules)
@@ -212,7 +219,7 @@ export function MarkdownItPlugin (md: Markdown) {
   }
 }
 
-export async function buildSrcdoc ({ repo, path, content }: F): Promise<{ html: string, content: string }> {
+export async function buildSrcdoc ({ repo, path, content, page }: F): Promise<{ html: string, content: string }> {
   if (!content && repo && path) {
     try {
       if (!path.endsWith('.drawio')) {
@@ -235,7 +242,7 @@ export async function buildSrcdoc ({ repo, path, content }: F): Promise<{ html: 
     nav: true,
     resize: true,
     toolbar: 'pages zoom layers',
-    page: 1,
+    page: page - 1, // page start from 0
     xml: content,
   })
 

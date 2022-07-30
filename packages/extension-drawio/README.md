@@ -7,7 +7,7 @@ This extension integrates [Draw.io](https://app.diagrams.net/) into Yank Note.
 The value of the link attribute `link-type` needs to be a `drawio` string. The use of the link format will not affect other Markdown resolver resolving.
 
 ```markdown
-[drawio](./test.drawio){link-type="drawio"}
+[drawio](./test.drawio){link-type="drawio" page="1"}
 ```
 
 ## Screenshots
