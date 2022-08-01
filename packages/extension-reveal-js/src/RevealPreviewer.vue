@@ -117,7 +117,7 @@ ctx.lib.vue.onBeforeUnmount(() => {
   opacity: 1;
 }
 
-iframe {
+.reveal-js-preview > iframe {
   position: absolute;
   top: 0;
   left: 0;
