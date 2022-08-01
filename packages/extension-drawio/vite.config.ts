@@ -25,7 +25,7 @@ export default defineConfig({
   },
   build: {
     outDir: OUT_DIR,
-    minify: true,
+    minify: 'terser',
     lib: {
       entry: path.resolve(__dirname, 'src/main.ts'),
       formats: ['iife'],
