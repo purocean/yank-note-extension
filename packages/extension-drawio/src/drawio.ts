@@ -269,6 +269,13 @@ export async function buildSrcdoc ({ repo, path, content, page }: F): Promise<{ 
           window._requestAnimationFrameTask = fn
         }
       }
+
+      window.DRAWIO_BASE_URL = '${BASE_URL}'
+      window.SHAPES_PATH = '${BASE_URL}/shapes'
+      window.STENCIL_PATH = '${BASE_URL}/stencils'
+      window.GRAPH_IMAGE_PATH = '${BASE_URL}/img'
+      window.mxImageBasePath = '${BASE_URL}/mxgraph/images'
+      window.mxBasePath = '${BASE_URL}/mxgraph/'
     </script>
 
     <style>
