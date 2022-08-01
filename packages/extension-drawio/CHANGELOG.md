@@ -1,3 +1,17 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.1.0...extension-drawio-1.2.0) (2022-08-01)
+
+
+### Bug Fixes
+
+* **extension-drawio:** fix viewer base path ([c4fe698](https://github.com/purocean/yank-note-extension/commit/c4fe698a77783e4435f602c9c86ec06079c6623b))
+
+
+### Features
+
+* **extension-drawio:** upgrade draw.io to 20.2.1 ([b9efb2a](https://github.com/purocean/yank-note-extension/commit/b9efb2a9a733c176881cb6ff5a452b66e88f407a))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.0.3...extension-drawio-1.1.0) (2022-07-30)
 
 
