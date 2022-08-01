@@ -1,3 +1,12 @@
+## [1.3.2](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.3.1...extension-reveal-js-1.3.2) (2022-08-01)
+
+
+### Bug Fixes
+
+* **extension-reveal-js:** fix style ([e29194d](https://github.com/purocean/yank-note-extension/commit/e29194dceccd8de85f1aae2c19b0c01c4ba5bb5c))
+
+
+
 ## [1.3.1](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.3.0...extension-reveal-js-1.3.1) (2022-08-01)
 
 
