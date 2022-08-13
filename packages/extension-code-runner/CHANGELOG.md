@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-code-runner-1.1.0...extension-code-runner-1.1.1) (2022-08-13)
+
+
+### Features
+
+* **extension-code-runner:** enable bat execution only on windows ([457e74c](https://github.com/purocean/yank-note-extension/commit/457e74c85d4f367415ed3806b5833f086772472e))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-code-runner-1.0.2...extension-code-runner-1.1.0) (2022-08-13)
 
 
