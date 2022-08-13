@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-code-runner",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "displayName": "Code Runner",
   "displayName_ZH-CN": "Code Runner",
   "description": "Run code for multiple languages: BASH/SH, PHP, Python, Node.js.",
