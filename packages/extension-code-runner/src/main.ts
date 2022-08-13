@@ -13,7 +13,7 @@ const runCmds: Record<string, string | { cmd: string, args: string[] }> = {
   node: { cmd: 'node', args: ['-e'] },
 }
 
-const terminalCmds = {
+const terminalCmds: Record<string, { start: string, exit: string }> = {
   bat: { start: 'cmd.exe', exit: 'exit' },
   shell: { start: '', exit: 'exit' },
   sh: { start: 'sh', exit: 'exit' },
@@ -27,6 +27,11 @@ const terminalCmds = {
 registerPlugin({
   name: extensionId,
   register (ctx) {
+    if (!ctx.env.isWindows) {
+      delete runCmds.bat
+      delete terminalCmds.bat
+    }
+
     ctx.runner.registerRunner({
       name: 'code-runner',
       order: 127,
