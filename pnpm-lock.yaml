@@ -63,6 +63,42 @@ importers:
       minimist: 1.2.6
       prompts: 2.4.2
 
+  packages/extension-code-runner:
+    specifiers:
+      '@rollup/plugin-node-resolve': ^13.2.1
+      '@rollup/plugin-replace': ^4.0.0
+      '@vitejs/plugin-vue': ^2.3.2
+      '@vue/eslint-config-standard': ^6.1.0
+      '@vue/eslint-config-typescript': ^10.0.0
+      '@yank-note/runtime-api': workspace:3.34.0
+      conventional-changelog-cli: ^2.2.2
+      eslint: ^7.32.0
+      eslint-plugin-import: ^2.26.0
+      eslint-plugin-node: ^11.1.0
+      eslint-plugin-promise: ^6.0.0
+      eslint-plugin-vue: ^8.7.1
+      typescript: ^4.6.4
+      vite: ^2.9.8
+      vue: ^3.2.33
+      vue-tsc: ^0.34.11
+    devDependencies:
+      '@rollup/plugin-node-resolve': 13.3.0
+      '@rollup/plugin-replace': 4.0.0
+      '@vitejs/plugin-vue': 2.3.2_vite@2.9.8+vue@3.2.33
+      '@vue/eslint-config-standard': 6.1.0_tixguow53u6a3uudjr4t2dcshu
+      '@vue/eslint-config-typescript': 10.0.0_yzev4ryi2uowr3tzgilgj3i2em
+      '@yank-note/runtime-api': link:../api
+      conventional-changelog-cli: 2.2.2
+      eslint: 7.32.0
+      eslint-plugin-import: 2.26.0_eslint@7.32.0
+      eslint-plugin-node: 11.1.0_eslint@7.32.0
+      eslint-plugin-promise: 6.0.0_eslint@7.32.0
+      eslint-plugin-vue: 8.7.1_eslint@7.32.0
+      typescript: 4.6.4
+      vite: 2.9.8
+      vue: 3.2.33
+      vue-tsc: 0.34.11_typescript@4.6.4
+
   packages/extension-drawio:
     specifiers:
       '@rollup/plugin-node-resolve': ^13.2.1
