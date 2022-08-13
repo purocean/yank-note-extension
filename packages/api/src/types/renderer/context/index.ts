@@ -25,6 +25,7 @@ import * as theme from '@fe/services/theme';
 import * as setting from '@fe/services/setting';
 import * as i18n from '@fe/services/i18n';
 import * as controlCenter from '@fe/services/control-center';
+import * as runner from '@fe/services/runner';
 import * as lib from './lib';
 import * as components from './components';
 declare const ctx: Readonly<{
@@ -72,6 +73,7 @@ declare const ctx: Readonly<{
     markdown: typeof markdown;
     statusBar: typeof statusBar;
     controlCenter: typeof controlCenter;
+    runner: typeof runner;
     layout: typeof layout;
     editor: typeof editor;
     view: typeof view;

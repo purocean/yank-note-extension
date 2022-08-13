@@ -31,6 +31,7 @@ declare const data: {
     'learn-more': string;
     previewer: string;
     default: string;
+    print: string;
     premium: {
         'need-purchase': string;
         'buy-license': string;

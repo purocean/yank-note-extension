@@ -33,6 +33,7 @@ declare const languages: {
         'learn-more': string;
         previewer: string;
         default: string;
+        print: string;
         premium: {
             'need-purchase': string;
             'buy-license': string;
@@ -586,6 +587,7 @@ declare const languages: {
         'learn-more': string;
         previewer: string;
         default: string;
+        print: string;
         premium: {
             'need-purchase': string;
             'buy-license': string;

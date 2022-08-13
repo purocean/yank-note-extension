@@ -209,8 +209,11 @@ export declare type BuildInActions = {
     'file-tabs.switch-left': () => void;
     'file-tabs.switch-right': () => void;
     'file-tabs.close-current': () => void;
-    'xterm.run-code': (language: string, code: string, exit: boolean) => void;
-    'xterm.run': (code: string) => void;
+    'xterm.run': (cmd: {
+        code: string;
+        start: string;
+        exit?: string;
+    } | string) => void;
     'xterm.init': (opts?: {
         cwd?: string;
     }) => void;
@@ -269,7 +272,9 @@ export declare type BuildInHookTypes = {
     VIEW_FILE_CHANGE: never;
     VIEW_BEFORE_REFRESH: never;
     VIEW_AFTER_REFRESH: never;
-    VIEW_PREVIEWER_CHANGE: never;
+    VIEW_PREVIEWER_CHANGE: {
+        type: 'register' | 'remove' | 'switch';
+    };
     VIEW_ON_GET_HTML_FILTER_NODE: {
         node: HTMLElement;
         options: {
@@ -350,11 +355,27 @@ export declare type BuildInHookTypes = {
     EXTENSION_READY: {
         extensions: Extension[];
     };
+    CODE_RUNNER_CHANGE: {
+        type: 'register' | 'remove';
+    };
 };
 export declare type Previewer = {
     name: string;
     component: any;
 };
+export interface CodeRunner {
+    name: string;
+    order?: number;
+    match: (language: string, magicComment: string) => boolean;
+    getTerminalCmd: (language: string, magicComment: string) => {
+        start: string;
+        exit: string;
+    } | null;
+    run: (language: string, code: string) => Promise<{
+        type: 'html' | 'plain';
+        value: ReadableStreamDefaultReader | string;
+    }>;
+}
 export declare type BuildInIOCTypes = {
     [key in keyof BuildInHookTypes]: any;
 } & {
@@ -362,6 +383,7 @@ export declare type BuildInIOCTypes = {
     CONTROL_CENTER_SCHEMA_TAPPERS: any;
     THEME_STYLES: any;
     VIEW_PREVIEWER: Previewer;
+    CODE_RUNNER: CodeRunner;
 };
 export declare type FrontMatterAttrs = {
     headingNumber?: boolean;

@@ -131,15 +131,19 @@ export declare function deleteTmpFile(name: string): Promise<ApiResult<any>>;
 export declare function convertFile(source: string, fromType: 'html' | 'markdown', toType: Exclude<ExportType, 'pdf'>, resourcePath: string): Promise<Response>;
 /**
  * Run code.
- * @param language
+ * @param cmd
  * @param code
- * @param callback
- * @returns result (javascript no result)
+ * @param outputStream
+ * @returns result
  */
-export declare function runCode(language: string, code: string, callback?: {
-    name: string;
-    handler: (res: string) => void;
-}): Promise<string>;
+export declare function runCode(cmd: string | {
+    cmd: string;
+    args: string[];
+}, code: string, outputStream: true): Promise<ReadableStreamDefaultReader>;
+export declare function runCode(cmd: string | {
+    cmd: string;
+    args: string[];
+}, code: string, outputStream?: false): Promise<string>;
 /**
  * Eval cade on Electron main process
  *
