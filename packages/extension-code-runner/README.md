@@ -4,7 +4,7 @@ Run code for multiple languages: BASH/SH, PHP, Python, Node.js.
 
 *[Note: This plugin is not available for Mac App Store downloaded Yank Note.](https://github.com/purocean/yn/issues/65#issuecomment-1065799677)*
 
-The first line of the code block needs to contain the string `--run--`, an example is as follows.
+The first line of the code block needs to contain the string `--run--`.
 
 ```js
 // --run--

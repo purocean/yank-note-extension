@@ -3,7 +3,7 @@ import { registerPlugin } from '@yank-note/runtime-api'
 const extensionId = __EXTENSION_ID__
 
 const runCmds: Record<string, string | { cmd: string, args: string[] }> = {
-  bat: 'cmd /c $tmpFile',
+  bat: '@chcp 65001 > nul & cmd /q /c "$tmpFile.bat"',
   sh: { cmd: 'sh', args: ['-c'] },
   shell: { cmd: 'sh', args: ['-c'] },
   bash: { cmd: 'bash', args: ['-c'] },
@@ -43,6 +43,10 @@ registerPlugin({
             type: 'plain',
             value: `Language ${language} not supported`
           }
+        }
+
+        if (language === 'bat') {
+          code = code.replace(/\r?\n/g, '\r\n')
         }
 
         const reader: any = await ctx.api.runCode(cmd, code, true)
