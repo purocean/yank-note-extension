@@ -27,11 +27,6 @@ const terminalCmds: Record<string, { start: string, exit: string }> = {
 registerPlugin({
   name: extensionId,
   register (ctx) {
-    if (!ctx.env.isWindows) {
-      delete runCmds.bat
-      delete terminalCmds.bat
-    }
-
     ctx.runner.registerRunner({
       name: 'code-runner',
       order: 127,
@@ -52,6 +47,13 @@ registerPlugin({
 
         if (language === 'bat') {
           code = code.replace(/\r?\n/g, '\r\n')
+        }
+
+        if (!ctx.env.isWindows && language === 'bat') {
+          return {
+            type: 'plain',
+            value: `Language ${language} not supported on this platform`
+          }
         }
 
         const reader: any = await ctx.api.runCode(cmd, code, true)
