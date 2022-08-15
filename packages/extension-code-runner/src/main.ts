@@ -27,17 +27,27 @@ const terminalCmds: Record<string, { start: string, exit: string }> = {
 registerPlugin({
   name: extensionId,
   register (ctx) {
+    function getCmd (language: string, code: string) {
+      const firstLine = code.split('\n')[0].trim()
+      const customCmd = firstLine.replace(/^.*--run--/, '').trim()
+      if (customCmd) {
+        return customCmd
+      }
+
+      return runCmds[language.toLowerCase()]
+    }
+
     ctx.runner.registerRunner({
       name: 'code-runner',
       order: 127,
-      match (language) {
-        return !!(runCmds[language.toLowerCase()])
+      match (language, magicComment) {
+        return !!getCmd(language, magicComment)
       },
       getTerminalCmd (language) {
         return terminalCmds[language.toLowerCase()] || null
       },
       async run (language, code) {
-        const cmd = runCmds[language.toLowerCase()]
+        const cmd = getCmd(language, code)
         if (!cmd) {
           return {
             type: 'plain',
