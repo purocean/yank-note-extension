@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-code-runner-1.1.1...extension-code-runner-1.2.0) (2022-08-15)
+
+
+### Features
+
+* **extension-code-runner:** support custom command ([9f95ed2](https://github.com/purocean/yank-note-extension/commit/9f95ed282ec7189a0d731c328f5e0a1d366ea7a6))
+
+
+
 ## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-code-runner-1.1.0...extension-code-runner-1.1.1) (2022-08-13)
 
 
