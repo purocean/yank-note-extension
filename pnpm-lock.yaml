@@ -310,7 +310,7 @@ importers:
       eslint-plugin-node: ^11.1.0
       eslint-plugin-promise: ^6.0.0
       eslint-plugin-vue: ^8.7.1
-      mermaid: ^9.1.0
+      mermaid: 9.1.3
       typescript: ^4.6.4
       vite: ^2.9.8
       vue: ^3.2.33
@@ -329,7 +329,7 @@ importers:
       eslint-plugin-node: 11.1.0_eslint@7.32.0
       eslint-plugin-promise: 6.0.0_eslint@7.32.0
       eslint-plugin-vue: 8.7.1_eslint@7.32.0
-      mermaid: 9.1.0
+      mermaid: 9.1.3
       typescript: 4.6.4
       vite: 2.9.8
       vue: 3.2.33
@@ -2826,8 +2826,8 @@ packages:
       esutils: 2.0.3
     dev: true
 
-  /dompurify/2.3.6:
-    resolution: {integrity: sha512-OFP2u/3T1R5CEgWCEONuJ1a5+MFKnOYpkywpUSxv/dj1LeBT1erK+JwM7zK0ROy2BRhqVCf0LRw/kHqKuMkVGg==}
+  /dompurify/2.3.8:
+    resolution: {integrity: sha512-eVhaWoVibIzqdGYjwsBWodIQIaXFSB+cKDf4cfxLMsK0xiud6SE+/WCVx/Xw/UwQsa4cS3T2eITcdtmTg2UKcw==}
     dev: true
 
   /dot-prop/5.3.0:
@@ -4312,14 +4312,14 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /mermaid/9.1.0:
-    resolution: {integrity: sha512-yltuGFfVJcWTT93DdGUdUhNQyS0PFmCRsXFtgV+Fsz8MiJmkrAQRDQMGpBR4z6riXBHnWyAMjFR8aMxx5HHQqg==}
+  /mermaid/9.1.3:
+    resolution: {integrity: sha512-jTIYiqKwsUXVCoxHUVkK8t0QN3zSKIdJlb9thT0J5jCnzXyc+gqTbZE2QmjRfavFTPPn5eRy5zaFp7V+6RhxYg==}
     dependencies:
       '@braintree/sanitize-url': 6.0.0
       d3: 7.4.4
       dagre: 0.8.5
       dagre-d3: 0.6.4
-      dompurify: 2.3.6
+      dompurify: 2.3.8
       graphlib: 2.1.8
       khroma: 2.0.0
       moment-mini: 2.24.0

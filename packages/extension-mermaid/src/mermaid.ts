@@ -62,7 +62,7 @@ const Mermaid = defineComponent({
           img.value = getImageUrl(svgCode)
         }, container.value)
       } catch (error) {
-        errMsg.value = '' + error
+        errMsg.value = error.str || String(error)
         logger.error('render', error)
       }
     }
