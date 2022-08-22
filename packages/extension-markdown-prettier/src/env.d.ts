@@ -9,5 +9,3 @@ declare module '*.vue' {
 
 declare const __EXTENSION_ID__: string
 declare const __EXTENSION_VERSION__: string
-declare module 'prettier/esm/standalone'
-declare module 'prettier/esm/parser-markdown'

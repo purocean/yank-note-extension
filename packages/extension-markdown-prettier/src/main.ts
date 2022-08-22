@@ -1,6 +1,6 @@
 import { registerPlugin } from '@yank-note/runtime-api'
-import prettier from 'prettier/esm/standalone'
-import prettierMarkdown from 'prettier/esm/parser-markdown'
+import prettier from 'prettier/standalone'
+import prettierMarkdown from 'prettier/parser-markdown'
 
 const extensionId = __EXTENSION_ID__
 const settingKeyFormatOnSave = 'plugin.markdown-prettier.format-on-save'
