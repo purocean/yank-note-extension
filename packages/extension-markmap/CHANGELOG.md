@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.1.1...extension-markmap-1.2.0) (2022-08-22)
+
+
+### Features
+
+* **extension-markmap:** handle link ([05fe709](https://github.com/purocean/yank-note-extension/commit/05fe7096b7de935756dad4f4f67bc20f5f83ba9a))
+
+
+
 ## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.1.0...extension-markmap-1.1.1) (2022-07-29)
 
 
