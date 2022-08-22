@@ -14,7 +14,7 @@
 import { ctx } from '@yank-note/runtime-api'
 import type { Markmap } from 'markmap-view'
 import type { Transformer } from 'markmap-lib'
-import { buildHTML } from './helper'
+import { buildHTML, handleLink, transformLink } from './helper'
 
 const logger = ctx.utils.getLogger('markmap-previewer')
 
@@ -41,6 +41,7 @@ function render (win?: Window) {
   if (_win) {
     const transformer: Transformer = (_win as any).transformer
     const { root } = transformer.transform(content)
+
     const mm: Markmap = (_win as any).mm
     if (mm) {
       mm.setData(root)
@@ -50,6 +51,10 @@ function render (win?: Window) {
       }
 
       const mm: Markmap = (_win as any).markmap.Markmap.create('#markmap', opts, root)
+
+      mm.viewHooks.transformHtml.tap((_, nodes) => {
+        transformLink(nodes)
+      })
 
       const toolbar = (_win as any).markmap.Toolbar.create(mm)
       toolbar.style.position = 'fixed'
@@ -141,6 +146,13 @@ async function onLoad (win: Window) {
     }
 
     render(_win)
+
+    _win.document.addEventListener('click', e => {
+      const target = e.target as HTMLAnchorElement
+      if (target.tagName === 'A') {
+        handleLink(e)
+      }
+    }, true)
   }
 }
 
