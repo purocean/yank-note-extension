@@ -102,7 +102,7 @@ registerPlugin({
                     }
                   }
                 })
-              }, 800);
+              }, 800)
             })
           } else {
             console.error('open popup preview window failed')
@@ -116,6 +116,9 @@ registerPlugin({
       if (win && win.ctx) {
         const _ctx: Ctx = win.ctx
         _ctx.store.state.currentContent = ctx.store.state.currentContent
+        if (_ctx.store.state.currentFile) {
+          _ctx.store.state.currentFile.content = ctx.store.state.currentContent
+        }
         win.document.title = i18n.t('popup-preview')
       }
     }
