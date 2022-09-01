@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.1.0...extension-pop-preview-1.1.1) (2022-09-01)
+
+
+### Bug Fixes
+
+* **extension-popup-preview:** fix auto save bug ([7a3d4ce](https://github.com/purocean/yank-note-extension/commit/7a3d4ce8c45d8b53113e0ec9e6f6dea4f2fb3fd7))
+
+
+
 ## 1.1.0 (2022-05-23)
 
 * feat(extension-popup-preview): add click to highlight editor line ([0d855a5](https://github.com/purocean/yank-note-extension/commit/0d855a5))
