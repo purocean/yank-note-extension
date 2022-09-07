@@ -319,6 +319,10 @@ export declare type BuildInHookTypes = {
         oldDoc: Doc;
         newDoc: Doc;
     };
+    DOC_BEFORE_SAVE: {
+        doc: Doc;
+        content: string;
+    };
     DOC_SAVED: {
         doc: Doc;
     };

@@ -1,3 +1,4 @@
+import type { Component } from 'vue';
 export declare type MenuItem = {
     id: string;
     type: 'normal';
@@ -16,7 +17,7 @@ export declare type MenuItem = {
 };
 export interface Menu {
     id: string;
-    title?: string;
+    title?: string | Component;
     tips?: string;
     icon?: string;
     hidden?: boolean;

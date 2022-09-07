@@ -238,6 +238,7 @@ declare const languages: {
                 selected: string;
                 lines: string;
                 chars: string;
+                selections: string;
             };
             help: {
                 help: string;
@@ -792,6 +793,7 @@ declare const languages: {
                 selected: string;
                 lines: string;
                 chars: string;
+                selections: string;
             };
             help: {
                 help: string;

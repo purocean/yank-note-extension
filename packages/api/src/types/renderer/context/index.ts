@@ -57,13 +57,6 @@ declare const ctx: Readonly<{
         currentFile: import("../types").Doc | null;
         recentOpenTime: Record<string, number>;
         tabs: import("../types").Components.FileTabs.Item[];
-        selectionInfo: {
-            textLength: number;
-            selectedLength: number;
-            lineCount: number;
-            line: number;
-            column: number;
-        };
         previewer: string;
     }>;
     action: typeof action;

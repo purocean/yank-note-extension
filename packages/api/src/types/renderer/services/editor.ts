@@ -100,6 +100,8 @@ export declare function getSelectionInfo(): {
     lineCount: number;
     textLength: number;
     selectedLength: number;
+    selectedLines: number;
+    selectionCount: number;
 };
 /**
  * Toggle editor word wrap.

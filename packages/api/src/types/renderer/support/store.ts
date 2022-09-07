@@ -21,13 +21,6 @@ export declare const initState: {
     currentFile: Doc | null;
     recentOpenTime: Record<string, number>;
     tabs: Components.FileTabs.Item[];
-    selectionInfo: {
-        textLength: number;
-        selectedLength: number;
-        lineCount: number;
-        line: number;
-        column: number;
-    };
     previewer: string;
 };
 export declare type AppState = typeof initState;
@@ -53,13 +46,6 @@ declare const _default: import("vuex").Store<{
     currentFile: Doc | null;
     recentOpenTime: Record<string, number>;
     tabs: Components.FileTabs.Item[];
-    selectionInfo: {
-        textLength: number;
-        selectedLength: number;
-        lineCount: number;
-        line: number;
-        column: number;
-    };
     previewer: string;
 }>;
 export default _default;

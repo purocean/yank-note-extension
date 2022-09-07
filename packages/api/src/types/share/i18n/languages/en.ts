@@ -236,6 +236,7 @@ declare const data: {
             selected: string;
             lines: string;
             chars: string;
+            selections: string;
         };
         help: {
             help: string;
