@@ -90,6 +90,21 @@ export declare namespace Components {
             level: number;
         }
     }
+    namespace QuickFilter {
+        interface Item {
+            label: string;
+            key: string;
+        }
+        interface Props {
+            top?: string | undefined;
+            right?: string | undefined;
+            bottom?: string | undefined;
+            left?: string | undefined;
+            placeholder?: string | undefined;
+            current?: string | undefined;
+            list: Item[];
+        }
+    }
 }
 export declare type ThemeName = 'system' | 'dark' | 'light';
 export declare type LanguageName = 'system' | Language;
@@ -209,6 +224,7 @@ export declare type BuildInActions = {
     'file-tabs.switch-left': () => void;
     'file-tabs.switch-right': () => void;
     'file-tabs.close-current': () => void;
+    'file-tabs.search-tabs': () => void;
     'xterm.run': (cmd: {
         code: string;
         start: string;

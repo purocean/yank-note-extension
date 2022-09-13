@@ -287,6 +287,7 @@ declare const languages: {
             'close-all': string;
             pin: string;
             unpin: string;
+            'search-tabs': string;
         };
         'export-panel': {
             export: string;
@@ -842,6 +843,7 @@ declare const languages: {
             'close-all': string;
             pin: string;
             unpin: string;
+            'search-tabs': string;
         };
         'export-panel': {
             export: string;

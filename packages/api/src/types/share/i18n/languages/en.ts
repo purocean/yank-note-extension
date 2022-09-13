@@ -285,6 +285,7 @@ declare const data: {
         'close-all': string;
         pin: string;
         unpin: string;
+        'search-tabs': string;
     };
     'export-panel': {
         export: string;

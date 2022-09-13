@@ -9,6 +9,7 @@ import * as action from '@fe/core/action';
 import * as command from '@fe/core/command';
 import { useToast } from '@fe/support/ui/toast';
 import { useModal } from '@fe/support/ui/modal';
+import { useQuickFilter } from '@fe/support/ui/quick-filter';
 import * as env from '@fe/support/env';
 import * as base from '@fe/services/base';
 import * as api from '@fe/support/api';
@@ -80,6 +81,7 @@ declare const ctx: Readonly<{
     ui: {
         useToast: typeof useToast;
         useModal: typeof useModal;
+        useQuickFilter: typeof useQuickFilter;
     };
     registerHook: typeof hook.registerHook;
     removeHook: typeof hook.removeHook;

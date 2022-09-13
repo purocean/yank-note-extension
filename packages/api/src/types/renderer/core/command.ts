@@ -8,6 +8,7 @@ export declare const Shift = "Shift";
 export declare const BracketLeft = "BracketLeft";
 export declare const BracketRight = "BracketRight";
 export declare const LeftClick = 0;
+export declare const Tab = "Tab";
 declare type XKey = typeof Ctrl | typeof CtrlCmd | typeof Alt | typeof Shift;
 export interface Command {
     /**
