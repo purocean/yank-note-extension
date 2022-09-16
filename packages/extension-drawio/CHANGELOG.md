@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.2.0...extension-drawio-1.3.1) (2022-09-16)
+
+
+### Features
+
+* **extension-drawio:** support pdf export ([ba5cd43](https://github.com/purocean/yank-note-extension/commit/ba5cd431ed1a959a0abdd3906f662a9e195c3b8f))
+
+
+
 # [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.1.0...extension-drawio-1.2.0) (2022-08-01)
 
 
