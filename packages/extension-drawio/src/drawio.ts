@@ -347,6 +347,9 @@ export function buildEditorSrcdoc (file: Doc) {
         iframe.style.height = '100vh'
         iframe.style.border = 'none'
         iframe.setAttribute('frameborder', '0')
+        iframe.addEventListener('load', () => {
+          iframe.contentWindow.EXPORT_URL = 'https://convert.diagrams.net/node/export?__allow-open-window__'
+        })
 
         ${
           isElectron
