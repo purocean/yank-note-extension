@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.0.4...extension-markdown-prettier-1.1.0) (2022-09-25)
+
+
+### Features
+
+* use Monaco formatting provider api ([2487509](https://github.com/purocean/yank-note-extension/commit/2487509b3c1c8b66798198b90957b212ce4420aa))
+
+
+
 ## [1.0.4](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.0.3...extension-markdown-prettier-1.0.4) (2022-08-22)
 
 
