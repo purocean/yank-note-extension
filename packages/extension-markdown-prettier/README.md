@@ -7,4 +7,4 @@ Markdown Formatter for Yank Note.
 - **macOS:** `Cmd` + `Shift` + `F`
 - **Windows:** `Ctrl` + `Shift` + `F`
 
-![](https://user-images.githubusercontent.com/7115690/185337852-7f6c5fc1-eeb7-4529-958f-00355540542a.png)
+![](https://user-images.githubusercontent.com/7115690/192148012-ca05bd56-df0f-45c9-9863-35628231e1ba.png)
