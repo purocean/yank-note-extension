@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.1.1...extension-markdown-prettier-1.2.0) (2022-09-25)
+
+
+### Features
+
+* **extension-markdown-prettier:** respect editor indentation ([52938f2](https://github.com/purocean/yank-note-extension/commit/52938f23db2b1211f87349a513c00d79032dbe29))
+
+
+
 ## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.1.0...extension-markdown-prettier-1.1.1) (2022-09-25)
 
 
