@@ -8,7 +8,7 @@ const settingKeyFormatOnSave = 'plugin.markdown-prettier.format-on-save'
 registerPlugin({
   name: extensionId,
   register: ctx => {
-    function formatMarkdown (text: string) {
+    function formatMarkdown (text: string, opts?: { tabWidth?: number, useTabs?: boolean }) {
       if (!ctx.getPremium()) {
         ctx.ui.useToast().show('info', ctx.i18n.t('premium.need-purchase', extensionId))
         ctx.showPremium()
@@ -18,17 +18,18 @@ registerPlugin({
       return prettier.format(text, {
         parser: 'markdown',
         plugins: [prettierMarkdown],
+        ...opts,
       })
     }
 
     const i18n = ctx.i18n.createI18n({
       en: {
         'format-markdown': 'Format Markdown',
-        'format-on-save': 'Format on Save -- Markdown Prettier',
+        'format-on-save': 'Format on Save - Markdown Prettier',
       },
       'zh-CN': {
         'format-markdown': '格式化 Markdown',
-        'format-on-save': '保存时格式化 -- Markdown Prettier',
+        'format-on-save': '保存时格式化 - Markdown Prettier',
       }
     })
 
@@ -44,8 +45,12 @@ registerPlugin({
       changeCommandKeybinding('editor.action.formatDocument', monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyF)
 
       monaco.languages.registerDocumentFormattingEditProvider('markdown', {
-        provideDocumentFormattingEdits: (model) => {
-          const text = formatMarkdown(model.getValue())
+        provideDocumentFormattingEdits: (model, options) => {
+          const text = formatMarkdown(model.getValue(), {
+            tabWidth: options.tabSize,
+            useTabs: !options.insertSpaces,
+          })
+
           return [{
             range: model!.getFullModelRange(),
             text,
@@ -54,8 +59,12 @@ registerPlugin({
       })
 
       monaco.languages.registerDocumentRangeFormattingEditProvider('markdown', {
-        provideDocumentRangeFormattingEdits: (model, range) => {
-          const text = formatMarkdown(model.getValueInRange(range))
+        provideDocumentRangeFormattingEdits: (model, range, options) => {
+          const text = formatMarkdown(model.getValueInRange(range), {
+            tabWidth: options.tabSize,
+            useTabs: !options.insertSpaces,
+          })
+
           return [{ range, text }]
         }
       })
