@@ -32,29 +32,23 @@ registerPlugin({
       }
     })
 
-    const action = ctx.action.registerAction({
-      name: 'plugin.markdown-prettier.format-markdown',
-      keys: [ctx.command.CtrlCmd, ctx.command.Shift, 'f'],
-      handler: () => {
-        const text = formatMarkdown(ctx.editor.getValue())
-        ctx.editor.setValue(text)
-      },
-    })
+    ctx.editor.whenEditorReady().then(({ monaco }) => {
+      monaco.languages.registerDocumentFormattingEditProvider('markdown', {
+        provideDocumentFormattingEdits: (model) => {
+          const text = formatMarkdown(model.getValue())
+          return [{
+            range: model!.getFullModelRange(),
+            text,
+          }]
+        }
+      })
 
-    ctx.statusBar.tapMenus((menus) => {
-      if (!ctx.store.state.showEditor || ctx.store.state.presentation) {
-        return
-      }
-
-      menus['status-bar-tool']?.list?.push(
-        {
-          id: action.name,
-          type: 'normal',
-          title: i18n.t('format-markdown'),
-          subTitle: ctx.command.getKeysLabel(action.name),
-          onClick: () => ctx.action.getActionHandler(action.name)()
-        },
-      )
+      monaco.languages.registerDocumentRangeFormattingEditProvider('markdown', {
+        provideDocumentRangeFormattingEdits: (model, range) => {
+          const text = formatMarkdown(model.getValueInRange(range))
+          return [{ range, text }]
+        }
+      })
     })
 
     if (ctx.lib.semver.satisfies(ctx.version, '>=3.35.0') && ctx.getPremium()) {
@@ -78,9 +72,10 @@ registerPlugin({
           return
         }
 
-        payload.content = formatMarkdown(payload.content)
+        const editor = ctx.editor.getEditor()
 
-        ctx.editor.setValue(payload.content)
+        editor.getAction('editor.action.formatDocument').run()
+        editor.focus()
       })
     }
   }
