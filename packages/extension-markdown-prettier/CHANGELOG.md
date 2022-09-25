@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.1.0...extension-markdown-prettier-1.1.1) (2022-09-25)
+
+
+### Bug Fixes
+
+* **extension-markdown-prettier:** fix shortcuts ([aef9b2f](https://github.com/purocean/yank-note-extension/commit/aef9b2f8fa8afdfe625a0342481b70ddf7f049e7))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.0.4...extension-markdown-prettier-1.1.0) (2022-09-25)
 
 
