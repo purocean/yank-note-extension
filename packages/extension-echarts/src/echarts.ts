@@ -137,7 +137,9 @@ export const Echarts = defineComponent({
       }
 
       if (imgSrc.value) {
-        return h('img', { src: imgSrc.value })
+        return h('p', { ...props.attrs }, [
+          h('img', { alt: 'echarts', src: imgSrc.value, 'only-child': true })
+        ])
       }
 
       return h('div', { ...props.attrs, class: 'echarts-wrapper' }, [
