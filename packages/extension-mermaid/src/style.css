@@ -4,8 +4,10 @@
 }
 
 .markdown-view .markdown-body img.mermaid-image {
-  --skip-contain: 1;
   background-color: inherit;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .markdown-view .markdown-body .mermaid-wrapper .mermaid-action {
