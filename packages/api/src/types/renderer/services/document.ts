@@ -6,12 +6,13 @@ import type { Doc, PathItem } from '@fe/types';
  * @returns
  */
 export declare function getAbsolutePath(doc: Doc): string;
+export declare function isMarkdownFile(doc: Doc): boolean;
 /**
  * Determine if the document is encrypted.
  * @param doc
  * @returns
  */
-export declare function isEncrypted(doc?: Pick<Doc, 'path'> | null): boolean;
+export declare function isEncrypted(doc?: Pick<Doc, 'path' | 'type'> | null): boolean;
 /**
  * Determine if it is in the same repository.
  * @param docA
@@ -58,14 +59,16 @@ export declare function createDir(doc: Optional<Pick<Doc, 'repo' | 'path' | 'con
 /**
  * Duplicate a document.
  * @param originDoc
+ * @param newPath
  * @returns
  */
-export declare function duplicateDoc(originDoc: Doc): Promise<void>;
+export declare function duplicateDoc(originDoc: Doc, newPath?: string): Promise<void>;
 /**
  * Delete a document.
  * @param doc
+ * @param skipConfirm
  */
-export declare function deleteDoc(doc: Doc): Promise<void>;
+export declare function deleteDoc(doc: Doc, skipConfirm?: boolean): Promise<void>;
 /**
  * Move or rename a document.
  * @param doc

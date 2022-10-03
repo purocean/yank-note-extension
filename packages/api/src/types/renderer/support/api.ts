@@ -34,12 +34,19 @@ export declare function writeFile(file: Doc, content?: string, asBase64?: boolea
     hash: any;
 }>;
 /**
- * Move / Remove a file or dir.
+ * Move / Rename a file or dir.
  * @param file
  * @param newPath
  * @returns
  */
 export declare function moveFile(file: FileItem, newPath: string): Promise<ApiResult<any>>;
+/**
+ * Copy a file
+ * @param file
+ * @param newPath
+ * @returns
+ */
+export declare function copyFile(file: FileItem, newPath: string): Promise<ApiResult<any>>;
 /**
  * Delete a file or dir.
  * @param file

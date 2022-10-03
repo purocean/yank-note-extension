@@ -5,6 +5,7 @@ declare const languages: {
         about: string;
         slogan: string;
         cancel: string;
+        undo: string;
         ok: string;
         'demo-tips': string;
         'blank-page': string;
@@ -280,6 +281,10 @@ declare const languages: {
                 'copy-name': string;
                 'copy-path': string;
             };
+            toast: {
+                moved: string;
+                copied: string;
+            };
         };
         tabs: {
             'close-others': string;
@@ -343,6 +348,7 @@ declare const languages: {
                     minimap: string;
                     'line-numbers': string;
                     'enable-preview': string;
+                    'font-family': string;
                 };
                 theme: string;
                 language: string;
@@ -564,6 +570,7 @@ declare const languages: {
         about: string;
         slogan: string;
         cancel: string;
+        undo: string;
         ok: string;
         'demo-tips': string;
         'blank-page': string;
@@ -839,6 +846,10 @@ declare const languages: {
                 'copy-name': string;
                 'copy-path': string;
             };
+            toast: {
+                moved: string;
+                copied: string;
+            };
         };
         tabs: {
             'close-others': string;
@@ -902,6 +913,7 @@ declare const languages: {
                     minimap: string;
                     'line-numbers': string;
                     'enable-preview': string;
+                    'font-family': string;
                 };
                 theme: string;
                 language: string;
