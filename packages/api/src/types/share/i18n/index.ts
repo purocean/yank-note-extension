@@ -2,6 +2,7 @@ import { BaseLanguage } from './languages/en';
 declare const languages: {
     en: {
         'app-name': string;
+        about: string;
         slogan: string;
         cancel: string;
         ok: string;
@@ -341,6 +342,7 @@ declare const languages: {
                     'ordered-list-completion': string;
                     minimap: string;
                     'line-numbers': string;
+                    'enable-preview': string;
                 };
                 theme: string;
                 language: string;
@@ -391,6 +393,7 @@ declare const languages: {
                 'link-file': string;
                 'insert-date': string;
                 'insert-time': string;
+                'reveal-line-in-preview': string;
             };
         };
         picgo: {
@@ -558,6 +561,7 @@ declare const languages: {
     };
     'zh-CN': {
         'app-name': string;
+        about: string;
         slogan: string;
         cancel: string;
         ok: string;
@@ -897,6 +901,7 @@ declare const languages: {
                     'ordered-list-completion': string;
                     minimap: string;
                     'line-numbers': string;
+                    'enable-preview': string;
                 };
                 theme: string;
                 language: string;
@@ -947,6 +952,7 @@ declare const languages: {
                 'link-file': string;
                 'insert-date': string;
                 'insert-time': string;
+                'reveal-line-in-preview': string;
             };
         };
         picgo: {

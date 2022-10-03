@@ -18,9 +18,12 @@ export declare function getEditor(): Monaco.editor.IStandaloneCodeEditor;
 /**
  * Highlight given line.
  * @param line
+ * @param reveal
+ * @param duration
  * @returns dispose function
  */
-export declare function highlightLine(line: number): () => string[];
+export declare function highlightLine(line: number | [number, number], reveal: boolean, duration: number): Promise<void>;
+export declare function highlightLine(line: number | [number, number], reveal?: boolean, duration?: number): (() => string[]) | Promise<void>;
 /**
  * Get one indent
  * getOneIndent removed https://github.com/microsoft/monaco-editor/issues/1565

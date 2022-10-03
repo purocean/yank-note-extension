@@ -20,9 +20,12 @@ export declare const DOM_ATTR_NAME: {
     ORIGIN_SRC: string;
     ORIGIN_HREF: string;
     LOCAL_IMAGE: string;
+    ONLY_CHILD: string;
     TOKEN_IDX: string;
 };
 export declare const DOM_CLASS_NAME: {
+    PREVIEW_HIGHLIGHT: string;
+    PREVIEW_MARKDOWN_BODY: string;
     MARK_OPEN: string;
     SKIP_EXPORT: string;
     SKIP_PRINT: string;

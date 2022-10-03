@@ -25,7 +25,14 @@ export declare function refresh(): Promise<void>;
  * Reveal line.
  * @param startLine
  */
-export declare function revealLine(startLine: number): void;
+export declare function revealLine(startLine: number): HTMLElement | null;
+/**
+ * Highlight line.
+ * @param line
+ * @@param reveal
+ * @param duration
+ */
+export declare function highlightLine(line: number, reveal: boolean, duration?: number): Promise<void>;
 /**
  * Scroll to a position.
  * @param top

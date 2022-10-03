@@ -72,6 +72,7 @@ export declare namespace Components {
             description?: string;
             payload: any;
             fixed?: boolean;
+            temporary?: boolean;
         }
     }
     namespace FileTabs {
@@ -179,6 +180,7 @@ export interface BuildInSettings {
     'editor.ordered-list-completion': 'auto' | 'increase' | 'one';
     'editor.minimap': boolean;
     'editor.line-numbers': 'on' | 'off' | 'relative' | 'interval';
+    'editor.enable-preview': boolean;
     'assets.path-type': 'relative' | 'absolute' | 'auto';
     'plugin.image-hosting-picgo.server-url': string;
     'plugin.image-hosting-picgo.enable-paste-image': boolean;
@@ -200,7 +202,7 @@ export declare type BuildInActions = {
     'view.render-immediately': () => void;
     'view.render': () => void;
     'view.refresh': () => void;
-    'view.reveal-line': (startLine: number) => void;
+    'view.reveal-line': (startLine: number) => HTMLElement | null;
     'view.scroll-top-to': (top: number) => void;
     'view.get-content-html': () => string;
     'view.get-view-dom': () => HTMLElement | null;
@@ -304,6 +306,9 @@ export declare type BuildInHookTypes = {
         };
     };
     TREE_NODE_SELECT: {
+        node: Components.Tree.Node;
+    };
+    TREE_NODE_DBLCLICK: {
         node: Components.Tree.Node;
     };
     MONACO_CHANGE_VALUE: {

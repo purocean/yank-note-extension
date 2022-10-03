@@ -1,5 +1,6 @@
 declare const data: {
     'app-name': string;
+    about: string;
     slogan: string;
     cancel: string;
     ok: string;
@@ -339,6 +340,7 @@ declare const data: {
                 'ordered-list-completion': string;
                 minimap: string;
                 'line-numbers': string;
+                'enable-preview': string;
             };
             theme: string;
             language: string;
@@ -389,6 +391,7 @@ declare const data: {
             'link-file': string;
             'insert-date': string;
             'insert-time': string;
+            'reveal-line-in-preview': string;
         };
     };
     picgo: {
