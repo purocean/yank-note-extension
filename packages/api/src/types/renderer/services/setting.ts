@@ -15,6 +15,11 @@ export declare type Schema = {
             defaultValue: BuildInSettings[K] extends any ? BuildInSettings[K] : any;
             enum?: string[] | number[];
             group: SettingGroup;
+            validator?: (schema: Schema['properties'][K], value: BuildInSettings[K], path: string) => {
+                path: string;
+                property: K;
+                message: string;
+            }[];
             items?: {
                 type: string;
                 title: TTitle;

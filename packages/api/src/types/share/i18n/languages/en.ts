@@ -371,6 +371,9 @@ declare const data: {
                 port: string;
                 'port-desc': string;
             };
+            tree: {
+                exclude: string;
+            };
             proxy: {
                 enabled: string;
                 server: string;
@@ -410,6 +413,7 @@ declare const data: {
         uploading: string;
         'upload-failed': string;
         'need-api': string;
+        'upload-all-images': string;
     };
     'code-run': {
         run: string;

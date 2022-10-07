@@ -1,4 +1,10 @@
 import type * as Monaco from 'monaco-editor';
+export declare type SimpleCompletionItem = {
+    label: string;
+    kind?: Monaco.languages.CompletionItemKind;
+    insertText: string;
+};
+export declare type SimpleCompletionItemTappers = (items: SimpleCompletionItem[]) => void;
 declare let monaco: typeof Monaco;
 declare let editor: Monaco.editor.IStandaloneCodeEditor;
 /**
@@ -110,5 +116,18 @@ export declare function getSelectionInfo(): {
  * Toggle editor word wrap.
  */
 export declare function toggleWrap(): void;
+/**
+ * Toggle typewriter mode.
+ */
 export declare function toggleTypewriterMode(): void;
+/**
+ * Register a simple completion item processor.
+ * @param tapper
+ */
+export declare function tapSimpleCompletionItems(tapper: (items: SimpleCompletionItem[]) => void): void;
+/**
+ * Get simple completion items.
+ * @returns
+ */
+export declare function getSimpleCompletionItems(): SimpleCompletionItem[];
 export {};

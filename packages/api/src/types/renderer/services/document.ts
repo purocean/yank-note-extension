@@ -6,6 +6,20 @@ import type { Doc, PathItem } from '@fe/types';
  * @returns
  */
 export declare function getAbsolutePath(doc: Doc): string;
+/**
+ * Create a checker to check if a document is current activated document.
+ * @returns
+ */
+export declare function createCurrentDocChecker(): {
+    check: () => boolean;
+    changed: () => boolean;
+    throwErrorIfChanged: () => void;
+};
+/**
+ * Check if the document is a markdown file.
+ * @param doc
+ * @returns
+ */
 export declare function isMarkdownFile(doc: Doc): boolean;
 /**
  * Determine if the document is encrypted.
