@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.2.0...extension-markmap-1.3.0) (2022-10-09)
+
+
+### Features
+
+* **extension-markmap:** support markmap code block ([22f5f9d](https://github.com/purocean/yank-note-extension/commit/22f5f9d786c5b322f63770123b747947fb914190))
+
+
+
 # [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.1.1...extension-markmap-1.2.0) (2022-08-22)
 
 
