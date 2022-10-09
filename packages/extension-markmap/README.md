@@ -10,6 +10,18 @@ Visualize your Markdown as mindmaps with Markmap.
 
 ## Usage
 
+### Code block
+
+~~~markdown
+```markmap
+- ABC
+    - DEF
+    - GHI
+    - JKL
+```
+~~~
+### Entire document
+
 ~~~markdown
 ---
 defaultPreviewer: 'Markmap'
