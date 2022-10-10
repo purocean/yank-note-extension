@@ -186,6 +186,7 @@ ctx.lib.vue.onMounted(init)
   background: #fff;
   height: 300px;
   width: 100%;
+  margin-bottom: 16px;
 }
 
 .markmap-preview-action {
