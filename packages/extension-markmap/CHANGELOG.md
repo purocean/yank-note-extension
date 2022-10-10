@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.3.0...extension-markmap-1.3.1) (2022-10-10)
+
+
+### Features
+
+* **extension-markmap:** update styles ([7918859](https://github.com/purocean/yank-note-extension/commit/7918859dbe5557d8e063d8928e3b71836e17ab81))
+
+
+
 # [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.2.0...extension-markmap-1.3.0) (2022-10-09)
 
 
