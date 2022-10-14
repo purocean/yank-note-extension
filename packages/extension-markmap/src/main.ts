@@ -26,11 +26,7 @@ registerPlugin({
       }
     })
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     if (ctx.editor.tapMarkdownMonarchLanguage) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       ctx.editor.tapMarkdownMonarchLanguage(mdLanguage => {
         mdLanguage.tokenizer.root.unshift(
           [
