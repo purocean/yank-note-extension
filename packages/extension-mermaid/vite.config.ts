@@ -1,11 +1,17 @@
 import * as path from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import copy from 'rollup-plugin-copy'
 import { YN_LIBS } from '@yank-note/runtime-api'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), copy({
+    targets: [
+      { src: 'node_modules/mermaid/dist/mermaid.min.js', dest: 'dist' },
+    ],
+    hook: 'writeBundle',
+  })],
   define: {
     __EXTENSION_VERSION__: JSON.stringify(process.env.npm_package_version),
     __EXTENSION_ID__: JSON.stringify(process.env.npm_package_name),

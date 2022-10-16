@@ -1,6 +1,6 @@
 import type Markdown from '@yank-note/runtime-api/types/types/third-party/markdown-it'
-import mermaid from 'mermaid'
 import { ctx } from '@yank-note/runtime-api'
+import { getMermaidLib } from './lib'
 
 const { registerHook, removeHook } = ctx
 const { debounce } = ctx.lib.lodash
@@ -12,12 +12,14 @@ const extensionId = __EXTENSION_ID__
 
 const logger = getLogger(extensionId)
 
-export function initMermaidTheme (colorScheme?: 'light' | 'dark') {
+export async function initMermaidTheme (colorScheme?: 'light' | 'dark') {
   colorScheme ??= ctx.theme.getColorScheme()
   const theme: any = {
     light: 'default',
     dark: 'dark',
   }[colorScheme]
+
+  const mermaid = await getMermaidLib()
 
   if (mermaid.mermaidAPI.getConfig().theme === theme) {
     return
@@ -53,8 +55,9 @@ const Mermaid = defineComponent({
       return 'data:image/svg+xml;base64,' + strToBase64(svg)
     }
 
-    function render () {
+    async function render () {
       logger.debug('render', props.code)
+      const mermaid = await getMermaidLib()
       try {
         mermaid.render(`mermaid-${mid++}`, props.code, (svgCode: string) => {
           result.value = svgCode
@@ -92,10 +95,10 @@ const Mermaid = defineComponent({
 
     async function beforeDocExport () {
       initMermaidTheme('light')
-      render()
+      await render()
       setTimeout(async () => {
-        initMermaidTheme()
-        render()
+        await initMermaidTheme()
+        await render()
       }, 500)
     }
 
@@ -106,10 +109,10 @@ const Mermaid = defineComponent({
     onMounted(() => render())
 
     registerHook('THEME_CHANGE', renderDebounce)
-    registerHook('DOC_BEFORE_EXPORT', beforeDocExport)
+    registerHook('VIEW_BEFORE_EXPORT', beforeDocExport)
     onBeforeUnmount(() => {
       removeHook('THEME_CHANGE', renderDebounce)
-      removeHook('DOC_BEFORE_EXPORT', beforeDocExport)
+      removeHook('VIEW_BEFORE_EXPORT', beforeDocExport)
     })
 
     return () => {

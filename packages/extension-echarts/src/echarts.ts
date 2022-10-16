@@ -117,12 +117,12 @@ export const Echarts = defineComponent({
     onMounted(() => setTimeout(render, 0))
 
     registerHook('GLOBAL_RESIZE', resize)
-    registerHook('DOC_BEFORE_EXPORT', beforeExport)
+    registerHook('VIEW_BEFORE_EXPORT', beforeExport)
     registerHook('THEME_CHANGE', changeTheme)
 
     onBeforeUnmount(() => {
       removeHook('GLOBAL_RESIZE', resize)
-      removeHook('DOC_BEFORE_EXPORT', beforeExport)
+      removeHook('VIEW_BEFORE_EXPORT', beforeExport)
       removeHook('THEME_CHANGE', changeTheme)
       chart?.dispose()
       chart = null

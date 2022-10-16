@@ -1,3 +1,7 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.1.1...extension-mermaid-1.2.0) (2022-10-16)
+
+
+
 ## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.1.0...extension-mermaid-1.1.1) (2022-09-26)
 
 
