@@ -25,7 +25,7 @@ export declare function refresh(): Promise<void>;
  * Reveal line.
  * @param startLine
  */
-export declare function revealLine(startLine: number): HTMLElement | null;
+export declare function revealLine(startLine: number): Promise<HTMLElement | null>;
 /**
  * Highlight line.
  * @param line
@@ -37,7 +37,7 @@ export declare function highlightLine(line: number, reveal: boolean, duration?: 
  * Scroll to a position.
  * @param top
  */
-export declare function scrollTopTo(top: number): void;
+export declare function scrollTopTo(top: number): Promise<void>;
 export declare function getPreviewStyles(): string;
 /**
  * Get rendered HTML.
@@ -119,3 +119,30 @@ export declare function getEnableSyncScroll(): boolean;
  * @param timeout
  */
 export declare function disableSyncScrollAwhile(fn: Function, timeout?: number): Promise<void>;
+/**
+ * Get render Iframe
+ * @returns
+ */
+export declare function getRenderIframe(): Promise<HTMLIFrameElement>;
+/**
+ * Add styles to default preview.
+ * @param style
+ * @return css dom
+ */
+export declare function addStyles(style: string): Promise<HTMLStyleElement>;
+/**
+ * Add style link to default preview.
+ * @param href
+ * @returns link dom
+ */
+export declare function addStyleLink(href: string): Promise<HTMLLinkElement>;
+/**
+ * Add script to default preview.
+ * @param src
+ * @returns script dom
+ */
+export declare function addScript(src: string): Promise<HTMLScriptElement>;
+/**
+ * print
+ */
+export declare function print(): Promise<void>;

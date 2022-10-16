@@ -10,6 +10,7 @@ import * as command from '@fe/core/command';
 import { useToast } from '@fe/support/ui/toast';
 import { useModal } from '@fe/support/ui/modal';
 import { useQuickFilter } from '@fe/support/ui/quick-filter';
+import { useContextMenu } from '@fe/support/ui/context-menu';
 import * as env from '@fe/support/env';
 import * as base from '@fe/services/base';
 import * as api from '@fe/support/api';
@@ -43,6 +44,7 @@ declare const ctx: Readonly<{
         showSide: boolean;
         showView: boolean;
         showEditor: boolean;
+        editorPreviewExclusive: boolean;
         showXterm: boolean;
         showOutline: boolean;
         autoPreview: boolean;
@@ -82,6 +84,7 @@ declare const ctx: Readonly<{
         useToast: typeof useToast;
         useModal: typeof useModal;
         useQuickFilter: typeof useQuickFilter;
+        useContextMenu: typeof useContextMenu;
     };
     registerHook: typeof hook.registerHook;
     removeHook: typeof hook.removeHook;

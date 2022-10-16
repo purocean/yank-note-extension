@@ -6,6 +6,7 @@ export declare const initState: {
     showSide: boolean;
     showView: boolean;
     showEditor: boolean;
+    editorPreviewExclusive: boolean;
     showXterm: boolean;
     showOutline: boolean;
     autoPreview: boolean;
@@ -31,6 +32,7 @@ declare const _default: import("vuex").Store<{
     showSide: boolean;
     showView: boolean;
     showEditor: boolean;
+    editorPreviewExclusive: boolean;
     showXterm: boolean;
     showOutline: boolean;
     autoPreview: boolean;

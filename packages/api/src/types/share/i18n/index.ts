@@ -208,6 +208,7 @@ declare const languages: {
                 'side-bar': string;
                 'word-wrap': string;
                 'typewriter-mode': string;
+                'editor-preview-exclusive': string;
             };
             setting: string;
             repo: {
@@ -777,6 +778,7 @@ declare const languages: {
                 'side-bar': string;
                 'word-wrap': string;
                 'typewriter-mode': string;
+                'editor-preview-exclusive': string;
             };
             setting: string;
             repo: {

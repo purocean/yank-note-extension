@@ -1,7 +1,7 @@
 import { App, ComponentPublicInstance } from 'vue';
 import type { Components } from '@fe/types';
 export interface Instance extends ComponentPublicInstance {
-    show: (menuItems: Components.ContextMenu.Item[]) => void;
+    show: (menuItems: Components.ContextMenu.Item[], opts?: Components.ContextMenu.ShowOpts) => void;
 }
 /**
  * Get ContextMenu instance

@@ -89,4 +89,6 @@ export declare function registerCommand(command: Command): Command;
  * @param id
  */
 export declare function removeCommand(id: string): void;
+export declare function keydownHandler(e: KeyboardEvent): void;
+export declare function keyupHandler(e: KeyboardEvent): void;
 export {};

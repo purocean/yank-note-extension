@@ -130,4 +130,14 @@ export declare function tapSimpleCompletionItems(tapper: (items: SimpleCompletio
  * @returns
  */
 export declare function getSimpleCompletionItems(): SimpleCompletionItem[];
+/**
+ * Register a markdown monarch language processor.
+ * @param tapper
+ */
+export declare function tapMarkdownMonarchLanguage(tapper: (mdLanguage: any) => void): void;
+/**
+ * Get markdown monarch language.
+ * @returns
+ */
+export declare function getMarkdownMonarchLanguage(): any;
 export {};

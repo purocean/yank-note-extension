@@ -27,3 +27,8 @@ export declare function toggleXterm(visible?: boolean): void;
  * @param visible
  */
 export declare function toggleOutline(visible?: boolean): void;
+/**
+ * Toggle editor preview exclusive.
+ * @param exclusive
+ */
+export declare function toggleEditorPreviewExclusive(exclusive?: boolean): void;

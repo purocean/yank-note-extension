@@ -52,6 +52,10 @@ export declare namespace Components {
         type ToastType = 'warning' | 'info';
     }
     namespace ContextMenu {
+        type ShowOpts = {
+            mouseX?: number;
+            mouseY?: number;
+        };
         type SeparatorItem = {
             type: 'separator';
             hidden?: boolean;
@@ -204,8 +208,7 @@ export declare type BuildInActions = {
     'view.render-immediately': () => void;
     'view.render': () => void;
     'view.refresh': () => void;
-    'view.reveal-line': (startLine: number) => HTMLElement | null;
-    'view.scroll-top-to': (top: number) => void;
+    'view.reveal-line': (startLine: number) => Promise<HTMLElement | null>;
     'view.get-content-html': () => string;
     'view.get-view-dom': () => HTMLElement | null;
     'view.get-render-env': () => RenderEnv | null;
@@ -256,6 +259,8 @@ export declare type BuildInActionName = keyof BuildInActions;
 export declare type BuildInHookTypes = {
     STARTUP: never;
     GLOBAL_RESIZE: never;
+    GLOBAL_KEYDOWN: KeyboardEvent;
+    GLOBAL_KEYUP: KeyboardEvent;
     ACTION_BEFORE_RUN: {
         name: string;
     };
@@ -285,7 +290,7 @@ export declare type BuildInHookTypes = {
         view: HTMLElement;
     };
     VIEW_SCROLL: {
-        e: WheelEvent;
+        e: Event;
     };
     VIEW_RENDER: never;
     VIEW_RENDERED: never;
@@ -295,6 +300,12 @@ export declare type BuildInHookTypes = {
     VIEW_AFTER_REFRESH: never;
     VIEW_PREVIEWER_CHANGE: {
         type: 'register' | 'remove' | 'switch';
+    };
+    VIEW_RENDER_IFRAME_READY: {
+        iframe: HTMLIFrameElement;
+    };
+    VIEW_BEFORE_EXPORT: {
+        type: ExportType;
     };
     VIEW_ON_GET_HTML_FILTER_NODE: {
         node: HTMLElement;
@@ -360,9 +371,6 @@ export declare type BuildInHookTypes = {
     DOC_CHANGED: {
         doc: Doc;
     };
-    DOC_BEFORE_EXPORT: {
-        type: ExportType;
-    };
     I18N_CHANGE_LANGUAGE: {
         lang: LanguageName;
         currentLang: Language;
@@ -385,6 +393,14 @@ export declare type BuildInHookTypes = {
     };
     CODE_RUNNER_CHANGE: {
         type: 'register' | 'remove';
+    };
+    PLUGIN_HOOK: {
+        plugin: 'markdown-katex';
+        type: 'before-render';
+        payload: {
+            latex: string;
+            options: any;
+        };
     };
 };
 export declare type Previewer = {
@@ -410,6 +426,7 @@ export declare type BuildInIOCTypes = {
     STATUS_BAR_MENU_TAPPERS: any;
     CONTROL_CENTER_SCHEMA_TAPPERS: any;
     EDITOR_SIMPLE_COMPLETION_ITEM_TAPPERS: any;
+    EDITOR_MARKDOWN_MONARCH_LANGUAGE_TAPPERS: any;
     THEME_STYLES: any;
     VIEW_PREVIEWER: Previewer;
     CODE_RUNNER: CodeRunner;

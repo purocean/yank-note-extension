@@ -22,14 +22,15 @@ export declare function setTheme(name: ThemeName): void;
 /**
  * Add styles to page.
  * @param style
- * @return style tag id
+ * @return css dom
  */
-export declare function addStyles(style: string): string;
+export declare function addStyles(style: string): Promise<HTMLStyleElement>;
 /**
- * Remove styles from page.
- * @param id style tag id
+ * Add style link to default preview.
+ * @param href
+ * @returns link dom
  */
-export declare function removeStyles(id: string): void;
+export declare function addStyleLink(href: string): Promise<HTMLLinkElement>;
 /**
  * register theme style
  * @param style

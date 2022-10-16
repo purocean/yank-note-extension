@@ -206,6 +206,7 @@ declare const data: {
             'side-bar': string;
             'word-wrap': string;
             'typewriter-mode': string;
+            'editor-preview-exclusive': string;
         };
         setting: string;
         repo: {
