@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-reveal-js",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "displayName": "Reveal.js",
   "description": "Reveal.js integration",
   "displayName_ZH-CN": "Reveal.js",

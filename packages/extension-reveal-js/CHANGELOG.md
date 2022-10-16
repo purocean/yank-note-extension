@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.3.2...extension-reveal-js-1.4.0) (2022-10-16)
+
+
+### Features
+
+* support runtime 3.40.0 ([4d5576e](https://github.com/purocean/yank-note-extension/commit/4d5576e4099609e08b35ac35502d88165be4b71c))
+
+
+
 ## [1.3.2](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.3.1...extension-reveal-js-1.3.2) (2022-08-01)
 
 
