@@ -1,5 +1,6 @@
 import { registerPlugin } from '@yank-note/runtime-api'
-import { initMermaidTheme, MarkdownItPlugin } from './mermaid'
+import { initMermaidTheme } from './lib'
+import { MarkdownItPlugin } from './mermaid'
 import monacoMermaid from './monaco-mermaid'
 
 import './style.css'
@@ -11,7 +12,6 @@ registerPlugin({
   register: ctx => {
     ctx.markdown.registerPlugin(MarkdownItPlugin)
 
-    initMermaidTheme()
     ctx.registerHook('THEME_CHANGE', () => initMermaidTheme())
 
     ctx.registerHook('VIEW_ON_GET_HTML_FILTER_NODE', async ({ node, options }) => {

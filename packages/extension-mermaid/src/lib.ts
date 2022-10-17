@@ -15,9 +15,26 @@ export async function getMermaidLib (): Promise<Mermaid> {
       script.onerror = reject
       script.onload = () => {
         ctx.view.getRenderIframe().then(iframe => {
+          initMermaidTheme()
           resolve((iframe.contentWindow as any).mermaid)
         })
       }
     })
   })
+}
+
+export async function initMermaidTheme (colorScheme?: 'light' | 'dark') {
+  colorScheme ??= ctx.theme.getColorScheme()
+  const theme: any = {
+    light: 'default',
+    dark: 'dark',
+  }[colorScheme]
+
+  const mermaid = await getMermaidLib()
+
+  if (mermaid.mermaidAPI.getConfig().theme === theme) {
+    return
+  }
+
+  mermaid.mermaidAPI.initialize({ theme })
 }

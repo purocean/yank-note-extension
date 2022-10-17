@@ -1,6 +1,7 @@
 .markdown-view .markdown-body .mermaid-wrapper {
   --skip-contain: 1;
   position: relative;
+  contain: paint;
 }
 
 .markdown-view .markdown-body img.mermaid-image {
@@ -29,6 +30,7 @@
 .markdown-view .markdown-body .mermaid-wrapper .mermaid-container {
   --skip-contain: 1;
   visibility: hidden;
+  contain: paint;
 }
 
 .markdown-view .markdown-body .mermaid-wrapper .mermaid-container > svg {
