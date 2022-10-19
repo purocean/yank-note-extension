@@ -6,7 +6,7 @@
       <button class="btn small" @click="init">{{_$t('reload')}}</button>
       <button class="btn small" @click="newWindow">{{_$t('open-in-new-window')}}</button>
     </div>
-    <iframe v-if="src" ref="iframe" @load="onLoad()" :src="src" frameborder="0" width="100%" height="100%"></iframe>
+    <iframe v-if="src" ref="iframe" :onload="onIframeLoad" :src="src" frameborder="0" width="100%" height="100%"></iframe>
   </component>
 </template>
 
@@ -172,6 +172,8 @@ async function onLoad (win?: Window) {
     }, true)
   }
 }
+
+const onIframeLoad = () => onLoad()
 
 ctx.lib.vue.watch(() => props.source, () => {
   renderDebounce()
