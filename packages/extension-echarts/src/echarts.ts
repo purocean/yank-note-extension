@@ -83,7 +83,9 @@ export const Echarts = defineComponent({
     }
 
     async function beforeExport ({ type }: { type: ExportType }) {
-      render('light', false, type !== 'pdf') // convert to image and set light theme.
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      render('light', false, type !== 'print') // convert to image and set light theme.
       await sleep(0)
       setTimeout(async () => {
         imgSrc.value = ''
