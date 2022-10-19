@@ -1,3 +1,12 @@
+## [1.3.2](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.3.1...extension-markmap-1.3.2) (2022-10-19)
+
+
+### Bug Fixes
+
+* **extension-markmap:** fix fence ([0b40817](https://github.com/purocean/yank-note-extension/commit/0b40817ab3d7ee5614ca40875078d67a40e66d5a))
+
+
+
 ## [1.3.1](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.3.0...extension-markmap-1.3.1) (2022-10-10)
 
 
