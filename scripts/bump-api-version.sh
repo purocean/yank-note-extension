@@ -4,9 +4,9 @@ set -e
 
 cd packages/api;
 
-V=$(pnpm version $1 | tail -n 1)
+V=$(pnpm version $1 | head -n 1)
 VERSION=${V//[$'\t\r\n v']}
-echo $VERSION;
+echo $VERSION"-----------------";
 
 PACKAGE_NAME='@yank-note/runtime-api'
 

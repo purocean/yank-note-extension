@@ -29,7 +29,7 @@
     "lint": "yarn run eslint '{src,__tests__}/**/*.{js,ts,tsx}'",
     "build": "rm -r lib/* types/*; yarn run rollup -c",
     "version": "conventional-changelog -t api- --commit-path . -p angular -i CHANGELOG.md -s && npm run tag-version",
-    "tag-version": "git add . && git commit -m 'chore(release): bump api version' && git tag api-$npm_package_version",
+    "tag-version": "git add . && git commit -m 'chore(release): bump api version'; git tag api-$npm_package_version",
     "prepublish": "npm run build"
   },
   "devDependencies": {
