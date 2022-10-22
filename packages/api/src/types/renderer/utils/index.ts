@@ -23,7 +23,8 @@ export declare function sleep(ms: number): Promise<unknown>;
 export declare function objectInsertAfterKey(obj: {}, key: string, content: {}): {
     [k: string]: unknown;
 };
-export declare function downloadContent(filename: string, content: ArrayBuffer | Buffer | string, type?: string): void;
+export declare function downloadContent(filename: string, content: Blob): void;
+export declare function downloadContent(filename: string, content: ArrayBuffer | Buffer | string, type: string): void;
 export declare function downloadDataURL(filename: string, dataURL: string): void;
 export declare function md5(content: any): string;
 export declare function binMd5(data: any): string;

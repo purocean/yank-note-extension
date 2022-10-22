@@ -567,7 +567,9 @@ declare const languages: {
             registry: string;
             'activation-time': string;
             requirement: string;
+            'auto-upgrade': string;
             'unknown-origin-tips': string;
+            'extensions-auto-upgraded': string;
         };
     };
     'zh-CN': {
@@ -1137,7 +1139,9 @@ declare const languages: {
             registry: string;
             'activation-time': string;
             requirement: string;
+            'auto-upgrade': string;
             'unknown-origin-tips': string;
+            'extensions-auto-upgraded': string;
         };
     };
 };

@@ -1,5 +1,6 @@
 import { IframeHTMLAttributes, PropType } from 'vue';
 declare type BuildSrcOpts = {
+    id?: string;
     globalStyle?: boolean;
     triggerParentKeyBoardEvent?: boolean;
 };

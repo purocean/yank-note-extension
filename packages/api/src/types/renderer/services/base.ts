@@ -36,6 +36,10 @@ export declare function showItemInFolder(path: string): Promise<void>;
  */
 export declare function trashItem(path: string): Promise<void>;
 /**
+ * Reload main window main page
+ */
+export declare function reloadMainWindow(): Promise<void>;
+/**
  * get repo by name
  * @param name
  * @returns

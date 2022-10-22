@@ -28,6 +28,7 @@ import * as setting from '@fe/services/setting';
 import * as i18n from '@fe/services/i18n';
 import * as controlCenter from '@fe/services/control-center';
 import * as runner from '@fe/services/runner';
+import * as exportDoc from '@fe/services/export';
 import * as lib from './lib';
 import * as components from './components';
 declare const ctx: Readonly<{
@@ -80,6 +81,7 @@ declare const ctx: Readonly<{
     i18n: typeof i18n;
     env: typeof env;
     utils: typeof utils;
+    export: typeof exportDoc;
     ui: {
         useToast: typeof useToast;
         useModal: typeof useModal;

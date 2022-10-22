@@ -161,12 +161,42 @@ export declare function runCode(cmd: string | {
  * @param code Function body
  */
 export declare function rpc(code: string): Promise<any>;
+/**
+ * Fetch installed extensions
+ * @returns
+ */
 export declare function fetchInstalledExtensions(): Promise<{
     id: string;
     enabled: boolean;
     isDev?: boolean;
 }[]>;
+/**
+ * Install extension
+ * @param id
+ * @param url
+ * @returns
+ */
 export declare function installExtension(id: string, url: string): Promise<any>;
+/**
+ * Abort extension installation
+ * @returns
+ */
+export declare function abortExtensionInstallation(): Promise<any>;
+/**
+ * Uninstall extension
+ * @param id
+ * @returns
+ */
 export declare function uninstallExtension(id: string): Promise<any>;
+/**
+ * Enable extension
+ * @param id
+ * @returns
+ */
 export declare function enableExtension(id: string): Promise<any>;
+/**
+ * Disable extension
+ * @param id
+ * @returns
+ */
 export declare function disableExtension(id: string): Promise<any>;

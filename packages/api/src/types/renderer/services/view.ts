@@ -142,7 +142,3 @@ export declare function addStyleLink(href: string): Promise<HTMLLinkElement>;
  * @returns script dom
  */
 export declare function addScript(src: string): Promise<HTMLScriptElement>;
-/**
- * print
- */
-export declare function print(): Promise<void>;

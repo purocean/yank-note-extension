@@ -129,10 +129,6 @@ export declare function openInOS(doc: Doc, reveal?: boolean): Promise<void>;
  */
 export declare function showHelp(docName: string): Promise<void>;
 /**
- * Show export panel.
- */
-export declare function showExport(): void;
-/**
  * show history versions of document
  * @param doc
  */

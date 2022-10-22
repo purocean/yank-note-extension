@@ -565,7 +565,9 @@ declare const data: {
         registry: string;
         'activation-time': string;
         requirement: string;
+        'auto-upgrade': string;
         'unknown-origin-tips': string;
+        'extensions-auto-upgraded': string;
     };
 };
 export declare type BaseLanguage = typeof data;

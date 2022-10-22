@@ -14,6 +14,7 @@ export declare function showManager(id?: string): void;
 export declare function enable(extension: Extension): Promise<void>;
 export declare function disable(extension: Pick<Extension, 'id'>): Promise<void>;
 export declare function uninstall(extension: Pick<Extension, 'id'>): Promise<void>;
+export declare function abortInstallation(): Promise<void>;
 export declare function install(extension: Extension, registry?: RegistryHostname): Promise<void>;
 export declare function getInitialized(): boolean;
 /**
