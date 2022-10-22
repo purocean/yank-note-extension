@@ -95,7 +95,6 @@ export async function present (print = false) {
     url.searchParams.set('print-pdf', 'true')
   }
 
-  await ctx.triggerHook('VIEW_BEFORE_EXPORT', { type: 'html' }, { breakable: true })
   const fileUri = ctx.doc.toUri(ctx.store.state.currentFile)
 
   const contentPromise = getContentHtml()

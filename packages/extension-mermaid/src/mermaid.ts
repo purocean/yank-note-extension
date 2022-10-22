@@ -82,10 +82,11 @@ const Mermaid = defineComponent({
     async function beforeDocExport () {
       initMermaidTheme('light')
       await render()
-      setTimeout(async () => {
-        await initMermaidTheme()
-        await render()
-      }, 500)
+    }
+
+    async function afterDocExport () {
+      await initMermaidTheme()
+      await render()
     }
 
     const renderDebounce = debounce(render, 100)
@@ -95,10 +96,12 @@ const Mermaid = defineComponent({
     onMounted(render)
 
     registerHook('THEME_CHANGE', renderDebounce)
-    registerHook('VIEW_BEFORE_EXPORT', beforeDocExport)
+    registerHook('EXPORT_BEFORE_PREPARE', beforeDocExport)
+    registerHook('EXPORT_AFTER_PREPARE', afterDocExport)
     onBeforeUnmount(() => {
       removeHook('THEME_CHANGE', renderDebounce)
-      removeHook('VIEW_BEFORE_EXPORT', beforeDocExport)
+      removeHook('EXPORT_BEFORE_PREPARE', beforeDocExport)
+      removeHook('EXPORT_AFTER_PREPARE', afterDocExport)
     })
 
     return () => {

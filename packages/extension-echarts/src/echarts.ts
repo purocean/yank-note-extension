@@ -82,16 +82,14 @@ export const Echarts = defineComponent({
       chart?.resize()
     }
 
-    async function beforeExport ({ type }: { type: ExportType }) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      render('light', false, type !== 'print') // convert to image and set light theme.
-      await sleep(0)
-      setTimeout(async () => {
-        imgSrc.value = ''
-        error.value = null
-        nextTick(() => render(getColorScheme(), false))
-      }, 500) // restore
+    async function beforeExport () {
+      render('light', false, true) // convert to image and set light theme.
+    }
+
+    function afterExport () {
+      imgSrc.value = ''
+      error.value = null
+      nextTick(() => render(getColorScheme(), false))
     }
 
     function changeTheme () {
@@ -119,12 +117,14 @@ export const Echarts = defineComponent({
     onMounted(() => setTimeout(render, 0))
 
     registerHook('GLOBAL_RESIZE', resize)
-    registerHook('VIEW_BEFORE_EXPORT', beforeExport)
+    registerHook('EXPORT_BEFORE_PREPARE', beforeExport)
+    registerHook('EXPORT_AFTER_PREPARE', afterExport)
     registerHook('THEME_CHANGE', changeTheme)
 
     onBeforeUnmount(() => {
       removeHook('GLOBAL_RESIZE', resize)
-      removeHook('VIEW_BEFORE_EXPORT', beforeExport)
+      removeHook('EXPORT_BEFORE_PREPARE', beforeExport)
+      removeHook('EXPORT_AFTER_PREPARE', afterExport)
       removeHook('THEME_CHANGE', changeTheme)
       chart?.dispose()
       chart = null
