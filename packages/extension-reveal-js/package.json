@@ -18,7 +18,7 @@
   "icon": "./icon.svg",
   "engines": {
     "node": ">=14.6.0",
-    "yank-note": "^3.40.0"
+    "yank-note": "^3.41.0"
   },
   "requirements": {
     "premium": true
