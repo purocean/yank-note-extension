@@ -1,3 +1,12 @@
+## [1.4.1](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.4.0...extension-markmap-1.4.1) (2022-10-23)
+
+
+### Bug Fixes
+
+* require runtime 3.41.0 ([67aeb63](https://github.com/purocean/yank-note-extension/commit/67aeb63fe3776f2bd436442b1fb0441f65f1faa5))
+
+
+
 # [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.3.2...extension-markmap-1.4.0) (2022-10-23)
 
 
