@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-echarts",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "displayName": "ECharts",
   "description": "ECharts integration",
   "displayName_ZH-CN": "ECharts",
