@@ -1,5 +1,4 @@
 import type Markdown from '@yank-note/runtime-api/types/types/third-party/markdown-it'
-import type { ExportType } from '@yank-note/runtime-api/types/types/renderer/types'
 import * as echarts from 'echarts'
 import { ctx } from '@yank-note/runtime-api'
 
@@ -84,6 +83,7 @@ export const Echarts = defineComponent({
 
     async function beforeExport () {
       render('light', false, true) // convert to image and set light theme.
+      await sleep(0)
     }
 
     function afterExport () {
