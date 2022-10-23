@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-markmap",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "displayName": "Markmap",
   "description": "Visualize your Markdown as mindmaps with Markmap.",
   "displayName_ZH-CN": "Markmap",

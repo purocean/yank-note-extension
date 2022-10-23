@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.4.1...extension-markmap-1.5.0) (2022-10-23)
+
+
+### Features
+
+* **extension-markmap:** support bullet list ([72562d1](https://github.com/purocean/yank-note-extension/commit/72562d17af9a8890929db7ddea86f40492081390))
+
+
+
 ## [1.4.1](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.4.0...extension-markmap-1.4.1) (2022-10-23)
 
 
