@@ -1,12 +1,20 @@
 <template>
-  <component :is="fence ? 'div' : Fragment" class="markmap-preview">
+  <p v-if="img"><img :src="img" only-child="true" /></p>
+  <component :is="fence ? 'div' : Fragment" :class="{'markmap-preview': true, 'skip-export': true, hidden: !!img}">
     <div class="markmap-preview-action">
       <button class="btn small" @click="downloadSvg">SVG</button>
       <button class="btn small" @click="downloadPng">PNG</button>
       <button class="btn small" @click="init">{{_$t('reload')}}</button>
       <button class="btn small" @click="newWindow">{{_$t('open-in-new-window')}}</button>
     </div>
-    <iframe v-if="src" ref="iframe" :onload="onIframeLoad" :src="src" frameborder="0" width="100%" height="100%"></iframe>
+    <iframe
+      v-if="src"
+      ref="iframe"
+      :onload="onIframeLoad"
+      :src="src"
+      frameborder="0"
+      width="100%"
+      height="100%" />
   </component>
 </template>
 
@@ -23,6 +31,7 @@ const Fragment = ctx.lib.vue.defineComponent({
   }
 })
 
+const img = ctx.lib.vue.ref('')
 const src = ctx.lib.vue.ref('')
 const iframe = ctx.lib.vue.ref<HTMLIFrameElement>()
 const { $t: _$t } = ctx.i18n.useI18n()
@@ -99,43 +108,76 @@ function init () {
   })
 }
 
-async function prepareExport (fun: (el: HTMLElement) => Promise<void>, radio = 1) {
+async function prepareExport (fun: (el: SVGSVGElement) => Promise<void>) {
   const win = iframe.value?.contentWindow
   if (win) {
-    const g = win.document.querySelector('#markmap > g')!
-    const { width, height } = g.getBoundingClientRect()
-    const el = win.document.getElementById('markmap')!
-    el.style.minWidth = `${width * radio}px`
-    el.style.minHeight = `${height * radio}px`
-    el.style.maxWidth = `${width * radio}px`
-    el.style.maxHeight = `${height * radio}px`
+    const mm: Markmap = (win as any).mm
+    const d3 = (win as any).d3
+
+    const p = d3.zoomIdentity.scale(1)
+    await mm.svg.transition().duration(0).call(mm.zoom.transform, p).end().catch(() => 0)
+
+    const svgNode = mm.svg.node() as SVGSVGElement
+    const style = svgNode.getAttribute('style') || ''
+
+    const { x, y, width, height } = svgNode.getBBox()
+    svgNode.setAttribute('width', `${width}`)
+    svgNode.setAttribute('height', `${height + 10}`)
+    svgNode.setAttribute('viewBox', `${x} ${y} ${width} ${height}`)
+    svgNode.removeAttribute('style')
+
+    await fun(svgNode)
+
+    svgNode.removeAttribute('width')
+    svgNode.removeAttribute('height')
+    svgNode.removeAttribute('viewBox')
+    svgNode.setAttribute('style', style)
+
+    const duration = mm.options.duration
+    mm.options.duration = 0
     await (win as any).mm.fit()
-
-    await fun(el)
-
-    el.style.minHeight = ''
-    el.style.minWidth = ''
-    el.style.maxHeight = ''
-    el.style.maxWidth = ''
-
-    await (win as any).mm.fit()
+    mm.options.duration = duration
   }
 }
 
-async function downloadSvg () {
-  await prepareExport(async el => {
-    const svg = el.outerHTML
-      .replace(/ id="markmap"[^>]*>/, '>')
-      .replace(/<br>/g, '<br/>')
-    ctx.utils.downloadContent('markmap.svg', svg)
+async function getSvg (): Promise<string> {
+  return new Promise((resolve, reject) => {
+    prepareExport(async el => {
+      const svg = el.outerHTML
+        .replace(/ id="markmap"/, '')
+        .replace(/<\/(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)>/g, '')
+        .replace(/<(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)([^>]*)>/g, '<$1$2/>')
+      resolve(svg)
+    }).catch(reject)
   })
+}
+
+async function downloadSvg () {
+  const svg = await getSvg()
+  ctx.utils.downloadContent('markmap.svg', svg, 'image/svg+xml')
 }
 
 async function downloadPng () {
   await prepareExport(async el => {
+    el.style.width = (Number(el.getAttribute('width')!) * 2)+ 'px'
+    el.style.height = (Number(el.getAttribute('height')!) * 2) + 'px'
+
     const dataUrl = await ctx.lib.domtoimage.toPng(el, { bgcolor: '#fff' })
     ctx.utils.downloadDataURL('markmap.png', dataUrl)
-  }, 4)
+  })
+}
+
+async function beforeExport () {
+  if (!props.fence) {
+    return
+  }
+
+  const svg = await getSvg()
+  img.value = 'data:image/svg+xml;base64,' + ctx.utils.strToBase64(svg)
+}
+
+async function afterExport () {
+  img.value = ''
 }
 
 async function onLoad (win?: Window) {
@@ -179,7 +221,16 @@ ctx.lib.vue.watch(() => props.source, () => {
   renderDebounce()
 })
 
-ctx.lib.vue.onMounted(init)
+ctx.lib.vue.onMounted(() => {
+  init()
+  ctx.registerHook('EXPORT_BEFORE_PREPARE', beforeExport)
+  ctx.registerHook('EXPORT_AFTER_PREPARE', afterExport)
+})
+
+ctx.lib.vue.onBeforeUnmount(() => {
+  ctx.removeHook('EXPORT_BEFORE_PREPARE', beforeExport)
+  ctx.removeHook('EXPORT_AFTER_PREPARE', afterExport)
+})
 </script>
 
 <style>
@@ -189,6 +240,10 @@ ctx.lib.vue.onMounted(init)
   height: 300px;
   width: 100%;
   margin-bottom: 16px;
+}
+
+.markmap-preview.hidden {
+  display: none;
 }
 
 .markmap-preview-action {

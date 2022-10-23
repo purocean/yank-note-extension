@@ -11,6 +11,15 @@ export function buildHTML () {
         padding: 0;
         margin: 0;
       }
+
+      .mm-toolbar {
+        opacity: 0;
+        transition: opacity .1s;
+      }
+
+      body:hover .mm-toolbar {
+        opacity: 1;
+      }
     </style>
     <link rel="stylesheet" href="${baseUrl}/dist/markmap-toolbar.css">
     <script src="${baseUrl}/dist/d3.min.js"></script>
