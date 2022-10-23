@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.4.0...extension-mermaid-1.5.0) (2022-10-23)
+
+
+### Features
+
+* support runtime 3.41.0 ([8392f19](https://github.com/purocean/yank-note-extension/commit/8392f19642a0f3842b279a2d660153e5dc0e1cda))
+
+
+
 # [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.3.0...extension-mermaid-1.4.0) (2022-10-17)
 
 
