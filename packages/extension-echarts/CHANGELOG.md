@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/purocean/yank-note-extension/compare/extension-echarts-1.3.0...extension-echarts-1.3.1) (2022-10-23)
+
+
+### Bug Fixes
+
+* require runtime 3.41.0 ([3e252fa](https://github.com/purocean/yank-note-extension/commit/3e252fa8243bb248ceebb3800290d6119e3c3a74))
+
+
+
 # [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-echarts-1.2.0...extension-echarts-1.3.0) (2022-10-23)
 
 
