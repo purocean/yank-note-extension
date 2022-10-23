@@ -10,6 +10,24 @@ Visualize your Markdown as mindmaps with Markmap.
 
 ## Usage
 
+### List
+
+Just need to add `{.mindmap}` to the end of root node of the list.
+
+```markdown
++ Central node{.markmap}
+    + **1** State Visibility
+    + **2** Environmental Appropriate
+    + **3** User Controllable
+    + **4** Consistency
+    + **5** Error Proofing
+    + **6** Accessibility
+    + **7** Agility and Efficiency
+    + **8** Grace and Simplicity
+    + **9** Fault Tolerance
+    + **10** Friendly Help
+```
+
 ### Code block
 
 ~~~markdown

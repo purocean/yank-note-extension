@@ -24,6 +24,21 @@ registerPlugin({
 
         return temp(tokens, idx, options, env, slf)
       }
+
+      md.renderer.rules.bullet_list_open = (tokens, idx, options, { bMarks, source }, slf) => {
+        const token = tokens[idx]
+        const nextToken = tokens[idx + 1]
+        if (token.map && nextToken && nextToken.attrGet('class')?.includes('markmap')) {
+          const content = source
+            .substring(bMarks[token.map[0]], bMarks[token.map[1]])
+            .replace(/\{.markmap[^}]*\}/gm, '')
+            .trim()
+
+          return ctx.lib.vue.h(MarkmapPreview, { source: content, fence: true }) as any
+        }
+
+        return slf.renderToken(tokens, idx, options)
+      }
     })
 
     if (ctx.editor.tapMarkdownMonarchLanguage) {
