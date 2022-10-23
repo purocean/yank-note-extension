@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.3.2...extension-markmap-1.4.0) (2022-10-23)
+
+
+### Features
+
+* **extension-markmap:** optimize export ([b5c17df](https://github.com/purocean/yank-note-extension/commit/b5c17dffa06a9af12ae52e38acd8c8c49f226358))
+
+
+
 ## [1.3.2](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.3.1...extension-markmap-1.3.2) (2022-10-19)
 
 
