@@ -1,3 +1,17 @@
+## [1.5.1](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.5.0...extension-markmap-1.5.1) (2022-10-24)
+
+
+### Bug Fixes
+
+* **extension-markmap:** fix conflict with mindmap plugin ([8a7ea2c](https://github.com/purocean/yank-note-extension/commit/8a7ea2ca987aacac7748afbaa32b9a360c9db2c1))
+
+
+### Features
+
+* **extension-markmap:** add editor completion ([4e60387](https://github.com/purocean/yank-note-extension/commit/4e6038783aa911d802257b8344928227de1bc794))
+
+
+
 # [1.5.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.4.1...extension-markmap-1.5.0) (2022-10-23)
 
 
