@@ -178,10 +178,12 @@ async function init() {
   switch (pkgManager) {
     case 'yarn':
       console.log('  yarn')
+      console.log('  yarn link-extension')
       console.log('  yarn dev')
       break
     default:
       console.log(`  ${pkgManager} install`)
+      console.log(`  ${pkgManager} run link-extension`)
       console.log(`  ${pkgManager} run dev`)
       break
   }
