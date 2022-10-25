@@ -33,10 +33,13 @@ const Mermaid = defineComponent({
     const errMsg = ref('')
 
     function getImageUrl (code?: string) {
-      const svg = code || container.value?.innerHTML
+      let svg = code || container.value?.innerHTML
       if (!svg) {
         return ''
       }
+
+      svg = svg.replace(/<\/(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)>/g, '')
+        .replace(/<(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)([^>]*)>/g, '<$1$2/>')
 
       return 'data:image/svg+xml;base64,' + strToBase64(svg)
     }
