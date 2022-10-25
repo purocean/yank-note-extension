@@ -1,3 +1,12 @@
+## [1.5.2](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.5.1...extension-mermaid-1.5.2) (2022-10-25)
+
+
+### Bug Fixes
+
+* fix https://github.com/purocean/yank-note-extension/issues/13 ([20d5b9e](https://github.com/purocean/yank-note-extension/commit/20d5b9e865b1708fd928098e533b4e975c443743))
+
+
+
 ## [1.5.1](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.5.0...extension-mermaid-1.5.1) (2022-10-23)
 
 
