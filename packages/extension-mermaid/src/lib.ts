@@ -4,7 +4,7 @@ import type { Mermaid } from 'mermaid'
 export async function getMermaidLib (): Promise<Mermaid> {
   const iframe = await ctx.view.getRenderIframe()
   const mermaid = (iframe.contentWindow as any).mermaid
-  if (mermaid) {
+  if (mermaid && mermaid.mermaidAPI) {
     return mermaid
   }
 
