@@ -3,12 +3,13 @@ declare const languages: {
     en: {
         'app-name': string;
         about: string;
+        feedback: string;
         slogan: string;
         cancel: string;
         undo: string;
         ok: string;
         'demo-tips': string;
-        'blank-page': string;
+        more: string;
         copied: string;
         'insert-different-repo-doc': string;
         'need-clipboard-permission': string;
@@ -233,7 +234,6 @@ declare const languages: {
                 'copy-content': string;
                 'doc-history': string;
                 'share-preview': string;
-                'extension-manager': string;
                 print: string;
                 export: string;
             };
@@ -254,6 +254,9 @@ declare const languages: {
             present: string;
             get: {
                 'get-application': string;
+            };
+            extension: {
+                'extension-manager': string;
             };
         };
         view: {
@@ -570,17 +573,24 @@ declare const languages: {
             'auto-upgrade': string;
             'unknown-origin-tips': string;
             'extensions-auto-upgraded': string;
+        };
+        'get-started': {
+            'get-started': string;
+            start: string;
+            help: string;
+            recent: string;
         };
     };
     'zh-CN': {
         'app-name': string;
         about: string;
+        feedback: string;
         slogan: string;
         cancel: string;
         undo: string;
         ok: string;
         'demo-tips': string;
-        'blank-page': string;
+        more: string;
         copied: string;
         'insert-different-repo-doc': string;
         'need-clipboard-permission': string;
@@ -805,7 +815,6 @@ declare const languages: {
                 'copy-content': string;
                 'doc-history': string;
                 'share-preview': string;
-                'extension-manager': string;
                 print: string;
                 export: string;
             };
@@ -826,6 +835,9 @@ declare const languages: {
             present: string;
             get: {
                 'get-application': string;
+            };
+            extension: {
+                'extension-manager': string;
             };
         };
         view: {
@@ -1142,6 +1154,12 @@ declare const languages: {
             'auto-upgrade': string;
             'unknown-origin-tips': string;
             'extensions-auto-upgraded': string;
+        };
+        'get-started': {
+            'get-started': string;
+            start: string;
+            help: string;
+            recent: string;
         };
     };
 };

@@ -19,10 +19,11 @@ export declare const initState: {
     currentContent: string;
     inComposition: boolean;
     currentRepo: Repo | undefined;
-    currentFile: Doc | null;
+    currentFile: Doc | null | undefined;
     recentOpenTime: Record<string, number>;
     tabs: Components.FileTabs.Item[];
     previewer: string;
+    editor: string;
 };
 export declare type AppState = typeof initState;
 declare const _default: import("vuex").Store<{
@@ -45,9 +46,10 @@ declare const _default: import("vuex").Store<{
     currentContent: string;
     inComposition: boolean;
     currentRepo: Repo | undefined;
-    currentFile: Doc | null;
+    currentFile: Doc | null | undefined;
     recentOpenTime: Record<string, number>;
     tabs: Components.FileTabs.Item[];
     previewer: string;
+    editor: string;
 }>;
 export default _default;

@@ -58,10 +58,11 @@ declare const ctx: Readonly<{
         currentContent: string;
         inComposition: boolean;
         currentRepo: import("../types").Repo | undefined;
-        currentFile: import("../types").Doc | null;
+        currentFile: import("../types").Doc | null | undefined;
         recentOpenTime: Record<string, number>;
         tabs: import("../types").Components.FileTabs.Item[];
         previewer: string;
+        editor: string;
     }>;
     action: typeof action;
     doc: typeof doc;

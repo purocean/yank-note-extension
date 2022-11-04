@@ -1,4 +1,5 @@
 import type * as Monaco from 'monaco-editor';
+import { CustomEditor } from '@fe/types';
 export declare type SimpleCompletionItem = {
     label: string;
     kind?: Monaco.languages.CompletionItemKind;
@@ -140,4 +141,24 @@ export declare function tapMarkdownMonarchLanguage(tapper: (mdLanguage: any) => 
  * @returns
  */
 export declare function getMarkdownMonarchLanguage(): any;
+/**
+ * Switch current editor
+ * @param name Editor name
+ */
+export declare function switchEditor(name: string): void;
+/**
+ * Register a custom editor.
+ * @param editor Editor
+ */
+export declare function registerCustomEditor(editor: CustomEditor): void;
+/**
+ * Remove a custom editor.
+ * @param name Editor name
+ */
+export declare function removeCustomEditor(name: string): void;
+/**
+ * Get all custom editors.
+ * @returns Editors
+ */
+export declare function getAllCustomEditors(): CustomEditor[];
 export {};

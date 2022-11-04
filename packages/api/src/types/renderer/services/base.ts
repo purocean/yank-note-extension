@@ -48,3 +48,8 @@ export declare function getRepo(name: string): import("@fe/types").Repo | undefi
 export declare function readFromClipboard(): Promise<Record<string, any>>;
 export declare function readFromClipboard(callback: (type: string, getType: (type: string) => Promise<Blob>) => Promise<void>): Promise<void>;
 export declare function writeToClipboard(type: string, value: any): Promise<any>;
+/**
+ * Get Server Timestamp
+ * @returns timestamp in ms
+ */
+export declare function getServerTimestamp(): Promise<number>;
