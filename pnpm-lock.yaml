@@ -70,7 +70,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.41.0
+      '@yank-note/runtime-api': workspace:3.42.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -106,7 +106,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.41.0
+      '@yank-note/runtime-api': workspace:^3.42.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -142,7 +142,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.41.0
+      '@yank-note/runtime-api': workspace:3.42.0
       conventional-changelog-cli: ^2.2.2
       echarts: ^5.3.2
       eslint: ^7.32.0
@@ -180,7 +180,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.41.0
+      '@yank-note/runtime-api': workspace:3.42.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -216,7 +216,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.41.0
+      '@yank-note/runtime-api': workspace:3.42.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -256,7 +256,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.41.0
+      '@yank-note/runtime-api': workspace:3.42.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -294,7 +294,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.41.0
+      '@yank-note/runtime-api': workspace:^3.42.0
       conventional-changelog-cli: ^2.2.2
       d3: '6'
       eslint: ^7.32.0
@@ -341,7 +341,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.41.0
+      '@yank-note/runtime-api': workspace:3.42.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -382,7 +382,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.41.0
+      '@yank-note/runtime-api': workspace:^3.42.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -418,7 +418,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.41.0
+      '@yank-note/runtime-api': workspace:^3.42.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -454,7 +454,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.41.0
+      '@yank-note/runtime-api': workspace:^3.42.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -494,7 +494,7 @@ importers:
       '@vitejs/plugin-vue': ^2.3.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.41.0
+      '@yank-note/runtime-api': workspace:^3.42.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -3897,7 +3897,7 @@ packages:
       source-map: 0.6.1
       wordwrap: 1.0.0
     optionalDependencies:
-      uglify-js: 3.17.3
+      uglify-js: 3.17.4
     dev: true
 
   /hard-rejection/2.1.0:
@@ -5527,8 +5527,8 @@ packages:
     hasBin: true
     dev: true
 
-  /uglify-js/3.17.3:
-    resolution: {integrity: sha512-JmMFDME3iufZnBpyKL+uS78LRiC+mK55zWfM5f/pWBJfpOttXAqYfdDGRukYhJuyRinvPVAtUhvy7rlDybNtFg==}
+  /uglify-js/3.17.4:
+    resolution: {integrity: sha512-T9q82TJI9e/C1TAxYvfb16xO120tMVFZrGA3f9/P4424DNu6ypK103y0GPFVa17yotwSyZW5iYXgjYHkGrJW/g==}
     engines: {node: '>=0.8.0'}
     hasBin: true
     requiresBuild: true
