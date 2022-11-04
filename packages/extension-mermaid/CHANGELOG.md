@@ -1,3 +1,12 @@
+## [1.5.3](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.5.2...extension-mermaid-1.5.3) (2022-11-04)
+
+
+### Bug Fixes
+
+* **extension-mermaid:** fix conflict global variable ([d87c477](https://github.com/purocean/yank-note-extension/commit/d87c477129e313fcdd365d7429e8ab662b1b0b00))
+
+
+
 ## [1.5.2](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.5.1...extension-mermaid-1.5.2) (2022-10-25)
 
 
