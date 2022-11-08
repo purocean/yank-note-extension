@@ -43,6 +43,7 @@ watchEffect(() => {
 .pdf-viewer {
   height: 100%;
   width: 100%;
+  border-top: 1px var(--g-color-70) solid;
 }
 
 .pdf-viewer > iframe {
