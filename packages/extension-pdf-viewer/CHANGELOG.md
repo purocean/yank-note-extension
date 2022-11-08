@@ -1,3 +1,13 @@
+# [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-pdf-viewer-1.0.0...extension-pdf-viewer-1.1.0) (2022-11-08)
+
+
+### Features
+
+* **extension-pdf-viewer:** change icon ([34adf1a](https://github.com/purocean/yank-note-extension/commit/34adf1a42ae54652693d7c028be9b1d46558e335))
+* **extension-pdf-viewer:** update UI ([212a923](https://github.com/purocean/yank-note-extension/commit/212a923b2be139fdbef2ebef165a642f657a120b))
+
+
+
 # 1.0.0 (2022-11-08)
 
 
