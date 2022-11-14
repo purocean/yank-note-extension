@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-milkdown-1.0.0...extension-milkdown-1.1.0) (2022-11-14)
+
+
+### Features
+
+* **extension-milkdown:** update dark theme ([743e4d6](https://github.com/purocean/yank-note-extension/commit/743e4d66dd90e85787cc150b011169533bdac67a))
+
+
+
 # 1.0.0 (2022-11-14)
 
 
