@@ -64,8 +64,9 @@ const renderImage: Parameters<typeof nordLight.override>[0] = (_emotion, themeMa
     img.onUpdate = (node) => {
       const { alt, title, loading, failed } = node.attrs
       // relative path
-      if (node.attrs.src && !(/^[^:]*:/.test(node.attrs.src) || node.attrs.src.startsWith('//'))) {
-        const src = (ctx.base as any).getAttachmentURL({ ...ctx.store.state.currentFile, path: node.attrs.src })
+      const currentFile = ctx.store.state.currentFile
+      if (currentFile && node.attrs.src && !(/^[^:]*:/.test(node.attrs.src) || node.attrs.src.startsWith('//'))) {
+        const src = ctx.base.getAttachmentURL({ ...currentFile, path: node.attrs.src })
         ;(onUpdate as any)({ attrs: { src, alt, title, loading, failed } })
       } else {
         onUpdate(node)

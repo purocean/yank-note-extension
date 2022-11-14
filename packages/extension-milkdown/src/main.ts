@@ -7,7 +7,8 @@ registerPlugin({
   name: extensionName,
   register (ctx) {
     ctx.editor.registerCustomEditor({
-      name: 'Milkdown',
+      name: 'milkdown',
+      displayName: 'Milkdown',
       component: CustomEditor,
       when ({ doc }) {
         return !!(doc && ctx.doc.isMarkdownFile(doc))
