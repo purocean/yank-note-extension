@@ -70,9 +70,8 @@ watchEffect(() => {
           position: sticky;
           top: 0;
           z-index: 99999;
-          margin: 0 -1px;
-          box-sizing: content-box;
           width: 100%;
+          box-shadow: 1px 0 0px rgba(59, 66, 82, 0.06), -1px 0 0px rgba(59, 66, 82, 0.06), 0 1px 1px rgba(59, 66, 82, 0.12);
         }
 
         .milkdown-menu > button {

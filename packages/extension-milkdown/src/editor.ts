@@ -81,7 +81,7 @@ nordDark.override((emotion, manager) => {
   const themeColor = manager.getSlice(ThemeColor)
   manager.set(ThemeColor, ([key, ...rest]) => {
     if (key === 'surface') {
-      return 'var(--g-color-90)'
+      return 'var(--g-color-92)'
     }
 
     return themeColor([key, ...rest])
