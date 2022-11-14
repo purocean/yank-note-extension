@@ -7,7 +7,8 @@ registerPlugin({
   name: extensionName,
   register (ctx) {
     ctx.editor.registerCustomEditor({
-      name: 'PDFViewer',
+      name: 'pdf-viewer',
+      displayName: 'PDF Viewer',
       component: PDFViewer,
       hiddenPreview: true,
       when ({ doc }) {
