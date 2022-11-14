@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-milkdown-1.1.0...extension-milkdown-1.1.1) (2022-11-14)
+
+
+### Features
+
+* **extension-milkdown:** update style ([ff491df](https://github.com/purocean/yank-note-extension/commit/ff491df7e2dd9c16e47cba37272b928acad2df47))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-milkdown-1.0.0...extension-milkdown-1.1.0) (2022-11-14)
 
 
