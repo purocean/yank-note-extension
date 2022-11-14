@@ -112,7 +112,7 @@ export declare function getContextMenuItems(e: MouseEvent): Components.ContextMe
  * get enableSyncScroll
  * @returns
  */
-export declare function getEnableSyncScroll(): boolean;
+export declare function getEnableSyncScroll(): boolean | null | undefined;
 /**
  * disable sync scroll for a while
  * @param fn

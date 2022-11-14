@@ -1,6 +1,7 @@
-import type { Components, Doc, Repo } from '@fe/types';
+import type { Components, Doc, FileSort, Repo } from '@fe/types';
 export declare const initState: {
     tree: Components.Tree.Node[] | null;
+    treeSort: FileSort;
     wordWrap: "on" | "off";
     typewriterMode: boolean;
     showSide: boolean;
@@ -28,6 +29,7 @@ export declare const initState: {
 export declare type AppState = typeof initState;
 declare const _default: import("vuex").Store<{
     tree: Components.Tree.Node[] | null;
+    treeSort: FileSort;
     wordWrap: "on" | "off";
     typewriterMode: boolean;
     showSide: boolean;

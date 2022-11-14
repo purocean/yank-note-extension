@@ -161,4 +161,13 @@ export declare function removeCustomEditor(name: string): void;
  * @returns Editors
  */
 export declare function getAllCustomEditors(): CustomEditor[];
+/**
+ * Trigger save.
+ */
+export declare function triggerSave(): void;
+/**
+ * Get current editor is default or not.
+ * @returns
+ */
+export declare function getIsDefault(): boolean;
 export {};

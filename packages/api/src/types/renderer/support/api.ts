@@ -1,4 +1,4 @@
-import type { Components, Doc, ExportType, FileItem, PathItem } from '@fe/types';
+import type { Components, Doc, ExportType, FileItem, FileSort, PathItem } from '@fe/types';
 export declare type ApiResult<T = any> = {
     status: 'ok' | 'error';
     message: string;
@@ -65,7 +65,7 @@ export declare function commentHistoryVersion(file: PathItem, version: string, m
  * @param repo
  * @returns
  */
-export declare function fetchTree(repo: string): Promise<Components.Tree.Node[]>;
+export declare function fetchTree(repo: string, sort: FileSort): Promise<Components.Tree.Node[]>;
 /**
  * Fetch custom styles.
  * @returns

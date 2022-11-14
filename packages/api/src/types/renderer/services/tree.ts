@@ -1,4 +1,4 @@
-import type { Ref } from 'vue';
+import { Ref } from 'vue';
 import type { Components } from '@fe/types';
 export declare type MenuItem = Components.ContextMenu.Item;
 export declare type VueCtx = {
@@ -21,3 +21,7 @@ export declare function getContextMenuItems(node: Components.Tree.Node, vueCtx: 
  * Refresh file tree.
  */
 export declare function refreshTree(): Promise<void>;
+/**
+ * Reveal current node.
+ */
+export declare function revealCurrentNode(): void;

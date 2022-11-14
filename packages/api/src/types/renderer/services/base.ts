@@ -1,5 +1,14 @@
 import type { Doc } from '@fe/types';
 /**
+ * Get document attachment url
+ * @param doc
+ * @param opts
+ * @returns
+ */
+export declare function getAttachmentURL(doc: Doc, opts?: {
+    origin: boolean;
+}): string;
+/**
  * Upload a file.
  * @param file
  * @param belongDoc belong document

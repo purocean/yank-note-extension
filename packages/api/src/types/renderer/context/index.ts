@@ -40,6 +40,7 @@ declare const ctx: Readonly<{
     args: typeof args;
     store: import("vuex").Store<{
         tree: import("../types").Components.Tree.Node[] | null;
+        treeSort: import("../types").FileSort;
         wordWrap: "on" | "off";
         typewriterMode: boolean;
         showSide: boolean;

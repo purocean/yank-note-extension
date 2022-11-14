@@ -54,8 +54,8 @@ export declare namespace Components {
     }
     namespace ContextMenu {
         type ShowOpts = {
-            mouseX?: number;
-            mouseY?: number;
+            mouseX?: number | ((x: number) => number);
+            mouseY?: number | ((y: number) => number);
         };
         type SeparatorItem = {
             type: 'separator';
@@ -66,6 +66,7 @@ export declare namespace Components {
             id: string;
             label: string;
             hidden?: boolean;
+            checked?: boolean;
             onClick: (item?: NormalItem) => void;
         };
         type Item = SeparatorItem | NormalItem;
@@ -78,6 +79,11 @@ export declare namespace Components {
             payload: any;
             fixed?: boolean;
             temporary?: boolean;
+        }
+        interface ActionBtn {
+            icon: string;
+            title: string;
+            onClick: (e: MouseEvent) => void;
         }
     }
     namespace FileTabs {
@@ -102,6 +108,7 @@ export declare namespace Components {
             key: string;
         }
         interface Props {
+            filterInputHidden?: boolean;
             top?: string | undefined;
             right?: string | undefined;
             bottom?: string | undefined;
@@ -112,6 +119,10 @@ export declare namespace Components {
         }
     }
 }
+export declare type FileSort = {
+    by: 'mtime' | 'birthtime' | 'name' | 'serial';
+    order: 'asc' | 'desc';
+};
 export declare type ThemeName = 'system' | 'dark' | 'light';
 export declare type LanguageName = 'system' | Language;
 export declare type ExportType = 'print' | 'pdf' | 'docx' | 'html' | 'rst' | 'adoc';
@@ -245,14 +256,17 @@ export declare type BuildInActions = {
     'status-bar.refresh-menu': () => void;
     'control-center.refresh': () => void;
     'tree.refresh': () => void;
+    'tree.reveal-current-node': () => void;
     'editor.toggle-wrap': () => void;
     'editor.refresh-custom-editor': () => void;
+    'editor.trigger-save': () => void;
     'filter.show-quick-open': () => void;
     'filter.choose-document': () => Promise<Doc>;
     'file-tabs.switch-left': () => void;
     'file-tabs.switch-right': () => void;
     'file-tabs.close-current': () => void;
     'file-tabs.search-tabs': () => void;
+    'file-tabs.refresh-action-btns': () => void;
     'xterm.run': (cmd: {
         code: string;
         start: string;
@@ -366,6 +380,9 @@ export declare type BuildInHookTypes = {
     EDITOR_CUSTOM_EDITOR_CHANGE: {
         type: 'register' | 'remove' | 'switch';
     };
+    EDITOR_CURRENT_EDITOR_CHANGE: {
+        current?: CustomEditor | null;
+    };
     EDITOR_CHANGE: {
         uri: string;
         value: string;
@@ -444,6 +461,7 @@ export declare type CustomEditorCtx = {
 };
 export declare type CustomEditor = {
     name: string;
+    displayName: string;
     hiddenPreview?: boolean;
     when: (ctx: CustomEditorCtx) => boolean | Promise<boolean>;
     component: any;
@@ -464,6 +482,7 @@ export interface CodeRunner {
 export declare type BuildInIOCTypes = {
     [key in keyof BuildInHookTypes]: any;
 } & {
+    TABS_ACTION_BTN_TAPPERS: (btns: Components.Tabs.ActionBtn[]) => void;
     STATUS_BAR_MENU_TAPPERS: any;
     CONTROL_CENTER_SCHEMA_TAPPERS: any;
     EDITOR_SIMPLE_COMPLETION_ITEM_TAPPERS: any;

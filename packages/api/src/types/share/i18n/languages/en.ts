@@ -287,6 +287,14 @@ declare const data: {
             moved: string;
             copied: string;
         };
+        sort: {
+            asc: string;
+            desc: string;
+            'by-name': string;
+            'by-mtime': string;
+            'by-birthtime': string;
+            'by-serial': string;
+        };
     };
     tabs: {
         'close-others': string;
@@ -406,6 +414,7 @@ declare const data: {
             'insert-time': string;
             'reveal-line-in-preview': string;
         };
+        'switch-editor': string;
     };
     picgo: {
         setting: {
