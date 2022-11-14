@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-pdf-viewer-1.1.0...extension-pdf-viewer-1.2.0) (2022-11-14)
+
+
+### Features
+
+* **extension-pdf-viewer:** support runtime 3.43.0 ([fb9945d](https://github.com/purocean/yank-note-extension/commit/fb9945d565b6a296ef47784727f21d29aff124ef))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-pdf-viewer-1.0.0...extension-pdf-viewer-1.1.0) (2022-11-08)
 
 
