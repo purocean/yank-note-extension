@@ -17,7 +17,7 @@ export default ({ mode }) => defineConfig({
     ],
   },
   build: {
-    minify: mode === 'production' ? 'terser' : false,
+    minify: 'terser',
     outDir: mode,
     lib: {
       entry: {

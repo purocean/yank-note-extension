@@ -108,6 +108,10 @@ watchEffect(() => {
         #editor {
           margin-bottom: 20px;
         }
+
+        .milkdown .editor {
+          padding: 50px 30px;
+        }
       </style>
       <div class="tips">${i18n.t('tips')}<a href="javascript:ctx.showExtensionManager('${__EXTENSION_ID__}')">${i18n.t('disable')}</a></div>
       <div id="editor"></div>

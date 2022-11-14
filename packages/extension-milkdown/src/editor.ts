@@ -1,4 +1,4 @@
-import { defaultValueCtx, Editor, editorViewOptionsCtx, rootCtx, ThemeImageType } from '@milkdown/core'
+import { defaultValueCtx, Editor, editorViewOptionsCtx, rootCtx, ThemeColor, ThemeImageType } from '@milkdown/core'
 import remarkFrontmatter from 'remark-frontmatter'
 import { refractor } from 'refractor/lib/common'
 import { nordDark, nordLight } from '@milkdown/theme-nord'
@@ -77,7 +77,17 @@ const renderImage: Parameters<typeof nordLight.override>[0] = (_emotion, themeMa
 }
 
 nordLight.override(renderImage)
-nordDark.override(renderImage)
+nordDark.override((emotion, manager) => {
+  const themeColor = manager.getSlice(ThemeColor)
+  manager.set(ThemeColor, ([key, ...rest]) => {
+    if (key === 'surface') {
+      return 'var(--g-color-90)'
+    }
+
+    return themeColor([key, ...rest])
+  })
+  renderImage(emotion, manager)
+})
 
 const uploader: Uploader = async (files, schema) => {
   const images: any[] = []
