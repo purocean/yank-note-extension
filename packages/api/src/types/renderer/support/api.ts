@@ -1,3 +1,4 @@
+import type { IProgressMessage, ISerializedFileMatch, ISerializedSearchSuccess, ITextQuery } from 'ripgrep-wrapper';
 import type { Components, Doc, ExportType, FileItem, FileSort, PathItem } from '@fe/types';
 export declare type ApiResult<T = any> = {
     status: 'ok' | 'error';
@@ -91,13 +92,14 @@ export declare function choosePath(options: Record<string, any>): Promise<{
     canceled: boolean;
     filePaths: string[];
 }>;
+declare type SearchReturn = (onResult: (result: ISerializedFileMatch[]) => void, onMessage?: (message: IProgressMessage) => void) => Promise<ISerializedSearchSuccess | null>;
 /**
- * Search in a repository.
- * @param repo
- * @param text
+ * Search files.
+ * @param controller
+ * @param query
  * @returns
  */
-export declare function search(repo: string, text: string): Promise<Pick<Doc, 'repo' | 'type' | 'path' | 'name'>>;
+export declare function search(controller: AbortController, query: ITextQuery): Promise<SearchReturn>;
 /**
  * Upload file.
  * @param repo
@@ -200,3 +202,4 @@ export declare function enableExtension(id: string): Promise<any>;
  * @returns
  */
 export declare function disableExtension(id: string): Promise<any>;
+export {};

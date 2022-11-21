@@ -15,7 +15,7 @@ export declare function t(path: MsgPath, ...args: string[]): string;
  * Get language
  * @returns
  */
-export declare function getLanguage(): "en" | "zh-CN" | "system";
+export declare function getLanguage(): "system" | "en" | "zh-CN";
 /**
  * Set language
  * @param language

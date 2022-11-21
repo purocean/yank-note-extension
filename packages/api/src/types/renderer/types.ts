@@ -163,6 +163,14 @@ export declare type ExtensionLoadStatus = {
     style: boolean;
     activationTime: number;
 };
+export declare type FindInRepositoryQuery = {
+    pattern?: string;
+    caseSensitive?: boolean;
+    wholeWord?: boolean;
+    regExp?: boolean;
+    include?: string;
+    exclude?: string;
+};
 export interface Extension {
     id: string;
     displayName: string;
@@ -222,6 +230,7 @@ export interface BuildInSettings {
     'mark': FileItem[];
     'updater.source': 'github.com' | 'ghproxy.com';
     'doc-history.number-limit': number;
+    'search.number-limit': number;
     'server.host': string;
     'server.port': number;
     'tree.exclude': string;
@@ -288,6 +297,7 @@ export declare type BuildInActions = {
     'plugin.electron-zoom.zoom-out': () => void;
     'plugin.electron-zoom.zoom-reset': () => void;
     'premium.show': () => void;
+    'base.find-in-repository': (query?: FindInRepositoryQuery) => void;
 };
 export declare type BuildInActionName = keyof BuildInActions;
 export declare type BuildInHookTypes = {

@@ -256,6 +256,12 @@ declare const data: {
         extension: {
             'extension-manager': string;
         };
+        theme: {
+            tips: string;
+            dark: string;
+            light: string;
+            system: string;
+        };
     };
     view: {
         outline: string;
@@ -282,6 +288,7 @@ declare const data: {
             'create-in-cd': string;
             'copy-name': string;
             'copy-path': string;
+            'find-in-folder': string;
         };
         toast: {
             moved: string;
@@ -378,6 +385,9 @@ declare const data: {
             'doc-history': {
                 'number-limit': string;
             };
+            search: {
+                'number-limit': string;
+            };
             server: {
                 host: string;
                 port: string;
@@ -399,7 +409,6 @@ declare const data: {
         'input-placeholder': string;
         empty: string;
         files: string;
-        search: string;
         marked: string;
     };
     editor: {
@@ -580,12 +589,25 @@ declare const data: {
         'auto-upgrade': string;
         'unknown-origin-tips': string;
         'extensions-auto-upgraded': string;
+        'fetch-registry-failed': string;
     };
     'get-started': {
         'get-started': string;
         start: string;
         help: string;
         recent: string;
+    };
+    'search-panel': {
+        'search-files': string;
+        'placeholder-search': string;
+        'for-history': string;
+        'files-to-include': string;
+        'files-to-exclude': string;
+        'match-case': string;
+        'match-whole-word': string;
+        'use-regex': string;
+        'expand-all': string;
+        'collapse-all': string;
     };
 };
 export declare type BaseLanguage = typeof data;

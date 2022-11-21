@@ -258,6 +258,12 @@ declare const languages: {
             extension: {
                 'extension-manager': string;
             };
+            theme: {
+                tips: string;
+                dark: string;
+                light: string;
+                system: string;
+            };
         };
         view: {
             outline: string;
@@ -284,6 +290,7 @@ declare const languages: {
                 'create-in-cd': string;
                 'copy-name': string;
                 'copy-path': string;
+                'find-in-folder': string;
             };
             toast: {
                 moved: string;
@@ -380,6 +387,9 @@ declare const languages: {
                 'doc-history': {
                     'number-limit': string;
                 };
+                search: {
+                    'number-limit': string;
+                };
                 server: {
                     host: string;
                     port: string;
@@ -401,7 +411,6 @@ declare const languages: {
             'input-placeholder': string;
             empty: string;
             files: string;
-            search: string;
             marked: string;
         };
         editor: {
@@ -582,12 +591,25 @@ declare const languages: {
             'auto-upgrade': string;
             'unknown-origin-tips': string;
             'extensions-auto-upgraded': string;
+            'fetch-registry-failed': string;
         };
         'get-started': {
             'get-started': string;
             start: string;
             help: string;
             recent: string;
+        };
+        'search-panel': {
+            'search-files': string;
+            'placeholder-search': string;
+            'for-history': string;
+            'files-to-include': string;
+            'files-to-exclude': string;
+            'match-case': string;
+            'match-whole-word': string;
+            'use-regex': string;
+            'expand-all': string;
+            'collapse-all': string;
         };
     };
     'zh-CN': {
@@ -848,6 +870,12 @@ declare const languages: {
             extension: {
                 'extension-manager': string;
             };
+            theme: {
+                tips: string;
+                dark: string;
+                light: string;
+                system: string;
+            };
         };
         view: {
             outline: string;
@@ -874,6 +902,7 @@ declare const languages: {
                 'create-in-cd': string;
                 'copy-name': string;
                 'copy-path': string;
+                'find-in-folder': string;
             };
             toast: {
                 moved: string;
@@ -970,6 +999,9 @@ declare const languages: {
                 'doc-history': {
                     'number-limit': string;
                 };
+                search: {
+                    'number-limit': string;
+                };
                 server: {
                     host: string;
                     port: string;
@@ -991,7 +1023,6 @@ declare const languages: {
             'input-placeholder': string;
             empty: string;
             files: string;
-            search: string;
             marked: string;
         };
         editor: {
@@ -1172,12 +1203,25 @@ declare const languages: {
             'auto-upgrade': string;
             'unknown-origin-tips': string;
             'extensions-auto-upgraded': string;
+            'fetch-registry-failed': string;
         };
         'get-started': {
             'get-started': string;
             start: string;
             help: string;
             recent: string;
+        };
+        'search-panel': {
+            'search-files': string;
+            'placeholder-search': string;
+            'for-history': string;
+            'files-to-include': string;
+            'files-to-exclude': string;
+            'match-case': string;
+            'match-whole-word': string;
+            'use-regex': string;
+            'expand-all': string;
+            'collapse-all': string;
         };
     };
 };

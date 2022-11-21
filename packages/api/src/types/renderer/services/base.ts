@@ -1,4 +1,4 @@
-import type { Doc } from '@fe/types';
+import type { Doc, FindInRepositoryQuery } from '@fe/types';
 /**
  * Get document attachment url
  * @param doc
@@ -62,3 +62,8 @@ export declare function writeToClipboard(type: string, value: any): Promise<any>
  * @returns timestamp in ms
  */
 export declare function getServerTimestamp(): Promise<number>;
+/**
+ * Find in current repository.
+ * @param query
+ */
+export declare function findInRepository(query?: FindInRepositoryQuery): void;

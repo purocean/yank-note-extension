@@ -1,7 +1,9 @@
 import type { BuildInHookTypes } from '@fe/types';
 export declare type HookType = keyof BuildInHookTypes;
-export declare type HookFun<T> = ((arg: T) => boolean | void | Promise<boolean | void>) & {
-    once?: boolean;
+export declare type HookFun<T> = (arg: T) => (boolean | void | Promise<boolean | void>);
+export declare type Hook<T> = {
+    fun: HookFun<T>;
+    once: boolean;
 };
 export declare type HookTypeWithoutPayload = {
     [K in keyof BuildInHookTypes]: BuildInHookTypes[K] extends never ? K : never;
