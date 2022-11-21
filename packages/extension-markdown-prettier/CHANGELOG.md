@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.2.0...extension-markdown-prettier-1.3.0) (2022-11-21)
+
+
+### Features
+
+* **extension-markdown-prettier:** change keyboard shortcut ([1aa80ae](https://github.com/purocean/yank-note-extension/commit/1aa80ae0cb661c3142d927c2fee908ac66a40dfe))
+
+
+
 # [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.1.1...extension-markdown-prettier-1.2.0) (2022-09-25)
 
 
