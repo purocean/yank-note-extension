@@ -42,7 +42,7 @@ registerPlugin({
         })
       }
 
-      changeCommandKeybinding('editor.action.formatDocument', monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyF)
+      changeCommandKeybinding('editor.action.formatDocument', monaco.KeyMod.Alt | monaco.KeyMod.Shift | monaco.KeyCode.KeyL)
 
       monaco.languages.registerDocumentFormattingEditProvider('markdown', {
         provideDocumentFormattingEdits: (model, options) => {
