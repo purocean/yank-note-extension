@@ -82,7 +82,7 @@ registerPlugin({
         }
       })
 
-      ctx.registerHook('DOC_BEFORE_SAVE' as any, (payload: any) => {
+      ctx.registerHook('DOC_BEFORE_SAVE', async (payload) => {
         if (!ctx.setting.getSetting<boolean>(settingKeyFormatOnSave)) {
           return
         }
@@ -93,8 +93,9 @@ registerPlugin({
 
         const editor = ctx.editor.getEditor()
 
-        editor.getAction('editor.action.formatDocument').run()
+        await editor.getAction('editor.action.formatDocument').run()
         editor.focus()
+        payload.content = ctx.editor.getValue()
       })
     }
   }
