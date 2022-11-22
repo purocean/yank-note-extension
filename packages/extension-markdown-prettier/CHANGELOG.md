@@ -1,3 +1,10 @@
+## <small>1.3.1 (2022-11-22)</small>
+
+* fix(extension-markdown-prettier): fix format on save ([b04ca80](https://github.com/purocean/yank-note-extension/commit/b04ca80))
+* chore: bump @yank-note/runtime-api to 3.44.0 ([3650908](https://github.com/purocean/yank-note-extension/commit/3650908))
+
+
+
 # [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.2.0...extension-markdown-prettier-1.3.0) (2022-11-21)
 
 
