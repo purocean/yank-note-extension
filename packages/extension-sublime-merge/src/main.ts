@@ -12,11 +12,13 @@ registerPlugin({
         'open-in-sublime-merge': 'Open in Sublime Merge',
         'show-history-in-sublime-merge': 'Show History in Sublime Merge',
         'smerge-command-path': 'Smerge Command Path',
+        'error-tips': 'Please check setting of Sublime Merge command path',
       },
       'zh-CN': {
         'open-in-sublime-merge': '在 Sublime Merge 中打开',
         'show-history-in-sublime-merge': '在 Sublime Merge 中显示历史',
         'smerge-command-path': 'Smerge 命令路径',
+        'error-tips': '请检查 Sublime Merge 命令路径设置',
       }
     })
 
@@ -55,7 +57,10 @@ registerPlugin({
             }
           )`).catch((e: any) => {
             ctx.ui.useToast().show('warning', e.message)
-            ctx.setting.showSettingPanel('plugin')
+            setTimeout(() => {
+              ctx.ui.useToast().show('warning', i18n.t('error-tips'))
+              ctx.setting.showSettingPanel(settingKeySmgPath)
+            }, 1000)
           })
         }
       }
