@@ -32,7 +32,6 @@ declare const data: {
     'install-extension-tips': string;
     'not-support-mas': string;
     'learn-more': string;
-    previewer: string;
     default: string;
     print: string;
     premium: {
@@ -424,6 +423,11 @@ declare const data: {
             'reveal-line-in-preview': string;
         };
         'switch-editor': string;
+        'default-editor': string;
+    };
+    previewer: {
+        'default-previewer': string;
+        'switch-previewer': string;
     };
     picgo: {
         setting: {

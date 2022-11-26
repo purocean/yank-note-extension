@@ -14,7 +14,6 @@ export declare const initState: {
     syncScroll: boolean;
     showSetting: boolean;
     showExport: boolean;
-    showControlCenter: boolean;
     presentation: boolean;
     isFullscreen: boolean;
     currentContent: string;
@@ -42,7 +41,6 @@ declare const _default: import("vuex").Store<{
     syncScroll: boolean;
     showSetting: boolean;
     showExport: boolean;
-    showControlCenter: boolean;
     presentation: boolean;
     isFullscreen: boolean;
     currentContent: string;

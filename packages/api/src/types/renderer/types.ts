@@ -80,11 +80,25 @@ export declare namespace Components {
             fixed?: boolean;
             temporary?: boolean;
         }
-        interface ActionBtn {
+        type ActionBtn = {
+            type: 'normal';
+            key?: string | number;
             icon: string;
             title: string;
+            order?: number;
+            hidden?: boolean;
             onClick: (e: MouseEvent) => void;
-        }
+        } | {
+            type: 'separator';
+            order?: number;
+            hidden?: boolean;
+        } | {
+            type: 'custom';
+            key?: string | number;
+            hidden?: boolean;
+            component: any;
+            order?: number;
+        };
     }
     namespace FileTabs {
         interface Item extends Tabs.Item {
@@ -117,6 +131,28 @@ export declare namespace Components {
             current?: string | undefined;
             list: Item[];
         }
+    }
+    namespace ControlCenter {
+        type Item = {
+            type: 'btn';
+            flat?: boolean;
+            checked?: boolean;
+            disabled?: boolean;
+            icon: string;
+            title: string;
+            onClick?: () => void;
+            showInActionBar?: boolean;
+        };
+        type SchemaItem = {
+            items: Item[];
+        };
+        type Schema = {
+            [category: string]: SchemaItem | undefined;
+        } & {
+            switch: SchemaItem;
+            navigation: SchemaItem;
+        };
+        type SchemaTapper = (schema: Schema) => void;
     }
 }
 export declare type FileSort = {
@@ -260,7 +296,6 @@ export declare type BuildInActions = {
     'layout.toggle-side': (visible?: boolean) => void;
     'layout.toggle-xterm': (visible?: boolean) => void;
     'layout.toggle-editor': (visible?: boolean) => void;
-    'layout.toggle-outline': (visible?: boolean) => void;
     'control-center.toggle': (visible?: boolean) => void;
     'status-bar.refresh-menu': () => void;
     'control-center.refresh': () => void;
@@ -298,6 +333,7 @@ export declare type BuildInActions = {
     'plugin.electron-zoom.zoom-reset': () => void;
     'premium.show': () => void;
     'base.find-in-repository': (query?: FindInRepositoryQuery) => void;
+    'workbench.toggle-outline': (visible?: boolean) => void;
 };
 export declare type BuildInActionName = keyof BuildInActions;
 export declare type BuildInHookTypes = {
@@ -464,6 +500,7 @@ export declare type BuildInHookTypes = {
 };
 export declare type Previewer = {
     name: string;
+    displayName?: string;
     component: any;
 };
 export declare type CustomEditorCtx = {

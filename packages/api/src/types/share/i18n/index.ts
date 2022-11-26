@@ -34,7 +34,6 @@ declare const languages: {
         'install-extension-tips': string;
         'not-support-mas': string;
         'learn-more': string;
-        previewer: string;
         default: string;
         print: string;
         premium: {
@@ -426,6 +425,11 @@ declare const languages: {
                 'reveal-line-in-preview': string;
             };
             'switch-editor': string;
+            'default-editor': string;
+        };
+        previewer: {
+            'default-previewer': string;
+            'switch-previewer': string;
         };
         picgo: {
             setting: {
@@ -646,7 +650,6 @@ declare const languages: {
         'install-extension-tips': string;
         'not-support-mas': string;
         'learn-more': string;
-        previewer: string;
         default: string;
         print: string;
         premium: {
@@ -1038,6 +1041,11 @@ declare const languages: {
                 'reveal-line-in-preview': string;
             };
             'switch-editor': string;
+            'default-editor': string;
+        };
+        previewer: {
+            'default-previewer': string;
+            'switch-previewer': string;
         };
         picgo: {
             setting: {
