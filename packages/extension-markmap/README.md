@@ -12,7 +12,7 @@ Visualize your Markdown as mindmaps with Markmap.
 
 ### List
 
-Just need to add `{.mindmap}` to the end of root node of the list.
+Just need to add `{.markmap}` to the end of root node of the list.
 
 ```markdown
 + Central node{.markmap}
