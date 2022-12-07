@@ -14,10 +14,14 @@
     "url": "https://github.com/purocean/yank-note-extension.git"
   },
   "main": "./dist/index.js",
+  "style": "./dist/style.css",
   "icon": "./icon.svg",
   "engines": {
     "node": ">=14.6.0",
     "yank-note": "^3.29.0"
+  },
+  "requirements": {
+    "premium": true
   },
   "files": [
     "dist",
@@ -48,6 +52,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^8.7.1",
+    "sass": "^1.56.1",
     "typescript": "^4.6.4",
     "vite": "^3.2.3",
     "vue": "^3.2.33",

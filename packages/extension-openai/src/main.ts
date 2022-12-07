@@ -1,17 +1,12 @@
+import { App, createApp } from 'vue'
 import { Ctx, ctx, registerPlugin } from '@yank-note/runtime-api'
 import Monaco from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
+import { actionName, i18n, loading, requestApi, setting, settingKeyToken } from './openai'
+import AIPanel from './AIPanel.vue'
 
 const { getLogger } = ctx.utils
 
 const extensionId = __EXTENSION_ID__
-const actionName = 'plugin.editor-openai.trigger'
-const settingKeyToken = 'plugin.editor-openai.api-token'
-const settingKeyEngine = 'plugin.editor-openai.engine-id'
-const settingKeyMode = 'plugin.editor-openai.mode'
-const settingKeyMaxTokens = 'plugin.editor-openai.max-tokens'
-const settingKeyRange = 'plugin.editor-openai.range'
-const settingKeyArgs = 'plugin.editor-openai.args-json'
-const defaultEngine = 'text-davinci-002'
 
 class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
   private readonly monaco: typeof Monaco
@@ -24,62 +19,28 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
   }
 
   freeInlineCompletions (): void {
-    this.ctx.ui.useToast().hide()
+    loading.value = false
   }
 
   handleItemDidShow (): void {
-    this.ctx.ui.useToast().hide()
+    loading.value = false
   }
 
-  public async provideInlineCompletions (model: Monaco.editor.IModel, position: Monaco.Position, context: Monaco.languages.InlineCompletionContext): Promise<Monaco.languages.InlineCompletions> {
+  public async provideInlineCompletions (_model: Monaco.editor.IModel, position: Monaco.Position, context: Monaco.languages.InlineCompletionContext): Promise<Monaco.languages.InlineCompletions> {
+    if (!setting.enable) {
+      return { items: [] }
+    }
+
     if (context.triggerKind !== this.monaco.languages.InlineCompletionTriggerKind.Explicit) {
       return { items: [] }
     }
 
-    this.ctx.ui.useToast().show('info', 'OpenAI: Loading...', 10000)
-
-    const range = this.ctx.setting.getSetting<number>(settingKeyRange, 256)
-
-    let prefix = ''
-    let suffix = ''
-
-    // get selection of editor model
-    const selection = this.ctx.editor.getEditor().getSelection()
-    const selectionText = selection && model.getValueInRange(selection)
-
-    if (selectionText) {
-      prefix = selectionText
-      position = selection!.getEndPosition()
-    } else {
-      const contentPrefix = model.getValueInRange(new this.monaco.Range(
-        1,
-        1,
-        position.lineNumber,
-        position.column,
-      ))
-
-      const maxLine = model.getLineCount()
-      const maxColumn = model.getLineMaxColumn(maxLine)
-
-      const contentSuffix = model.getValueInRange(new this.monaco.Range(
-        position.lineNumber,
-        position.column,
-        maxLine,
-        maxColumn,
-      ))
-
-      prefix = contentPrefix.substring(Math.max(0, contentPrefix.length - range))
-      suffix = contentSuffix.substring(0, range)
-    }
-
-    this.logger.debug('provideInlineCompletions', range, prefix, suffix)
-
     return {
-      items: await this.provideSuggestions(prefix, suffix, position)
+      items: await this.provideSuggestions(position)
     }
   }
 
-  private async provideSuggestions (prompt: string, suffix: string, position: Monaco.Position): Promise<Monaco.languages.InlineCompletion[]> {
+  private async provideSuggestions (position: Monaco.Position): Promise<Monaco.languages.InlineCompletion[]> {
     const range = new this.monaco.Range(
       position.lineNumber,
       position.column,
@@ -87,55 +48,33 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
       position.column,
     )
 
-    const token = this.ctx.setting.getSetting(settingKeyToken, '')
+    let stop = setting.stopSequences
 
-    if (token.length < 40) {
-      setTimeout(() => {
-        this.ctx.ui.useToast().show('warning', 'OpenAI: No API token')
-        this.ctx.setting.showSettingPanel('openai')
-      }, 0)
-      return []
-    }
-
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    }
-
-    let args = {}
     try {
-      args = JSON.parse(this.ctx.setting.getSetting(settingKeyArgs, '{}'))
-    } catch (e: any) {
-      this.ctx.ui.useToast().show('warning', `OpenAI: Custom Arguments Error "${e.message}"`, 5000)
-      throw e
+      stop = JSON.parse(stop)
+    } catch {
+      // ignore
     }
-
-    const mode = this.ctx.setting.getSetting(settingKeyMode, 'insert')
-    const maxTokens = this.ctx.setting.getSetting(settingKeyMaxTokens, 256)
 
     const body = {
-      temperature: 0.3,
+      temperature: setting.temperature,
       n: 1,
-      top_p: 1,
-      frequency_penalty: 0.0,
-      presence_penalty: 0.0,
-      // stop: '\n',
-      ...args,
-      prompt: prompt,
-      max_tokens: maxTokens,
-      suffix: mode === 'insert' && suffix.trim() ? suffix : undefined
+      top_p: setting.topP,
+      frequency_penalty: setting.frequencyPenalty,
+      presence_penalty: setting.presencePenalty,
+      prompt: setting.prefix,
+      max_tokens: setting.maxTokens,
+      suffix: setting.suffix,
+      stop,
     }
 
-    const engineId = this.ctx.setting.getSetting('plugin.editor-openai.engine-id', defaultEngine)
-
-    this.logger.debug('provideSuggestions', 'request', engineId, body)
+    this.logger.debug('provideSuggestions', 'request', setting.model, body)
 
     try {
-      const res = await this.ctx.api.proxyRequest(
-        `https://api.openai.com/v1/engines/${engineId}/completions`,
-        { headers, body: JSON.stringify(body), method: 'post' },
-        true
-      ).then(x => x.json())
+      const res = await requestApi(
+        `https://api.openai.com/v1/engines/${setting.model}/completions`,
+        body
+      )
 
       this.logger.debug('provideSuggestions', 'result', res)
 
@@ -143,6 +82,8 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
         this.ctx.ui.useToast().show('warning', JSON.stringify(res), 5000)
         return []
       }
+
+      ctx.editor.getEditor().focus()
 
       return res.choices.map((x: any) => ({
         text: x.text,
@@ -156,35 +97,6 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
   }
 }
 
-const i18n = ctx.i18n.createI18n({
-  en: {
-    'openai-complete': 'OpenAI Complete',
-    'api-token': 'Api Token',
-    'api-token-desc': 'You can get your api token from <a target="_blank" href="http://openai.com">openai.com</a>',
-    'engine-id': 'Engine Id',
-    'engine-id-desc': 'Please refer to <a target="_blank" href="https://beta.openai.com/docs/engines/overview/">Engine Overview</a>',
-    mode: 'Mode',
-    range: 'Characters Range',
-    'range-desc': 'Context characters range',
-    'max-tokens': 'Max Tokens',
-    'args-json': 'Custom Arguments',
-    'args-json-desc': 'Query parameters, JSON string like {"temperature": 0.3}',
-  },
-  'zh-CN': {
-    'openai-complete': 'OpenAI 自动补全',
-    'api-token': 'Api Token',
-    'api-token-desc': '你可以从 <a target="_blank" href="http://openai.com">openai.com</a> 获取',
-    'engine-id': 'Engine Id',
-    'engine-id-desc': '请参考 <a target="_blank" href="https://beta.openai.com/docs/engines/overview/">Engine Overview</a>',
-    mode: '模式',
-    range: '字符范围',
-    'range-desc': '上下文字符范围',
-    'max-tokens': 'Max Tokens',
-    'args-json': '自定义参数',
-    'args-json-desc': '请求参数，JSON 字符串如 {"temperature": 0.3}',
-  }
-})
-
 registerPlugin({
   name: extensionId,
   register (ctx) {
@@ -196,30 +108,8 @@ registerPlugin({
     })
 
     ctx.setting.changeSchema((schema) => {
-      schema.groups.push({ label: 'OpenAI' as any, value: 'openai' as any })
-
-      schema.properties[settingKeyMode] = {
-        title: i18n.$$t('mode'),
-        type: 'string',
-        defaultValue: 'insert',
-        enum: ['insert', 'complete'],
-        group: 'openai' as any,
-        required: true,
-      }
-
-      schema.properties[settingKeyEngine] = {
-        title: i18n.$$t('engine-id'),
-        description: i18n.$$t('engine-id-desc'),
-        type: 'string',
-        defaultValue: defaultEngine,
-        group: 'openai' as any,
-        enum: [
-          'text-davinci-002',
-          'text-curie-001',
-          'text-babbage-001',
-          'text-ada-001',
-        ],
-        required: true,
+      if (!schema.groups.some((x: any) => x.value === 'plugin')) {
+        schema.groups.push({ value: 'plugin', label: 'Plugin' } as any)
       }
 
       schema.properties[settingKeyToken] = {
@@ -227,46 +117,9 @@ registerPlugin({
         description: i18n.$$t('api-token-desc'),
         type: 'string',
         defaultValue: '',
-        group: 'openai' as any,
+        group: 'plugin' as any,
         options: {
           inputAttributes: { placeholder: 'sk-' + 'x'.repeat(10) }
-        },
-      }
-
-      schema.properties[settingKeyMaxTokens] = {
-        title: i18n.$$t('max-tokens'),
-        type: 'number',
-        defaultValue: 256,
-        group: 'openai' as any,
-        required: true,
-        minimum: 4,
-        maximum: 4096,
-        options: {
-          inputAttributes: { placeholder: i18n.$$t('max-tokens') }
-        },
-      }
-
-      schema.properties[settingKeyRange] = {
-        title: i18n.$$t('range'),
-        type: 'number',
-        defaultValue: 256,
-        group: 'openai' as any,
-        required: true,
-        minimum: 10,
-        maximum: 10240,
-        options: {
-          inputAttributes: { placeholder: i18n.$$t('range-desc') }
-        },
-      }
-
-      schema.properties[settingKeyArgs] = {
-        title: i18n.$$t('args-json'),
-        description: i18n.$$t('args-json-desc'),
-        type: 'string',
-        defaultValue: '{"temperature": 0.3}',
-        group: 'openai' as any,
-        options: {
-          inputAttributes: { placeholder: '{"temperature": 0.3}' }
         },
       }
     })
@@ -291,10 +144,37 @@ registerPlugin({
           id: actionName,
           type: 'normal',
           title: i18n.t('openai-complete'),
-          subTitle: ctx.command.getKeysLabel(actionName),
-          onClick: () => ctx.action.getActionHandler(actionName)()
+          checked: setting.enable,
+          onClick: () => {
+            setting.enable = !setting.enable
+          },
         },
       )
     })
+
+    const div = document.createElement('div')
+    div.className = 'openai-panel-container'
+    div.style.position = 'absolute'
+    div.style.right = '5%'
+    div.style.bottom = '20px'
+    div.style.zIndex = '2048'
+    div.style.maxWidth = '85%'
+    document.querySelector('.editor-container')!.appendChild(div)
+
+    let panel: App | null = null
+
+    ctx.lib.vue.watch(() => setting.enable, (val) => {
+      ctx.statusBar.refreshMenu()
+
+      if (val) {
+        div.style.display = 'block'
+        panel = createApp(AIPanel)
+        panel.mount(div)
+      } else {
+        div.style.display = 'none'
+        panel?.unmount()
+        panel = null
+      }
+    }, { immediate: true })
   }
 })
