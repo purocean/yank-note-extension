@@ -1,3 +1,13 @@
+# [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.0.5...extension-openai-1.1.0) (2022-12-07)
+
+
+### Features
+
+* **extension-openai:** add panel ([416b059](https://github.com/purocean/yank-note-extension/commit/416b0594e00dffaf4a6cf4a33614dc485c068c54))
+* **extension-openai:** require runtime 3.46.0 ([d098e5c](https://github.com/purocean/yank-note-extension/commit/d098e5c4446ea8d87f5c712b9704767cae409e1e))
+
+
+
 ## [1.0.5](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.0.4...extension-openai-1.0.5) (2022-08-01)
 
 
