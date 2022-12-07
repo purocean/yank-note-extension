@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.1.0...extension-openai-1.1.1) (2022-12-07)
+
+
+### Features
+
+* **extension-openai:** optimize ([ea4bd84](https://github.com/purocean/yank-note-extension/commit/ea4bd84445bd1ab05b55251be02f1b896751621f))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.0.5...extension-openai-1.1.0) (2022-12-07)
 
 
