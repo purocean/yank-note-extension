@@ -222,7 +222,7 @@ onBeforeUnmount(dispose.dispose)
     padding: 8px 14px;
 
     .context {
-      height: 6em;
+      height: 5em;
       font-size: 12px;
       overflow-y: auto;
       overflow-wrap: break-word;
@@ -232,7 +232,7 @@ onBeforeUnmount(dispose.dispose)
     }
 
     .row {
-      margin: 8px 0;
+      margin: 5px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -242,6 +242,8 @@ onBeforeUnmount(dispose.dispose)
         margin-right: 8px;
         flex: none;
         width: 80px;
+        font-size: 13px;
+        line-height: 1.1;
 
         & + div {
           width: 100%;
@@ -252,7 +254,6 @@ onBeforeUnmount(dispose.dispose)
       .input {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 4px;
       }
 
       input, select {
@@ -280,7 +281,7 @@ onBeforeUnmount(dispose.dispose)
   }
 
   &.pined {
-    max-height: 75vh;
+    max-height: 80vh;
     width: 400px;
     max-width: 100%;
 
@@ -308,6 +309,8 @@ onBeforeUnmount(dispose.dispose)
 
     .setting {
       display: block;
+      overflow-y: auto;
+      max-height: calc(80vh - 48px);
     }
   }
 
