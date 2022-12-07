@@ -537,6 +537,10 @@ declare const languages: {
                 title: string;
                 hint: string;
             };
+            'content-too-long-alert': {
+                title: string;
+                content: string;
+            };
         };
         'copy-content': {
             options: string;
@@ -1152,6 +1156,10 @@ declare const languages: {
             'mark-dialog': {
                 title: string;
                 hint: string;
+            };
+            'content-too-long-alert': {
+                title: string;
+                content: string;
             };
         };
         'copy-content': {

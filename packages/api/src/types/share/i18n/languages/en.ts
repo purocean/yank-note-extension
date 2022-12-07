@@ -535,6 +535,10 @@ declare const data: {
             title: string;
             hint: string;
         };
+        'content-too-long-alert': {
+            title: string;
+            content: string;
+        };
     };
     'copy-content': {
         options: string;
