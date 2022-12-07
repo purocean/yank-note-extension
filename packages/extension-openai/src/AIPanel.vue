@@ -74,10 +74,10 @@
           <div class="label">Stop sequences</div>
           <input type="text" placeholder='string or json array. e.g. hello or ["\n"]' v-model="setting.stopSequences" />
         </div>
-        <div class="row">
-          <a href="https://beta.openai.com/docs/introduction/overview" target="_blank">OpenAI API</a>
-          <button @click="submit" class="primary tr">Submit</button>
-        </div>
+      </div>
+      <div class="action">
+        <a href="https://beta.openai.com/docs/introduction/overview" target="_blank">OpenAI API</a>
+        <button @click="submit" class="primary tr">Submit</button>
       </div>
     </div>
   </div>
@@ -219,7 +219,7 @@ onBeforeUnmount(dispose.dispose)
 
   .setting {
     display: none;
-    padding: 8px 14px;
+    padding: 8px 0;
 
     .context {
       height: 5em;
@@ -236,6 +236,7 @@ onBeforeUnmount(dispose.dispose)
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 0 14px;
 
       .label {
         margin-bottom: 4px;
@@ -275,6 +276,19 @@ onBeforeUnmount(dispose.dispose)
     }
   }
 
+  .action {
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    height: 36px;
+    position: sticky;
+    bottom: 0;
+    background: var(--g-color-85);
+    border-top: 1px solid var(--g-color-70);
+    margin: 0;
+    padding: 0 14px;
+  }
+
   &.pined .pin-icon {
     display: flex;
     transform: rotate(0);
@@ -310,7 +324,11 @@ onBeforeUnmount(dispose.dispose)
     .setting {
       display: block;
       overflow-y: auto;
-      max-height: calc(80vh - 48px);
+      max-height: calc(80vh - 100px);
+    }
+
+    .action {
+      display: flex;
     }
   }
 
