@@ -26,7 +26,12 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
     loading.value = false
   }
 
-  public async provideInlineCompletions (_model: Monaco.editor.IModel, position: Monaco.Position, context: Monaco.languages.InlineCompletionContext): Promise<Monaco.languages.InlineCompletions> {
+  public async provideInlineCompletions (
+    _model: Monaco.editor.IModel,
+    position: Monaco.Position,
+    context: Monaco.languages.InlineCompletionContext,
+    token: Monaco.CancellationToken
+  ): Promise<Monaco.languages.InlineCompletions> {
     if (!setting.enable) {
       return { items: [] }
     }
@@ -36,11 +41,20 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
     }
 
     return {
-      items: await this.provideSuggestions(position)
+      items: await this.provideSuggestions(position, token)
     }
   }
 
-  private async provideSuggestions (position: Monaco.Position): Promise<Monaco.languages.InlineCompletion[]> {
+  private async provideSuggestions (position: Monaco.Position, token: Monaco.CancellationToken): Promise<Monaco.languages.InlineCompletion[]> {
+    if (token.isCancellationRequested) {
+      return []
+    }
+
+    token.onCancellationRequested(() => {
+      loading.value = false
+      this.ctx.ui.useToast().show('warning', 'Canceled', 2000)
+    })
+
     const range = new this.monaco.Range(
       position.lineNumber,
       position.column,
@@ -64,8 +78,8 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
       presence_penalty: setting.presencePenalty,
       prompt: setting.prefix,
       max_tokens: setting.maxTokens,
-      suffix: setting.suffix,
-      stop,
+      suffix: setting.suffix || undefined,
+      stop: stop || undefined,
     }
 
     this.logger.debug('provideSuggestions', 'request', setting.model, body)
@@ -82,8 +96,6 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
         this.ctx.ui.useToast().show('warning', JSON.stringify(res), 5000)
         return []
       }
-
-      ctx.editor.getEditor().focus()
 
       return res.choices.map((x: any) => ({
         text: x.text,

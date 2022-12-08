@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ panel: true, pined, loading }">
+  <div :class="{ panel: true, pined, loading }" tabindex="-1" @focus="focusEditor">
     <div class="content">
       <div class="head">
         <svg-icon class="logo-icon" :name="openAIIcon" @click="submit" :title="i18n.t('openai-complete') + ' ' + ctx.command.getKeysLabel(actionName)" />
@@ -98,6 +98,12 @@ const suffixContextRef = ref<HTMLElement | null>(null)
 const prefixContextRef = ref<HTMLElement | null>(null)
 const pined = ref(false)
 
+function focusEditor () {
+  nextTick(() => {
+    editor.focus()
+  })
+}
+
 function buildContent () {
   const model = editor.getModel()!
   const position = editor.getPosition()!
@@ -134,14 +140,28 @@ function submit () {
   ctx.action.getActionHandler(actionName)()
 }
 
+function escHandler (e: KeyboardEvent) {
+  if (e.key === 'Escape') {
+    pined.value = false
+  }
+}
+
 watchEffect(buildContent)
 
 watch(pined, buildContent)
 watch(() => ctx.store.state.currentContent, ctx.lib.lodash.debounce(buildContent, 200))
 
-const dispose = editor.onDidChangeCursorPosition(buildContent)
+ctx.registerHook('GLOBAL_KEYDOWN', escHandler)
 
-onBeforeUnmount(dispose.dispose)
+const dispose = [
+  { dispose: () => ctx.removeHook('GLOBAL_KEYDOWN', escHandler) },
+  editor.onDidChangeCursorPosition(buildContent),
+]
+
+onBeforeUnmount(() => {
+  dispose.forEach(x => x.dispose())
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -385,7 +405,7 @@ onBeforeUnmount(dispose.dispose)
     top: -50%;
     width: 200%;
     height: 200%;
-    background: conic-gradient(transparent, rgba(168, 239, 255, 1), transparent 30%);
+    background: conic-gradient(transparent, #2196f3, transparent 30%);
     animation: rotate 2s linear infinite;
   }
 

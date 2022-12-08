@@ -33,7 +33,7 @@ const defaultSetting = {
   model: models[0],
   prefixLength: 128,
   suffixLength: 128,
-  maxTokens: 128,
+  maxTokens: 64,
   topP: 1,
   temperature: 0.3,
   presencePenalty: 0,
