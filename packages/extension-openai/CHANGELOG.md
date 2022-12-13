@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.1.3...extension-openai-1.2.0) (2022-12-13)
+
+
+### Features
+
+* **extension-openai:** support select text as prompt ([3957fe6](https://github.com/purocean/yank-note-extension/commit/3957fe60fdc3bc4bf4bdb137369363fe532eca38))
+
+
+
 ## [1.1.3](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.1.2...extension-openai-1.1.3) (2022-12-08)
 
 
