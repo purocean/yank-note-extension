@@ -10,7 +10,7 @@
       </div>
       <div class="setting">
         <div class="row">
-          <div class="label">Prefix</div>
+          <div class="label">Prompt</div>
           <div>
             <textarea ref="prefixContextRef" class="context" v-model="setting.prefix" />
             <div class="input">
@@ -107,7 +107,7 @@ function focusEditor () {
 function buildContent () {
   const model = editor.getModel()!
   const position = editor.getPosition()!
-  const contentPrefix = model.getValueInRange(new monaco.Range(
+  let contentPrefix = model.getValueInRange(new monaco.Range(
     1,
     1,
     position.lineNumber,
@@ -117,12 +117,21 @@ function buildContent () {
   const maxLine = model.getLineCount()
   const maxColumn = model.getLineMaxColumn(maxLine)
 
-  const contentSuffix = model.getValueInRange(new monaco.Range(
+  let contentSuffix = model.getValueInRange(new monaco.Range(
     position.lineNumber,
     position.column,
     maxLine,
     maxColumn,
   ))
+
+  const selection = editor.getSelection()
+  if (selection) {
+    const selectedText = model.getValueInRange(selection)
+    if (selectedText) {
+      contentPrefix = selectedText
+      contentSuffix = ''
+    }
+  }
 
   const prefix = contentPrefix.slice(-setting.prefixLength)
   const suffix = contentSuffix.slice(0, setting.suffixLength)
