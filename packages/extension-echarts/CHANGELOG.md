@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-echarts-1.3.1...extension-echarts-1.4.0) (2023-01-06)
+
+
+### Features
+
+* **extension-echarts:** optimize usage ([b2b96be](https://github.com/purocean/yank-note-extension/commit/b2b96be13ccd09bf0fa099a8069cfd0a2b9cdf7d))
+
+
+
 ## [1.3.1](https://github.com/purocean/yank-note-extension/compare/extension-echarts-1.3.0...extension-echarts-1.3.1) (2022-10-23)
 
 
