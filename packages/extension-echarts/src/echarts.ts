@@ -61,8 +61,21 @@ export const Echarts = defineComponent({
       }
 
       try {
-        // eslint-disable-next-line
-        eval(`(${props.code})(chart)`)
+        try {
+          // eslint-disable-next-line
+          const fn = eval(props.code)
+          if (typeof fn === 'function') {
+            fn(chart)
+          }
+        } catch (e: any) {
+          if (e.message.includes('require a function name')) {
+            // eslint-disable-next-line
+            eval(`(${props.code})`)(chart)
+          } else {
+            throw e
+          }
+        }
+
         if (img) {
           imgSrc.value = chart.getDataURL({ type: 'png' })
           cleanChart()

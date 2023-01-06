@@ -7,7 +7,8 @@ This extension integrates [ECharts](https://github.com/apache/echarts) into Yank
 ~~~markdown
 ```js
 // --echarts--
-chart => chart.setOption({
+
+const option = {
   xAxis: {
     type: "category",
     data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -21,7 +22,9 @@ chart => chart.setOption({
       type: "line"
     }
   ]
-}, true)
+}
+
+chart.setOption(option, true)
 ```
 ~~~
 

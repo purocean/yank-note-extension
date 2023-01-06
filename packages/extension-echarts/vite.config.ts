@@ -9,6 +9,7 @@ export default defineConfig({
   define: {
     __EXTENSION_VERSION__: JSON.stringify(process.env.npm_package_version),
     __EXTENSION_ID__: JSON.stringify(process.env.npm_package_name),
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
   },
   resolve: {
     alias: [
