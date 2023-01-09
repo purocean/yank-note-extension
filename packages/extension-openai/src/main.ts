@@ -167,7 +167,7 @@ registerPlugin({
     const div = document.createElement('div')
     div.className = 'openai-panel-container'
     div.style.position = 'absolute'
-    div.style.right = '5%'
+    div.style.right = '3%'
     div.style.bottom = '20px'
     div.style.zIndex = '2048'
     div.style.maxWidth = '85%'
