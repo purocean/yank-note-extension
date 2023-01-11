@@ -173,6 +173,46 @@ importers:
       vue: 3.2.33
       vue-tsc: 0.34.11_typescript@4.6.4
 
+  packages/extension-editor-themes:
+    specifiers:
+      '@rollup/plugin-node-resolve': ^13.2.1
+      '@rollup/plugin-replace': ^4.0.0
+      '@vitejs/plugin-vue': ^3.2.0
+      '@vue/eslint-config-standard': ^6.1.0
+      '@vue/eslint-config-typescript': ^10.0.0
+      '@yank-note/runtime-api': workspace:^3.46.0
+      conventional-changelog-cli: ^2.2.2
+      eslint: ^7.32.0
+      eslint-plugin-import: ^2.26.0
+      eslint-plugin-node: ^11.1.0
+      eslint-plugin-promise: ^6.0.0
+      eslint-plugin-vue: ^8.7.1
+      monaco-themes: ^0.4.3
+      sass: ^1.56.1
+      typescript: ^4.6.4
+      vite: ^3.2.3
+      vue: ^3.2.33
+      vue-tsc: ^0.34.11
+    devDependencies:
+      '@rollup/plugin-node-resolve': 13.3.0
+      '@rollup/plugin-replace': 4.0.0
+      '@vitejs/plugin-vue': 3.2.0_vite@3.2.3+vue@3.2.33
+      '@vue/eslint-config-standard': 6.1.0_tixguow53u6a3uudjr4t2dcshu
+      '@vue/eslint-config-typescript': 10.0.0_yzev4ryi2uowr3tzgilgj3i2em
+      '@yank-note/runtime-api': link:../api
+      conventional-changelog-cli: 2.2.2
+      eslint: 7.32.0
+      eslint-plugin-import: 2.26.0_eslint@7.32.0
+      eslint-plugin-node: 11.1.0_eslint@7.32.0
+      eslint-plugin-promise: 6.0.0_eslint@7.32.0
+      eslint-plugin-vue: 8.7.1_eslint@7.32.0
+      monaco-themes: 0.4.3
+      sass: 1.56.1
+      typescript: 4.6.4
+      vite: 3.2.3_sass@1.56.1
+      vue: 3.2.33
+      vue-tsc: 0.34.11_typescript@4.6.4
+
   packages/extension-git-push:
     specifiers:
       '@rollup/plugin-node-resolve': ^13.2.1
@@ -2047,7 +2087,7 @@ packages:
       vite: ^3.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 3.2.3
+      vite: 3.2.3_sass@1.56.1
       vue: 3.2.33
     dev: true
 
@@ -4401,6 +4441,10 @@ packages:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
     dev: true
 
+  /fast-plist/0.1.3:
+    resolution: {integrity: sha512-d9cEfo/WcOezgPLAC/8t8wGb6YOD6JTCPMw2QcG2nAdFmyY+9rTUizCTaGjIZAloWENTEUMAPpkUAIJJJ0i96A==}
+    dev: true
+
   /fastq/1.13.0:
     resolution: {integrity: sha512-YpkpUnK8od0o1hmeSc7UUs/eB/vIPWJYjKck2QKIzAf71Vm1AAQ3EbuZB3g2JIy+pg+ERD0vqI79KyZiB2e2Nw==}
     dependencies:
@@ -5795,6 +5839,12 @@ packages:
 
   /moment-mini/2.24.0:
     resolution: {integrity: sha512-9ARkWHBs+6YJIvrIp0Ik5tyTTtP9PoV0Ssu2Ocq5y9v8+NOOpWiRshAp8c4rZVWTOe+157on/5G+zj5pwIQFEQ==}
+    dev: true
+
+  /monaco-themes/0.4.3:
+    resolution: {integrity: sha512-Ajt8osGYtdxPLp5CeLljWijm6GZZukK9t8b2JuVKlSleiwrVDEd/n47uQdm/uxYKCsWvSFmngAOhqZvC/wcxQg==}
+    dependencies:
+      fast-plist: 0.1.3
     dev: true
 
   /mri/1.2.0:
