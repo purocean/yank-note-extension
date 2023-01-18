@@ -1,3 +1,12 @@
+# [3.48.0](https://github.com/purocean/yank-note-extension/compare/api-3.46.0...api-3.48.0) (2023-01-18)
+
+
+### Features
+
+* **script:** add types ([0f58f8e](https://github.com/purocean/yank-note-extension/commit/0f58f8e049d68ac2e8bfe1acb87e79557f1eec8d))
+
+
+
 # [3.46.0](https://github.com/purocean/yank-note-extension/compare/api-3.45.0...api-3.46.0) (2022-12-07)
 
 

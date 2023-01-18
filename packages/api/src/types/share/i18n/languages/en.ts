@@ -345,6 +345,7 @@ declare const data: {
             editor: string;
             image: string;
             proxy: string;
+            macros: string;
             other: string;
         };
         schema: {
@@ -401,6 +402,13 @@ declare const data: {
                 'server-hint': string;
                 'bypass-list': string;
                 'pac-url': string;
+            };
+            macros: {
+                macros: string;
+                match: string;
+                replace: string;
+                'match-placeholder': string;
+                'replace-placeholder': string;
             };
         };
     };
@@ -550,6 +558,8 @@ declare const data: {
         'highlight-code': string;
         rt: string;
         complete: string;
+        'copy-tips': string;
+        'copy-tips-selected': string;
     };
     'share-preview': {
         expire: string;
@@ -616,6 +626,11 @@ declare const data: {
         'use-regex': string;
         'expand-all': string;
         'collapse-all': string;
+    };
+    'file-changed-alert': {
+        title: string;
+        content: string;
+        reload: string;
     };
 };
 export declare type BaseLanguage = typeof data;

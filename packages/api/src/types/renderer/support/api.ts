@@ -1,5 +1,8 @@
+/// <reference types="node" />
+import type { Stats } from 'fs';
+import type { WatchOptions } from 'chokidar';
 import type { IProgressMessage, ISerializedFileMatch, ISerializedSearchSuccess, ITextQuery } from 'ripgrep-wrapper';
-import type { Components, Doc, ExportType, FileItem, FileSort, PathItem } from '@fe/types';
+import type { Components, Doc, ExportType, FileItem, FileSort, FileStat, PathItem } from '@fe/types';
 export declare type ApiResult<T = any> = {
     status: 'ok' | 'error';
     message: string;
@@ -21,8 +24,9 @@ export declare function proxyRequest(url: string, reqOptions?: Record<string, an
  * @returns
  */
 export declare function readFile(file: PathItem, asBase64?: boolean): Promise<{
-    content: any;
-    hash: any;
+    content: string;
+    hash: string;
+    stat: FileStat;
 }>;
 /**
  * Write content to a file.
@@ -32,7 +36,8 @@ export declare function readFile(file: PathItem, asBase64?: boolean): Promise<{
  * @returns
  */
 export declare function writeFile(file: Doc, content?: string, asBase64?: boolean): Promise<{
-    hash: any;
+    hash: string;
+    stat: FileStat;
 }>;
 /**
  * Move / Rename a file or dir.
@@ -100,6 +105,20 @@ declare type SearchReturn = (onResult: (result: ISerializedFileMatch[]) => void,
  * @returns
  */
 export declare function search(controller: AbortController, query: ITextQuery): Promise<SearchReturn>;
+/**
+ * Watch a file.
+ * @param controller
+ * @param query
+ * @returns
+ */
+export declare function watchFile(repo: string, path: string, options: WatchOptions, onResult: (result: {
+    eventName: 'add' | 'change' | 'unlink';
+    path: string;
+    stats?: Stats;
+}) => void, onError: (error: Error) => void): Promise<{
+    result: Promise<string | null>;
+    abort: () => void;
+}>;
 /**
  * Upload file.
  * @param repo

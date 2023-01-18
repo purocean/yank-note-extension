@@ -8,6 +8,11 @@ export interface PathItem {
 export interface FileItem extends PathItem {
     name: string;
 }
+export interface FileStat {
+    mtime: number;
+    birthtime: number;
+    size: number;
+}
 export interface Doc extends PathItem {
     type: 'file' | 'dir';
     name: string;
@@ -15,6 +20,7 @@ export interface Doc extends PathItem {
     title?: string;
     passwordHash?: string;
     contentHash?: string;
+    stat?: FileStat;
     status?: 'loaded' | 'save-failed' | 'saved';
     absolutePath?: string;
     plain?: boolean;
@@ -162,7 +168,7 @@ export declare type FileSort = {
 export declare type ThemeName = 'system' | 'dark' | 'light';
 export declare type LanguageName = 'system' | Language;
 export declare type ExportType = 'print' | 'pdf' | 'docx' | 'html' | 'rst' | 'adoc';
-export declare type SettingGroup = 'repos' | 'appearance' | 'editor' | 'image' | 'proxy' | 'other';
+export declare type SettingGroup = 'repos' | 'appearance' | 'editor' | 'image' | 'proxy' | 'other' | 'macros';
 export declare type RegistryHostname = 'registry.npmjs.org' | 'registry.npmmirror.com';
 export declare type PrintOpts = {
     landscape?: boolean;
@@ -244,6 +250,10 @@ export interface Extension {
 }
 export interface BuildInSettings {
     'repos': Repo[];
+    'macros': {
+        match: string;
+        replace: string;
+    }[];
     'theme': ThemeName;
     'language': LanguageName;
     'auto-save': number;
@@ -284,7 +294,7 @@ export declare type BuildInActions = {
     'view.render': () => void;
     'view.refresh': () => void;
     'view.reveal-line': (startLine: number) => Promise<HTMLElement | null>;
-    'view.get-content-html': () => string;
+    'view.get-content-html': (selected?: boolean) => string;
     'view.get-view-dom': () => HTMLElement | null;
     'view.get-render-env': () => RenderEnv | null;
     'view.enter-presentation': () => void;
@@ -399,6 +409,7 @@ export declare type BuildInHookTypes = {
             uploadLocalImage?: boolean;
             highlightCode?: boolean;
             preferPng?: boolean;
+            onlySelected?: boolean;
             nodeProcessor?: (node: HTMLElement) => void;
         };
     };
@@ -481,7 +492,7 @@ export declare type BuildInHookTypes = {
         oldSettings: BuildInSettings;
     };
     SETTING_BEFORE_WRITE: {
-        settings: BuildInSettings;
+        settings: Partial<BuildInSettings>;
     };
     EXTENSION_READY: {
         extensions: Extension[];

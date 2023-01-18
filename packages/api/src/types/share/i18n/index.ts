@@ -347,6 +347,7 @@ declare const languages: {
                 editor: string;
                 image: string;
                 proxy: string;
+                macros: string;
                 other: string;
             };
             schema: {
@@ -403,6 +404,13 @@ declare const languages: {
                     'server-hint': string;
                     'bypass-list': string;
                     'pac-url': string;
+                };
+                macros: {
+                    macros: string;
+                    match: string;
+                    replace: string;
+                    'match-placeholder': string;
+                    'replace-placeholder': string;
                 };
             };
         };
@@ -552,6 +560,8 @@ declare const languages: {
             'highlight-code': string;
             rt: string;
             complete: string;
+            'copy-tips': string;
+            'copy-tips-selected': string;
         };
         'share-preview': {
             expire: string;
@@ -618,6 +628,11 @@ declare const languages: {
             'use-regex': string;
             'expand-all': string;
             'collapse-all': string;
+        };
+        'file-changed-alert': {
+            title: string;
+            content: string;
+            reload: string;
         };
     };
     'zh-CN': {
@@ -967,6 +982,7 @@ declare const languages: {
                 editor: string;
                 image: string;
                 proxy: string;
+                macros: string;
                 other: string;
             };
             schema: {
@@ -1023,6 +1039,13 @@ declare const languages: {
                     'server-hint': string;
                     'bypass-list': string;
                     'pac-url': string;
+                };
+                macros: {
+                    macros: string;
+                    match: string;
+                    replace: string;
+                    'match-placeholder': string;
+                    'replace-placeholder': string;
                 };
             };
         };
@@ -1172,6 +1195,8 @@ declare const languages: {
             'highlight-code': string;
             rt: string;
             complete: string;
+            'copy-tips': string;
+            'copy-tips-selected': string;
         };
         'share-preview': {
             expire: string;
@@ -1238,6 +1263,11 @@ declare const languages: {
             'use-regex': string;
             'expand-all': string;
             'collapse-all': string;
+        };
+        'file-changed-alert': {
+            title: string;
+            content: string;
+            reload: string;
         };
     };
 };
