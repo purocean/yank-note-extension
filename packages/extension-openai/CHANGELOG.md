@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.2.1...extension-openai-1.3.0) (2023-01-18)
+
+
+### Features
+
+* **extension-openai:** support edit model ([4513f65](https://github.com/purocean/yank-note-extension/commit/4513f65fa4c49df422540907e6ac132b48ea8043))
+
+
+
 ## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.2.0...extension-openai-1.2.1) (2023-01-09)
 
 
