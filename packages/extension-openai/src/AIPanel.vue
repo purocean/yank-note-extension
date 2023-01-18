@@ -3,39 +3,79 @@
     <div class="content">
       <div class="head">
         <svg-icon class="logo-icon" :name="openAIIcon" @click="submit" :title="i18n.t('openai-complete') + ' ' + ctx.command.getKeysLabel(actionName)" />
-        <b class="title">OpenAI</b>
+        <b class="title">
+          <span>OpenAI</span>
+          <group-tabs
+            v-if="pined"
+            class="tabs"
+            v-model="setting.type"
+            :tabs="[{ label: 'Completion', value: 'completion' }, { label: 'Edit', value: 'edit' }]"
+          />
+        </b>
         <div class="pin-icon" @click="(pined = !pined)">
           <svg-icon style="width: 12px; height: 12px" name="chevron-down" />
         </div>
       </div>
       <div class="setting">
-        <div class="row">
-          <div class="label">Prompt</div>
-          <div>
-            <textarea ref="prefixContextRef" class="context" v-model="setting.prefix" />
-            <div class="input">
-              <input type="range" max="4000" min="1" v-model.number="setting.prefixLength" />
-              <input type="number" max="4000" min="1" v-model.number="setting.prefixLength" />
+        <template v-if="setting.type === 'edit'">
+          <div class="row">
+            <div class="label">Input</div>
+            <div>
+              <textarea ref="prefixContextRef" class="context" v-model="setting.input" />
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="label">Suffix</div>
-          <div>
-            <textarea ref="suffixContextRef" class="context" v-model="setting.suffix" />
-            <div class="input">
-              <input type="range" max="4000" min="0" v-model.number="setting.suffixLength" />
-              <input type="number" max="4000" min="0" v-model.number="setting.suffixLength" />
+          <div class="row">
+            <div class="label">Instruction</div>
+            <div>
+              <textarea ref="suffixContextRef" class="context" v-model="setting.instruction" />
+              <div class="input" v-if="setting.instructionHistory && setting.instructionHistory.length">
+                <select
+                  required
+                  @input="setting.instruction = ($event.target as any).value"
+                  value=""
+                >
+                  <option value="" disabled hidden>History...</option>
+                  <option v-for="item in setting.instructionHistory" :key="item" :value="item">{{item}}</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row">
+          <div class="row">
           <div class="label">Model</div>
-          <select v-model="setting.model">
-            <option v-for="model in models" :key="model" :value="model">{{model}}</option>
+          <select v-model="setting.editModel">
+            <option v-for="model in editModels" :key="model" :value="model">{{model}}</option>
           </select>
         </div>
-        <div class="row">
+        </template>
+        <template v-if="setting.type === 'completion'">
+          <div class="row">
+            <div class="label">Prompt</div>
+            <div>
+              <textarea ref="prefixContextRef" class="context" v-model="setting.prefix" />
+              <div class="input">
+                <input type="range" max="4000" min="1" v-model.number="setting.prefixLength" />
+                <input type="number" max="4000" min="1" v-model.number="setting.prefixLength" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="label">Suffix</div>
+            <div>
+              <textarea ref="suffixContextRef" class="context" v-model="setting.suffix" />
+              <div class="input">
+                <input type="range" max="4000" min="0" v-model.number="setting.suffixLength" />
+                <input type="number" max="4000" min="0" v-model.number="setting.suffixLength" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="label">Model</div>
+            <select v-model="setting.model">
+              <option v-for="model in models" :key="model" :value="model">{{model}}</option>
+            </select>
+          </div>
+        </template>
+        <div v-if="setting.type === 'completion'" class="row">
           <div class="label">Max tokens</div>
           <div class="input">
             <input type="range" max="4096" min="1" v-model.number="setting.maxTokens" />
@@ -56,24 +96,26 @@
             <input type="number" max="1" min="0" step="0.01" v-model.number="setting.topP" />
           </div>
         </div>
-        <div class="row">
-          <div class="label">Frequency penalty</div>
-          <div class="input">
-            <input type="range" max="2" min="0" step="0.01" v-model.number="setting.frequencyPenalty" />
-            <input type="number" max="2" min="0" step="0.01" v-model.number="setting.frequencyPenalty" />
+        <template v-if="setting.type === 'completion'">
+          <div class="row">
+            <div class="label">Frequency penalty</div>
+            <div class="input">
+              <input type="range" max="2" min="0" step="0.01" v-model.number="setting.frequencyPenalty" />
+              <input type="number" max="2" min="0" step="0.01" v-model.number="setting.frequencyPenalty" />
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="label">Presence penalty</div>
-          <div class="input">
-            <input type="range" max="2" min="0" step="0.01" v-model.number="setting.presencePenalty" />
-            <input type="number" max="2" min="0" step="0.01" v-model.number="setting.presencePenalty" />
+          <div class="row">
+            <div class="label">Presence penalty</div>
+            <div class="input">
+              <input type="range" max="2" min="0" step="0.01" v-model.number="setting.presencePenalty" />
+              <input type="number" max="2" min="0" step="0.01" v-model.number="setting.presencePenalty" />
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="label">Stop sequences</div>
-          <input type="text" placeholder='string or json array. e.g. hello or ["\n"]' v-model="setting.stopSequences" />
-        </div>
+          <div class="row">
+            <div class="label">Stop sequences</div>
+            <input type="text" placeholder='string or json array. e.g. hello or ["\n"]' v-model="setting.stopSequences" />
+          </div>
+        </template>
       </div>
       <div class="action">
         <a href="https://beta.openai.com/docs/introduction/overview" target="_blank">OpenAI API</a>
@@ -86,13 +128,13 @@
 <script lang="ts" setup>
 import { nextTick, onBeforeUnmount, ref, watch, watchEffect } from 'vue'
 import { ctx } from '@yank-note/runtime-api'
-import { i18n, models, setting, loading, actionName } from './openai'
+import { editModels, i18n, models, setting, loading, actionName } from './openai'
 
 const openAIIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51 51"><path fill="currentColor" transform="scale(0.89)" transform-origin="center" d="M47.21,20.92a12.65,12.65,0,0,0-1.09-10.38A12.78,12.78,0,0,0,32.36,4.41,12.82,12.82,0,0,0,10.64,9a12.65,12.65,0,0,0-8.45,6.13,12.78,12.78,0,0,0,1.57,15A12.64,12.64,0,0,0,4.84,40.51a12.79,12.79,0,0,0,13.77,6.13,12.65,12.65,0,0,0,9.53,4.25A12.8,12.8,0,0,0,40.34,42a12.66,12.66,0,0,0,8.45-6.13A12.8,12.8,0,0,0,47.21,20.92ZM28.14,47.57a9.46,9.46,0,0,1-6.08-2.2l.3-.17,10.1-5.83a1.68,1.68,0,0,0,.83-1.44V23.69l4.27,2.47a.15.15,0,0,1,.08.11v11.8A9.52,9.52,0,0,1,28.14,47.57ZM7.72,38.85a9.45,9.45,0,0,1-1.13-6.37l.3.18L17,38.49a1.63,1.63,0,0,0,1.65,0L31,31.37V36.3a.17.17,0,0,1-.07.13L20.7,42.33A9.51,9.51,0,0,1,7.72,38.85Zm-2.66-22a9.48,9.48,0,0,1,5-4.17v12a1.62,1.62,0,0,0,.82,1.43L23.17,33.2,18.9,35.67a.16.16,0,0,1-.15,0L8.54,29.78A9.52,9.52,0,0,1,5.06,16.8ZM40.14,25,27.81,17.84l4.26-2.46a.16.16,0,0,1,.15,0l10.21,5.9A9.5,9.5,0,0,1,41,38.41v-12A1.67,1.67,0,0,0,40.14,25Zm4.25-6.39-.3-.18L34,12.55a1.64,1.64,0,0,0-1.66,0L20,19.67V14.74a.14.14,0,0,1,.06-.13L30.27,8.72a9.51,9.51,0,0,1,14.12,9.85ZM17.67,27.35,13.4,24.89a.17.17,0,0,1-.08-.12V13a9.51,9.51,0,0,1,15.59-7.3l-.3.17-10.1,5.83a1.68,1.68,0,0,0-.83,1.44Zm2.32-5,5.5-3.17L31,22.35v6.34l-5.49,3.17L20,28.69Z"></path></svg>'
 const editor = ctx.editor.getEditor()
 const monaco = ctx.editor.getMonaco()
 
-const { SvgIcon } = ctx.components
+const { SvgIcon, GroupTabs } = ctx.components
 
 const suffixContextRef = ref<HTMLElement | null>(null)
 const prefixContextRef = ref<HTMLElement | null>(null)
@@ -131,6 +173,10 @@ function buildContent () {
       contentPrefix = selectedText
       contentSuffix = ''
     }
+
+    setting.input = selectedText
+  } else {
+    setting.input = ''
   }
 
   const prefix = contentPrefix.slice(-setting.prefixLength)
@@ -210,6 +256,21 @@ onBeforeUnmount(() => {
     align-items: center;
     position: absolute;
     bottom: 2px;
+
+    .tabs {
+      display: inline-flex;
+      margin-bottom: 0;
+      z-index: 1;
+      flex: none;
+      margin-left: 6px;
+      background: var(--g-color-86);
+
+      ::v-deep(.tab) {
+        font-weight: normal;
+        line-height: 1.5;
+        font-size: 12px;
+      }
+    }
 
     .logo-icon {
       color: rgb(250, 148, 37);

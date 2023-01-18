@@ -13,6 +13,11 @@ export const models = [
   'code-cushman-001',
 ]
 
+export const editModels = [
+  'text-davinci-edit-001',
+  'code-davinci-edit-001',
+]
+
 export const i18n = ctx.i18n.createI18n({
   en: {
     'openai-complete': 'OpenAI Complete',
@@ -27,6 +32,11 @@ export const i18n = ctx.i18n.createI18n({
 })
 
 const defaultSetting = {
+  type: 'completion' as 'completion' | 'edit',
+  input: '',
+  instruction: '',
+  instructionHistory: [] as string[],
+  editModel: editModels[0],
   enable: true,
   prefix: '',
   suffix: '',
@@ -42,7 +52,10 @@ const defaultSetting = {
 }
 
 const storageSettingKey = __EXTENSION_ID__ + '.setting'
-export const setting = reactive(ctx.utils.storage.get(storageSettingKey, defaultSetting))
+export const setting = reactive({
+  ...defaultSetting,
+  ...ctx.utils.storage.get(storageSettingKey, defaultSetting)
+})
 
 const saveSetting = ctx.lib.lodash.debounce(() => {
   ctx.utils.storage.set(storageSettingKey, ctx.lib.lodash.omit(setting, ['suffix', 'prefix']))

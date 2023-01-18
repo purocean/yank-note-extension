@@ -70,25 +70,39 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
       // ignore
     }
 
-    const body = {
-      temperature: setting.temperature,
-      n: 1,
-      top_p: setting.topP,
-      frequency_penalty: setting.frequencyPenalty,
-      presence_penalty: setting.presencePenalty,
-      prompt: setting.prefix,
-      max_tokens: setting.maxTokens,
-      suffix: setting.suffix || undefined,
-      stop: stop || undefined,
-    }
+    const body = setting.type === 'completion'
+      ? {
+          temperature: setting.temperature,
+          n: 1,
+          top_p: setting.topP,
+          frequency_penalty: setting.frequencyPenalty,
+          presence_penalty: setting.presencePenalty,
+          prompt: setting.prefix,
+          max_tokens: setting.maxTokens,
+          suffix: setting.suffix || undefined,
+          stop: stop || undefined,
+        }
+      : {
+          input: setting.input,
+          instruction: setting.instruction,
+          n: 1,
+          temperature: setting.temperature,
+          top_p: setting.topP,
+        }
+
+    const url = setting.type === 'completion'
+      ? `https://api.openai.com/v1/engines/${setting.model}/completions`
+      : `https://api.openai.com/v1/engines/${setting.editModel}/edits`
 
     this.logger.debug('provideSuggestions', 'request', setting.model, body)
 
+    if (setting.type === 'edit') {
+      setting.instructionHistory.unshift(setting.instruction.trim())
+      setting.instructionHistory = [...new Set(setting.instructionHistory.slice(0, 20))]
+    }
+
     try {
-      const res = await requestApi(
-        `https://api.openai.com/v1/engines/${setting.model}/completions`,
-        body
-      )
+      const res = await requestApi(url, body)
 
       this.logger.debug('provideSuggestions', 'result', res)
 
@@ -97,8 +111,9 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
         return []
       }
 
-      return res.choices.map((x: any) => ({
+      return (res.choices as {text: string}[]).map((x: any) => ({
         text: x.text,
+        insertText: { snippet: x.text },
         range,
       }))
     } catch (error: any) {
