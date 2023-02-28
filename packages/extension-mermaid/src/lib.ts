@@ -4,11 +4,12 @@ import type { Mermaid } from 'mermaid'
 export async function getMermaidLib (): Promise<Mermaid> {
   const iframe = await ctx.view.getRenderIframe()
   const mermaid = (iframe.contentWindow as any).mermaid
-  if (mermaid && mermaid.mermaidAPI) {
+
+  if (mermaid && (mermaid.mermaidAPI || mermaid.then)) {
     return mermaid
   }
 
-  return new Promise((resolve, reject) => {
+  const promise = new Promise<Mermaid>((resolve, reject) => {
     const src = getExtensionBasePath(__EXTENSION_ID__) + '/dist/mermaid.min.js'
     // after 3.40.0 use iframe to render
     ctx.view.addScript(src).then(script => {
@@ -21,6 +22,10 @@ export async function getMermaidLib (): Promise<Mermaid> {
       }
     })
   })
+
+  ;(iframe.contentWindow as any).mermaid = promise
+
+  return promise
 }
 
 export async function initMermaidTheme (colorScheme?: 'light' | 'dark') {
