@@ -1,3 +1,12 @@
+## [1.5.4](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.5.3...extension-mermaid-1.5.4) (2023-02-28)
+
+
+### Bug Fixes
+
+* **extension-mermaid:** fix concurrent calls to `getMermaidLib` ([3231312](https://github.com/purocean/yank-note-extension/commit/323131297f9e8331500d6e9200ce43dc41c9beb1))
+
+
+
 ## [1.5.3](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.5.2...extension-mermaid-1.5.3) (2022-11-04)
 
 

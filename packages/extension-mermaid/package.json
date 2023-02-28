@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-mermaid",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "displayName": "Mermaid",
   "description": "Mermaid integration",
   "displayName_ZH-CN": "Mermaid",
