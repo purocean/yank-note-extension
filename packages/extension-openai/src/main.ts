@@ -70,7 +70,10 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
       // ignore
     }
 
-    const body = setting.type === 'completion'
+    const isChat = (setting.type === 'completion' && setting.model.startsWith('gpt-')) ||
+      (setting.type === 'edit' && setting.editModel.startsWith('gpt-'))
+
+    const body: any = (setting.type === 'completion' || isChat)
       ? {
           temperature: setting.temperature,
           n: 1,
@@ -90,9 +93,31 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
           top_p: setting.topP,
         }
 
-    const url = setting.type === 'completion'
+    if (isChat) {
+      body.model = setting.model
+      body.messages = [{ role: 'user', content: setting.prefix }]
+
+      if (setting.type === 'edit') {
+        body.model = setting.editModel
+        body.messages = [
+          { role: 'system', content: setting.instruction },
+          { role: 'user', content: setting.input }
+        ]
+      }
+
+      delete body.suffix
+      delete body.prompt
+      delete body.input
+      delete body.instruction
+    }
+
+    let url = setting.type === 'completion'
       ? `https://api.openai.com/v1/engines/${setting.model}/completions`
       : `https://api.openai.com/v1/engines/${setting.editModel}/edits`
+
+    if (isChat) {
+      url = 'https://api.openai.com/v1/chat/completions'
+    }
 
     this.logger.debug('provideSuggestions', 'request', setting.model, body)
 
@@ -111,11 +136,15 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
         return []
       }
 
-      return (res.choices as {text: string}[]).map((x: any) => ({
-        text: x.text,
-        insertText: { snippet: x.text },
-        range,
-      }))
+      return (res.choices).map((x: any) => {
+        const text = isChat ? x.message.content : x.text
+
+        return {
+          text: text,
+          insertText: { snippet: text },
+          range,
+        }
+      })
     } catch (error: any) {
       this.ctx.ui.useToast().show('warning', error.message || `${error}`, 5000)
       this.logger.error('provideSuggestions', 'error', error)

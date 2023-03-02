@@ -167,11 +167,13 @@ function buildContent () {
   ))
 
   const selection = editor.getSelection()
+  let useSelection = false
   if (selection) {
     const selectedText = model.getValueInRange(selection)
     if (selectedText) {
       contentPrefix = selectedText
       contentSuffix = ''
+      useSelection = true
     }
 
     setting.input = selectedText
@@ -179,7 +181,7 @@ function buildContent () {
     setting.input = ''
   }
 
-  const prefix = contentPrefix.slice(-setting.prefixLength)
+  const prefix = contentPrefix.slice(useSelection ? 0 : -setting.prefixLength)
   const suffix = contentSuffix.slice(0, setting.suffixLength)
 
   setting.prefix = prefix

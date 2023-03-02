@@ -5,6 +5,7 @@ export const settingKeyToken = 'plugin.editor-openai.api-token'
 export const actionName = 'plugin.editor-openai.trigger'
 
 export const models = [
+  'gpt-3.5-turbo',
   'text-davinci-003',
   'text-curie-001',
   'text-babbage-001',
@@ -14,6 +15,7 @@ export const models = [
 ]
 
 export const editModels = [
+  'gpt-3.5-turbo',
   'text-davinci-edit-001',
   'code-davinci-edit-001',
 ]
