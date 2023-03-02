@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.3.0...extension-openai-1.4.0) (2023-03-02)
+
+
+### Features
+
+* **extension-openai:** add gpt-3.5-turbo model ([e65662f](https://github.com/purocean/yank-note-extension/commit/e65662f3d8c246314549fcfb010e70285c0aa74a))
+
+
+
 # [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.2.1...extension-openai-1.3.0) (2023-01-18)
 
 
