@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.4.0...extension-openai-1.5.0) (2023-03-04)
+
+
+### Features
+
+* **extension-openai:** add chat mode ([1ddae00](https://github.com/purocean/yank-note-extension/commit/1ddae00afe52448d4f1557c0c79c40731a56fa09))
+
+
+
 # [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.3.0...extension-openai-1.4.0) (2023-03-02)
 
 
