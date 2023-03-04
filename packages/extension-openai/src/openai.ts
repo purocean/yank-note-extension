@@ -5,7 +5,6 @@ export const settingKeyToken = 'plugin.editor-openai.api-token'
 export const actionName = 'plugin.editor-openai.trigger'
 
 export const models = [
-  'gpt-3.5-turbo',
   'text-davinci-003',
   'text-curie-001',
   'text-babbage-001',
@@ -15,9 +14,12 @@ export const models = [
 ]
 
 export const editModels = [
-  'gpt-3.5-turbo',
   'text-davinci-edit-001',
   'code-davinci-edit-001',
+]
+
+export const chatModels = [
+  'gpt-3.5-turbo',
 ]
 
 export const i18n = ctx.i18n.createI18n({
@@ -34,10 +36,13 @@ export const i18n = ctx.i18n.createI18n({
 })
 
 const defaultSetting = {
-  type: 'completion' as 'completion' | 'edit',
+  type: 'completion' as 'completion' | 'edit' | 'chat',
+  chatSystem: '',
+  chatModel: chatModels[0],
   input: '',
   instruction: '',
   instructionHistory: [] as string[],
+  chatSystemHistory: [] as string[],
   editModel: editModels[0],
   enable: true,
   prefix: '',
@@ -45,7 +50,7 @@ const defaultSetting = {
   model: models[0],
   prefixLength: 128,
   suffixLength: 128,
-  maxTokens: 64,
+  maxTokens: 1024,
   topP: 1,
   temperature: 0.3,
   presencePenalty: 0,
@@ -58,6 +63,18 @@ export const setting = reactive({
   ...defaultSetting,
   ...ctx.utils.storage.get(storageSettingKey, defaultSetting)
 })
+
+if (!models.includes(setting.model)) {
+  setting.model = models[0]
+}
+
+if (!editModels.includes(setting.editModel)) {
+  setting.editModel = editModels[0]
+}
+
+if (!chatModels.includes(setting.chatModel)) {
+  setting.chatModel = chatModels[0]
+}
 
 const saveSetting = ctx.lib.lodash.debounce(() => {
   ctx.utils.storage.set(storageSettingKey, ctx.lib.lodash.omit(setting, ['suffix', 'prefix']))

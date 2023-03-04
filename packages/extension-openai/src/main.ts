@@ -70,61 +70,69 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
       // ignore
     }
 
-    const isChat = (setting.type === 'completion' && setting.model.startsWith('gpt-')) ||
-      (setting.type === 'edit' && setting.editModel.startsWith('gpt-'))
+    let url: string
+    let body: any
 
-    const body: any = (setting.type === 'completion' || isChat)
-      ? {
-          temperature: setting.temperature,
-          n: 1,
-          top_p: setting.topP,
-          frequency_penalty: setting.frequencyPenalty,
-          presence_penalty: setting.presencePenalty,
-          prompt: setting.prefix,
-          max_tokens: setting.maxTokens,
-          suffix: setting.suffix || undefined,
-          stop: stop || undefined,
-        }
-      : {
-          input: setting.input,
-          instruction: setting.instruction,
-          n: 1,
-          temperature: setting.temperature,
-          top_p: setting.topP,
-        }
-
-    if (isChat) {
-      body.model = setting.model
-      body.messages = [{ role: 'user', content: setting.prefix }]
-
-      if (setting.type === 'edit') {
-        body.model = setting.editModel
-        body.messages = [
-          { role: 'system', content: setting.instruction },
-          { role: 'user', content: setting.input }
-        ]
+    if (setting.type === 'chat') {
+      const content = setting.input
+      const system = setting.chatSystem.trim()
+      if (!content) {
+        return []
       }
 
-      delete body.suffix
-      delete body.prompt
-      delete body.input
-      delete body.instruction
-    }
+      const messages = [{ role: 'user', content }]
+      if (system.trim()) {
+        messages.unshift({ role: 'system', content: system })
+      }
 
-    let url = setting.type === 'completion'
-      ? `https://api.openai.com/v1/engines/${setting.model}/completions`
-      : `https://api.openai.com/v1/engines/${setting.editModel}/edits`
-
-    if (isChat) {
       url = 'https://api.openai.com/v1/chat/completions'
+
+      body = {
+        model: setting.chatModel,
+        messages,
+        temperature: setting.temperature,
+        n: 1,
+        top_p: setting.topP,
+        frequency_penalty: setting.frequencyPenalty,
+        presence_penalty: setting.presencePenalty,
+        max_tokens: setting.maxTokens,
+        stop: stop || undefined,
+      }
+
+      setting.chatSystemHistory.unshift(setting.chatSystem.trim())
+      setting.chatSystemHistory = [...new Set(setting.chatSystemHistory.slice(0, 20))]
+    } else {
+      url = setting.type === 'completion'
+        ? `https://api.openai.com/v1/engines/${setting.model}/completions`
+        : `https://api.openai.com/v1/engines/${setting.editModel}/edits`
+
+      body = setting.type === 'completion'
+        ? {
+            temperature: setting.temperature,
+            n: 1,
+            top_p: setting.topP,
+            frequency_penalty: setting.frequencyPenalty,
+            presence_penalty: setting.presencePenalty,
+            prompt: setting.prefix,
+            max_tokens: setting.maxTokens,
+            suffix: setting.suffix || undefined,
+            stop: stop || undefined,
+          }
+        : {
+            input: setting.input,
+            instruction: setting.instruction,
+            n: 1,
+            temperature: setting.temperature,
+            top_p: setting.topP,
+          }
+
+      if (setting.type === 'edit') {
+        setting.instructionHistory.unshift(setting.instruction.trim())
+        setting.instructionHistory = [...new Set(setting.instructionHistory.slice(0, 20))]
+      }
     }
 
     this.logger.debug('provideSuggestions', 'request', setting.model, body)
-
-    if (setting.type === 'edit') {
-      setting.instructionHistory.unshift(setting.instruction.trim())
-      setting.instructionHistory = [...new Set(setting.instructionHistory.slice(0, 20))]
-    }
 
     try {
       const res = await requestApi(url, body)
@@ -137,7 +145,7 @@ class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
       }
 
       return (res.choices).map((x: any) => {
-        const text = isChat ? x.message.content : x.text
+        const text = x.message ? x.message.content : x.text
 
         return {
           text: text,
