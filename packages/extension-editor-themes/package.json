@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-editor-themes",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "displayName": "Editor Themes",
   "description": "Change the theme of the editor",
   "displayName_ZH-CN": "编辑器主题",
