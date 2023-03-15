@@ -34,6 +34,8 @@ import zenburnesque from 'monaco-themes/themes/Zenburnesque.json'
 import monoindustrial from 'monaco-themes/themes/monoindustrial.json'
 import tomorrowNightBright from 'monaco-themes/themes/Tomorrow-Night-Bright.json'
 import idleFingers from 'monaco-themes/themes/idleFingers.json'
+import ayuDark from '../etc-themes/dark/monaco-ayu-dark.json'
+import ayuMirage from '../etc-themes/dark/monaco-ayu-mirage.json'
 
 // light
 import xcodeDefault from 'monaco-themes/themes/Xcode_default.json'
@@ -55,6 +57,7 @@ import kuroirTheme from 'monaco-themes/themes/Kuroir Theme.json'
 import iPlastic from 'monaco-themes/themes/iPlastic.json'
 import dawn from 'monaco-themes/themes/Dawn.json'
 import solarizedLight from 'monaco-themes/themes/Solarized-light.json'
+import ayuLight from '../etc-themes/light/monaco-ayu-light.json'
 
 export const darkThemes = [
   { name: 'vs-dark', displayName: 'Default VS Dark', theme: null },
@@ -94,6 +97,8 @@ export const darkThemes = [
   { name: 'monoindustrial', displayName: 'monoindustrial', theme: monoindustrial },
   { name: 'tomorrow-night-bright', displayName: 'Tomorrow-Night-Bright', theme: tomorrowNightBright },
   { name: 'idle-fingers', displayName: 'idleFingers', theme: idleFingers },
+  { name: 'ayu-mirage', displayName: 'ayuMirage', theme: ayuMirage },
+  { name: 'ayu-dark', displayName: 'ayuDark', theme: ayuDark },
 ]
 
 export const lightThemes = [
@@ -117,4 +122,5 @@ export const lightThemes = [
   { name: 'i-plastic', displayName: 'iPlastic', theme: iPlastic },
   { name: 'dawn', displayName: 'Dawn', theme: dawn },
   { name: 'solarized-light', displayName: 'Solarized-light', theme: solarizedLight },
+  { name: 'ayu-light', displayName: 'Ayu-light', theme: ayuLight },
 ]
