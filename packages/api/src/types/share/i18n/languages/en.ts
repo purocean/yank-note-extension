@@ -114,6 +114,7 @@ declare const data: {
                 buttons: {
                     download: string;
                     'view-changes': string;
+                    'download-and-view-changes': string;
                     cancel: string;
                     ignore: string;
                 };
@@ -310,6 +311,7 @@ declare const data: {
         pin: string;
         unpin: string;
         'search-tabs': string;
+        'new-tab': string;
     };
     'export-panel': {
         export: string;
@@ -343,6 +345,7 @@ declare const data: {
             repos: string;
             appearance: string;
             editor: string;
+            render: string;
             image: string;
             proxy: string;
             macros: string;
@@ -366,6 +369,16 @@ declare const data: {
                 'line-numbers': string;
                 'enable-preview': string;
                 'font-family': string;
+                'complete-emoji': string;
+            };
+            render: {
+                'md-html': string;
+                'md-breaks': string;
+                'md-linkify': string;
+                'md-typographer': string;
+                'md-sup': string;
+                'md-sub': string;
+                'md-emoji': string;
             };
             theme: string;
             language: string;

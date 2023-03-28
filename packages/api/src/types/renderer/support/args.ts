@@ -14,6 +14,7 @@ export declare const FLAG_MAS = false;
 export declare const FLAG_DEMO: boolean;
 export declare const FLAG_READONLY: boolean;
 export declare const FLAG_DEBUG: boolean;
+export declare const HELP_REPO_NAME = "__help__";
 export declare const DOM_ATTR_NAME: {
     SOURCE_LINE_START: string;
     SOURCE_LINE_END: string;

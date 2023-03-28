@@ -1,4 +1,5 @@
 import type { Language } from '@share/i18n';
+import type MarkdownIt from 'markdown-it';
 import type Token from 'markdown-it/lib/token';
 import type * as Monaco from 'monaco-editor';
 export interface PathItem {
@@ -36,6 +37,7 @@ export declare namespace Components {
             content?: string;
             okText?: string;
             cancelText?: string;
+            modalWidth?: string;
         }
         export interface ConfirmModalParams extends BaseParams {
             component?: any;
@@ -49,7 +51,6 @@ export declare namespace Components {
             type?: string;
             value?: string;
             hint?: string;
-            modalWidth?: string;
             readonly?: boolean;
             select?: boolean | [number, number, 'forward' | 'backward' | 'none'];
         }
@@ -93,6 +94,7 @@ export declare namespace Components {
             title: string;
             order?: number;
             hidden?: boolean;
+            style?: string;
             onClick: (e: MouseEvent) => void;
         } | {
             type: 'separator';
@@ -168,7 +170,7 @@ export declare type FileSort = {
 export declare type ThemeName = 'system' | 'dark' | 'light';
 export declare type LanguageName = 'system' | Language;
 export declare type ExportType = 'print' | 'pdf' | 'docx' | 'html' | 'rst' | 'adoc';
-export declare type SettingGroup = 'repos' | 'appearance' | 'editor' | 'image' | 'proxy' | 'other' | 'macros';
+export declare type SettingGroup = 'repos' | 'appearance' | 'editor' | 'image' | 'proxy' | 'other' | 'macros' | 'render';
 export declare type RegistryHostname = 'registry.npmjs.org' | 'registry.npmmirror.com';
 export declare type PrintOpts = {
     landscape?: boolean;
@@ -269,6 +271,14 @@ export interface BuildInSettings {
     'editor.line-numbers': 'on' | 'off' | 'relative' | 'interval';
     'editor.enable-preview': boolean;
     'editor.font-family': string;
+    'editor.complete-emoji': boolean;
+    'render.md-html': boolean;
+    'render.md-breaks': boolean;
+    'render.md-linkify': boolean;
+    'render.md-typographer': boolean;
+    'render.md-emoji': boolean;
+    'render.md-sub': boolean;
+    'render.md-sup': boolean;
     'assets.path-type': 'relative' | 'absolute' | 'auto';
     'plugin.image-hosting-picgo.server-url': string;
     'plugin.image-hosting-picgo.enable-paste-image': boolean;
@@ -366,6 +376,7 @@ export declare type BuildInHookTypes = {
     MARKDOWN_BEFORE_RENDER: {
         src: string;
         env: RenderEnv;
+        md: MarkdownIt;
     };
     VIEW_ELEMENT_CLICK: {
         e: MouseEvent;

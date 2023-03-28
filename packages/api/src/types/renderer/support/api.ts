@@ -149,6 +149,28 @@ export declare function readTmpFile(name: string): Promise<Response>;
  */
 export declare function deleteTmpFile(name: string): Promise<ApiResult<any>>;
 /**
+ * Write user file.
+ * @param name
+ * @param data
+ * @param asBase64
+ * @returns
+ */
+export declare function writeUserFile(name: string, data: string, asBase64?: boolean): Promise<ApiResult<{
+    path: string;
+}>>;
+/**
+ * Read user file.
+ * @param name
+ * @returns
+ */
+export declare function readUserFile(name: string): Promise<Response>;
+/**
+ * Remove user file.
+ * @param name
+ * @returns
+ */
+export declare function deleteUserFile(name: string): Promise<ApiResult<any>>;
+/**
  * Convert file
  * @param source
  * @param fromType
