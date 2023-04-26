@@ -4,6 +4,7 @@ export declare type SimpleCompletionItem = {
     label: string;
     kind?: Monaco.languages.CompletionItemKind;
     insertText: string;
+    detail?: string;
 };
 export declare type SimpleCompletionItemTappers = (items: SimpleCompletionItem[]) => void;
 declare let monaco: typeof Monaco;

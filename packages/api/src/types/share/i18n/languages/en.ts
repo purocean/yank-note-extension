@@ -51,37 +51,31 @@ declare const data: {
         };
         buy: {
             buy: string;
-            'step-1': string;
-            'step-2': string;
-            'step-3': string;
-            'send-email': string;
-            'email-tips': string;
-            'email-failed': string;
-            'email-failed-dialog': {
-                title: string;
-                content: string;
-            };
-            wechat: string;
-            alipay: string;
-            email: {
-                subject: string;
-                body: string;
-            };
         };
         activation: {
             license: string;
             activation: string;
             placeholder: string;
+            'get-license': string;
             info: string;
+            expired: string;
+            expiring: string;
+            'need-refresh': string;
+            refresh: string;
+            renewal: string;
+            devices: string;
+            'this-machine': string;
+            unbind: string;
+            'unbind-confirm': string;
             name: string;
             email: string;
             expires: string;
-            hash: string;
+            plan: string;
             success: string;
             activating: string;
             tips: string;
-            'tips-email': string;
             'tips-wechat': string;
+            'activation-tips': string;
         };
     };
     app: {

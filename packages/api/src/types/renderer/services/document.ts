@@ -116,7 +116,9 @@ export declare function markDoc(doc: Doc): Promise<void>;
  */
 export declare function unmarkDoc(doc: Doc): Promise<void>;
 export declare function getMarkedFiles(): import("@fe/types").FileItem[];
-export declare function isMarked(doc: PathItem): boolean;
+export declare function isMarked(doc: PathItem & {
+    type?: Doc['type'];
+}): boolean;
 /**
  * Open in OS.
  * @param doc

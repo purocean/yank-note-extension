@@ -2,6 +2,7 @@ import type { Language } from '@share/i18n';
 import type MarkdownIt from 'markdown-it';
 import type Token from 'markdown-it/lib/token';
 import type * as Monaco from 'monaco-editor';
+export declare type PremiumTab = 'intro' | 'activation';
 export interface PathItem {
     repo: string;
     path: string;
@@ -351,7 +352,7 @@ export declare type BuildInActions = {
     'plugin.electron-zoom.zoom-in': () => void;
     'plugin.electron-zoom.zoom-out': () => void;
     'plugin.electron-zoom.zoom-reset': () => void;
-    'premium.show': () => void;
+    'premium.show': (tab?: PremiumTab) => void;
     'base.find-in-repository': (query?: FindInRepositoryQuery) => void;
     'workbench.toggle-outline': (visible?: boolean) => void;
 };
