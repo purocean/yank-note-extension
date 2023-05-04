@@ -35,8 +35,7 @@ registerPlugin({
         !ctx.store.state.presentation &&
         window.getSelection()!.toString().length < 1
       ) {
-        ctx.editor.getEditor().revealLineNearTop(line)
-        setTimeout(ctx.editor.highlightLine(line), 1000)
+        ctx.editor.highlightLine(line, true, 1000)
       }
 
       return false
