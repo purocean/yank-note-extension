@@ -119,6 +119,7 @@ registerPlugin({
         if (_ctx.store.state.currentFile) {
           _ctx.store.state.currentFile.content = ctx.store.state.currentContent
         }
+        win.onbeforeunload = null
         win.document.title = i18n.t('popup-preview')
       }
     }
