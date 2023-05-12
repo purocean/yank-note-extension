@@ -72,7 +72,7 @@ export declare namespace Components {
         type NormalItem = {
             type?: 'normal';
             id: string;
-            label: string;
+            label: any;
             hidden?: boolean;
             checked?: boolean;
             onClick: (item?: NormalItem) => void;
@@ -285,7 +285,7 @@ export interface BuildInSettings {
     'plugin.image-hosting-picgo.enable-paste-image': boolean;
     'license': string;
     'mark': FileItem[];
-    'updater.source': 'github.com' | 'ghproxy.com';
+    'updater.source': 'auto' | 'github' | 'yank-note';
     'doc-history.number-limit': number;
     'search.number-limit': number;
     'server.host': string;

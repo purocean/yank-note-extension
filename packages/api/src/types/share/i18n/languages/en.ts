@@ -39,6 +39,7 @@ declare const data: {
         'buy-license': string;
         free: string;
         premium: string;
+        upgrade: string;
         intro: {
             intro: string;
             'current-plan': string;
@@ -133,6 +134,9 @@ declare const data: {
                 title: string;
                 desc: string;
             };
+        };
+        error: {
+            EADDRINUSE: string;
         };
     };
     'quit-check-dialog': {

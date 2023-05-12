@@ -41,6 +41,7 @@ declare const languages: {
             'buy-license': string;
             free: string;
             premium: string;
+            upgrade: string;
             intro: {
                 intro: string;
                 'current-plan': string;
@@ -135,6 +136,9 @@ declare const languages: {
                     title: string;
                     desc: string;
                 };
+            };
+            error: {
+                EADDRINUSE: string;
             };
         };
         'quit-check-dialog': {
@@ -683,6 +687,7 @@ declare const languages: {
             'buy-license': string;
             free: string;
             premium: string;
+            upgrade: string;
             intro: {
                 intro: string;
                 'current-plan': string;
@@ -777,6 +782,9 @@ declare const languages: {
                     title: string;
                     desc: string;
                 };
+            };
+            error: {
+                EADDRINUSE: string;
             };
         };
         'quit-check-dialog': {
