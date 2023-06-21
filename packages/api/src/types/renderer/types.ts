@@ -1,7 +1,53 @@
-import type { Language } from '@share/i18n';
+import type { Language, MsgPath } from '@share/i18n';
 import type MarkdownIt from 'markdown-it';
 import type Token from 'markdown-it/lib/token';
 import type * as Monaco from 'monaco-editor';
+export declare type TTitle = keyof {
+    [K in MsgPath as `T_${K}`]: never;
+};
+export declare type SettingSchema = {
+    type: string;
+    title: TTitle;
+    properties: {
+        [K in keyof BuildInSettings]: {
+            type: string;
+            title: TTitle;
+            description?: TTitle;
+            required?: boolean;
+            defaultValue: BuildInSettings[K] extends any ? BuildInSettings[K] : any;
+            enum?: string[] | number[];
+            group: SettingGroup;
+            needReloadWindowWhenChanged?: boolean;
+            validator?: (schema: SettingSchema['properties'][K], value: BuildInSettings[K], path: string) => {
+                path: string;
+                property: K;
+                message: string;
+            }[];
+            items?: {
+                type: string;
+                title: TTitle;
+                properties: {
+                    [K in string]: {
+                        type: string;
+                        title: TTitle;
+                        description?: TTitle;
+                        options: {
+                            inputAttributes: {
+                                placeholder: TTitle;
+                            };
+                        };
+                    };
+                };
+            };
+            [key: string]: any;
+        };
+    };
+    required: (keyof BuildInSettings)[];
+    groups: {
+        label: TTitle;
+        value: SettingGroup;
+    }[];
+};
 export declare type PremiumTab = 'intro' | 'activation';
 export interface PathItem {
     repo: string;
@@ -495,6 +541,7 @@ export declare type BuildInHookTypes = {
     };
     SETTING_PANEL_BEFORE_SHOW: {};
     SETTING_CHANGED: {
+        schema: SettingSchema;
         changedKeys: (keyof BuildInSettings)[];
         oldSettings: BuildInSettings;
         settings: BuildInSettings;

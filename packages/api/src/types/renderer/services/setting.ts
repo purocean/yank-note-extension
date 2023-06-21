@@ -1,5 +1,5 @@
-import type { BuildInSettings, SettingGroup } from '@fe/types';
-import { Schema } from '@fe/others/setting-schema';
+import type { BuildInSettings, SettingGroup, SettingSchema } from '@fe/types';
+declare type Schema = SettingSchema;
 /**
  * Get Schema.
  * @returns Schema
@@ -56,3 +56,4 @@ export declare function showSettingPanel(keyOrGroup?: string): Promise<void>;
  * Hide setting panel.
  */
 export declare function hideSettingPanel(): void;
+export {};

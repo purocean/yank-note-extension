@@ -151,6 +151,10 @@ declare const data: {
         title: string;
         desc: string;
     };
+    'change-setting-reload-main-widow-dialog': {
+        title: string;
+        desc: string;
+    };
     'file-status': {
         unsaved: string;
         saving: string;
