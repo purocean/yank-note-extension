@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.3.1...extension-drawio-1.4.0) (2023-06-27)
+
+
+### Features
+
+* **extension-drawio:** upgrade drawio to v21.5.1 ([7bf0184](https://github.com/purocean/yank-note-extension/commit/7bf0184afee31d959d4a480a5bdb460b98ea6153))
+
+
+
 ## [1.3.1](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.2.0...extension-drawio-1.3.1) (2022-09-16)
 
 
