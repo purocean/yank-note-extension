@@ -34,15 +34,16 @@ registerPlugin({
     })
 
     ctx.editor.whenEditorReady().then(({ monaco }) => {
-      function changeCommandKeybinding (id: string, keys: number) {
-        const editor: any = ctx.editor.getEditor()
-        editor._standaloneKeybindingService.addDynamicKeybinding('-' + id, undefined, () => undefined)
-        editor._standaloneKeybindingService.addDynamicKeybinding(id, keys, () => {
-          editor.getAction(id).run()
-        })
-      }
-
-      changeCommandKeybinding('editor.action.formatDocument', monaco.KeyMod.Alt | monaco.KeyMod.Shift | monaco.KeyCode.KeyL)
+      monaco.editor.addKeybindingRules([
+        {
+          keybinding: monaco.KeyMod.Alt | monaco.KeyMod.Shift | monaco.KeyCode.KeyF,
+          command: null
+        },
+        {
+          keybinding: monaco.KeyMod.Alt | monaco.KeyMod.Shift | monaco.KeyCode.KeyL,
+          command: 'editor.action.formatDocument'
+        },
+      ])
 
       monaco.languages.registerDocumentFormattingEditProvider('markdown', {
         provideDocumentFormattingEdits: (model, options) => {
