@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-luckysheet-1.0.3...extension-luckysheet-1.1.0) (2023-07-11)
+
+
+### Features
+
+* **extension-lucksheet:** support readonly flag ([133d893](https://github.com/purocean/yank-note-extension/commit/133d89373c17a7eff61d8f4046bbc88b4b93bdc2))
+
+
+
 ## [1.0.3](https://github.com/purocean/yank-note-extension/compare/extension-luckysheet-1.0.2...extension-luckysheet-1.0.3) (2022-05-14)
 
 
