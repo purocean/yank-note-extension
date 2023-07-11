@@ -24,6 +24,10 @@ registerPlugin({
     })
 
     ctx.tree.tapContextMenus((items, node) => {
+      if (ctx.args.FLAG_READONLY) {
+        return
+      }
+
       if (node.type === 'dir') {
         items.push(
           { type: 'separator' },
