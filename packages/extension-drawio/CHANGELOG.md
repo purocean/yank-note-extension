@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.4.0...extension-drawio-1.5.0) (2023-07-11)
+
+
+### Features
+
+* **extension-drawio:** support readonly flag ([c826e2a](https://github.com/purocean/yank-note-extension/commit/c826e2aeb94fc1ce9771cc06797731b4b4a72aaf))
+
+
+
 # [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.3.1...extension-drawio-1.4.0) (2023-06-27)
 
 
