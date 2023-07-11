@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.3.1...extension-markdown-prettier-1.4.0) (2023-07-11)
+
+
+### Features
+
+* **extension-markdown-prettier:** support yn 3.55.0 ([4b6c25e](https://github.com/purocean/yank-note-extension/commit/4b6c25eb4e2f7a293760a77d840168ca90c13f6a))
+
+
+
 ## <small>1.3.1 (2022-11-22)</small>
 
 * fix(extension-markdown-prettier): fix format on save ([b04ca80](https://github.com/purocean/yank-note-extension/commit/b04ca80))
