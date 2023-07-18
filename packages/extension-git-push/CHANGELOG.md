@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-git-push-1.1.7...extension-git-push-1.2.0) (2023-07-18)
+
+
+### Features
+
+* **extension-git-push:** optimize commit message ([4ced9a2](https://github.com/purocean/yank-note-extension/commit/4ced9a2fd34c33ba2e2d2da660b7463eca365f93))
+
+
+
 ## <small>1.1.7 (2022-05-16)</small>
 
 * fix: fix bugs ([371205f](https://github.com/purocean/yank-note-extension/commit/371205f))
