@@ -1,4 +1,5 @@
 import { registerPlugin } from '@yank-note/runtime-api'
+import type { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 
 const extensionName = __EXTENSION_ID__
 
@@ -36,7 +37,8 @@ registerPlugin({
       }
     })
 
-    ctx.tree.tapContextMenus((items, node) => {
+    function getItems (node: Components.Tree.Node) {
+      const items: Components.ContextMenu.Item[] = []
       const openInSublimeMerge = () => {
         const currentRepo = ctx.store.state.currentRepo
         const path = currentRepo ? ctx.utils.path.join(currentRepo.path, node.path) : ''
@@ -79,6 +81,19 @@ registerPlugin({
       }
 
       return items
+    }
+
+    ctx.tree.tapContextMenus((items, node) => {
+      items.push(...getItems(node))
+    })
+
+    ctx.workbench.FileTabs.tapTabContextMenus((items, tab) => {
+      const doc = tab.payload.file
+      if (!doc) {
+        return
+      }
+
+      items.push(...getItems(doc))
     })
   }
 })
