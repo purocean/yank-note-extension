@@ -24,6 +24,22 @@ export declare const FileTabs: {
      * @returns
      */
     getActionBtns(): Components.Tabs.ActionBtn[];
+    /**
+     * Add a tab context menu processor.
+     * @param tapper
+     */
+    tapTabContextMenus(tapper: (items: Components.ContextMenu.Item[], tab: Components.Tabs.Item) => void): void;
+    /**
+     * Remove a tab context menu processor.
+     * @param tapper
+     */
+    removeTabContextMenuTapper(tapper: (items: Components.ContextMenu.Item[], tab: Components.Tabs.Item) => void): void;
+    /**
+     * Get tab context menus.
+     * @param tab
+     * @returns
+     */
+    getTabContextMenus(tab: Components.Tabs.Item): Components.ContextMenu.Item[];
 };
 export declare const ControlCenter: {
     /**

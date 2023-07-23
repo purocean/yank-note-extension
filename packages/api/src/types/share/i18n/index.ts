@@ -201,6 +201,10 @@ declare const languages: {
                 title: string;
                 content: string;
             };
+            'switch-noent-dialog': {
+                title: string;
+                content: string;
+            };
         };
         'status-bar': {
             view: {
@@ -848,6 +852,10 @@ declare const languages: {
                 content: string;
             };
             'save-encrypted-file-dialog': {
+                title: string;
+                content: string;
+            };
+            'switch-noent-dialog': {
                 title: string;
                 content: string;
             };

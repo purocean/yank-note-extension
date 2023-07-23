@@ -199,6 +199,10 @@ declare const data: {
             title: string;
             content: string;
         };
+        'switch-noent-dialog': {
+            title: string;
+            content: string;
+        };
     };
     'status-bar': {
         view: {

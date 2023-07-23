@@ -378,6 +378,7 @@ export declare type BuildInActions = {
     'file-tabs.close-current': () => void;
     'file-tabs.search-tabs': () => void;
     'file-tabs.refresh-action-btns': () => void;
+    'file-tabs.close-tabs': (keys: string[]) => void;
     'xterm.run': (cmd: {
         code: string;
         start: string;
@@ -600,6 +601,7 @@ export declare type BuildInIOCTypes = {
     [key in keyof BuildInHookTypes]: any;
 } & {
     TABS_ACTION_BTN_TAPPERS: (btns: Components.Tabs.ActionBtn[]) => void;
+    TABS_TAB_CONTEXT_MENU_TAPPERS: (items: Components.ContextMenu.Item[], tab: Components.Tabs.Item) => void;
     STATUS_BAR_MENU_TAPPERS: any;
     CONTROL_CENTER_SCHEMA_TAPPERS: any;
     EDITOR_SIMPLE_COMPLETION_ITEM_TAPPERS: any;
