@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-sublime-merge-1.1.0...extension-sublime-merge-1.2.0) (2023-07-23)
+
+
+### Features
+
+* **extension-sublime-merge:** add context menu to file tabs ([316ce1e](https://github.com/purocean/yank-note-extension/commit/316ce1ec8270bbabfde070eb41beb116f13b8df0))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-sublime-merge-1.0.5...extension-sublime-merge-1.1.0) (2022-11-23)
 
 
