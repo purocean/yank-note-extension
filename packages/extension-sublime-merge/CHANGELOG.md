@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-sublime-merge-1.2.0...extension-sublime-merge-1.2.1) (2023-07-24)
+
+
+### Bug Fixes
+
+* **extension-sublime-merge:** fix cross repo open in sublime merge ([446e164](https://github.com/purocean/yank-note-extension/commit/446e164b7c68386fb1704c249335a7eacc67a298))
+
+
+
 # [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-sublime-merge-1.1.0...extension-sublime-merge-1.2.0) (2023-07-23)
 
 
