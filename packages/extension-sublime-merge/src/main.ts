@@ -40,7 +40,7 @@ registerPlugin({
     function getItems (node: Components.Tree.Node) {
       const items: Components.ContextMenu.Item[] = []
       const openInSublimeMerge = () => {
-        const currentRepo = ctx.store.state.currentRepo
+        const currentRepo = ctx.base.getRepo(node.repo)
         const path = currentRepo ? ctx.utils.path.join(currentRepo.path, node.path) : ''
         if (path && currentRepo) {
           const smgPath = ctx.setting.getSetting(settingKeySmgPath, 'smerge')
