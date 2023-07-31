@@ -346,7 +346,6 @@ declare const data: {
         add: string;
         'delete-warning': string;
         'error-choose-repo-path': string;
-        'keep-running-after-closing-window': string;
         tabs: {
             repos: string;
             appearance: string;
@@ -376,6 +375,7 @@ declare const data: {
                 'enable-preview': string;
                 'font-family': string;
                 'complete-emoji': string;
+                'todo-with-time': string;
             };
             render: {
                 'md-html': string;
@@ -429,6 +429,8 @@ declare const data: {
                 'match-placeholder': string;
                 'replace-placeholder': string;
             };
+            'hide-main-window-on-startup': string;
+            'keep-running-after-closing-window': string;
         };
     };
     'quick-open': {

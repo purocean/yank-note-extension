@@ -60,9 +60,12 @@ export declare function copyFile(file: FileItem, newPath: string): Promise<ApiRe
  */
 export declare function deleteFile(file: FileItem): Promise<ApiResult<any>>;
 export declare function fetchHistoryList(file: PathItem): Promise<{
-    name: string;
-    comment: string;
-}[]>;
+    size: number;
+    list: {
+        name: string;
+        comment: string;
+    }[];
+}>;
 export declare function fetchHistoryContent(file: PathItem, version: string): Promise<string>;
 export declare function deleteHistoryVersion(file: PathItem, version: string): Promise<any>;
 export declare function commentHistoryVersion(file: PathItem, version: string, msg: string): Promise<any>;

@@ -348,7 +348,6 @@ declare const languages: {
             add: string;
             'delete-warning': string;
             'error-choose-repo-path': string;
-            'keep-running-after-closing-window': string;
             tabs: {
                 repos: string;
                 appearance: string;
@@ -378,6 +377,7 @@ declare const languages: {
                     'enable-preview': string;
                     'font-family': string;
                     'complete-emoji': string;
+                    'todo-with-time': string;
                 };
                 render: {
                     'md-html': string;
@@ -431,6 +431,8 @@ declare const languages: {
                     'match-placeholder': string;
                     'replace-placeholder': string;
                 };
+                'hide-main-window-on-startup': string;
+                'keep-running-after-closing-window': string;
             };
         };
         'quick-open': {
@@ -1002,7 +1004,6 @@ declare const languages: {
             add: string;
             'delete-warning': string;
             'error-choose-repo-path': string;
-            'keep-running-after-closing-window': string;
             tabs: {
                 repos: string;
                 appearance: string;
@@ -1032,6 +1033,7 @@ declare const languages: {
                     'enable-preview': string;
                     'font-family': string;
                     'complete-emoji': string;
+                    'todo-with-time': string;
                 };
                 render: {
                     'md-html': string;
@@ -1085,6 +1087,8 @@ declare const languages: {
                     'match-placeholder': string;
                     'replace-placeholder': string;
                 };
+                'hide-main-window-on-startup': string;
+                'keep-running-after-closing-window': string;
             };
         };
         'quick-open': {
