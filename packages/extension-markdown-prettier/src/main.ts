@@ -37,7 +37,7 @@ registerPlugin({
       monaco.editor.addKeybindingRules([
         {
           keybinding: monaco.KeyMod.Alt | monaco.KeyMod.Shift | monaco.KeyCode.KeyF,
-          command: null
+          command: '-editor.action.formatDocument'
         },
         {
           keybinding: monaco.KeyMod.Alt | monaco.KeyMod.Shift | monaco.KeyCode.KeyL,
