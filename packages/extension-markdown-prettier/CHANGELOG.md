@@ -1,3 +1,12 @@
+## [1.4.1](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.4.0...extension-markdown-prettier-1.4.1) (2023-08-05)
+
+
+### Bug Fixes
+
+* **extension-markdown-prettier:** fix keybinding conflict ([c312dd8](https://github.com/purocean/yank-note-extension/commit/c312dd885e4bbe033a74b052d4bfc679beaaa277))
+
+
+
 # [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.3.1...extension-markdown-prettier-1.4.0) (2023-07-11)
 
 
