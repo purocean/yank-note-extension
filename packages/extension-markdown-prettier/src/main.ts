@@ -94,7 +94,7 @@ registerPlugin({
 
         const editor = ctx.editor.getEditor()
 
-        await editor.getAction('editor.action.formatDocument').run()
+        await editor.getAction('editor.action.formatDocument')?.run()
         editor.focus()
         payload.content = ctx.editor.getValue()
       })
