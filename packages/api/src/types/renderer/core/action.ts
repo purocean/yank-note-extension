@@ -1,24 +1,20 @@
-import { BuildInActions, BuildInActionName } from '@fe/types';
-export declare type ActionHandler<T extends string> = T extends BuildInActionName ? BuildInActions[T] : (...args: any[]) => any;
+import type { Action, ActionHandler, BuildInActionName } from '@fe/types';
 export declare type HookType = 'before-run' | 'after-run';
-export interface Action<T extends string> {
-    /**
-     * Name
-     */
-    name: T;
-    /**
-     * Associate shortcuts
-     */
-    keys?: null | (string | number)[];
-    /**
-     * Handler
-     */
-    handler: ActionHandler<T>;
-    /**
-     * When should execute handler
-     */
-    when?: () => boolean;
-}
+/**
+ * Get all actions
+ * @returns all actions
+ */
+export declare function getRawActions(): Action[];
+/**
+ * Register a action tapper.
+ * @param tapper
+ */
+export declare function tapAction(tapper: (action: Action) => void): void;
+/**
+ * Remove a action tapper.
+ * @param tapper
+ */
+export declare function removeActionTapper(tapper: (action: Action) => void): void;
 /**
  * Register an action.
  * @param action

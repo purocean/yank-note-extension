@@ -46,6 +46,7 @@ export declare function whenEditorReady(): Promise<{
     editor: typeof editor;
     monaco: typeof monaco;
 }>;
+export declare function lookupKeybindingKeys(commandId: string): string[] | null;
 /**
  * Insert text at current cursor.
  * @param text

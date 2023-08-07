@@ -6,6 +6,7 @@ export declare const nodeRequire: NodeRequire;
 export declare const isElectron: boolean;
 export declare const isMacOS: boolean;
 export declare const isWindows: boolean;
+export declare const isOtherOS: boolean;
 /**
  * Open in new window.
  * @param url

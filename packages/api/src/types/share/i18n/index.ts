@@ -37,6 +37,7 @@ declare const languages: {
         default: string;
         print: string;
         premium: {
+            confetti: string;
             'need-purchase': string;
             'buy-license': string;
             free: string;
@@ -86,6 +87,7 @@ declare const languages: {
             preferences: string;
             'close-window': string;
             'toggle-fullscreen': string;
+            'hide-main-window': string;
             tray: {
                 'open-main-window': string;
                 'open-in-browser': string;
@@ -348,6 +350,7 @@ declare const languages: {
             add: string;
             'delete-warning': string;
             'error-choose-repo-path': string;
+            'change-keyboard-shortcuts': string;
             tabs: {
                 repos: string;
                 appearance: string;
@@ -452,6 +455,8 @@ declare const languages: {
                 'insert-date': string;
                 'insert-time': string;
                 'reveal-line-in-preview': string;
+                'force-insert-new-line': string;
+                'force-insert-indent': string;
             };
             'switch-editor': string;
             'default-editor': string;
@@ -654,6 +659,56 @@ declare const languages: {
             title: string;
             content: string;
             reload: string;
+        };
+        'command-desc': {
+            'base_find-in-repository': string;
+            'control-center_toggle': string;
+            'doc_show-history': string;
+            'editor_toggle-wrap': string;
+            'file-tabs_close-current': string;
+            'file-tabs_search-tabs': string;
+            'file-tabs_show-welcome': string;
+            'file-tabs_switch-left': string;
+            'file-tabs_switch-right': string;
+            'layout_toggle-editor': string;
+            'layout_toggle-side': string;
+            'layout_toggle-view': string;
+            'layout_toggle-xterm': string;
+            'plugin_copy-content_copy-content': string;
+            'plugin_document-history-stack_back': string;
+            'plugin_document-history-stack_forward': string;
+            'plugin_editor_focus-editor': string;
+            'plugin_switch-todo_switch': string;
+            'view_enter-presentation': string;
+            'workbench_show-quick-open': string;
+            'workbench_toggle-outline': string;
+            'plugin_electron-zoom_zoom-in': string;
+            'plugin_electron-zoom_zoom-out': string;
+            'plugin_electron-zoom_zoom-reset': string;
+            view_refresh: string;
+            'extension_show-manager': string;
+            'keyboard-shortcuts_show-manager': string;
+            'plugin_image-localization_all': string;
+            tree_refresh: string;
+            'plugin_status-bar-theme_switch': string;
+        };
+        'keyboard-shortcuts': {
+            'keyboard-shortcuts': string;
+            command: string;
+            keybinding: string;
+            'not-set': string;
+            clear: string;
+            change: string;
+            reset: string;
+            search: string;
+            empty: string;
+            recorder: {
+                tip: string;
+                'conflict-commands': string;
+            };
+            conflict: string;
+            'conflict-title': string;
+            'conflict-commands': string;
         };
     };
     'zh-CN': {
@@ -693,6 +748,7 @@ declare const languages: {
         default: string;
         print: string;
         premium: {
+            confetti: string;
             'need-purchase': string;
             'buy-license': string;
             free: string;
@@ -742,6 +798,7 @@ declare const languages: {
             preferences: string;
             'close-window': string;
             'toggle-fullscreen': string;
+            'hide-main-window': string;
             tray: {
                 'open-main-window': string;
                 'open-in-browser': string;
@@ -1004,6 +1061,7 @@ declare const languages: {
             add: string;
             'delete-warning': string;
             'error-choose-repo-path': string;
+            'change-keyboard-shortcuts': string;
             tabs: {
                 repos: string;
                 appearance: string;
@@ -1108,6 +1166,8 @@ declare const languages: {
                 'insert-date': string;
                 'insert-time': string;
                 'reveal-line-in-preview': string;
+                'force-insert-new-line': string;
+                'force-insert-indent': string;
             };
             'switch-editor': string;
             'default-editor': string;
@@ -1310,6 +1370,56 @@ declare const languages: {
             title: string;
             content: string;
             reload: string;
+        };
+        'command-desc': {
+            'base_find-in-repository': string;
+            'control-center_toggle': string;
+            'doc_show-history': string;
+            'editor_toggle-wrap': string;
+            'file-tabs_close-current': string;
+            'file-tabs_search-tabs': string;
+            'file-tabs_show-welcome': string;
+            'file-tabs_switch-left': string;
+            'file-tabs_switch-right': string;
+            'layout_toggle-editor': string;
+            'layout_toggle-side': string;
+            'layout_toggle-view': string;
+            'layout_toggle-xterm': string;
+            'plugin_copy-content_copy-content': string;
+            'plugin_document-history-stack_back': string;
+            'plugin_document-history-stack_forward': string;
+            'plugin_editor_focus-editor': string;
+            'plugin_switch-todo_switch': string;
+            'view_enter-presentation': string;
+            'workbench_show-quick-open': string;
+            'workbench_toggle-outline': string;
+            'plugin_electron-zoom_zoom-in': string;
+            'plugin_electron-zoom_zoom-out': string;
+            'plugin_electron-zoom_zoom-reset': string;
+            view_refresh: string;
+            'extension_show-manager': string;
+            'keyboard-shortcuts_show-manager': string;
+            'plugin_image-localization_all': string;
+            tree_refresh: string;
+            'plugin_status-bar-theme_switch': string;
+        };
+        'keyboard-shortcuts': {
+            'keyboard-shortcuts': string;
+            command: string;
+            keybinding: string;
+            'not-set': string;
+            clear: string;
+            change: string;
+            reset: string;
+            search: string;
+            empty: string;
+            recorder: {
+                tip: string;
+                'conflict-commands': string;
+            };
+            conflict: string;
+            'conflict-title': string;
+            'conflict-commands': string;
         };
     };
 };

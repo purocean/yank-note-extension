@@ -29,7 +29,15 @@ export declare function removeHook<T extends HookType>(type: T, fun: HookFun<Bui
  * @returns
  */
 export declare function triggerHook<T extends HookTypeWithoutPayload>(type: T): Promise<void>;
-export declare function triggerHook<T extends HookTypeWithPayload>(type: T, arg: BuildInHookTypes[T], options?: {
-    breakable?: boolean;
+export declare function triggerHook<T extends HookTypeWithoutPayload>(type: T, arg: undefined, options: {
+    breakable: true;
+}): Promise<void>;
+export declare function triggerHook<T extends HookTypeWithPayload>(type: T, arg: BuildInHookTypes[T]): Promise<void>;
+export declare function triggerHook<T extends HookTypeWithPayload>(type: T, arg: BuildInHookTypes[T], options: {
+    breakable: true;
     ignoreError?: boolean;
 }): Promise<boolean>;
+export declare function triggerHook<T extends HookTypeWithPayload>(type: T, arg: BuildInHookTypes[T], options?: {
+    breakable?: false;
+    ignoreError?: boolean;
+}): Promise<void>;

@@ -1,3 +1,5 @@
+/// <reference types="node" />
+import { Language } from './i18n';
 export declare const MARKDOWN_FILE_EXT = ".md";
 export declare const ENCRYPTED_MARKDOWN_FILE_EXT = ".c.md";
 export declare const DOC_HISTORY_MAX_CONTENT_LENGTH = 102400;
@@ -7,3 +9,8 @@ export declare const API_BASE_URL = "https://api.yank-note.com";
 export declare const HOMEPAGE_URL = "https://yank-note.com";
 export declare function isMarkdownFile(path: string): boolean;
 export declare function isEncryptedMarkdownFile(path: string): boolean;
+export declare function getDefaultApplicationAccelerators(platform: NodeJS.Platform, lang?: Language): {
+    command: 'show-main-window' | 'hide-main-window' | 'open-in-browser';
+    accelerator: string | null;
+    description: string;
+}[];
