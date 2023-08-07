@@ -1,3 +1,12 @@
+# [1.6.0](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.5.0...extension-openai-1.6.0) (2023-08-07)
+
+
+### Features
+
+* **extension-openai:** support Yank Note 3.58.0 ([5499662](https://github.com/purocean/yank-note-extension/commit/54996629d266c3ccd811f37545e786b5ac6978df))
+
+
+
 # [1.5.0](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.4.0...extension-openai-1.5.0) (2023-03-04)
 
 
