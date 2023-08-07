@@ -190,9 +190,11 @@ registerPlugin({
 
     ctx.action.registerAction({
       name: actionName,
-      keys: [ctx.command.CtrlCmd, ctx.command.Alt, 'Period'],
+      keys: [ctx.keybinding.CtrlCmd, ctx.keybinding.Alt, 'Period'],
+      description: i18n.t('openai-complete'),
+      forUser: true,
       handler: () => {
-        ctx.editor.getEditor().getAction('editor.action.inlineSuggest.trigger').run()
+        ctx.editor.getEditor().getAction('editor.action.inlineSuggest.trigger')?.run()
         ctx.editor.getEditor().focus()
       },
       when: () => ctx.store.state.showEditor && !ctx.store.state.presentation,

@@ -2,7 +2,7 @@
   <div :class="{ panel: true, pined, loading }" tabindex="-1" @focus="focusEditor">
     <div class="content">
       <div class="head">
-        <svg-icon class="logo-icon" :name="openAIIcon" @click="submit" :title="i18n.t('openai-complete') + ' ' + ctx.command.getKeysLabel(actionName)" />
+        <svg-icon class="logo-icon" :name="openAIIcon" @click="submit" :title="i18n.t('openai-complete') + ' ' + ctx.keybinding.getKeysLabel(actionName)" />
         <b class="title">
           <span>OpenAI</span>
           <group-tabs
