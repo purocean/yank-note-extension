@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-milkdown-1.1.1...extension-milkdown-1.2.0) (2023-08-10)
+
+
+### Bug Fixes
+
+* **extension-milkdown:** fix image display ([fe9d5c3](https://github.com/purocean/yank-note-extension/commit/fe9d5c36463a1c4e85dcccc7779f2a4a718cc2a4))
+
+
+
 ## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-milkdown-1.1.0...extension-milkdown-1.1.1) (2022-11-14)
 
 
