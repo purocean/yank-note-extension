@@ -20,3 +20,7 @@ cat package.json | sed -e 's/"'${PACKAGE_NAME//\//\\/}'": ".*"/"'${PACKAGE_NAME/
 cat package.json | sed -e 's/"yank-note": ".*"/"yank-note": ">='$VERSION'"/' > package.json.new \
     && rm package.json && mv package.json.new package.json;
 git add -u && git commit -m "chore: bump $PACKAGE_NAME to $VERSION";
+
+cd ../../../;
+cd packages/api;
+pnpm publish --access public
