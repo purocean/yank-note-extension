@@ -693,7 +693,11 @@ declare const languages: {
             'plugin_status-bar-theme_switch': string;
         };
         'keyboard-shortcuts': {
+            workbench: string;
+            editor: string;
+            application: string;
             'keyboard-shortcuts': string;
+            unavailable: string;
             command: string;
             keybinding: string;
             'not-set': string;
@@ -1404,7 +1408,11 @@ declare const languages: {
             'plugin_status-bar-theme_switch': string;
         };
         'keyboard-shortcuts': {
+            workbench: string;
+            editor: string;
+            application: string;
             'keyboard-shortcuts': string;
+            unavailable: string;
             command: string;
             keybinding: string;
             'not-set': string;
