@@ -24,3 +24,8 @@ git add -u && git commit -m "chore: bump $PACKAGE_NAME to $VERSION";
 cd ../../../;
 cd packages/api;
 pnpm publish --access public
+
+cd ../../
+cd packages/create-extension
+pnpm version minor
+pnpm publish --access public
