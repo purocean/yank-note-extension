@@ -225,10 +225,12 @@ export declare namespace Components {
             onClick?: () => void;
             showInActionBar?: boolean;
             order?: number;
+            hidden?: boolean;
         } | {
             type: 'custom';
             component: any;
             order?: number;
+            hidden?: boolean;
         };
         type SchemaItem = {
             items: Item[];
@@ -388,6 +390,7 @@ export interface BuildInSettings {
 }
 export declare type BuildInActions = {
     'view.render-immediately': () => void;
+    'view.show-find-in-preview': () => void;
     'view.render': () => void;
     'view.refresh': () => void;
     'view.reveal-line': (startLine: number) => Promise<HTMLElement | null>;
@@ -518,10 +521,6 @@ export declare type BuildInHookTypes = {
     TREE_NODE_DBLCLICK: {
         node: Components.Tree.Node;
     };
-    MONACO_CHANGE_VALUE: {
-        uri: string;
-        value: string;
-    };
     MONACO_BEFORE_INIT: {
         monaco: typeof Monaco;
     };
@@ -539,7 +538,7 @@ export declare type BuildInHookTypes = {
     EDITOR_CURRENT_EDITOR_CHANGE: {
         current?: CustomEditor | null;
     };
-    EDITOR_CHANGE: {
+    EDITOR_CONTENT_CHANGE: {
         uri: string;
         value: string;
     };

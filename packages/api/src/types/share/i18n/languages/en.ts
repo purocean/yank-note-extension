@@ -535,6 +535,7 @@ declare const data: {
             'sync-rendering': string;
             'word-wrap': string;
             'typewriter-mode': string;
+            'find-in-preview': string;
         };
         navigation: {
             goto: string;
@@ -689,6 +690,8 @@ declare const data: {
         'plugin_image-localization_all': string;
         tree_refresh: string;
         'plugin_status-bar-theme_switch': string;
+        'editor_rotate-custom-editors': string;
+        'view_show-find-in-preview-widget': string;
     };
     'keyboard-shortcuts': {
         workbench: string;
@@ -711,6 +714,15 @@ declare const data: {
         conflict: string;
         'conflict-title': string;
         'conflict-commands': string;
+    };
+    'find-in-preview': {
+        'action-tips': {
+            prev: string;
+            next: string;
+            close: string;
+        };
+        results: string;
+        'toast-no-more': string;
     };
 };
 export declare type BaseLanguage = typeof data;
