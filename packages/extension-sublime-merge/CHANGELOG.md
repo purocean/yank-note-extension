@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-sublime-merge-1.2.1...extension-sublime-merge-1.3.0) (2023-08-17)
+
+
+### Features
+
+* **extension-sublime-merge:** support custom keyboard shortcut ([bfc78c8](https://github.com/purocean/yank-note-extension/commit/bfc78c88b17efd02249fc3874592c0437c05d304))
+
+
+
 ## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-sublime-merge-1.2.0...extension-sublime-merge-1.2.1) (2023-07-24)
 
 
