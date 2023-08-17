@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-git-push-1.2.0...extension-git-push-1.3.0) (2023-08-17)
+
+
+### Features
+
+* **extension-git-push:** support custom keyboard shortcut ([ab040fa](https://github.com/purocean/yank-note-extension/commit/ab040faa6a6d99b849e633d335361d9d6926fbcb))
+
+
+
 # [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-git-push-1.1.7...extension-git-push-1.2.0) (2023-07-18)
 
 
