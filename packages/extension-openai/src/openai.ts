@@ -2,7 +2,7 @@ import { ctx } from '@yank-note/runtime-api'
 import { reactive, ref, watch } from 'vue'
 
 export const settingKeyToken = 'plugin.editor-openai.api-token'
-export const actionName = 'plugin.editor-openai.trigger'
+export const actionName = __EXTENSION_ID__ + '.trigger'
 
 export const models = [
   'text-davinci-003',
