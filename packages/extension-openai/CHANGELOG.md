@@ -1,3 +1,7 @@
+# [1.7.0](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.6.0...extension-openai-1.7.0) (2023-08-17)
+
+
+
 # [1.6.0](https://github.com/purocean/yank-note-extension/compare/extension-openai-1.5.0...extension-openai-1.6.0) (2023-08-07)
 
 
