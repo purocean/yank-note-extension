@@ -37,51 +37,66 @@ registerPlugin({
       }
     })
 
+    const actionName = extensionName + '.open'
+
+    function openInSublimeMerge (node: { repo: string, type: string, path: string }) {
+      const currentRepo = ctx.base.getRepo(node.repo)
+      const path = currentRepo ? ctx.utils.path.join(currentRepo.path, node.path) : ''
+      if (path && currentRepo) {
+        const smgPath = ctx.setting.getSetting(settingKeySmgPath, 'smerge')
+
+        const args = [ctx.utils.quote(path)]
+
+        if (node.type === 'file') {
+          args.unshift('`log`')
+        }
+
+        ctx.api.rpc(`return require('util').promisify(require('child_process').execFile)(
+          ${ctx.utils.quote(smgPath)},
+          [${args.join(',')}],
+          {
+            cwd: ${ctx.utils.quote(currentRepo.path)},
+          }
+        )`).catch((e: any) => {
+          ctx.ui.useToast().show('warning', e.message)
+          setTimeout(() => {
+            ctx.ui.useToast().show('warning', i18n.t('error-tips'))
+            ctx.setting.showSettingPanel(settingKeySmgPath)
+          }, 1000)
+        })
+      }
+    }
+
     function getItems (node: Components.Tree.Node) {
       const items: Components.ContextMenu.Item[] = []
-      const openInSublimeMerge = () => {
-        const currentRepo = ctx.base.getRepo(node.repo)
-        const path = currentRepo ? ctx.utils.path.join(currentRepo.path, node.path) : ''
-        if (path && currentRepo) {
-          const smgPath = ctx.setting.getSetting(settingKeySmgPath, 'smerge')
-
-          const args = [ctx.utils.quote(path)]
-
-          if (node.type === 'file') {
-            args.unshift('`log`')
-          }
-
-          ctx.api.rpc(`return require('util').promisify(require('child_process').execFile)(
-            ${ctx.utils.quote(smgPath)},
-            [${args.join(',')}],
-            {
-              cwd: ${ctx.utils.quote(currentRepo.path)},
-            }
-          )`).catch((e: any) => {
-            ctx.ui.useToast().show('warning', e.message)
-            setTimeout(() => {
-              ctx.ui.useToast().show('warning', i18n.t('error-tips'))
-              ctx.setting.showSettingPanel(settingKeySmgPath)
-            }, 1000)
-          })
-        }
-      }
 
       if (node.type === 'file' || (node.type === 'dir' && node.path === '/')) {
         items.push(
           { type: 'separator' },
           {
-            id: extensionName + '-openInSublimeMerge',
+            id: actionName,
             label: node.type === 'file'
               ? i18n.t('show-history-in-sublime-merge')
               : i18n.t('open-in-sublime-merge'),
-            onClick: openInSublimeMerge
+            onClick: () => openInSublimeMerge(node)
           }
         )
       }
 
       return items
     }
+
+    ctx.action.registerAction({
+      name: actionName,
+      description: i18n.t('open-in-sublime-merge'),
+      forUser: true,
+      handler: () => {
+        const repo = ctx.store.state.currentRepo
+        if (repo) {
+          openInSublimeMerge({ repo: repo.name, type: 'dir', path: '/' })
+        }
+      }
+    })
 
     ctx.tree.tapContextMenus((items, node) => {
       items.push(...getItems(node))
