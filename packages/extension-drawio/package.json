@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-drawio",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "displayName": "Drawio",
   "description": "Drawio integration",
   "displayName_ZH-CN": "Drawio",

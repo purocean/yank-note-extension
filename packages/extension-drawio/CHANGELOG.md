@@ -1,3 +1,12 @@
+# [1.6.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.5.0...extension-drawio-1.6.0) (2023-08-18)
+
+
+### Features
+
+* **extension-drawio:** add custom drawio editor ([009fd1e](https://github.com/purocean/yank-note-extension/commit/009fd1e2de8be272eac5db18324f1c27254d0d96))
+
+
+
 # [1.5.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.4.0...extension-drawio-1.5.0) (2023-07-11)
 
 
