@@ -324,6 +324,10 @@ export async function buildSrcdoc ({ repo, path, content, page }: F): Promise<{ 
   return { html, content }
 }
 
+export function supported (file?: Doc | null) {
+  return !!(file && (file.path.endsWith('.drawio') || file.path.endsWith('.drawio.png')))
+}
+
 export function buildEditorSrcdoc (file: Doc) {
   if (FLAG_DEMO) {
     file.repo = 'help'
@@ -343,6 +347,7 @@ export function buildEditorSrcdoc (file: Doc) {
 
         const iframe = document.createElement('iframe')
         iframe.style.boxSizing = 'border-box'
+        iframe.style.display = 'block'
         iframe.style.width = '100vw'
         iframe.style.height = '100vh'
         iframe.style.border = 'none'

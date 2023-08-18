@@ -1,6 +1,8 @@
 import { registerPlugin } from '@yank-note/runtime-api'
-import { buildEditorSrcdoc, createDrawioFile, MarkdownItPlugin } from './drawio'
+import type { Components } from '@yank-note/runtime-api/types/types/renderer/types'
+import { buildEditorSrcdoc, createDrawioFile, MarkdownItPlugin, supported } from './drawio'
 import i18n from './i18n'
+import CustomEditor from './CustomEditor.vue'
 
 import './style.css'
 
@@ -11,17 +13,18 @@ registerPlugin({
   register: ctx => {
     ctx.markdown.registerPlugin(MarkdownItPlugin)
 
-    ctx.registerHook('TREE_NODE_SELECT', async ({ node }) => {
-      if (node.path.toLowerCase().includes('.drawio')) {
-        const { repo, path, name, type } = node
-        const srcdoc = buildEditorSrcdoc({ repo, path, name, type })
-        ctx.env.openWindow(ctx.embed.buildSrc(srcdoc, i18n.t('edit-diagram', name)), '_blank', { alwaysOnTop: false })
-
-        return true
+    function getFileContextMenu (node: Components.Tree.Node): Components.ContextMenu.Item {
+      return {
+        id: 'open-drawio',
+        type: 'normal',
+        label: i18n.t('edit-in-new-window'),
+        onClick: () => {
+          const { repo, path, name, type } = node
+          const srcdoc = buildEditorSrcdoc({ repo, path, name, type })
+          ctx.env.openWindow(ctx.embed.buildSrc(srcdoc, i18n.t('edit-diagram', name)), '_blank', { alwaysOnTop: false })
+        }
       }
-
-      return false
-    })
+    }
 
     ctx.tree.tapContextMenus((items, node) => {
       if (ctx.args.FLAG_READONLY) {
@@ -44,6 +47,26 @@ registerPlugin({
             onClick: () => createDrawioFile(node, '.drawio.png')
           },
         )
+      } else if (node.type === 'file' && supported(node)) {
+        items.unshift(
+          getFileContextMenu(node),
+          { type: 'separator' },
+        )
+      }
+    })
+
+    ctx.workbench.FileTabs.tapTabContextMenus((items, tab) => {
+      if (ctx.args.FLAG_READONLY) {
+        return
+      }
+
+      const doc = tab.payload.file
+
+      if (doc && supported(doc)) {
+        items.push(
+          { type: 'separator' },
+          getFileContextMenu(doc),
+        )
       }
     })
 
@@ -56,6 +79,16 @@ registerPlugin({
         ;(node as HTMLIFrameElement).src =
           'https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1&title=#R' +
           encodeURIComponent(node.dataset.xml)
+      }
+    })
+
+    ctx.editor.registerCustomEditor({
+      name: 'drawio',
+      displayName: 'Drawio',
+      component: CustomEditor,
+      hiddenPreview: true,
+      when ({ doc }) {
+        return supported(doc)
       }
     })
   }
