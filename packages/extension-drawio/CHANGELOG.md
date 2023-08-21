@@ -1,3 +1,12 @@
+# [1.7.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.6.0...extension-drawio-1.7.0) (2023-08-21)
+
+
+### Features
+
+* **extension-drawio:** check editor is dirty before close file ([af9fe7a](https://github.com/purocean/yank-note-extension/commit/af9fe7a20e02da8fde087f1e7f2ae315eb61762d))
+
+
+
 # [1.6.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.5.0...extension-drawio-1.6.0) (2023-08-18)
 
 
