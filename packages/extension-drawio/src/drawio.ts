@@ -175,6 +175,8 @@ const DrawioComponent = defineComponent({
   }
 })
 
+export const CUSTOM_EDITOR_IFRAME_ID = 'custom-editor-drawio'
+
 export function MarkdownItPlugin (md: Markdown) {
   const render = ({ url, content, page = 1 }: any) => {
     if (url) {
@@ -328,7 +330,7 @@ export function supported (file?: Doc | null) {
   return !!(file && (file.path.endsWith('.drawio') || file.path.endsWith('.drawio.png')))
 }
 
-export function buildEditorSrcdoc (file: Doc) {
+export function buildEditorSrcdoc (file: Doc, showExit = true) {
   if (FLAG_DEMO) {
     file.repo = 'help'
   }
@@ -343,7 +345,7 @@ export function buildEditorSrcdoc (file: Doc) {
     </style>
     <script>
       function init (doc) {
-        const DRAW_IFRAME_URL = '${BASE_URL}/index.html?embed=1&proto=json';
+        const DRAW_IFRAME_URL = '${BASE_URL}/index.html?embed=1&proto=json${!showExit ? '&noExitBtn=1' : ''}';
 
         const iframe = document.createElement('iframe')
         iframe.style.boxSizing = 'border-box'
@@ -378,6 +380,18 @@ export function buildEditorSrcdoc (file: Doc) {
             const { event } = msg
 
             if (event === 'init') {
+              // hack for get editorUI
+              const _updateActionStates = iframe.contentWindow.App.prototype.updateActionStates
+              iframe.contentWindow.App.prototype.updateActionStates = function () {
+                window.drawioApp = this
+                iframe.contentWindow.App.prototype.updateActionStates = _updateActionStates
+                return _updateActionStates.apply(this, arguments)
+              }
+
+              window.getIsDirty = function () {
+                return window.drawioApp.editor.modified
+              }
+
               let { content, hash } = await window.embedCtx.api.readFile(doc, asPng)
               doc.contentHash = hash
 

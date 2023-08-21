@@ -1,13 +1,13 @@
 <template>
   <div class="custom-editor">
-    <iframe v-if="url" :src="url" />
+    <iframe :id="CUSTOM_EDITOR_IFRAME_ID" v-if="url" :src="url" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, watchEffect } from 'vue'
 import { ctx } from '@yank-note/runtime-api'
-import { buildEditorSrcdoc, supported } from './drawio'
+import { CUSTOM_EDITOR_IFRAME_ID, buildEditorSrcdoc, supported } from './drawio'
 
 const url = ref('')
 
@@ -15,7 +15,7 @@ watchEffect(() => {
   const currentFile = ctx.store.state.currentFile
 
   if (supported(currentFile)) {
-    const srcdoc = buildEditorSrcdoc(currentFile!)
+    const srcdoc = buildEditorSrcdoc(currentFile!, false)
     url.value = ctx.embed.buildSrc(srcdoc, 'drawio editor')
   } else {
     url.value = ''

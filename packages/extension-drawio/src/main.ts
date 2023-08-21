@@ -1,6 +1,6 @@
 import { registerPlugin } from '@yank-note/runtime-api'
 import type { Components } from '@yank-note/runtime-api/types/types/renderer/types'
-import { buildEditorSrcdoc, createDrawioFile, MarkdownItPlugin, supported } from './drawio'
+import { buildEditorSrcdoc, createDrawioFile, CUSTOM_EDITOR_IFRAME_ID, MarkdownItPlugin, supported } from './drawio'
 import i18n from './i18n'
 import CustomEditor from './CustomEditor.vue'
 
@@ -89,6 +89,14 @@ registerPlugin({
       hiddenPreview: true,
       when ({ doc }) {
         return supported(doc)
+      },
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      getIsDirty () {
+        const iframe = document.getElementById(CUSTOM_EDITOR_IFRAME_ID) as HTMLIFrameElement
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return !!(iframe?.contentWindow?.getIsDirty?.())
       }
     })
   }
