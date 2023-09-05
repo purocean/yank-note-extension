@@ -552,6 +552,9 @@ export declare type BuildInHookTypes = {
         oldDoc: Doc;
         newDoc: Doc;
     };
+    DOC_PRE_SWITCH: {
+        doc?: Doc | null;
+    };
     DOC_BEFORE_SAVE: {
         doc: Doc;
         content: string;
@@ -575,6 +578,7 @@ export declare type BuildInHookTypes = {
     DOC_CHANGED: {
         doc: Doc;
     };
+    DOC_PRE_ENSURE_CURRENT_FILE_SAVED: never;
     I18N_CHANGE_LANGUAGE: {
         lang: LanguageName;
         currentLang: Language;
@@ -624,6 +628,7 @@ export declare type CustomEditor = {
     hiddenPreview?: boolean;
     when: (ctx: CustomEditorCtx) => boolean | Promise<boolean>;
     component: any;
+    getIsDirty?: () => boolean | Promise<boolean>;
 };
 export interface CodeRunner {
     name: string;

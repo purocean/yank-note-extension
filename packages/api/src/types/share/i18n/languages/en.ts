@@ -287,6 +287,7 @@ declare const data: {
             duplicate: string;
             'create-doc': string;
             'create-dir': string;
+            'add-item': string;
             rename: string;
             delete: string;
             'open-in-os': string;
@@ -692,6 +693,7 @@ declare const data: {
         'plugin_status-bar-theme_switch': string;
         'editor_rotate-custom-editors': string;
         'view_show-find-in-preview-widget': string;
+        'tree_reveal-current-node': string;
     };
     'keyboard-shortcuts': {
         workbench: string;

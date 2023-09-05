@@ -31,3 +31,12 @@ export declare function md5(content: any): string;
 export declare function binMd5(data: any): string;
 export declare function strToBase64(str: string): string;
 export declare function copyText(text?: string): void;
+/**
+ * Wait until condition is true
+ * @param fn
+ * @param interval
+ * @param timeout
+ */
+export declare function waitCondition(fn: () => boolean | Promise<boolean>, interval?: number, timeout?: number): (Promise<void> | {
+    cancel: () => void;
+});

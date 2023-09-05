@@ -171,5 +171,10 @@ export declare function triggerSave(): void;
  * Get current editor is default or not.
  * @returns
  */
-export declare function getIsDefault(): boolean;
+export declare function isDefault(): boolean;
+/**
+ * Get current editor is dirty or not.
+ * @returns
+ */
+export declare function isDirty(): Promise<boolean>;
 export {};
