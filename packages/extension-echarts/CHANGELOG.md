@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/purocean/yank-note-extension/compare/extension-echarts-1.4.0...extension-echarts-1.5.0) (2023-09-22)
+
+
+### Features
+
+* **extension-echarts:** support safe mode ([6cbd7e0](https://github.com/purocean/yank-note-extension/commit/6cbd7e079dbd3d2a90947ec546983237eb2427e5))
+
+
+
 # [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-echarts-1.3.1...extension-echarts-1.4.0) (2023-01-06)
 
 
