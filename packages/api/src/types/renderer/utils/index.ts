@@ -10,6 +10,7 @@ export * as composable from './composable';
  */
 export declare function quote(str: string, quote?: string): string;
 export declare function encodeMarkdownLink(path: string): string;
+export declare function escapeMd(str: string): string;
 export declare function removeQuery(url: string): string;
 export declare function dataURLtoBlob(dataURL: string): Blob;
 export declare function fileToBase64URL(file: File | Blob): Promise<string>;

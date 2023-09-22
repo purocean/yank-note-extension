@@ -9,6 +9,7 @@ export declare type MenuItem = {
     hidden?: boolean;
     checked?: boolean;
     order?: number;
+    ellipsis?: boolean;
     onClick?: (item: MenuItem) => void;
 } | {
     type: 'separator';

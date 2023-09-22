@@ -21,6 +21,7 @@ export declare function createCurrentDocChecker(): {
  * @returns
  */
 export declare function isMarkdownFile(doc: Doc): boolean;
+export declare function isOutOfRepo(doc?: Doc | null): boolean;
 /**
  * Determine if the document is encrypted.
  * @param doc
@@ -105,6 +106,7 @@ export declare function ensureCurrentFileSaved(): Promise<void>;
  * @param force
  */
 export declare function switchDoc(doc: Doc | null, force?: boolean): Promise<void>;
+export declare function switchDocByPath(path: string): Promise<void>;
 /**
  * Mark document.
  * @param doc

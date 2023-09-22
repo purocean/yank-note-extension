@@ -380,6 +380,7 @@ declare const data: {
                 'font-family': string;
                 'complete-emoji': string;
                 'todo-with-time': string;
+                'suggest-on-trigger-characters': string;
             };
             render: {
                 'md-html': string;
@@ -389,6 +390,10 @@ declare const data: {
                 'md-sup': string;
                 'md-sub': string;
                 'md-emoji': string;
+                'multimd-multiline': string;
+                'multimd-rowspan': string;
+                'multimd-headerless': string;
+                'multimd-multibody': string;
             };
             theme: string;
             language: string;

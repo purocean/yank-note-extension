@@ -48,6 +48,7 @@ export declare function trashItem(path: string): Promise<void>;
  * Reload main window main page
  */
 export declare function reloadMainWindow(): Promise<void>;
+export declare function getAllRepos(): import("@fe/types").Repo[];
 /**
  * get repo by name
  * @param name
