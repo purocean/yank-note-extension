@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-sublime-merge-1.3.0...extension-sublime-merge-1.4.0) (2023-09-22)
+
+
+### Features
+
+* **extension-sublime-merge:** support safe mode ([d164b5c](https://github.com/purocean/yank-note-extension/commit/d164b5c790c9f4ca029cf1d7e0a85a0b1d9a9989))
+
+
+
 # [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-sublime-merge-1.2.1...extension-sublime-merge-1.3.0) (2023-08-17)
 
 
