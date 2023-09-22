@@ -1,6 +1,7 @@
-import type Markdown from '@yank-note/runtime-api/types/types/third-party/markdown-it'
 import * as echarts from 'echarts'
 import { ctx } from '@yank-note/runtime-api'
+import type Markdown from '@yank-note/runtime-api/types/types/third-party/markdown-it'
+import type { RenderEnv } from '@yank-note/runtime-api/types/types/renderer/types'
 
 const { debounce } = ctx.lib.lodash
 const { defineComponent, h, nextTick, onBeforeUnmount, onMounted, ref, watch } = ctx.lib.vue
@@ -169,12 +170,12 @@ export const Echarts = defineComponent({
 
 export const MarkdownItPlugin = (md: Markdown) => {
   const temp = md.renderer.rules.fence!.bind(md.renderer.rules)
-  md.renderer.rules.fence = (tokens, idx, options, env, slf) => {
+  md.renderer.rules.fence = (tokens, idx, options, env: RenderEnv, slf) => {
     const token = tokens[idx]
 
     const code = token.content.trim()
     const firstLine = code.split(/\n/)[0].trim()
-    if (token.info !== 'js' || !firstLine.includes('--echarts--')) {
+    if (token.info !== 'js' || !firstLine.includes('--echarts--') || env.safeMode) {
       return temp(tokens, idx, options, env, slf)
     }
 
