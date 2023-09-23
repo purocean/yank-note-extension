@@ -104,7 +104,7 @@ registerPlugin({
 
     ctx.workbench.FileTabs.tapTabContextMenus((items, tab) => {
       const doc = tab.payload.file
-      if (!doc || ctx.doc.isOutOfRepo(doc)) {
+      if (!doc || doc.repo.startsWith('__')) {
         return
       }
 
