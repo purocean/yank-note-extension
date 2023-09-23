@@ -1,3 +1,12 @@
+## [1.4.1](https://github.com/purocean/yank-note-extension/compare/extension-sublime-merge-1.4.0...extension-sublime-merge-1.4.1) (2023-09-23)
+
+
+### Bug Fixes
+
+* **extension-sublime-merge:** disable context menu of file tabs of outside repository ([84c930c](https://github.com/purocean/yank-note-extension/commit/84c930c4caf62b74e8e83653b0803f37b07592f4))
+
+
+
 # [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-sublime-merge-1.3.0...extension-sublime-merge-1.4.0) (2023-09-22)
 
 
