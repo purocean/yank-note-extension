@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Excalidraw</title>
+    <meta charset="UTF-8" />
+    <style>
+      html, body {
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <script>
+      // use relative path to assets
+      window.EXCALIDRAW_ASSET_PATH = ''
+      window.EXCALIDRAW_EXPORT_SOURCE = 'https://github.com/purocean/yank-note-extension/tree/main/packages/extension-excalidraw'
+      window.ctx = (window.opener || window.parent || window).ctx
+    </script>
+    <script type="text/javascript" src="./index.js"></script>
+  </body>
+</html>
