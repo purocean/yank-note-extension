@@ -37,14 +37,8 @@ registerPlugin({
           {
             id: 'create-drawio-drawio',
             type: 'normal',
-            label: i18n.t('create-drawio-file', '.drawio'),
-            onClick: () => createDrawioFile(node, '.drawio')
-          },
-          {
-            id: 'create-drawio-png',
-            type: 'normal',
-            label: i18n.t('create-drawio-file', '.png'),
-            onClick: () => createDrawioFile(node, '.drawio.png')
+            label: i18n.t('create-drawio-file'),
+            onClick: () => createDrawioFile(node)
           },
         )
       } else if (node.type === 'file' && supported(node)) {
