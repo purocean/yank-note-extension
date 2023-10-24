@@ -137,7 +137,7 @@ registerPlugin({
       const win = getWin()
       if (win && win.ctx) {
         const _ctx: Ctx = win.ctx
-        _ctx.store.commit('setCurrentFile', JSON.parse(JSON.stringify(ctx.store.state.currentFile)))
+        _ctx.store.state.currentFile = JSON.parse(JSON.stringify(ctx.store.state.currentFile))
       }
     }
 
@@ -145,7 +145,7 @@ registerPlugin({
       const win = getWin()
       if (win && win.ctx) {
         const _ctx: Ctx = win.ctx
-        _ctx.store.commit('setCurrentRepo', JSON.parse(JSON.stringify(ctx.store.state.currentRepo)))
+        _ctx.store.state.currentRepo = JSON.parse(JSON.stringify(ctx.store.state.currentRepo))
       }
     }
 
