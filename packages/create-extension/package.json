@@ -1,6 +1,6 @@
 {
   "name": "create-yank-note-extension",
-  "version": "1.20.0",
+  "version": "1.21.0",
   "license": "MIT",
   "author": "purocean",
   "bin": {
