@@ -159,7 +159,7 @@ async function downloadSvg () {
 
 async function downloadPng () {
   await prepareExport(async el => {
-    el.style.width = (Number(el.getAttribute('width')!) * 2)+ 'px'
+    el.style.width = (Number(el.getAttribute('width')!) * 2) + 'px'
     el.style.height = (Number(el.getAttribute('height')!) * 2) + 'px'
 
     const dataUrl = await ctx.lib.domtoimage.toPng(el, { bgcolor: '#fff' })
