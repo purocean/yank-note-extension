@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.1.2...extension-pop-preview-1.2.0) (2023-10-24)
+
+
+### Features
+
+* **extension-popup-preview:** support runtime 3.36.1 ([61cf733](https://github.com/purocean/yank-note-extension/commit/61cf73315031213473568f6dbc4cf4dfb5e9f36c))
+
+
+
 ## [1.1.2](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.1.1...extension-pop-preview-1.1.2) (2023-05-04)
 
 
