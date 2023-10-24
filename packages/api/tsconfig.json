@@ -21,7 +21,6 @@
     "baseUrl": ".",
     "paths": {
       "vue": ["src/types/third-party/vue"],
-      "vuex": ["src/types/third-party/vuex"],
       "dayjs": ["src/types/third-party/dayjs"],
       "semver": ["src/types/third-party/semver"],
       "crypto-js": ["src/types/third-party/crypto-js"],

@@ -12,7 +12,6 @@ yarn tsc --esModuleInterop true --declaration true --emitDeclarationOnly true --
 
 mkdir -p ../packages/api/src/types/third-party
 
-cp -r node_modules/vuex/types ../packages/api/src/types/third-party/vuex;
 mkdir -p ../packages/api/src/types/third-party/vue;
 cp node_modules/@vue/*/dist/*-*.d.ts ../packages/api/src/types/third-party/vue;
 cp node_modules/@vue/reactivity/dist/reactivity.d.ts ../packages/api/src/types/third-party/vue;
