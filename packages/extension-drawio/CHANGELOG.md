@@ -1,3 +1,13 @@
+# [1.8.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.7.0...extension-drawio-1.8.0) (2023-10-27)
+
+
+### Features
+
+* **extension-drawio:** optimize UX ([12cd2dc](https://github.com/purocean/yank-note-extension/commit/12cd2dcb3047f5c477f217f3a90a5595d72bc757))
+* **extension-drawio:** support runtime 3.63.2 ([ca42239](https://github.com/purocean/yank-note-extension/commit/ca42239964de1064b130766d4daa1374391de539))
+
+
+
 # [1.7.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.6.0...extension-drawio-1.7.0) (2023-08-21)
 
 
