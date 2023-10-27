@@ -87,7 +87,7 @@ declare const ctx: Readonly<{
                     birthtime: number;
                     size: number;
                 } | undefined;
-                status?: "saved" | "save-failed" | "loaded" | undefined;
+                status?: "unsaved" | "saved" | "save-failed" | "loaded" | undefined;
                 absolutePath?: string | undefined;
                 plain?: boolean | undefined;
                 repo: string;
@@ -110,7 +110,7 @@ declare const ctx: Readonly<{
                             birthtime: number;
                             size: number;
                         } | undefined;
-                        status?: "saved" | "save-failed" | "loaded" | undefined;
+                        status?: "unsaved" | "saved" | "save-failed" | "loaded" | undefined;
                         absolutePath?: string | undefined;
                         plain?: boolean | undefined;
                         repo: string;
@@ -128,7 +128,7 @@ declare const ctx: Readonly<{
             editor: string;
         };
         watch: typeof lib.vue.watch;
-        subscribe: typeof lib.vue.watchEffect;
+        watchEffect: typeof lib.vue.watchEffect;
         getters: {
             isSaved: lib.vue.ComputedRef<boolean>;
         };

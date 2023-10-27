@@ -76,7 +76,7 @@ declare const _default: {
                 birthtime: number;
                 size: number;
             } | undefined;
-            status?: "saved" | "save-failed" | "loaded" | undefined;
+            status?: "unsaved" | "saved" | "save-failed" | "loaded" | undefined;
             absolutePath?: string | undefined;
             plain?: boolean | undefined;
             repo: string;
@@ -99,7 +99,7 @@ declare const _default: {
                         birthtime: number;
                         size: number;
                     } | undefined;
-                    status?: "saved" | "save-failed" | "loaded" | undefined;
+                    status?: "unsaved" | "saved" | "save-failed" | "loaded" | undefined;
                     absolutePath?: string | undefined;
                     plain?: boolean | undefined;
                     repo: string;
@@ -117,7 +117,7 @@ declare const _default: {
         editor: string;
     };
     watch: typeof watch;
-    subscribe: typeof watchEffect;
+    watchEffect: typeof watchEffect;
     getters: {
         isSaved: import("vue").ComputedRef<boolean>;
     };
