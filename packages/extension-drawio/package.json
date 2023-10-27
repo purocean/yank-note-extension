@@ -20,7 +20,7 @@
   "changelogUrl": "https://fastly.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/CHANGELOG.md",
   "engines": {
     "node": ">=14.6.0",
-    "yank-note": "^3.63.0"
+    "yank-note": "^3.63.2"
   },
   "files": [
     "*.md",
