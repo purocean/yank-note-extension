@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.1.0...extension-excalidraw-1.1.1) (2023-10-27)
+
+
+### Bug Fixes
+
+* **extension-excalidraw:** use local assets path ([d03abdb](https://github.com/purocean/yank-note-extension/commit/d03abdb89fd64231f4d542a86020158bf015f978))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.0.1...extension-excalidraw-1.1.0) (2023-10-27)
 
 
