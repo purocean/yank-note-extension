@@ -69,6 +69,6 @@ registerPlugin({
 
     ctx.registerHook('THEME_CHANGE', updateTheme)
     ctx.registerHook('SETTING_FETCHED', updateTheme)
-    ctx.store.watch((state) => state.showSetting, updateTheme)
+    ctx.store.watch(() => ctx.store.state.showSetting, updateTheme)
   }
 })
