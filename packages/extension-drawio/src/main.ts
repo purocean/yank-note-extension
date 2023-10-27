@@ -84,8 +84,6 @@ registerPlugin({
       when ({ doc }) {
         return supported(doc)
       },
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       getIsDirty () {
         const iframe = document.getElementById(CUSTOM_EDITOR_IFRAME_ID) as HTMLIFrameElement
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment

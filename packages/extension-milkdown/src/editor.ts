@@ -142,8 +142,6 @@ const editor = Editor.make()
   .use($shortcut(() => {
     return {
       'Mod-s': () => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         ctx.editor.triggerSave()
         return true
       }

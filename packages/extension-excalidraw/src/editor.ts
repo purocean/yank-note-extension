@@ -174,13 +174,9 @@ const App = () => {
   const writeFileDebounced = React.useCallback(ctx.lib.lodash.debounce(saveFile, 2000), [saveFile])
 
   React.useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     ctx.registerHook('DEEP_LINK_OPEN', handleDeepLink)
 
     return () => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       ctx.removeHook('DEEP_LINK_OPEN', handleDeepLink)
     }
   }, [handleDeepLink])
@@ -208,8 +204,6 @@ const App = () => {
 
     if (currentSceneVersion !== lastSceneVersion) {
       setStatusText(i18n.t('unsaved'))
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       ctx.store.state.currentFile!.status = 'unsaved'
     }
 
