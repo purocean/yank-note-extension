@@ -48,11 +48,15 @@ const Mermaid = defineComponent({
       logger.debug('render', props.code)
       const mermaid = await getMermaidLib()
       try {
-        mermaid.render(`mermaid-${mid++}`, props.code, (svgCode: string) => {
-          result.value = svgCode
-          errMsg.value = ''
-          img.value = getImageUrl(svgCode)
-        }, container.value)
+        let { svg } = await mermaid.render(`mermaid-${mid++}`, props.code, container.value)
+        // get max width
+        const width = svg.match(/style="max-width: ([\d.]+px);"/)?.[1]
+        if (width) {
+          svg = svg.replace('width="100%"', `width="${width}"`)
+        }
+        result.value = svg
+        errMsg.value = ''
+        img.value = getImageUrl(svg)
       } catch (error) {
         errMsg.value = error.str || String(error)
         logger.error('render', error)
