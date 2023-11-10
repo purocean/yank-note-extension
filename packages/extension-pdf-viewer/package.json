@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-pdf-viewer",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "displayName": "PDF Viewer",
   "description": "PDF viewer extension",
   "displayName_ZH-CN": "PDF Viewer",
