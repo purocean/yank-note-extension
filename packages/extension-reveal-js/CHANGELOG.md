@@ -1,3 +1,17 @@
+# [1.6.0](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.5.1...extension-reveal-js-1.6.0) (2023-11-10)
+
+
+### Bug Fixes
+
+* **extension-reveal-js:** fix code highlight on rerender ([0840d41](https://github.com/purocean/yank-note-extension/commit/0840d41077ce252058c7c0ba15563928b28e558e))
+
+
+### Features
+
+* **extension-reveal-js:** upgrade reveal.js to 5.0.2 ([4ee804f](https://github.com/purocean/yank-note-extension/commit/4ee804f2d357095a68a7150829fe43f0590c0e72))
+
+
+
 ## [1.5.1](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.5.0...extension-reveal-js-1.5.1) (2022-10-23)
 
 
