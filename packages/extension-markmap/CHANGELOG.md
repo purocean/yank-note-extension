@@ -1,3 +1,12 @@
+## [1.5.2](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.5.1...extension-markmap-1.5.2) (2023-11-10)
+
+
+### Features
+
+* use base64 image ([754f36c](https://github.com/purocean/yank-note-extension/commit/754f36c8da832dadff392c1df9bd79b7921acfe0))
+
+
+
 ## [1.5.1](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.5.0...extension-markmap-1.5.1) (2022-10-24)
 
 
