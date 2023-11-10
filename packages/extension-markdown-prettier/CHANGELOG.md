@@ -1,3 +1,12 @@
+## [1.4.2](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.4.1...extension-markdown-prettier-1.4.2) (2023-11-10)
+
+
+### Features
+
+* use base64 image ([754f36c](https://github.com/purocean/yank-note-extension/commit/754f36c8da832dadff392c1df9bd79b7921acfe0))
+
+
+
 ## [1.4.1](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.4.0...extension-markdown-prettier-1.4.1) (2023-08-05)
 
 
