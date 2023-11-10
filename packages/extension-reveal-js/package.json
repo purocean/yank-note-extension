@@ -18,7 +18,7 @@
   "icon": "./icon.svg",
   "engines": {
     "node": ">=14.6.0",
-    "yank-note": "^3.41.0"
+    "yank-note": "^3.63.3"
   },
   "requirements": {
     "premium": true
@@ -52,7 +52,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^8.7.1",
-    "reveal.js": "^4.3.1",
+    "reveal.js": "^5.0.2",
     "rollup-plugin-copy": "^3.4.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.3",
