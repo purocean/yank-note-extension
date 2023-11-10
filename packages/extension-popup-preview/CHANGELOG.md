@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.2.0...extension-pop-preview-1.2.1) (2023-11-10)
+
+
+### Features
+
+* use base64 image ([754f36c](https://github.com/purocean/yank-note-extension/commit/754f36c8da832dadff392c1df9bd79b7921acfe0))
+
+
+
 # [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.1.2...extension-pop-preview-1.2.0) (2023-10-24)
 
 
