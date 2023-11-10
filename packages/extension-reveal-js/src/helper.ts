@@ -74,6 +74,12 @@ export async function processReveal (win: Window, opts: Record<string, any>, con
     const state = Reveal.getState()
     Reveal.sync()
     Reveal.slide(state.indexh, state.indexv, state.indexf)
+    const RevealHighlight = (win.window as any).RevealHighlight
+    RevealHighlight().init({
+      getConfig: () => Reveal.getConfig(),
+      getRevealElement: () => Reveal.getRevealElement(),
+      on: () => 0, // noop
+    })
   }
 }
 
