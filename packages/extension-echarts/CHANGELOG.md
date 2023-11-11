@@ -1,3 +1,12 @@
+## [1.5.2](https://github.com/purocean/yank-note-extension/compare/extension-echarts-1.5.1...extension-echarts-1.5.2) (2023-11-11)
+
+
+### Reverts
+
+* Revert "feat: use base64 image" ([8492d5a](https://github.com/purocean/yank-note-extension/commit/8492d5a0c1c84991d56b06f9176632f8406d1e26))
+
+
+
 ## [1.5.1](https://github.com/purocean/yank-note-extension/compare/extension-echarts-1.5.0...extension-echarts-1.5.1) (2023-11-10)
 
 
