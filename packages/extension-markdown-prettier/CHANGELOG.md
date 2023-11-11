@@ -1,3 +1,12 @@
+## [1.4.3](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.4.2...extension-markdown-prettier-1.4.3) (2023-11-11)
+
+
+### Reverts
+
+* Revert "feat: use base64 image" ([8492d5a](https://github.com/purocean/yank-note-extension/commit/8492d5a0c1c84991d56b06f9176632f8406d1e26))
+
+
+
 ## [1.4.2](https://github.com/purocean/yank-note-extension/compare/extension-markdown-prettier-1.4.1...extension-markdown-prettier-1.4.2) (2023-11-10)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-markdown-prettier",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "displayName": "Markdown Prettier",
   "description": "Markdown Formatter for Yank Note",
   "displayName_ZH-CN": "Markdown Prettier",
