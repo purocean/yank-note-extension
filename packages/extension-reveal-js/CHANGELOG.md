@@ -1,3 +1,14 @@
+# [1.7.0](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.6.2...extension-reveal-js-1.7.0) (2023-11-22)
+
+
+### Features
+
+* **extension-reveal-js:** add "Reload (Keep Current Slide)" button ([870a027](https://github.com/purocean/yank-note-extension/commit/870a0273c32d5b07a71053a439f2e49ac5eb83b3))
+* **extension-reveal-js:** optimize print ([fe83573](https://github.com/purocean/yank-note-extension/commit/fe835736e9383533cf7613f24b458331bf09e177))
+* **extension-reveal-js:** support custom style ([b4adf3b](https://github.com/purocean/yank-note-extension/commit/b4adf3ba4069355bf30d6beb4bf8153bb9654917))
+
+
+
 ## [1.6.2](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.6.1...extension-reveal-js-1.6.2) (2023-11-11)
 
 
