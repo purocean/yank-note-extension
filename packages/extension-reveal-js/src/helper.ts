@@ -114,7 +114,7 @@ export async function present (print = false) {
     processReveal(win, opts, contentPromise, true)
 
     if (print) {
-      setTimeout(() => win.window.print(), 500)
+      setTimeout(() => win.window.print(), 1500)
     }
   }
 
@@ -122,7 +122,7 @@ export async function present (print = false) {
     processReveal(win, opts, contentHtml, false)
 
     if (print) {
-      setTimeout(() => win.window.print(), 500)
+      setTimeout(() => win.window.print(), 1500)
     }
   }
 
