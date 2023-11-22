@@ -70,6 +70,11 @@ export async function processReveal (win: Window, opts: Record<string, any>, con
       // Learn about plugins: https://revealjs.com/plugins/
       plugins: [RevealHighlight, RevealMath.KaTeX]
     })
+
+    const style = win.window.document.createElement('style')
+    style.id = 'reveal-custom-style'
+    style.innerHTML = opts.customStyle || ''
+    win.window.document.head.appendChild(style)
   } else {
     const state = Reveal.getState()
     Reveal.sync()
@@ -80,6 +85,11 @@ export async function processReveal (win: Window, opts: Record<string, any>, con
       getRevealElement: () => Reveal.getRevealElement(),
       on: () => 0, // noop
     })
+
+    const style = win.window.document.getElementById('reveal-custom-style')
+    if (style) {
+      style.innerHTML = opts.customStyle || ''
+    }
   }
 }
 
