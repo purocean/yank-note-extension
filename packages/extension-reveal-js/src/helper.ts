@@ -9,11 +9,13 @@ export const i18n = ctx.i18n.createI18n({
     present: 'Present with Reveal.js',
     print: 'Print with Reveal.js',
     fullscreen: 'Fullscreen',
+    'reload-current': 'Reload (Keep Current Slide)',
   },
   'zh-CN': {
     present: '使用 Reveal.js 演示',
     print: '使用 Reveal.js 打印',
     fullscreen: '全屏',
+    'reload-current': '重载 (保持当前页)',
   }
 })
 
@@ -48,7 +50,12 @@ export function getContentHtml () {
   })
 }
 
-export async function processReveal (win: Window, opts: Record<string, any>, contentHtml: string | Promise<string>, init: boolean) {
+export function getState (win: Window) {
+  const Reveal = (win.window as any).Reveal
+  return Reveal.getState()
+}
+
+export async function processReveal (win: Window, opts: Record<string, any>, contentHtml: string | Promise<string>, init: boolean, state?: any) {
   const content = await contentHtml
 
   const tmp = document.createElement('div')
@@ -62,7 +69,7 @@ export async function processReveal (win: Window, opts: Record<string, any>, con
   if (init) {
     const RevealHighlight = (win.window as any).RevealHighlight
     const RevealMath = (win.window as any).RevealMath
-    Reveal.initialize({
+    await Reveal.initialize({
       hash: true,
       controls: true,
       center: true,
@@ -75,6 +82,10 @@ export async function processReveal (win: Window, opts: Record<string, any>, con
     style.id = 'reveal-custom-style'
     style.innerHTML = opts.customStyle || ''
     win.window.document.head.appendChild(style)
+
+    if (state) {
+      Reveal.slide(state.indexh, state.indexv, state.indexf)
+    }
   } else {
     const state = Reveal.getState()
     Reveal.sync()

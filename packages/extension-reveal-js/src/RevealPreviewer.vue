@@ -3,6 +3,7 @@
     <div v-if="src" class="reveal-js-preview">
       <div class="reveal-js-preview-action">
         <button class="btn small" @click="init">{{_$t('reload')}}</button>
+        <button class="btn small" @click="initWithState">{{$t('reload-current')}}</button>
         <button class="btn small" @click="fullscreen">{{$t('fullscreen')}}</button>
         <button class="btn small" @click="present(true)">{{_$t('print')}}</button>
         <button class="btn small" @click="present(false)">{{_$t('open-in-new-window')}}</button>
@@ -14,7 +15,7 @@
 
 <script lang="ts" setup>
 import { ctx } from '@yank-note/runtime-api'
-import { buildHTML, processReveal, getContentHtml, getOpts, present, i18n } from './helper'
+import { buildHTML, processReveal, getContentHtml, getOpts, present, i18n, getState } from './helper'
 
 const logger = ctx.utils.getLogger('reveal-previewer')
 
@@ -22,6 +23,7 @@ const src = ctx.lib.vue.ref('')
 const iframe = ctx.lib.vue.ref<HTMLIFrameElement>()
 const { $t: _$t } = ctx.i18n.useI18n()
 const { $t } = i18n
+let state: any = null
 
 function fullscreen () {
   const contentDocument = iframe.value?.contentDocument
@@ -40,11 +42,12 @@ function fullscreen () {
   }
 }
 
-function _processReveal (init: boolean) {
+async function _processReveal (init: boolean) {
   if (iframe.value) {
     const opts = getOpts()
     const win = iframe.value.contentWindow!
-    processReveal(win, opts, getContentHtml(), init)
+    await processReveal(win, opts, getContentHtml(), init, state)
+    state = null
   }
 }
 
@@ -66,6 +69,12 @@ function init () {
     const html = buildHTML(theme, false)
     src.value = ctx.embed.buildSrc(html, 'Reveal.js')
   })
+}
+
+async function initWithState () {
+  logger.debug('initWithState')
+  state = iframe.value ? getState(iframe.value.contentWindow!) : null
+  init()
 }
 
 async function onLoad () {
