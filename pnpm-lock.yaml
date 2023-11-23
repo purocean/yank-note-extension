@@ -437,7 +437,7 @@ importers:
       eslint-plugin-node: ^11.1.0
       eslint-plugin-promise: ^6.0.0
       eslint-plugin-vue: ^8.7.1
-      mermaid: 10.6.0
+      mermaid: 10.6.1
       rollup-plugin-copy: ^3.4.0
       typescript: ^4.6.4
       vite: ^3.2.3
@@ -457,7 +457,7 @@ importers:
       eslint-plugin-node: 11.1.0_eslint@7.32.0
       eslint-plugin-promise: 6.0.0_eslint@7.32.0
       eslint-plugin-vue: 8.7.1_eslint@7.32.0
-      mermaid: 10.6.0
+      mermaid: 10.6.1
       rollup-plugin-copy: 3.4.0
       typescript: 4.6.4
       vite: 3.2.3
@@ -3649,7 +3649,7 @@ packages:
     resolution: {integrity: sha512-JgoahDG51ncUfJu6wX/1vWQEqOflgXyl4MaHqlcSruTez7yhaRKR9i8VjjcQGeS2en/jnFivXuaIMnseMMt0XA==}
     engines: {node: '>=12'}
     dependencies:
-      d3-array: 3.1.6
+      d3-array: 3.2.4
       d3-axis: 3.0.0
       d3-brush: 3.0.0
       d3-chord: 3.0.1
@@ -5723,8 +5723,8 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /mermaid/10.6.0:
-    resolution: {integrity: sha512-Hcti+Q2NiWnb2ZCijSX89Bn2i7TCUwosBdIn/d+u63Sz7y40XU6EKMctT4UX4qZuZGfKGZpfOeim2/KTrdR7aQ==}
+  /mermaid/10.6.1:
+    resolution: {integrity: sha512-Hky0/RpOw/1il9X8AvzOEChfJtVvmXm+y7JML5C//ePYMy0/9jCEmW1E1g86x9oDfW9+iVEdTV/i+M6KWRNs4A==}
     dependencies:
       '@braintree/sanitize-url': 6.0.4
       '@types/d3-scale': 4.0.6
@@ -5732,7 +5732,7 @@ packages:
       cytoscape: 3.26.0
       cytoscape-cose-bilkent: 4.1.0_cytoscape@3.26.0
       cytoscape-fcose: 2.2.0_cytoscape@3.26.0
-      d3: 7.4.4
+      d3: 7.8.5
       d3-sankey: 0.12.3
       dagre-d3-es: 7.0.10
       dayjs: 1.11.10
