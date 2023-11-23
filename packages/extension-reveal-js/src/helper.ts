@@ -43,9 +43,10 @@ export function buildHTML (theme: string, init = true) {
       `
 }
 
-export function getContentHtml () {
+export function getContentHtml (forExport = false) {
   return ctx.view.getContentHtml({
-    inlineLocalImage: true,
+    useRemoteSrcOfLocalImage: !forExport,
+    inlineLocalImage: forExport,
     includeStyle: true,
   })
 }
@@ -124,7 +125,7 @@ export async function present (print = false) {
 
   const fileUri = ctx.doc.toUri(ctx.store.state.currentFile)
 
-  const contentPromise = getContentHtml()
+  const contentPromise = getContentHtml(print)
 
   const win = ctx.env.openWindow(url.toString(), '_blank', { alwaysOnTop: false })
   if (!win) {
