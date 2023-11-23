@@ -493,6 +493,7 @@ export declare type BuildInHookTypes = {
             inlineStyle?: boolean;
             includeStyle?: boolean;
             inlineLocalImage?: boolean;
+            useRemoteSrcOfLocalImage?: boolean;
             uploadLocalImage?: boolean;
             highlightCode?: boolean;
             preferPng?: boolean;
