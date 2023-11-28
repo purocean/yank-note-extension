@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.1.3...extension-excalidraw-1.2.0) (2023-11-28)
+
+
+### Features
+
+* **extension-excalidraw:** upgrade excalidraw to 0.17.0 ([628d804](https://github.com/purocean/yank-note-extension/commit/628d8048c167fbc4c13443d06136364e9be10c7c))
+
+
+
 ## [1.1.3](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.1.2...extension-excalidraw-1.1.3) (2023-11-11)
 
 
