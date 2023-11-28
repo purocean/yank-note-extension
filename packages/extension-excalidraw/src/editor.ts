@@ -220,6 +220,10 @@ const App = () => {
     saveLibrary(items)
   }
 
+  function excalidrawAPI (api) {
+    editorRef.current = api
+  }
+
   if (!initialData) {
     return null
   }
@@ -235,7 +239,7 @@ const App = () => {
       React.createElement(
         Excalidraw,
         {
-          ref: editorRef,
+          excalidrawAPI,
           initialData,
           onChange,
           langCode,
