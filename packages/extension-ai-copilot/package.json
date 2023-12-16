@@ -1,14 +1,14 @@
 {
-  "name": "@yank-note/extension-openai",
-  "version": "1.7.2",
-  "displayName": "OpenAI",
+  "name": "@yank-note/extension-ai-copilot",
+  "version": "0.0.1",
+  "displayName": "AI Copilot",
   "description": "Your AI writing assistant",
-  "displayName_ZH-CN": "OpenAI",
+  "displayName_ZH-CN": "AI Copilot",
   "description_ZH-CN": "你的人工智能写作助手",
   "author": "Yank Note",
   "license": "AGPL-3.0",
   "keywords": [],
-  "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/extension-openai",
+  "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/extension-ai-copilot",
   "repository": {
     "type": "git",
     "url": "https://github.com/purocean/yank-note-extension.git"
@@ -18,7 +18,7 @@
   "icon": "./icon.svg",
   "engines": {
     "node": ">=14.6.0",
-    "yank-note": "^3.58.0"
+    "yank-note": "^3.65.0"
   },
   "requirements": {
     "premium": true
@@ -35,8 +35,8 @@
     "dev": "vite build --watch",
     "build": "vue-tsc --noEmit && vite build",
     "lint": "vue-tsc --noEmit && yarn run eslint '{src,__tests__}/**/*.{js,ts,tsx,vue}'",
-    "version": "conventional-changelog -t extension-openai- --commit-path . -p angular -i CHANGELOG.md -s && npm run tag-version",
-    "tag-version": "git add . && git commit -m 'chore(release): bump extension-openai version' && git tag extension-openai-$npm_package_version",
+    "version": "conventional-changelog -t extension-ai-copilot- --commit-path . -p angular -i CHANGELOG.md -s && npm run tag-version",
+    "tag-version": "git add . && git commit -m 'chore(release): bump extension-ai-copilot version' && git tag extension-ai-copilot-$npm_package_version",
     "prepublish": "npm run build"
   },
   "devDependencies": {
@@ -54,6 +54,7 @@
     "eslint-plugin-vue": "^8.7.1",
     "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.56.1",
+    "terser": "^5.26.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.3",
     "vue": "^3.2.33",
