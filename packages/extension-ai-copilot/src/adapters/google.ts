@@ -188,11 +188,9 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
   monaco = ctx.editor.getMonaco()
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.googleAIEditAdapter')
   defaultInstruction = 'Translate to English'
-  defaultSystemMessage = 'Follow with the instruction and rewrite the text.\n\nExample 1: \nInstruction: Translate to English\nInput: 你好\nOutput: Hello\n\nExample 2: \nInstruction: Fix the grammar\nInput: I are a boy\nOutput: I am a boy\n\nAttention: Only output the rewritten content.'
 
   private _state = reactive({
     selection: '',
-    systemMessage: this.defaultSystemMessage,
     historyInstructions: [] as string[],
     instruction: this.defaultInstruction,
     model: 'gemini-pro',
@@ -209,7 +207,6 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
       { type: 'input', key: 'apiToken', label: 'Api Token', props: { type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gemini-pro', props: { placeholder: 'e.g. gemini-pro' }, hasError: v => !v },
       { type: 'textarea', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
-      { type: 'textarea', key: 'systemMessage', label: 'System Message', defaultValue: this.defaultSystemMessage },
       { type: 'range', key: 'maxOutputTokens', label: 'Max Tokens', max: 4096, min: -1, step: 1, description: '-1 means unlimited', defaultValue: -1 },
       { type: 'range', key: 'temperature', label: 'Temperature', max: 1, min: 0, step: 0.01, defaultValue: 0.5 },
       {
@@ -277,7 +274,7 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
     this._state.historyInstructions.unshift(instruction)
     this._state.historyInstructions = ctx.lib.lodash.uniq(this._state.historyInstructions.slice(0, 10))
 
-    const system = this._state.systemMessage + '\n\n' + 'Instruction: ' + instruction
+    const system = 'Instruction: ' + instruction
     const content = selectedText
     const params = this._parseJson(this._state.paramsJson, {})
 
