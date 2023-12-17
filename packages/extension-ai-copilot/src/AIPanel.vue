@@ -56,10 +56,14 @@ const { SvgIcon, GroupTabs } = ctx.components
 
 const pined = ref(false)
 const adapters = computed(() => {
-  return getAllAdapters(state.type).map(x => ({ id: x.id, displayname: x.displayname }))
+  return (pined.value || true) && getAllAdapters(state.type).map(x => ({ id: x.id, displayname: x.displayname }))
 })
 
 const adapter = computed(() => getAdapter(state.type, state.adapter[state.type]))
+
+if (!adapter.value) {
+  state.adapter[state.type] = adapters.value[0].id
+}
 
 function focusEditor () {
   nextTick(() => {
@@ -158,7 +162,10 @@ const refreshPanelSize = async () => {
 }
 
 watchEffect(refreshPanelSize, { flush: 'post' })
-watch(adapter, refreshPanelSize)
+watch(adapter, () => {
+  refreshPanelSize()
+  cancel()
+})
 
 const onMouseUp = () => {
   isDragging = false

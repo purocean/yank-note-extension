@@ -1,7 +1,7 @@
 import { App, createApp } from 'vue'
 import { ctx, registerPlugin } from '@yank-note/runtime-api'
-import Monaco, { languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
-import { COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, globalCancelTokenSource, i18n, loading, state } from './core'
+import Monaco from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
+import { COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, globalCancelTokenSource, i18n, loading, proxyRequest, state } from './core'
 import AIPanel from './AIPanel.vue'
 import { getAdapter, registerAdapter } from './adapter'
 import { OpenAICompletionAdapter, OpenAIEditAdapter } from './adapters/openai'
@@ -246,5 +246,12 @@ registerPlugin({
         panel = null
       }
     }, { immediate: true })
+
+    return {
+      registerAdapter,
+      state,
+      proxyRequest,
+      loading,
+    }
   }
 })
