@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.0.1...extension-ai-copilot-1.1.0) (2023-12-17)
+
+
+### Features
+
+* **extension-ai-copilot:** remove systemMessage from GoogleAIEditAdapter ([6e29659](https://github.com/purocean/yank-note-extension/commit/6e29659fa445af02b00af0f3b6019cf6c955b8dc))
+
+
+
 ## [1.0.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.0.0...extension-ai-copilot-1.0.1) (2023-12-17)
 
 
