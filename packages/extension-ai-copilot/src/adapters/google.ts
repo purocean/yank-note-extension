@@ -198,7 +198,7 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
     model: 'gemini-pro',
     apiToken: '',
     maxOutputTokens: -1,
-    temperature: 1,
+    temperature: 0.5,
     paramsJson: '{}',
   })
 
@@ -211,7 +211,7 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
       { type: 'textarea', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
       { type: 'textarea', key: 'systemMessage', label: 'System Message', defaultValue: this.defaultSystemMessage },
       { type: 'range', key: 'maxOutputTokens', label: 'Max Tokens', max: 4096, min: -1, step: 1, description: '-1 means unlimited', defaultValue: -1 },
-      { type: 'range', key: 'temperature', label: 'Temperature', max: 2, min: 0, step: 0.01, defaultValue: 1 },
+      { type: 'range', key: 'temperature', label: 'Temperature', max: 1, min: 0, step: 0.01, defaultValue: 0.5 },
       {
         type: 'textarea',
         key: 'paramsJson',
