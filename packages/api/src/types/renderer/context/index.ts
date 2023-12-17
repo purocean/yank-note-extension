@@ -166,6 +166,7 @@ declare const ctx: Readonly<{
     showExtensionManager: typeof extension.showManager;
     getExtensionLoadStatus: typeof extension.getLoadStatus;
     getExtensionInitialized: typeof extension.getInitialized;
+    getPluginApi: typeof plugin.getApi;
     version: string;
 }>;
 export declare type Ctx = typeof ctx;
