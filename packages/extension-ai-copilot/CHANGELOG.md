@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.0.0...extension-ai-copilot-1.0.1) (2023-12-17)
+
+
+### Features
+
+* **extension-ai-copilot:** fix temperature for google ai ([b017a53](https://github.com/purocean/yank-note-extension/commit/b017a537b68fed1b948620091cb3c4a71a7abc45))
+
+
+
 # 1.0.0 (2023-12-17)
 
 
