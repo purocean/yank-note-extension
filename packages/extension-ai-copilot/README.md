@@ -1,6 +1,6 @@
 # AI Copilot
 
-AI Copilot is a Yank Note extension that provides AI-powered code completion suggestions or rewrite suggestions.
+AI Copilot is a Yank Note extension that provides AI-powered text completion suggestions or rewrite suggestions.
 
 ## Screenshots
 
