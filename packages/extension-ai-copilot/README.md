@@ -1,6 +1,6 @@
 # AI Copilot
 
-AI Copilot is a VS Code extension that provides AI-powered code completion suggestions or rewrite suggestions.
+AI Copilot is a Yank Note extension that provides AI-powered code completion suggestions or rewrite suggestions.
 
 ## Screenshots
 
@@ -30,8 +30,8 @@ window.registerPlugin({
       const { registerAdapter, proxyRequest } = ctx.getPluginApi('@yank-note/extension-ai-copilot')
 
       class DemoCompletionAdapter {
-        type ='completion'
-        id ='demo'
+        type = 'completion'
+        id = 'demo'
         displayname = 'DemoCompletionAdapter'
         description = 'Powered by <a target="_blank" href="http://yank-note.com">Yank Note</a>'
         _state = ctx.lib.vue.reactive({ apiPoint: 'demo' })
