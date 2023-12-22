@@ -10,6 +10,7 @@ export class GithubCopilotCompletionAdapter implements CompletionAdapter {
   displayname = 'Github Copilot'
   description = 'Please refer to <a target="_blank" href="https://blog-purocean.vercel.app/hack-github-copilot/">this article</a> for details.'
   defaultApiPoint = 'http://127.0.0.1:3223/calculateInlineCompletions'
+  logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.GithubCopilotCompletionAdapter')
 
   private _state = reactive({
     apiPoint: this.defaultApiPoint,
@@ -25,7 +26,9 @@ export class GithubCopilotCompletionAdapter implements CompletionAdapter {
   activate (): { dispose: () => void, state: Record<string, any> } {
     return {
       state: this._state,
-      dispose: () => 0
+      dispose: () => {
+        this.logger.debug('dispose')
+      }
     }
   }
 

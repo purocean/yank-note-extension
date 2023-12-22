@@ -9,6 +9,7 @@ export type FormItem = CustomVueComponent
   | { type: 'prefix', key: 'prefix', label: string, hasError?: (val: string) => boolean, props?: any }
   | { type: 'suffix', key: 'suffix', label: string, hasError?: (val: string) => boolean, props?: any }
   | { type: 'selection', key: 'selection', label: string, hasError?: (val: string) => boolean, props?: any }
+  | { type: 'instruction', key: 'instruction', label: string, historyValueKey: 'historyInstructions', hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
   | { type: 'textarea' | 'input', key: string, label: string, description?: string, historyValueKey?: string, hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
   | { type: 'select', key: string, label: string, options: {label: string, value: string}[], description?: string, hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
   | { type: 'range', key: string, label: string, max: number, min: number, step: number, description?: string, hasError?: (val: string) => boolean, defaultValue?: number, props?: any }
@@ -25,6 +26,7 @@ export interface Adapter {
   description: string
 
   panel?: Panel
+  state?: Record<string, any>,
   activate(): {
     dispose: () => void,
     state?: Record<string, any>
@@ -48,9 +50,11 @@ export interface ChatAdapter extends Adapter {
 
 export interface EditAdapter extends Adapter {
   type: 'edit'
+  state: Record<string, any> & { instruction: string },
   fetchEditResults(
     selectedText: string,
-    cancelToken: Monaco.CancellationToken
+    instruction: string,
+    cancelToken: Monaco.CancellationToken,
   ): Promise<string | null | undefined>
 }
 

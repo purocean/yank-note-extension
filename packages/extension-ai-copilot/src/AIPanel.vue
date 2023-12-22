@@ -16,8 +16,13 @@
         </div>
       </div>
       <div class="setting">
-        <AISettingPanel v-if="adapter" :adapter="adapter" :key="state.type + state.adapter[state.type]" />
-        <div v-if="adapter" class="adapter-desc" v-html="adapter.description">
+        <div v-if="editAdapter" v-show="state.type === 'edit'">
+          <AISettingPanel type="edit" :adapter="editAdapter" :key="state.adapter.edit" />
+          <div v-if="editAdapter" class="adapter-desc" v-html="editAdapter.description" />
+        </div>
+        <div v-if="completionAdapter" v-show="state.type === 'completion'">
+          <AISettingPanel type="completion" :adapter="completionAdapter" :key="state.adapter.completion" />
+          <div v-if="completionAdapter" class="adapter-desc" v-html="completionAdapter.description" />
         </div>
       </div>
       <div class="action" @mousedown.self="startDrag">
@@ -59,9 +64,13 @@ const adapters = computed(() => {
   return (pined.value || true) && getAllAdapters(state.type).map(x => ({ id: x.id, displayname: x.displayname }))
 })
 
-const adapter = computed(() => getAdapter(state.type, state.adapter[state.type]))
+const completionAdapter = computed(() => getAdapter('completion', state.adapter.completion))
+if (!completionAdapter.value) {
+  state.adapter[state.type] = adapters.value[0].id
+}
 
-if (!adapter.value) {
+const editAdapter = computed(() => getAdapter('edit', state.adapter.edit))
+if (!editAdapter.value) {
   state.adapter[state.type] = adapters.value[0].id
 }
 
@@ -75,7 +84,22 @@ function doWork () {
   if (state.type === 'completion') {
     ctx.action.getActionHandler(COMPLETION_ACTION_NAME)()
   } else if (state.type === 'edit') {
-    ctx.action.getActionHandler(EDIT_ACTION_NAME)()
+    if (pined.value) {
+      ctx.action.getActionHandler(EDIT_ACTION_NAME)(false)
+      return
+    }
+
+    const editor = ctx.editor.getEditor()
+    const selection = editor.getSelection()
+
+    // if no selection, trigger completion
+    if (!selection || selection.isEmpty()) {
+      state.type = 'completion'
+      ctx.action.getActionHandler(COMPLETION_ACTION_NAME)()
+    } else {
+      // display rewrite widget
+      ctx.action.getActionHandler(EDIT_ACTION_NAME)(true)
+    }
   }
 }
 
@@ -162,7 +186,7 @@ const refreshPanelSize = async () => {
 }
 
 watchEffect(refreshPanelSize, { flush: 'post' })
-watch(adapter, () => {
+watch(editAdapter, () => {
   refreshPanelSize()
   cancel()
 })
@@ -298,7 +322,6 @@ const onMouseUp = () => {
   &.pined {
     max-height: 80vh;
     width: 400px;
-    max-width: 100%;
 
     .head {
       border-bottom: 1px solid var(--g-color-70);

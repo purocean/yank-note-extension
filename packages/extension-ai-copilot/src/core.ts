@@ -36,8 +36,6 @@ export const state = reactive({
   ...ctx.utils.storage.get(storageStateKey, defaultState)
 })
 
-;(window as any).xxxState = state
-
 const saveState = ctx.lib.lodash.debounce(() => {
   ctx.utils.storage.set(storageStateKey, state)
 }, 1000, { leading: true })

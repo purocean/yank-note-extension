@@ -149,6 +149,7 @@ export class GoogleAICompletionAdapter extends BaseGoogleAIAdapter implements Co
     return {
       state: this._state,
       dispose: () => {
+        this.logger.debug('dispose')
         dispose.forEach((d) => d())
       }
     }
@@ -189,7 +190,7 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.googleAIEditAdapter')
   defaultInstruction = 'Translate to English'
 
-  private _state = reactive({
+  state = reactive({
     selection: '',
     historyInstructions: [] as string[],
     instruction: this.defaultInstruction,
@@ -204,9 +205,9 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
     type: 'form',
     items: [
       { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true }, hasError: v => !v },
+      { type: 'instruction', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
       { type: 'input', key: 'apiToken', label: 'Api Token', props: { type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gemini-pro', props: { placeholder: 'e.g. gemini-pro' }, hasError: v => !v },
-      { type: 'textarea', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
       { type: 'range', key: 'maxOutputTokens', label: 'Max Tokens', max: 4096, min: -1, step: 1, description: '-1 means unlimited', defaultValue: -1 },
       { type: 'range', key: 'temperature', label: 'Temperature', max: 1, min: 0, step: 0.01, defaultValue: 0.5 },
       {
@@ -227,58 +228,59 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
 
   activate (): { dispose: () => void, state: Record<string, any> } {
     const dispose = [
-      watch(() => this._state.paramsJson, (json) => {
+      watch(() => this.state.paramsJson, (json) => {
         const params = {
-          maxOutputTokens: this._state.maxOutputTokens,
-          temperature: this._state.temperature,
+          maxOutputTokens: this.state.maxOutputTokens,
+          temperature: this.state.temperature,
           ...this._parseJson(json),
         }
 
-        this._state.maxOutputTokens = params.maxOutputTokens
-        this._state.temperature = params.temperature
-        this._state.paramsJson = JSON.stringify(params, null, 2)
+        this.state.maxOutputTokens = params.maxOutputTokens
+        this.state.temperature = params.temperature
+        this.state.paramsJson = JSON.stringify(params, null, 2)
       }),
       watch([
-        () => this._state.maxOutputTokens,
-        () => this._state.temperature,
+        () => this.state.maxOutputTokens,
+        () => this.state.temperature,
       // eslint-disable-next-line camelcase
       ], ([maxOutputTokens, temperature]) => {
         const params = {
-          ...this._parseJson(this._state.paramsJson, {}),
+          ...this._parseJson(this.state.paramsJson, {}),
           maxOutputTokens,
           temperature,
         }
 
-        this._state.paramsJson = JSON.stringify(params, null, 2)
+        this.state.paramsJson = JSON.stringify(params, null, 2)
       }, { immediate: true })
     ]
 
     return {
-      state: this._state,
+      state: this.state,
       dispose: () => {
+        this.logger.debug('dispose')
         dispose.forEach((d) => d())
       }
     }
   }
 
-  async fetchEditResults (selectedText: string): Promise<string | null | undefined> {
-    if (!this._state.selection || !this._state.model) {
+  async fetchEditResults (selectedText: string, instruction: string): Promise<string | null | undefined> {
+    if (!this.state.selection || !this.state.model) {
       return
     }
 
-    const instruction = this._state.instruction
     if (!instruction) {
       return
     }
 
-    this._state.historyInstructions.unshift(instruction)
-    this._state.historyInstructions = ctx.lib.lodash.uniq(this._state.historyInstructions.slice(0, 10))
+    this.state.instruction = instruction
 
-    const system = 'Instruction: ' + instruction
-    const content = selectedText
-    const params = this._parseJson(this._state.paramsJson, {})
+    this.state.historyInstructions.unshift(instruction)
+    this.state.historyInstructions = ctx.lib.lodash.uniq(this.state.historyInstructions.slice(0, 10))
 
-    const result = await this.request(this._state.model, this._state.apiToken, content, system, params)
+    const content = 'Instruction: ' + instruction + '\n\n' + selectedText
+    const params = this._parseJson(this.state.paramsJson, {})
+
+    const result = await this.request(this.state.model, this.state.apiToken, content, '', params)
     return result[0]
   }
 }

@@ -6,7 +6,7 @@
         <component v-if="item.type === 'custom'" :is="item.component"/>
         <div v-else-if="adapterState" :class="{
           row : true,
-          'has-icon-btn': !!(item as any).defaultValue,
+          'has-icon-btn': !!(item as any).defaultValue || (item as any).historyValueKey,
           'has-error': !!item.hasError?.(adapterState[item.key])
         }">
           <div class="label">{{ item.label }}</div>
@@ -30,7 +30,7 @@
             <div v-else style="position: relative">
               <div class="input" :title="(item as any).description">
                 <input v-if="item.type === 'input'" type="text" v-model="adapterState[item.key]" v-bind="item.props" />
-                <textarea v-if="item.type === 'textarea'" v-model="adapterState[item.key]" v-bind="item.props" />
+                <textarea v-if="item.type === 'textarea' || item.type === 'instruction'" v-model="adapterState[item.key]" v-bind="item.props" />
                 <select v-else-if="item.type === 'select'" v-model="adapterState[item.key]" v-bind="item.props">
                   <option v-for="option in item.options" :key="option.value" :value="option.value">{{ option.label }}</option>
                 </select>
@@ -72,7 +72,9 @@
 import { computed, unref, defineProps, ref, nextTick, watchEffect, onBeforeUnmount, watch, onMounted } from 'vue'
 import { state } from './core'
 import { ctx } from '@yank-note/runtime-api'
-import { Adapter, FormItem } from './adapter'
+import { Adapter, AdapterType, FormItem } from './adapter'
+import type { Components } from '../../api/types/types/renderer/types'
+
 const SvgIcon = ctx.components.SvgIcon
 
 const editor = ctx.editor.getEditor()
@@ -80,9 +82,10 @@ const monaco = ctx.editor.getMonaco()
 
 const props = defineProps<{
   adapter: Adapter
+  type: AdapterType
 }>()
 
-const adapterKey = computed(() => state.type + '-' + state.adapter[state.type])
+const adapterKey = computed(() => props.type + '-' + state.adapter[props.type])
 
 const adapter = computed(() => props.adapter)
 const panel = computed(() => unref(adapter.value.panel))
@@ -158,13 +161,24 @@ function showHistoryMenu (item: FormItem) {
   }
 
   const list: string[] = adapterState![(item as any).historyValueKey!]
-  ctx.ui.useContextMenu().show(list.map(x => ({
+  const items: Components.ContextMenu.Item[] = list.map(x => ({
     id: x,
-    label: x,
+    label: x.slice(0, 20) + (x.length > 20 ? '...' : ''),
     onClick: () => {
       adapterState![item.key] = x
     }
-  })))
+  }))
+
+  ctx.ui.useContextMenu().show(items.concat(
+    { type: 'separator' },
+    {
+      id: 'clear',
+      label: 'Clear',
+      onClick: () => {
+        adapterState![(item as any).historyValueKey!] = []
+      }
+    })
+  )
 }
 
 watchEffect(buildContent)

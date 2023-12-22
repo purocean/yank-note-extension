@@ -113,6 +113,7 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
     return {
       state: this._state,
       dispose: () => {
+        this.logger.debug('dispose')
         dispose.forEach((d) => d())
       }
     }
@@ -183,7 +184,7 @@ export class OpenAIEditAdapter implements EditAdapter {
   defaultInstruction = 'Translate to English'
   defaultSystemMessage = 'Follow with the instruction and rewrite the text.\n\nExample 1: \nInstruction: Translate to English\nInput: 你好\nOutput: Hello\n\nExample 2: \nInstruction: Fix the grammar\nInput: I are a boy\nOutput: I am a boy\n\nAttention: Only output the rewritten content.'
 
-  private _state = reactive({
+  state = reactive({
     selection: '',
     system_message: this.defaultSystemMessage,
     historyInstructions: [] as string[],
@@ -199,9 +200,9 @@ export class OpenAIEditAdapter implements EditAdapter {
     type: 'form',
     items: [
       { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true }, hasError: v => !v },
+      { type: 'instruction', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
       { type: 'input', key: 'api_token', label: 'Api Token', props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
-      { type: 'textarea', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
       { type: 'textarea', key: 'system_message', label: 'System Message', defaultValue: this.defaultSystemMessage },
       { type: 'range', key: 'max_tokens', label: 'Max Tokens', max: 4096, min: -1, step: 1, description: '-1 means unlimited', defaultValue: -1 },
       { type: 'range', key: 'temperature', label: 'Temperature', max: 2, min: 0, step: 0.01, defaultValue: 1 },
@@ -234,7 +235,7 @@ export class OpenAIEditAdapter implements EditAdapter {
   }
 
   private async _requestApi (url: string, body?: any) {
-    const token = this._state.api_token
+    const token = this.state.api_token
 
     const headers = { Authorization: `Bearer ${token}` }
 
@@ -249,57 +250,60 @@ export class OpenAIEditAdapter implements EditAdapter {
 
   activate (): { dispose: () => void, state: Record<string, any> } {
     const dispose = [
-      watch(() => this._state.paramsJson, (json) => {
+      watch(() => this.state.paramsJson, (json) => {
         const params = {
-          model: this._state.model,
-          max_tokens: this._state.max_tokens,
-          temperature: this._state.temperature,
+          model: this.state.model,
+          max_tokens: this.state.max_tokens,
+          temperature: this.state.temperature,
           ...this._parseJson(json),
         }
 
-        this._state.model = params.model
-        this._state.max_tokens = params.max_tokens
-        this._state.temperature = params.temperature
-        this._state.paramsJson = JSON.stringify(params, null, 2)
+        this.state.model = params.model
+        this.state.max_tokens = params.max_tokens
+        this.state.temperature = params.temperature
+        this.state.paramsJson = JSON.stringify(params, null, 2)
       }),
       watch([
-        () => this._state.model,
-        () => this._state.max_tokens,
-        () => this._state.temperature,
+        () => this.state.model,
+        () => this.state.max_tokens,
+        () => this.state.temperature,
       // eslint-disable-next-line camelcase
       ], ([model, max_tokens, temperature]) => {
         const params = {
-          ...this._parseJson(this._state.paramsJson, {}),
+          ...this._parseJson(this.state.paramsJson, {}),
           model,
           max_tokens,
           temperature,
         }
 
-        this._state.paramsJson = JSON.stringify(params, null, 2)
+        this.state.paramsJson = JSON.stringify(params, null, 2)
       }, { immediate: true })
     ]
 
     return {
-      state: this._state,
+      state: this.state,
       dispose: () => {
+        this.logger.debug('dispose')
         dispose.forEach((d) => d())
       }
     }
   }
 
-  async fetchEditResults (selectedText: string): Promise<string | null | undefined> {
-    if (!this._state.selection || !this._state.model) {
+  async fetchEditResults (selectedText: string, instruction: string): Promise<string | null | undefined> {
+    if (!this.state.selection || !this.state.model) {
       return
     }
 
-    const system = this._state.system_message
-    const instruction = this._state.instruction
+    const system = this.state.system_message
+
     if (!instruction) {
       return
     }
 
-    this._state.historyInstructions.unshift(instruction)
-    this._state.historyInstructions = ctx.lib.lodash.uniq(this._state.historyInstructions.slice(0, 10))
+    this.state.instruction = instruction
+
+    this.state.historyInstructions.unshift(instruction)
+    this.state.historyInstructions = ctx.lib.lodash.uniq(this.state.historyInstructions.slice(0, 10))
 
     const messages = [{ role: 'user', content: selectedText }]
 
@@ -311,7 +315,7 @@ export class OpenAIEditAdapter implements EditAdapter {
 
     const url = 'https://api.openai.com/v1/chat/completions'
 
-    const params = this._parseJson(this._state.paramsJson, {})
+    const params = this._parseJson(this.state.paramsJson, {})
 
     if (params.max_tokens === -1) {
       delete params.max_tokens
