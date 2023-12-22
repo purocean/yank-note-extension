@@ -32,7 +32,7 @@
           <button class="small tr" @click="undo">Discard</button>
           <button class="small tr" @click="reload"><svg-icon name="sync-alt-solid" width="11px" height="13px" /></button>
         </template>
-        <select v-model="state.adapter.edit">
+        <select v-model="state.adapter.edit" @change="textareaRef?.focus()">
           <option v-for="item in adapters" :key="item.id" :value="item.id">{{item.displayname}}</option>
         </select>
       </div>
@@ -73,7 +73,11 @@ function close () {
   emits('dispose')
 }
 
-function onEnter () {
+function onEnter (e: KeyboardEvent) {
+  if (e.isComposing) {
+    return
+  }
+
   if (finished.value) {
     close()
   } else {
@@ -81,7 +85,11 @@ function onEnter () {
   }
 }
 
-function onEsc () {
+function onEsc (e: KeyboardEvent) {
+  if (e.isComposing) {
+    return
+  }
+
   if (finished.value) {
     undo()
   } else if (loading.value) {
