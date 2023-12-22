@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.1.2...extension-ai-copilot-1.2.0) (2023-12-22)
+
+
+### Features
+
+* **extension-ai-copilot:** add rewrite widget ([d2952f2](https://github.com/purocean/yank-note-extension/commit/d2952f21ed4eda8be08d29bb4d6360086069bfcd))
+
+
+
 ## [1.1.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.1.1...extension-ai-copilot-1.1.2) (2023-12-18)
 
 
