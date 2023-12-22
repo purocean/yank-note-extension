@@ -44,7 +44,7 @@ registerPlugin({
       name: EDIT_ACTION_NAME,
       description: i18n.t('ai-edit'),
       forUser: true,
-      handler: async (showWidget?: boolean) => {
+      handler: async (showWidget = true) => {
         const editor = ctx.editor.getEditor()
         const selection = editor.getSelection()
 

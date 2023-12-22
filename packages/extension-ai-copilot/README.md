@@ -34,7 +34,7 @@ window.registerPlugin({
         id = 'demo'
         displayname = 'DemoCompletionAdapter'
         description = 'Powered by <a target="_blank" href="http://yank-note.com">Yank Note</a>'
-        _state = ctx.lib.vue.reactive({ apiPoint: 'demo' })
+        state = ctx.lib.vue.reactive({ apiPoint: 'demo' })
         panel = {
           type: 'form',
           items: [
@@ -44,7 +44,7 @@ window.registerPlugin({
 
         activate () {
           return {
-            state: this._state,
+            state: this.state,
             dispose: () => 0
           }
         }
@@ -77,20 +77,22 @@ window.registerPlugin({
         id ='demo'
         displayname = 'DemoEditAdapter'
         description = 'Powered by <a target="_blank" href="http://yank-note.com">Yank Note</a>'
-        _state = ctx.lib.vue.reactive({
-          apiPoint: 'demo'
+        state = ctx.lib.vue.reactive({
+          apiPoint: 'demo',
+          instruction: 'test',
         })
 
         panel = {
           type: 'form',
           items: [
             { type: 'input', key: 'apiPoint', label: 'Api Point', defaultValue: 'demo', props: { placeholder: 'demo' }, hasError: v => !v },
+            { type: 'instruction', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions' },
           ],
         }
 
         activate () {
           return {
-            state: this._state,
+            state: this.state,
             dispose: () => 0
           }
         }

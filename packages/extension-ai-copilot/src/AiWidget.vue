@@ -1,15 +1,17 @@
 <template>
   <div ref="wrapperRef" :class="{'ai-widget': true, loading}">
     <div class="content">
-      <div class="input" v-if="adapter">
+      <div class="input" v-if="adapter && adapter.state">
         <textarea
           placeholder="Ask Copilot to edit text..."
+          ref="textareaRef"
           v-model="adapter.state.instruction"
-          v-auto-focus
+          v-auto-focus="{delay: 50}"
           rows="1"
           v-auto-resize="{minRows: 1, maxRows: 5}"
           v-textarea-on-enter
-          @keydown.escape="cancel"
+          @keydown.escape="onEsc"
+          @keydown.enter="onEnter"
           @keydown.stop
         />
         <svg-icon
@@ -41,7 +43,7 @@
 <script lang="ts" setup>
 import { ctx } from '@yank-note/runtime-api'
 import type { Components } from '@yank-note/runtime-api/types/types/renderer/types'
-import { computed, defineEmits, ref, nextTick, watch, onBeforeUnmount } from 'vue'
+import { computed, defineEmits, ref, watch, onBeforeUnmount, onMounted } from 'vue'
 import { state, loading, globalCancelTokenSource } from './core'
 import { getAdapter, getAllAdapters } from './adapter'
 import { executeEdit } from './edit'
@@ -49,19 +51,11 @@ import { executeEdit } from './edit'
 const SvgIcon = ctx.components.SvgIcon
 
 const wrapperRef = ref<HTMLElement>()
+const textareaRef = ref<HTMLTextAreaElement>()
 const emits = defineEmits<{(event: 'layout', height: number): void, (event: 'dispose'): void}>()
 
 const adapter = computed(() => getAdapter('edit', state.adapter.edit))
 const finished = ref(false)
-
-watch(() => adapter.value?.state.instruction, () => {
-  nextTick(() => {
-    const height = wrapperRef.value?.clientHeight
-    if (height) {
-      emits('layout', height + 4)
-    }
-  })
-}, { immediate: true })
 
 const adapters = computed(() => {
   return getAllAdapters('edit').map(x => ({ id: x.id, displayname: x.displayname }))
@@ -79,11 +73,27 @@ function close () {
   emits('dispose')
 }
 
+function onEnter () {
+  if (finished.value) {
+    close()
+  } else {
+    rewrite()
+  }
+}
+
+function onEsc () {
+  if (finished.value) {
+    undo()
+  } else if (loading.value) {
+    cancel()
+  } else {
+    close()
+  }
+}
+
 function cancel () {
   if (loading.value) {
     globalCancelTokenSource.value?.cancel()
-  } else {
-    close()
   }
 }
 
@@ -98,6 +108,7 @@ function showHistoryMenu () {
     label: x.slice(0, 20) + (x.length > 20 ? '...' : ''),
     onClick: () => {
       adapter.value!.state.instruction = x
+      textareaRef.value?.focus()
     }
   }))
 
@@ -122,12 +133,16 @@ async function rewrite () {
 
   const cts = new (ctx.editor.getMonaco().CancellationTokenSource)()
   finished.value = false
-  await executeEdit(cts.token)
-  finished.value = true
+  if (await executeEdit(cts.token)) {
+    finished.value = true
+  }
+
+  textareaRef.value?.focus()
 }
 
 function undo () {
   const editor = ctx.editor.getEditor()
+  editor.focus()
   editor.trigger('editor', 'undo', null)
   close()
 }
@@ -138,7 +153,23 @@ function reload () {
   rewrite()
 }
 
+function layout () {
+  if (wrapperRef.value) {
+    emits('layout', wrapperRef.value.clientHeight + 16)
+  }
+}
+
+watch(() => adapter.value?.state?.instruction, async () => {
+  layout()
+})
+
+onMounted(() => {
+  layout()
+  setTimeout(layout, 50)
+})
+
 onBeforeUnmount(() => {
+  cancel()
   disposable.dispose()
 })
 </script>
@@ -152,11 +183,12 @@ onBeforeUnmount(() => {
   border-radius: var(--g-border-radius);
   background: rgba(var(--g-color-85-rgb), 0.8);
   backdrop-filter: var(--g-backdrop-filter);
+  margin-top: 8px;
 
   .content {
     position: relative;
     z-index: 3;
-    background: var(--g-color-85);
+    background: var(--g-color-88);
     color: var(--g-color-10);
     font-size: 14px;
     overflow: hidden;
@@ -165,6 +197,8 @@ onBeforeUnmount(() => {
 
   .input {
     position: relative;
+    margin-bottom: 8px;
+
     textarea {
       font-size: 13px;
       padding: 4px;
@@ -184,7 +218,6 @@ onBeforeUnmount(() => {
   .actions {
     display: flex;
     align-items: center;
-    padding-top: 8px;
 
     button {
       &:first-child {

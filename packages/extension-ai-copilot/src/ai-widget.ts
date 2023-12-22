@@ -19,6 +19,8 @@ export function createWidget () {
     return
   }
 
+  editor.setScrollLeft(0)
+
   editor.changeViewZones(accessor => {
     const domNode = document.createElement('div')
 
@@ -56,8 +58,9 @@ export function createWidget () {
 }
 
 export function disposeWidget () {
+  const editor = ctx.editor.getEditor()
   if (zone) {
-    ctx.editor.getEditor().changeViewZones(accessor => {
+    editor.changeViewZones(accessor => {
       accessor.removeZone(zone!.id)
       zone = null
     })
@@ -65,4 +68,6 @@ export function disposeWidget () {
 
   widget?.unmount()
   widget = null
+
+  editor.focus()
 }

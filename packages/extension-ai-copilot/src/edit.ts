@@ -4,16 +4,16 @@ import { globalCancelTokenSource, i18n, loading, state } from './core'
 import { getAdapter } from './adapter'
 import { createWidget } from './ai-widget'
 
-export async function executeEdit (token: Monaco.CancellationToken) {
+export async function executeEdit (token: Monaco.CancellationToken): Promise<boolean> {
   if (!state.enable) {
-    return
+    return false
   }
 
   globalCancelTokenSource.value = new (ctx.editor.getMonaco().CancellationTokenSource)(token)
   token = globalCancelTokenSource.value.token
 
   if (token.isCancellationRequested) {
-    return
+    return false
   }
 
   const cancelPromise = new Promise<void>((resolve) => {
@@ -37,14 +37,14 @@ export async function executeEdit (token: Monaco.CancellationToken) {
     const selectedText = model?.getValueInRange(ctx.editor.getEditor().getSelection()!)
 
     if (!selectedText) {
-      return
+      return false
     }
 
     const res = await adapter.fetchEditResults(selectedText, adapter.state.instruction, token)
     const result = await Promise.race([res, cancelPromise])
 
     if (!result || token.isCancellationRequested || model !== editor.getModel()) {
-      return
+      return false
     }
 
     editor.executeEdits('ai-copilot', [{
@@ -52,6 +52,7 @@ export async function executeEdit (token: Monaco.CancellationToken) {
       text: result,
     }])
     editor.focus()
+    return true
   } catch (error: any) {
     ctx.ui.useToast().show('warning', error.message || `${error}`, 5000)
     throw error
