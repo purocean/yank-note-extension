@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.2.0...extension-ai-copilot-1.2.1) (2023-12-22)
+
+
+### Features
+
+* **extension-ai-copilot:** fix bug ([2da58bc](https://github.com/purocean/yank-note-extension/commit/2da58bc9c9d39909bb01604974a53bea39bb2c59))
+
+
+
 # [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.1.2...extension-ai-copilot-1.2.0) (2023-12-22)
 
 
