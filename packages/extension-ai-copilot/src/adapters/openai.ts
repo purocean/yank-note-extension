@@ -4,6 +4,8 @@ import { ctx } from '@yank-note/runtime-api'
 import { Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { reactive, watch } from 'vue'
 
+const defaultApiUrl = 'https://api.openai.com/v1/chat/completions'
+
 export class OpenAICompletionAdapter implements CompletionAdapter {
   type: 'completion' = 'completion'
   id = 'openai-completion'
@@ -15,6 +17,7 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
   defaultSystemMessage = `Fill content at the \`${this.cursorPlaceholder}\`. \n\nExample 1:\nInput: I like {CURSOR} dance with my hands\nOutput: dance\n\nExample 2:\nInput: I like dance with my {CURSOR}\nOutput: hands\n\nAttention: Only output the filled content, do not output the surrounding content.`
 
   private _state = reactive({
+    api_url: defaultApiUrl,
     prefix: '',
     suffix: '',
     system_message: this.defaultSystemMessage,
@@ -35,6 +38,7 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
       { type: 'textarea', key: 'system_message', label: 'System Message', defaultValue: this.defaultSystemMessage },
       { type: 'range', key: 'max_tokens', label: 'Max Tokens', max: 4096, min: -1, step: 1, description: '-1 means unlimited', defaultValue: -1 },
       { type: 'range', key: 'temperature', label: 'Temperature', max: 2, min: 0, step: 0.01, defaultValue: 1 },
+      { type: 'input', key: 'api_url', label: 'Api Url', defaultValue: defaultApiUrl, props: { placeholder: 'https://' }, hasError: v => !v },
       {
         type: 'textarea',
         key: 'paramsJson',
@@ -146,7 +150,7 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
       messages.unshift({ role: 'system', content: system })
     }
 
-    const url = 'https://api.openai.com/v1/chat/completions'
+    const url = this._state.api_url || defaultApiUrl
 
     const params = this._parseJson(this._state.paramsJson, {})
 
@@ -185,6 +189,7 @@ export class OpenAIEditAdapter implements EditAdapter {
   defaultSystemMessage = 'Follow with the instruction and rewrite the text.\n\nExample 1: \nInstruction: Translate to English\nInput: 你好\nOutput: Hello\n\nExample 2: \nInstruction: Fix the grammar\nInput: I are a boy\nOutput: I am a boy\n\nAttention: Only output the rewritten content.'
 
   state = reactive({
+    api_url: defaultApiUrl,
     selection: '',
     system_message: this.defaultSystemMessage,
     historyInstructions: [] as string[],
@@ -206,6 +211,7 @@ export class OpenAIEditAdapter implements EditAdapter {
       { type: 'textarea', key: 'system_message', label: 'System Message', defaultValue: this.defaultSystemMessage },
       { type: 'range', key: 'max_tokens', label: 'Max Tokens', max: 4096, min: -1, step: 1, description: '-1 means unlimited', defaultValue: -1 },
       { type: 'range', key: 'temperature', label: 'Temperature', max: 2, min: 0, step: 0.01, defaultValue: 1 },
+      { type: 'input', key: 'api_url', label: 'Api Url', defaultValue: defaultApiUrl, props: { placeholder: 'https://' }, hasError: v => !v },
       {
         type: 'textarea',
         key: 'paramsJson',
@@ -313,7 +319,7 @@ export class OpenAIEditAdapter implements EditAdapter {
       messages.unshift({ role: 'system', content: system })
     }
 
-    const url = 'https://api.openai.com/v1/chat/completions'
+    const url = this.state.api_url || defaultApiUrl
 
     const params = this._parseJson(this.state.paramsJson, {})
 
