@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.2.2...extension-ai-copilot-1.3.0) (2023-12-29)
+
+
+### Features
+
+* **extension-ai-copilot:** custom OpenAI api url ([ba42cae](https://github.com/purocean/yank-note-extension/commit/ba42cae4ca1c6b8ff05368e9cdd36fff3bba4a69))
+
+
+
 ## [1.2.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.2.1...extension-ai-copilot-1.2.2) (2023-12-22)
 
 
