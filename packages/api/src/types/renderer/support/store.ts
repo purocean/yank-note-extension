@@ -26,7 +26,7 @@ export declare const initState: {
     previewer: string;
     editor: string;
 };
-export declare type AppState = typeof initState;
+export type AppState = typeof initState;
 declare const _default: {
     state: {
         tree: {
@@ -82,9 +82,7 @@ declare const _default: {
             repo: string;
             path: string;
         } | null | undefined;
-        recentOpenTime: {
-            [x: string]: number;
-        };
+        recentOpenTime: Record<string, number>;
         tabs: {
             payload: {
                 file: {

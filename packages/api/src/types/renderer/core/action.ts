@@ -1,5 +1,5 @@
 import type { Action, ActionHandler, BuildInActionName } from '@fe/types';
-export declare type HookType = 'before-run' | 'after-run';
+export type HookType = 'before-run' | 'after-run';
 /**
  * Get all actions
  * @returns all actions

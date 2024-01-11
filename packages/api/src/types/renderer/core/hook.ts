@@ -1,14 +1,14 @@
 import type { BuildInHookTypes } from '@fe/types';
-export declare type HookType = keyof BuildInHookTypes;
-export declare type HookFun<T> = (arg: T) => (boolean | void | Promise<boolean | void>);
-export declare type Hook<T> = {
+export type HookType = keyof BuildInHookTypes;
+export type HookFun<T> = (arg: T) => (boolean | void | Promise<boolean | void>);
+export type Hook<T> = {
     fun: HookFun<T>;
     once: boolean;
 };
-export declare type HookTypeWithoutPayload = {
+export type HookTypeWithoutPayload = {
     [K in keyof BuildInHookTypes]: BuildInHookTypes[K] extends never ? K : never;
 }[keyof BuildInHookTypes];
-export declare type HookTypeWithPayload = keyof Omit<BuildInHookTypes, HookTypeWithoutPayload>;
+export type HookTypeWithPayload = keyof Omit<BuildInHookTypes, HookTypeWithoutPayload>;
 /**
  * Register a hook.
  * @param type

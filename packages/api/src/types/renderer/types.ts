@@ -4,10 +4,10 @@ import type MarkdownIt from 'markdown-it';
 import type Token from 'markdown-it/lib/token';
 import type * as Monaco from 'monaco-editor';
 export * from '@share/types';
-export declare type TTitle = keyof {
+export type TTitle = keyof {
     [K in MsgPath as `T_${K}`]: never;
 };
-export declare type SettingSchema = {
+export type SettingSchema = {
     type: string;
     title: TTitle;
     properties: {
@@ -50,7 +50,7 @@ export declare type SettingSchema = {
         value: SettingGroup;
     }[];
 };
-export declare type ActionHandler<T extends string> = T extends BuildInActionName ? BuildInActions[T] : (...args: any[]) => any;
+export type ActionHandler<T extends string> = T extends BuildInActionName ? BuildInActions[T] : (...args: any[]) => any;
 export interface Action<T extends string = string> {
     /**
      * Name
@@ -77,7 +77,7 @@ export interface Action<T extends string = string> {
      */
     when?: () => boolean;
 }
-export declare type PremiumTab = 'intro' | 'activation';
+export type PremiumTab = 'intro' | 'activation';
 export declare namespace Components {
     namespace Modal {
         interface BaseParams {
@@ -219,27 +219,27 @@ export declare namespace Components {
         type SchemaTapper = (schema: Schema) => void;
     }
 }
-export declare type FileSort = {
+export type FileSort = {
     by: 'mtime' | 'birthtime' | 'name' | 'serial';
     order: 'asc' | 'desc';
 };
-export declare type ThemeName = 'system' | 'dark' | 'light';
-export declare type LanguageName = 'system' | Language;
-export declare type ExportType = 'print' | 'pdf' | 'docx' | 'html' | 'rst' | 'adoc';
-export declare type SettingGroup = 'repos' | 'appearance' | 'editor' | 'image' | 'proxy' | 'other' | 'macros' | 'render';
-export declare type RegistryHostname = 'registry.npmjs.org' | 'registry.npmmirror.com';
-export declare type Keybinding = {
+export type ThemeName = 'system' | 'dark' | 'light';
+export type LanguageName = 'system' | Language;
+export type ExportType = 'print' | 'pdf' | 'docx' | 'html' | 'rst' | 'adoc';
+export type SettingGroup = 'repos' | 'appearance' | 'editor' | 'image' | 'proxy' | 'other' | 'macros' | 'render';
+export type RegistryHostname = 'registry.npmjs.org' | 'registry.npmmirror.com';
+export type Keybinding = {
     type: 'workbench' | 'editor' | 'application';
     keys: string | null;
     command: string;
 };
-export declare type PrintOpts = {
+export type PrintOpts = {
     landscape?: boolean;
     pageSize?: string;
     scaleFactor?: number;
     printBackground?: boolean;
 };
-export declare type ConvertOpts = {
+export type ConvertOpts = {
     fromType: 'markdown' | 'html';
     toType: 'docx' | 'html' | 'rst' | 'adoc';
     fromHtmlOptions?: {
@@ -250,7 +250,7 @@ export declare type ConvertOpts = {
         highlightCode: boolean;
     };
 };
-export declare type RenderEnv = {
+export type RenderEnv = {
     source: string;
     file: Doc | null;
     renderCount: number;
@@ -258,18 +258,18 @@ export declare type RenderEnv = {
     tokens: Token[];
     safeMode?: boolean;
 };
-export declare type ExtensionCompatible = {
+export type ExtensionCompatible = {
     value: boolean;
     reason: string;
 };
-export declare type ExtensionLoadStatus = {
+export type ExtensionLoadStatus = {
     version?: string;
     themes: boolean;
     plugin: boolean;
     style: boolean;
     activationTime: number;
 };
-export declare type FindInRepositoryQuery = {
+export type FindInRepositoryQuery = {
     pattern?: string;
     caseSensitive?: boolean;
     wholeWord?: boolean;
@@ -370,7 +370,7 @@ export interface BuildInSettings {
     'hide-main-window-on-startup': boolean;
     'plantuml-api': string;
 }
-export declare type BuildInActions = {
+export type BuildInActions = {
     'view.render-immediately': () => void;
     'view.show-find-in-preview': () => void;
     'view.render': () => void;
@@ -428,8 +428,8 @@ export declare type BuildInActions = {
     'base.find-in-repository': (query?: FindInRepositoryQuery) => void;
     'workbench.toggle-outline': (visible?: boolean) => void;
 };
-export declare type BuildInActionName = keyof BuildInActions;
-export declare type BuildInHookTypes = {
+export type BuildInActionName = keyof BuildInActions;
+export type BuildInHookTypes = {
     STARTUP: never;
     GLOBAL_RESIZE: never;
     GLOBAL_KEYDOWN: KeyboardEvent;
@@ -600,15 +600,15 @@ export declare type BuildInHookTypes = {
     };
     PREMIUM_STATUS_CHANGED: never;
 };
-export declare type Previewer = {
+export type Previewer = {
     name: string;
     displayName?: string;
     component: any;
 };
-export declare type CustomEditorCtx = {
+export type CustomEditorCtx = {
     doc?: Doc | null;
 };
-export declare type CustomEditor = {
+export type CustomEditor = {
     name: string;
     displayName: string;
     hiddenPreview?: boolean;
@@ -629,7 +629,7 @@ export interface CodeRunner {
         value: ReadableStreamDefaultReader | string;
     }>;
 }
-export declare type BuildInIOCTypes = {
+export type BuildInIOCTypes = {
     [key in keyof BuildInHookTypes]: any;
 } & {
     TABS_ACTION_BTN_TAPPERS: (btns: Components.Tabs.ActionBtn[]) => void;
@@ -644,7 +644,7 @@ export declare type BuildInIOCTypes = {
     EDITOR_CUSTOM_EDITOR: CustomEditor;
     CODE_RUNNER: CodeRunner;
 };
-export declare type FrontMatterAttrs = {
+export type FrontMatterAttrs = {
     headingNumber?: boolean;
     wrapCode?: boolean;
     enableMacro?: boolean;

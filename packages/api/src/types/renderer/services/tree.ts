@@ -1,10 +1,10 @@
 import { Ref } from 'vue';
 import type { Components } from '@fe/types';
-export declare type MenuItem = Components.ContextMenu.Item;
-export declare type VueCtx = {
+export type MenuItem = Components.ContextMenu.Item;
+export type VueCtx = {
     localMarked: Ref<boolean | null>;
 };
-export declare type BuildContextMenu = (items: MenuItem[], node: Components.Tree.Node, vueCtx: VueCtx) => void;
+export type BuildContextMenu = (items: MenuItem[], node: Components.Tree.Node, vueCtx: VueCtx) => void;
 /**
  * Add a context menu processor.
  * @param fun

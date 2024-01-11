@@ -1,5 +1,5 @@
 import type { BuildInSettings, SettingGroup, SettingSchema } from '@fe/types';
-declare type Schema = SettingSchema;
+type Schema = SettingSchema;
 /**
  * Get Schema.
  * @returns Schema

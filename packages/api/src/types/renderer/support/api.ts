@@ -3,7 +3,7 @@ import type { Stats } from 'fs';
 import type { WatchOptions } from 'chokidar';
 import type { IProgressMessage, ISerializedFileMatch, ISerializedSearchSuccess, ITextQuery } from 'ripgrep-wrapper';
 import type { Components, Doc, ExportType, FileItem, FileSort, FileStat, PathItem } from '@fe/types';
-export declare type ApiResult<T = any> = {
+export type ApiResult<T = any> = {
     status: 'ok' | 'error';
     message: string;
     data: T;
@@ -100,7 +100,7 @@ export declare function choosePath(options: Record<string, any>): Promise<{
     canceled: boolean;
     filePaths: string[];
 }>;
-declare type SearchReturn = (onResult: (result: ISerializedFileMatch[]) => void, onMessage?: (message: IProgressMessage) => void) => Promise<ISerializedSearchSuccess | null>;
+type SearchReturn = (onResult: (result: ISerializedFileMatch[]) => void, onMessage?: (message: IProgressMessage) => void) => Promise<ISerializedSearchSuccess | null>;
 /**
  * Search files.
  * @param controller

@@ -1,5 +1,5 @@
 import type { Component } from 'vue';
-export declare type MenuItem = {
+export type MenuItem = {
     id: string;
     type: 'normal';
     title: string;
@@ -28,10 +28,10 @@ export interface Menu {
     onClick?: (menu: Menu) => void;
     onMousedown?: (menu: Menu) => void;
 }
-export declare type Menus = {
+export type Menus = {
     [id: string]: Menu;
 };
-export declare type MenuTapper = (menus: Menus) => void;
+export type MenuTapper = (menus: Menus) => void;
 /**
  * Refresh status bar menus.
  */

@@ -1,6 +1,6 @@
 import { LicenseToken } from 'app-license';
 import type { PremiumTab } from '@fe/types';
-declare type Payload = {
+type Payload = {
     fetchToken: {
         licenseId: string;
     };

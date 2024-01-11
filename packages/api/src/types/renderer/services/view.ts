@@ -1,7 +1,7 @@
 import type { BuildInHookTypes, Components, Previewer } from '@fe/types';
-export declare type MenuItem = Components.ContextMenu.Item;
-export declare type BuildContextMenu = (items: MenuItem[], e: MouseEvent) => void;
-export declare type Heading = {
+export type MenuItem = Components.ContextMenu.Item;
+export type BuildContextMenu = (items: MenuItem[], e: MouseEvent) => void;
+export type Heading = {
     tag: string;
     class: string;
     text: string;

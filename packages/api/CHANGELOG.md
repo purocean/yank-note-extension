@@ -1,3 +1,10 @@
+## 3.66.0 (2024-01-11)
+
+* chore(api): upgrade dependence ([ee77694](https://github.com/purocean/yank-note-extension/commit/ee77694))
+* feat(api): add custom-editor helper class ([a3e8663](https://github.com/purocean/yank-note-extension/commit/a3e8663))
+
+
+
 # [3.65.0](https://github.com/purocean/yank-note-extension/compare/api-3.64.1...api-3.65.0) (2023-12-17)
 
 

@@ -60,5 +60,5 @@ export declare const ControlCenter: {
      * Toggle visible
      * @param visible
      */
-    toggle(visible?: boolean | undefined): void;
+    toggle(visible?: boolean): void;
 };

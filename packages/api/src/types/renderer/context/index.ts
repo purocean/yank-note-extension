@@ -29,11 +29,13 @@ import * as setting from '@fe/services/setting';
 import * as i18n from '@fe/services/i18n';
 import * as runner from '@fe/services/runner';
 import * as exportDoc from '@fe/services/export';
+import * as directives from '@fe/directives/index';
 import * as lib from './lib';
 import * as components from './components';
 declare const ctx: Readonly<{
     lib: typeof lib;
     components: typeof components;
+    directives: typeof directives;
     ioc: typeof ioc;
     base: typeof base;
     api: typeof api;
@@ -93,9 +95,7 @@ declare const ctx: Readonly<{
                 repo: string;
                 path: string;
             } | null | undefined;
-            recentOpenTime: {
-                [x: string]: number;
-            };
+            recentOpenTime: Record<string, number>;
             tabs: {
                 payload: {
                     file: {
@@ -169,6 +169,6 @@ declare const ctx: Readonly<{
     getPluginApi: typeof plugin.getApi;
     version: string;
 }>;
-export declare type Ctx = typeof ctx;
-export declare type Plugin = plugin.Plugin<Ctx>;
+export type Ctx = typeof ctx;
+export type Plugin = plugin.Plugin<Ctx>;
 export default ctx;

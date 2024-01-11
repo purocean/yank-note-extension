@@ -736,5 +736,5 @@ declare const data: {
         'toast-no-more': string;
     };
 };
-export declare type BaseLanguage = typeof data;
+export type BaseLanguage = typeof data;
 export default data;

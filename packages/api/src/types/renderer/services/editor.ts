@@ -1,12 +1,12 @@
 import type * as Monaco from 'monaco-editor';
 import { CustomEditor } from '@fe/types';
-export declare type SimpleCompletionItem = {
+export type SimpleCompletionItem = {
     label: string;
     kind?: Monaco.languages.CompletionItemKind;
     insertText: string;
     detail?: string;
 };
-export declare type SimpleCompletionItemTappers = (items: SimpleCompletionItem[]) => void;
+export type SimpleCompletionItemTappers = (items: SimpleCompletionItem[]) => void;
 declare let monaco: typeof Monaco;
 declare let editor: Monaco.editor.IStandaloneCodeEditor;
 /**
