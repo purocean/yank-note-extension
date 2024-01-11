@@ -325,7 +325,7 @@ export const MarkdownItPlugin = (md: Markdown) => {
       return linkTemp(tokens, idx, options, env, slf)
     }
 
-    const path = join(dirname(currentFile.path), url)
+    const path = url.startsWith('/') ? url : join(dirname(currentFile.path), url)
 
     const nextToken = tokens[idx + 1]
     if (nextToken && nextToken.type === 'text') {
