@@ -17,7 +17,7 @@
       // use relative path to assets
       window.EXCALIDRAW_ASSET_PATH = '../editor/'
       window.EXCALIDRAW_EXPORT_SOURCE = 'https://github.com/purocean/yank-note-extension/tree/main/packages/extension-excalidraw'
-      window.ctx = (window.opener || window.parent || window).ctx
+      this.ctx = (window.opener || window.parent || window).ctx
     </script>
     <script type="text/javascript" src="./index.js"></script>
   </body>

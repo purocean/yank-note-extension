@@ -1,8 +1,8 @@
 import { registerPlugin } from '@yank-note/runtime-api'
-import CustomEditor from './CustomEditor.vue'
-import type { Components, Doc } from '@yank-note/runtime-api/types/types/renderer/types'
+import type { Components, CustomEditorCtx, Doc } from '@yank-note/runtime-api/types/types/renderer/types'
 import i18n from './i18n'
-import { CUSTOM_EDITOR_IFRAME_ID, FILE_JSON, FILE_PNG, FILE_SVG, buildEditorUrl, supported } from './lib'
+import { FILE_JSON, FILE_PNG, FILE_SVG, buildEditorUrl } from './lib'
+import { BaseCustomEditor } from '@yank-note/runtime-api/src/custom-editor'
 
 const extensionName = __EXTENSION_ID__
 
@@ -72,71 +72,29 @@ registerPlugin({
       }
     }
 
-    function getFileContextMenu (node: Components.Tree.Node): Components.ContextMenu.Item {
-      return {
-        id: 'open-excalidraw',
-        type: 'normal',
-        label: i18n.t('edit-in-new-window'),
-        onClick: () => {
-          const { repo, path, name, type } = node
-          const url = buildEditorUrl({ repo, path, name, type })
-          ctx.env.openWindow(url, '_blank', { alwaysOnTop: false })
+    class ExcalidrawEditor extends BaseCustomEditor {
+      name = 'excalidraw'
+      displayName = 'Excalidraw'
+      hiddenPreview = true
+      supportedFileTypes = ['.excalidraw', '.excalidraw.svg', '.excalidraw.png']
+      labels = {
+        createFile: i18n.t('create-file'),
+        openFile: i18n.t('edit-in-new-window'),
+      }
+
+      buildEditorUrl (ctx: CustomEditorCtx) {
+        if (!ctx.doc) {
+          throw new Error('Need Doc')
         }
+
+        return buildEditorUrl(ctx.doc)
+      }
+
+      createFile (node: Components.Tree.Node) {
+        return createFile(node)
       }
     }
 
-    ctx.tree.tapContextMenus((items, node) => {
-      if (ctx.args.FLAG_READONLY) {
-        return
-      }
-
-      if (node.type === 'dir') {
-        items.push(
-          { type: 'separator' },
-          {
-            id: 'create-excalidraw-file',
-            type: 'normal',
-            label: i18n.t('create-file'),
-            onClick: () => createFile(node)
-          },
-        )
-      } else if (node.type === 'file' && supported(node)) {
-        items.unshift(
-          getFileContextMenu(node),
-          { type: 'separator' },
-        )
-      }
-    })
-
-    ctx.workbench.FileTabs.tapTabContextMenus((items, tab) => {
-      if (ctx.args.FLAG_READONLY) {
-        return
-      }
-
-      const doc = tab.payload.file
-
-      if (doc && supported(doc)) {
-        items.push(
-          { type: 'separator' },
-          getFileContextMenu(doc),
-        )
-      }
-    })
-
-    ctx.editor.registerCustomEditor({
-      name: 'excalidraw',
-      displayName: 'Excalidraw',
-      component: CustomEditor,
-      hiddenPreview: true,
-      when ({ doc }) {
-        return supported(doc)
-      },
-      getIsDirty () {
-        const iframe = document.getElementById(CUSTOM_EDITOR_IFRAME_ID) as HTMLIFrameElement
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        return !!(iframe?.contentWindow?.getIsDirty?.())
-      }
-    })
+    ctx.editor.registerCustomEditor(new ExcalidrawEditor())
   }
 })

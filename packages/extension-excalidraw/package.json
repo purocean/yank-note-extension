@@ -14,7 +14,6 @@
     "url": "https://github.com/purocean/yank-note-extension.git"
   },
   "main": "./main/index.js",
-  "style": "./main/style.css",
   "icon": "./icon.png",
   "engines": {
     "node": ">=14.6.0",
