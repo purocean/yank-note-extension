@@ -2,6 +2,7 @@ import type { Ctx as _Ctx } from '@fe/context'
 import type * as _Setting from '@fe/services/setting'
 import type { Plugin } from '@fe/core/plugin'
 import { BuildInSettings } from '@fe/types'
+export * from './custom-editor'
 
 type __Setting = typeof _Setting;
 
