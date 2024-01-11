@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-excalidraw",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "displayName": "Excalidraw",
   "description": "Excalidraw integration",
   "displayName_ZH-CN": "Excalidraw",
