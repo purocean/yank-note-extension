@@ -1,3 +1,12 @@
+## [1.1.3](https://github.com/purocean/yank-note-extension/compare/extension-luckysheet-1.1.2...extension-luckysheet-1.1.3) (2024-01-11)
+
+
+### Bug Fixes
+
+* **extension-luckysheet:** fix absolute path ([4ac795d](https://github.com/purocean/yank-note-extension/commit/4ac795d8c376279b5b0a7d96b9dc8f951434d8b4))
+
+
+
 ## [1.1.2](https://github.com/purocean/yank-note-extension/compare/extension-luckysheet-1.1.1...extension-luckysheet-1.1.2) (2023-11-11)
 
 
