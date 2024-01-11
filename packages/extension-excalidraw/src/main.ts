@@ -1,8 +1,7 @@
-import { registerPlugin } from '@yank-note/runtime-api'
+import { registerPlugin, BaseCustomEditor } from '@yank-note/runtime-api'
 import type { Components, CustomEditorCtx, Doc } from '@yank-note/runtime-api/types/types/renderer/types'
 import i18n from './i18n'
 import { FILE_JSON, FILE_PNG, FILE_SVG, buildEditorUrl } from './lib'
-import { BaseCustomEditor } from '@yank-note/runtime-api/src/custom-editor'
 
 const extensionName = __EXTENSION_ID__
 

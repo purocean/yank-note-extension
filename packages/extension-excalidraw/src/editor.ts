@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom/client'
 import { Excalidraw, Footer, exportToBlob, exportToSvg, getSceneVersion, loadFromBlob, loadLibraryFromBlob, serializeAsJSON } from '@excalidraw/excalidraw'
 import type { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types'
 import type { AppState, BinaryFiles, LibraryItems } from '@excalidraw/excalidraw/types/types'
-import { BaseCustomEditorContent } from '@yank-note/runtime-api/src/custom-editor'
+import { BaseCustomEditorContent } from '@yank-note/runtime-api'
 import { LIBRARY_FILE, LIBRARY_RETURN_URL } from './lib'
 import i18n from './i18n'
 

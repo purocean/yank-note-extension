@@ -22,6 +22,6 @@
     },
   },
   "exclude": ["node_modules", "lib", "types", "docs"],
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "../api/src/custom-editor.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "compileOnSave": false
 }
