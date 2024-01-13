@@ -1,3 +1,7 @@
+## [1.0.1](https://github.com/purocean/yank-note-extension/compare/extension-repl-1.0.0...extension-repl-1.0.1) (2024-01-13)
+
+
+
 # 1.0.0 (2024-01-13)
 
 
