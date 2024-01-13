@@ -1,0 +1,71 @@
+{
+  "name": "@yank-note/extension-repl",
+  "version": "0.0.1",
+  "displayName": "Vue Repl",
+  "description": "Build and run Vue interactive apps in Yank Note",
+  "displayName_ZH-CN": "Vue Repl",
+  "description_ZH-CN": "在 Yank Note 中构建并运行 Vue 交互式应用",
+  "author": "Yank Note",
+  "license": "AGPL-3.0",
+  "keywords": [],
+  "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/extension-repl",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/purocean/yank-note-extension.git"
+  },
+  "main": "./main/index.js",
+  "style": "./main/style.css",
+  "icon": "./icon.svg",
+  "engines": {
+    "node": ">=14.6.0",
+    "yank-note": "^3.66.0"
+  },
+  "requirements": {
+    "premium": true
+  },
+  "files": [
+    "dist",
+    "themes",
+    "*.md",
+    "icon.svg"
+  ],
+  "scripts": {
+    "link-extension": "link-yn-extension",
+    "unlink-extension": "link-yn-extension --unlink",
+    "dev:main": "vite build --mode main --watch",
+    "dev:editor": "vite build --mode editor --watch",
+    "build:main": "vue-tsc --noEmit && env NODE_ENV=production vite build --mode main",
+    "build:editor": "vue-tsc --noEmit && env NODE_ENV=production vite build --mode editor",
+    "build": "npm run build:main && npm run build:editor",
+    "lint": "vue-tsc --noEmit && yarn run eslint '{src,__tests__}/**/*.{js,ts,tsx,vue}'",
+    "version": "conventional-changelog -t extension-repl- --commit-path . -p angular -i CHANGELOG.md -s && npm run tag-version",
+    "tag-version": "git add . && git commit -m 'chore(release): bump extension-repl version' && git tag extension-repl-$npm_package_version",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.2.1",
+    "@rollup/plugin-replace": "^4.0.0",
+    "@vitejs/plugin-vue": "^4.6.2",
+    "@vue/eslint-config-standard": "^6.1.0",
+    "@vue/eslint-config-typescript": "^10.0.0",
+    "@yank-note/runtime-api": "workspace:^3.65.0",
+    "conventional-changelog-cli": "^2.2.2",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-vue": "^8.7.1",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "sass": "^1.56.1",
+    "terser": "^5.26.0",
+    "typescript": "^4.6.4",
+    "vite": "^3.2.3",
+    "vue": "^3.4.10",
+    "vue-tsc": "^0.34.11"
+  },
+  "dependencies": {
+    "@vue/repl": "^3.3.0",
+    "jszip": "^3.10.1"
+  }
+}

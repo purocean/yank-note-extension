@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "vue": "/extensions/@yank-note$extension-repl/editor/vue.runtime.esm-browser.js"
+  }
+}
