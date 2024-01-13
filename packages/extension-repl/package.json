@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-repl",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "displayName": "Vue Repl",
   "description": "Build and run Vue interactive apps in Yank Note",
   "displayName_ZH-CN": "Vue Repl",
