@@ -1,3 +1,7 @@
+# [2.0.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.9.0...extension-drawio-2.0.0) (2024-01-15)
+
+
+
 # [1.9.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.8.2...extension-drawio-1.9.0) (2024-01-15)
 
 
