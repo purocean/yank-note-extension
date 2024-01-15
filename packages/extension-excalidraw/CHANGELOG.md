@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.3.0...extension-excalidraw-1.4.0) (2024-01-15)
+
+
+### Features
+
+* **extension-excalidraw:** add Excalidraw editing options to context menu ([5a4638b](https://github.com/purocean/yank-note-extension/commit/5a4638baa035b4299e22e9034d9452417ae4c220))
+
+
+
 # [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.2.0...extension-excalidraw-1.3.0) (2024-01-11)
 
 
