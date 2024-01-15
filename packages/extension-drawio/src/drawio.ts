@@ -326,7 +326,7 @@ export async function buildSrcdoc ({ repo, path, content, page }: F): Promise<{ 
   return { html, content }
 }
 
-export function supported (file?: Doc | null) {
+export function supported (file?: { path: string } | null) {
   return !!(file && (file.path.endsWith('.drawio') || file.path.endsWith('.drawio.png')))
 }
 

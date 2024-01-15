@@ -7,6 +7,7 @@ export default ctx.i18n.createI18n({
     'create-drawio-file': 'Create Drawio File',
     'edit-in-new-window': 'Edit in New Window',
     'file-type': 'File Type: ',
+    'edit-with-drawio': 'Edit with Drawio',
   },
   'zh-CN': {
     'edit-diagram': '编辑图形 - %s',
@@ -14,5 +15,6 @@ export default ctx.i18n.createI18n({
     'create-drawio-file': '创建 Drawio 文件',
     'edit-in-new-window': '在新窗口中编辑',
     'file-type': '文件类型: ',
+    'edit-with-drawio': '使用 Drawio 编辑',
   }
 })

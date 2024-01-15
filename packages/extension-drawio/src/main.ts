@@ -1,5 +1,5 @@
 import { registerPlugin } from '@yank-note/runtime-api'
-import type { Components } from '@yank-note/runtime-api/types/types/renderer/types'
+import type { Components, Doc } from '@yank-note/runtime-api/types/types/renderer/types'
 import { buildEditorSrcdoc, createDrawioFile, CUSTOM_EDITOR_IFRAME_ID, MarkdownItPlugin, supported } from './drawio'
 import i18n from './i18n'
 import CustomEditor from './CustomEditor.vue'
@@ -89,6 +89,43 @@ registerPlugin({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         return !!(iframe?.contentWindow?.getIsDirty?.())
+      }
+    })
+
+    ctx.view.tapContextMenus((items, e) => {
+      const el = e.target as HTMLElement
+      const originSrc = el.getAttribute(ctx.args.DOM_ATTR_NAME.ORIGIN_SRC)
+      const currentFile = ctx.store.state.currentFile
+
+      if (
+        el.tagName === 'IMG' &&
+        el.getAttribute(ctx.args.DOM_ATTR_NAME.LOCAL_IMAGE) &&
+        originSrc &&
+        currentFile &&
+        supported({ path: originSrc })
+      ) {
+        const repo = currentFile.repo
+        const path = ctx.utils.path.resolve(
+          ctx.utils.path.dirname(currentFile.path),
+          originSrc
+        )
+
+        const name = ctx.utils.path.basename(path)
+
+        const file: Doc = { type: 'file', repo, path, name }
+
+        items.push(
+          {
+            id: __EXTENSION_ID__ + '-edit-with-drawio',
+            type: 'normal',
+            ellipsis: false,
+            label: i18n.t('edit-with-drawio'),
+            onClick: async () => {
+              ctx.doc.switchDoc(file)
+              ctx.editor.switchEditor('drawio')
+            }
+          },
+        )
       }
     })
   }
