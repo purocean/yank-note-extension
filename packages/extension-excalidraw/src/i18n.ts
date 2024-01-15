@@ -9,6 +9,8 @@ export default ctx.i18n.createI18n({
     'saved': 'Saved',
     'unsaved': 'Unsaved',
     'saving': 'Saving...',
+    'edit-with-excalidraw': 'Edit with Excalidraw',
+    'edit-with-excalidraw-new-window': 'Edit with Excalidraw (New Window)',
   },
   'zh-CN': {
     'create-file': '创建 Excalidraw 文件',
@@ -17,5 +19,7 @@ export default ctx.i18n.createI18n({
     'saved': '已保存',
     'unsaved': '未保存',
     'saving': '保存中...',
+    'edit-with-excalidraw': '使用 Excalidraw 编辑',
+    'edit-with-excalidraw-new-window': '使用 Excalidraw 编辑 (新窗口)',
   }
 })

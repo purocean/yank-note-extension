@@ -8,9 +8,12 @@ const extensionName = __EXTENSION_ID__
 registerPlugin({
   name: extensionName,
   register (ctx) {
+    type FileTypes = '.excalidraw' | '.excalidraw.svg' | '.excalidraw.png'
+    const supportedFileTypes: FileTypes[] = ['.excalidraw', '.excalidraw.svg', '.excalidraw.png']
+
     async function createFile (node: Doc) {
       const currentPath = node.path
-      const fileExt = ctx.lib.vue.ref<'.excalidraw' | '.excalidraw.svg' | '.excalidraw.png'>('.excalidraw')
+      const fileExt = ctx.lib.vue.ref<FileTypes>('.excalidraw')
       const { h } = ctx.lib.vue
 
       let filename = await ctx.ui.useModal().input({
@@ -75,7 +78,7 @@ registerPlugin({
       name = 'excalidraw'
       displayName = 'Excalidraw'
       hiddenPreview = true
-      supportedFileTypes = ['.excalidraw', '.excalidraw.svg', '.excalidraw.png']
+      supportedFileTypes = supportedFileTypes
       labels = {
         createFile: i18n.t('create-file'),
         openFile: i18n.t('edit-in-new-window'),
@@ -93,6 +96,54 @@ registerPlugin({
         return createFile(node)
       }
     }
+
+    ctx.view.tapContextMenus((items, e) => {
+      const el = e.target as HTMLElement
+      const originSrc = el.getAttribute(ctx.args.DOM_ATTR_NAME.ORIGIN_SRC)
+      const currentFile = ctx.store.state.currentFile
+
+      if (
+        el.tagName === 'IMG' &&
+        el.getAttribute(ctx.args.DOM_ATTR_NAME.LOCAL_IMAGE) &&
+        originSrc &&
+        currentFile &&
+        supportedFileTypes.some((ext) => originSrc.endsWith(ext))
+      ) {
+        const repo = currentFile.repo
+        const path = ctx.utils.path.resolve(
+          ctx.utils.path.dirname(currentFile.path),
+          originSrc
+        )
+
+        const name = ctx.utils.path.basename(path)
+
+        const file: Doc = { type: 'file', repo, path, name }
+
+        items.push(
+          {
+            id: __EXTENSION_ID__ + '-edit-with-excalidraw',
+            type: 'normal',
+            ellipsis: false,
+            label: i18n.t('edit-with-excalidraw'),
+            onClick: async () => {
+              ctx.doc.switchDoc(file)
+              ctx.editor.switchEditor('excalidraw')
+            }
+          },
+          {
+            id: __EXTENSION_ID__ + '-edit-with-excalidraw-new-window',
+            type: 'normal',
+            ellipsis: false,
+            label: i18n.t('edit-with-excalidraw-new-window'),
+            hidden: true, // TODO: hide this menu item until we have a better way to sync file changes
+            onClick: async () => {
+              const url = buildEditorUrl(file)
+              ctx.env.openWindow(url, '_blank', { alwaysOnTop: false })
+            }
+          }
+        )
+      }
+    })
 
     ctx.editor.registerCustomEditor(new ExcalidrawEditor())
   }
