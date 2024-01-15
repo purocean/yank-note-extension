@@ -1,3 +1,12 @@
+# [1.9.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.8.2...extension-drawio-1.9.0) (2024-01-15)
+
+
+### Features
+
+* **extension-drawio:** add Drawio editing options to context ([71f9277](https://github.com/purocean/yank-note-extension/commit/71f9277c2061caba3840e2245167f356a8bc08c9))
+
+
+
 ## [1.8.2](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.8.1...extension-drawio-1.8.2) (2023-11-11)
 
 
