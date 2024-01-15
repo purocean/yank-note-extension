@@ -1,8 +1,8 @@
-import { registerPlugin } from '@yank-note/runtime-api'
-import type { Components, Doc } from '@yank-note/runtime-api/types/types/renderer/types'
-import { buildEditorSrcdoc, createDrawioFile, CUSTOM_EDITOR_IFRAME_ID, MarkdownItPlugin, supported } from './drawio'
+import { BaseCustomEditor, registerPlugin } from '@yank-note/runtime-api'
+import type { Components, CustomEditorCtx, Doc } from '@yank-note/runtime-api/types/types/renderer/types'
+import { buildEditorUrl, createDrawioFile } from './lib'
+import { MarkdownItPlugin } from './drawio'
 import i18n from './i18n'
-import CustomEditor from './CustomEditor.vue'
 
 import './style.css'
 
@@ -11,58 +11,8 @@ const extensionId = __EXTENSION_ID__
 registerPlugin({
   name: extensionId,
   register: ctx => {
+    const supportedFileTypes = ['.drawio', '.drawio.png']
     ctx.markdown.registerPlugin(MarkdownItPlugin)
-
-    function getFileContextMenu (node: Components.Tree.Node): Components.ContextMenu.Item {
-      return {
-        id: 'open-drawio',
-        type: 'normal',
-        label: i18n.t('edit-in-new-window'),
-        onClick: () => {
-          const { repo, path, name, type } = node
-          const srcdoc = buildEditorSrcdoc({ repo, path, name, type })
-          ctx.env.openWindow(ctx.embed.buildSrc(srcdoc, i18n.t('edit-diagram', name)), '_blank', { alwaysOnTop: false })
-        }
-      }
-    }
-
-    ctx.tree.tapContextMenus((items, node) => {
-      if (ctx.args.FLAG_READONLY) {
-        return
-      }
-
-      if (node.type === 'dir') {
-        items.push(
-          { type: 'separator' },
-          {
-            id: 'create-drawio-drawio',
-            type: 'normal',
-            label: i18n.t('create-drawio-file'),
-            onClick: () => createDrawioFile(node)
-          },
-        )
-      } else if (node.type === 'file' && supported(node)) {
-        items.unshift(
-          getFileContextMenu(node),
-          { type: 'separator' },
-        )
-      }
-    })
-
-    ctx.workbench.FileTabs.tapTabContextMenus((items, tab) => {
-      if (ctx.args.FLAG_READONLY) {
-        return
-      }
-
-      const doc = tab.payload.file
-
-      if (doc && supported(doc)) {
-        items.push(
-          { type: 'separator' },
-          getFileContextMenu(doc),
-        )
-      }
-    })
 
     ctx.registerHook('VIEW_ON_GET_HTML_FILTER_NODE', ({ node }) => {
       if (node.tagName === 'IFRAME' && node.className === 'drawio' && node.dataset.xml) {
@@ -76,21 +26,31 @@ registerPlugin({
       }
     })
 
-    ctx.editor.registerCustomEditor({
-      name: 'drawio',
-      displayName: 'Drawio',
-      component: CustomEditor,
-      hiddenPreview: true,
-      when ({ doc }) {
-        return supported(doc)
-      },
-      getIsDirty () {
-        const iframe = document.getElementById(CUSTOM_EDITOR_IFRAME_ID) as HTMLIFrameElement
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        return !!(iframe?.contentWindow?.getIsDirty?.())
+    class DrawioEditor extends BaseCustomEditor {
+      name = 'drawio'
+      displayName = 'Drawio'
+      hiddenPreview = true
+      supportedFileTypes = supportedFileTypes
+      labels = {
+        createFile: i18n.t('create-drawio-file'),
+        openFile: i18n.t('edit-in-new-window'),
       }
-    })
+
+      buildEditorUrl (ctx: CustomEditorCtx) {
+        if (!ctx.doc) {
+          throw new Error('Need Doc')
+        }
+
+        return buildEditorUrl(ctx.doc)
+      }
+
+      createFile (node: Components.Tree.Node) {
+        return createDrawioFile(node)
+      }
+    }
+
+    const editor = new DrawioEditor()
+    ctx.editor.registerCustomEditor(editor)
 
     ctx.view.tapContextMenus((items, e) => {
       const el = e.target as HTMLElement
@@ -102,7 +62,7 @@ registerPlugin({
         el.getAttribute(ctx.args.DOM_ATTR_NAME.LOCAL_IMAGE) &&
         originSrc &&
         currentFile &&
-        supported({ path: originSrc })
+        editor.supported({ type: 'file', name: ctx.utils.path.basename(originSrc), repo: '', path: originSrc })
       ) {
         const repo = currentFile.repo
         const path = ctx.utils.path.resolve(

@@ -13,18 +13,20 @@
     "type": "git",
     "url": "https://github.com/purocean/yank-note-extension.git"
   },
-  "main": "./dist/index.js",
-  "style": "./dist/style.css",
+  "main": "./main/index.js",
+  "style": "./main/style.css",
   "icon": "https://fastly.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/icon.svg",
   "readmeUrl": "https://fastly.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/README.md",
   "changelogUrl": "https://fastly.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/CHANGELOG.md",
   "engines": {
     "node": ">=14.6.0",
-    "yank-note": "^3.63.2"
+    "yank-note": "^3.66.0"
   },
   "files": [
     "*.md",
     "dist",
+    "main",
+    "editor",
     "themes",
     "icon.png",
     "drawio/src/main/webapp"
@@ -32,8 +34,11 @@
   "scripts": {
     "link-extension": "link-yn-extension",
     "unlink-extension": "link-yn-extension --unlink",
-    "dev": "vite build --watch",
-    "build": "vue-tsc --noEmit && vite build",
+    "dev:main": "vite build --mode main --watch",
+    "dev:editor": "vite build --mode editor --watch",
+    "build:main": "vue-tsc --noEmit && env NODE_ENV=production vite build --mode main",
+    "build:editor": "vue-tsc --noEmit && env NODE_ENV=production vite build --mode editor",
+    "build": "npm run build:main && npm run build:editor",
     "lint": "vue-tsc --noEmit && yarn run eslint '{src,__tests__}/**/*.{js,ts,tsx,vue}'",
     "version": "conventional-changelog -t extension-drawio- --commit-path . -p angular -i CHANGELOG.md -s && npm run tag-version",
     "tag-version": "git add . && git commit -m 'chore(release): bump extension-drawio version' && git tag extension-drawio-$npm_package_version",
@@ -52,6 +57,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^8.7.1",
+    "rollup-plugin-copy": "^3.5.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.3",
     "vue": "^3.2.33",

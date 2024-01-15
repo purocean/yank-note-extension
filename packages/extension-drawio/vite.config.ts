@@ -1,19 +1,21 @@
 import * as path from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { YN_LIBS, getExtensionBasePath } from '@yank-note/runtime-api'
+import { YN_LIBS } from '@yank-note/runtime-api'
+import copy from 'rollup-plugin-copy'
 import * as fs from 'fs'
 
 if (!fs.existsSync(path.resolve(__dirname, 'drawio/src/main/webapp/index.html'))) {
   throw new Error('Drawio not found')
 }
 
-const OUT_DIR = 'dist'
-
-// https://vitejs.dev/config/
-export default defineConfig({
-  base: path.join(getExtensionBasePath(process.env.npm_package_name), OUT_DIR),
-  plugins: [vue()],
+export default ({ mode }) => defineConfig({
+  plugins: [vue(), copy({
+    targets: [
+      { src: 'src/index.html', dest: 'editor' },
+    ],
+    hook: 'writeBundle',
+  })],
   define: {
     __EXTENSION_VERSION__: JSON.stringify(process.env.npm_package_version),
     __EXTENSION_ID__: JSON.stringify(process.env.npm_package_name),
@@ -24,12 +26,14 @@ export default defineConfig({
     ],
   },
   build: {
-    outDir: OUT_DIR,
     minify: 'terser',
+    outDir: mode,
     lib: {
-      entry: path.resolve(__dirname, 'src/main.ts'),
+      entry: {
+        [mode]: path.resolve(__dirname, `src/${mode}.ts`),
+      },
       formats: ['iife'],
-      name: process.env.npm_package_name.replace(/[^a-zA-Z0-9_]/g, '_'),
+      name: process.env.npm_package_name!.replace(/[^a-zA-Z0-9_]/g, '_'),
       fileName: () => 'index.js',
     },
     rollupOptions: {
@@ -38,8 +42,8 @@ export default defineConfig({
         globals: {
           window: 'window',
           ...YN_LIBS,
-        }
-      }
+        },
+      },
     }
   },
 })
