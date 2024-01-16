@@ -10,7 +10,7 @@ class EditorContent extends BaseCustomEditorContent {
     const BASE_URL = location.origin + this.ctx.utils.path.join(getExtensionBasePath(__EXTENSION_ID__), 'drawio/src/main/webapp')
     const inIframe = !!window.parent
 
-    const DRAW_IFRAME_URL = `${BASE_URL}/index.html?embed=1&proto=json${inIframe ? '&noExitBtn=1' : ''}`
+    const DRAW_IFRAME_URL = `${BASE_URL}/index.html?embed=1&atlas=1&proto=json${inIframe ? '&noExitBtn=1' : ''}`
 
     const iframe = document.createElement('iframe')
     iframe.style.boxSizing = 'border-box'
