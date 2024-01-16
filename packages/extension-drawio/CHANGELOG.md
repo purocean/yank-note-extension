@@ -1,3 +1,12 @@
+# [2.1.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.0.0...extension-drawio-2.1.0) (2024-01-16)
+
+
+### Features
+
+* **extension-drawio:** support switch theme ([695443a](https://github.com/purocean/yank-note-extension/commit/695443acaf6a094acdabc0ed349f49922fdc57ab))
+
+
+
 # [2.0.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-1.9.0...extension-drawio-2.0.0) (2024-01-15)
 
 
