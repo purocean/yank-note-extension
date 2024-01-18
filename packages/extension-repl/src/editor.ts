@@ -1,8 +1,50 @@
-import { createApp, defineAsyncComponent, h, onBeforeUnmount, ref, watch, watchEffect } from 'vue'
-import { Repl } from '@vue/repl'
-import { BaseCustomEditorContent } from '@yank-note/runtime-api'
+import { createApp, defineAsyncComponent, defineComponent, h, onBeforeUnmount, provide, ref, watch, watchEffect } from 'vue'
+import { File, Preview, Repl } from '@vue/repl'
+import { BaseCustomEditorContent, Ctx } from '@yank-note/runtime-api'
 import Editor from '@vue/repl/codemirror-editor'
-import { base64ToVueProject, replStoreToVueProject, vueProjectToBase64, vueProjectToReplStore } from './vue/helper'
+import { base64ToVueProject, getDefaultReplStore, replStoreToVueProject, vueProjectToBase64, vueProjectToReplStore } from './vue/helper'
+
+const useCode = `window.useYnCtx = (opts) => {
+  const ctx = window.parent.ctx
+
+  document.documentElement.setAttribute('app-theme', document.documentElement.className)
+
+  if (!window._themeObserve) {
+    window._themeObserve = new MutationObserver(() => {
+      if (document.documentElement.className !== document.documentElement.getAttribute('app-theme')) {
+        document.documentElement.setAttribute('app-theme', document.documentElement.className)
+      }
+    })
+
+    window._themeObserve.observe(document.documentElement, { attributes: true })
+  }
+
+  if ((!opts || !opts.injectGlobalCss) && window._globalCssLink) {
+    window._globalCssLink.remove()
+    window._globalCssLink = null
+  }
+
+  if (opts && opts.injectGlobalCss && !window._globalCssLink) {
+    const globalCssHref = [...window?.parent?.parent?.document?.styleSheets]
+    .find(x => x.href && x.href.match(/assets\\/api-[^.]+.css/))?.href
+
+    if (globalCssHref) {
+      const link = document.createElement('link')
+      link.href = globalCssHref
+      link.rel = 'stylesheet'
+      document.head.appendChild(link)
+
+      window._globalCssLink = link
+    }
+  }
+
+  return ctx
+}`
+
+function getVueSfcCode () {
+  const query = new URLSearchParams(location.hash)
+  return query.get('#vue-sfc-code')
+}
 
 class EditorContent extends BaseCustomEditorContent {
   logger = this.ctx.utils.getLogger('repl-editor')
@@ -50,44 +92,7 @@ class EditorContent extends BaseCustomEditorContent {
       editor: Editor,
       theme: theme.value,
       previewOptions: {
-        customCode: {
-          useCode: `window.useYnCtx = (opts) => {
-            const ctx = window.parent.ctx
-
-            document.documentElement.setAttribute('app-theme', document.documentElement.className)
-
-            if (!window._themeObserve) {
-              window._themeObserve = new MutationObserver(() => {
-                if (document.documentElement.className !== document.documentElement.getAttribute('app-theme')) {
-                  document.documentElement.setAttribute('app-theme', document.documentElement.className)
-                }
-              })
-
-              window._themeObserve.observe(document.documentElement, { attributes: true })
-            }
-
-            if ((!opts || !opts.injectGlobalCss) && window._globalCssLink) {
-              window._globalCssLink.remove()
-              window._globalCssLink = null
-            }
-
-            if (opts && opts.injectGlobalCss && !window._globalCssLink) {
-              const globalCssHref = [...window?.parent?.parent?.document?.styleSheets]
-              .find(x => x.href && x.href.match(/assets\\/api-[^.]+.css/))?.href
-
-              if (globalCssHref) {
-                const link = document.createElement('link')
-                link.href = globalCssHref
-                link.rel = 'stylesheet'
-                document.head.appendChild(link)
-
-                window._globalCssLink = link
-              }
-            }
-
-            return ctx
-          }`,
-        },
+        customCode: { useCode },
       }
     })
   })
@@ -98,5 +103,77 @@ class EditorContent extends BaseCustomEditorContent {
   }
 }
 
-const editorContent = new EditorContent()
-editorContent.init()
+class Previewer {
+  ctx: Ctx = (window as any).ctx
+  VueRepl = defineComponent(() => {
+    const store = getDefaultReplStore()
+
+    const updateCode = () => {
+      const code = getVueSfcCode()
+      if (code) {
+        store.addFile(new File('src/App.vue', code))
+        store.setActive('src/App.vue')
+      }
+    }
+
+    updateCode()
+    store.init()
+
+    const theme = ref<'dark' | 'light'>(this.ctx.theme.getColorScheme())
+    const refreshTheme = () => {
+      theme.value = this.ctx.theme.getColorScheme()
+    }
+
+    const debounceUpdateCode = this.ctx.lib.lodash.debounce(updateCode, 800)
+
+    window.addEventListener('hashchange', debounceUpdateCode)
+
+    this.ctx.registerHook('THEME_CHANGE', refreshTheme)
+    onBeforeUnmount(() => {
+      this.ctx.removeHook('THEME_CHANGE', refreshTheme)
+      window.removeEventListener('hashchange', debounceUpdateCode)
+    })
+
+    watchEffect(() => {
+      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.remove('light')
+      document.documentElement.classList.add(theme.value)
+    })
+
+    const previewOptions = {
+      headHTML: '<style>html > body { padding: 0; margin: 0; }</style>',
+      customCode: {
+        useCode: `
+          ${useCode}
+
+          function resize () {
+            const height = window.document.documentElement.scrollHeight
+            window.parent.resize(height)
+          }
+
+          setTimeout(resize, 500);
+        `
+      },
+    }
+
+    provide('store', store)
+    provide('theme', theme)
+    provide('preview-options', previewOptions)
+    provide('clear-console', ref(false))
+
+    return () => h(Preview, { show: true })
+  })
+
+  init () {
+    const app = window.document.getElementById('app')!
+    createApp(this.VueRepl).mount(app)
+  }
+}
+
+if (getVueSfcCode()) {
+  const previewer = new Previewer()
+  previewer.init()
+} else {
+  const editorContent = new EditorContent()
+  editorContent.init()
+}
