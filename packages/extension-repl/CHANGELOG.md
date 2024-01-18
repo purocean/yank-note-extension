@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-repl-1.2.0...extension-repl-1.2.1) (2024-01-18)
+
+
+### Bug Fixes
+
+* **extension-repl:** fix bug ([d115e8b](https://github.com/purocean/yank-note-extension/commit/d115e8b3672d5d703c2d79e3552d1cc945489b42))
+
+
+
 # [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-repl-1.1.0...extension-repl-1.2.0) (2024-01-18)
 
 
