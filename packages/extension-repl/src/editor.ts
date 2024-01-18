@@ -140,18 +140,34 @@ class Previewer {
       document.documentElement.classList.add(theme.value)
     })
 
-    const previewOptions = {
-      headHTML: '<style>html > body { padding: 0; margin: 0; }</style>',
-      customCode: {
-        useCode: `
-          ${useCode}
+    watchEffect(() => {
+      const errors = store.state.errors.map(x => String(x)).join('')
+      const iframe = document.querySelector('.iframe-container>iframe') as HTMLIFrameElement
+      const win: any = iframe?.contentWindow
+      if (errors.trim() && win) {
+        setTimeout(() => {
+          if (window.document.body.scrollHeight < 200) {
+            win.resize(200)
+          }
+          win._console.error(errors)
+        }, 500)
+      }
+    })
 
-          function resize () {
-            const height = window.document.documentElement.scrollHeight
+    const previewOptions = {
+      headHTML: '<style>html > body { padding: 0; margin: 0; display: flow-root; }</style>',
+      customCode: {
+        importCode: `
+          window._console = console;
+          window.resize = (h) => {
+            const height = h || window.document.body.scrollHeight
             window.parent.resize(height)
           }
-
-          setTimeout(resize, 500);
+        `, // expose console use for display complier error.
+        useCode: `
+          ${useCode}
+          setTimeout(window.resize, 0);
+          setTimeout(window.resize, 500);
         `
       },
     }

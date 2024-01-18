@@ -44,7 +44,7 @@ export const MarkdownItPlugin = (md: Markdown) => {
     const iframe = ctx.lib.vue.h('iframe', {
       ...token.meta?.attrs,
       style: 'width: 100%; border: none; display: block;',
-      height: '20px',
+      height: '50px',
       src: buildEditorUrl() + '#vue-sfc-code=' + encodeURIComponent(code),
       onload,
     })

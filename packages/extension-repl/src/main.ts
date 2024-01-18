@@ -102,7 +102,7 @@ registerPlugin({
       /* eslint-disable no-template-curly-in-string */
 
       items.push(
-        { label: '/ ``` Applet Vue Repl', insertText: '```vue\n<!-- --applet-- ${1:DEMO} -->\n' + appSrc + '\n```\n' },
+        { label: '/ ``` Applet Vue Repl', insertText: '```vue\n<!-- --applet-- ${1:DEMO} -->\n' + appSrc + '```\n' },
       )
     })
   }
