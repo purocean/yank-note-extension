@@ -90,8 +90,8 @@ const adapterKey = computed(() => props.type + '-' + state.adapter[props.type])
 const adapter = computed(() => props.adapter)
 const panel = computed(() => unref(adapter.value.panel))
 
-const suffixContextRef = ref<HTMLElement | null>(null)
-const prefixContextRef = ref<HTMLElement | null>(null)
+const suffixContextRef = ref<HTMLElement[] | HTMLElement | null>(null)
+const prefixContextRef = ref<HTMLElement[] | HTMLElement | null>(null)
 
 const adapterRes = adapter.value.activate()
 const adapterState = adapterRes.state
@@ -149,9 +149,15 @@ function buildContent () {
   adapterState.prefix = prefix
   adapterState.suffix = suffix
 
+  function toArray<T> (obj?: T | T[] | null) {
+    return obj
+      ? (Array.isArray(obj) ? obj : [obj])
+      : []
+  }
+
   nextTick(() => {
-    suffixContextRef.value?.scrollTo(0, 0)
-    prefixContextRef.value?.scrollTo(0, prefixContextRef.value.scrollHeight)
+    toArray(suffixContextRef.value).forEach(x => x.scrollTo(0, 0))
+    toArray(prefixContextRef.value).forEach(x => x.scrollTo(0, x.scrollHeight))
   })
 }
 
