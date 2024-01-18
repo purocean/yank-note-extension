@@ -1,5 +1,5 @@
 import { createApp, defineAsyncComponent, defineComponent, h, onBeforeUnmount, provide, ref, watch, watchEffect } from 'vue'
-import { File, Preview, Repl } from '@vue/repl'
+import { Preview, Repl } from '@vue/repl'
 import { BaseCustomEditorContent, Ctx } from '@yank-note/runtime-api'
 import Editor from '@vue/repl/codemirror-editor'
 import { base64ToVueProject, getDefaultReplStore, replStoreToVueProject, vueProjectToBase64, vueProjectToReplStore } from './vue/helper'
@@ -111,8 +111,7 @@ class Previewer {
     const updateCode = () => {
       const code = getVueSfcCode()
       if (code) {
-        store.addFile(new File('src/App.vue', code))
-        store.setActive('src/App.vue')
+        store.state.activeFile.code = code
       }
     }
 
@@ -167,6 +166,7 @@ class Previewer {
         useCode: `
           ${useCode}
           setTimeout(window.resize, 0);
+          setTimeout(window.resize, 100);
           setTimeout(window.resize, 500);
         `
       },

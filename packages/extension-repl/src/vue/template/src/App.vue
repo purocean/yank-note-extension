@@ -18,7 +18,7 @@ function test () {
 </template>
 
 <style>
-  body {
-    padding: 16px;
-  }
+body {
+  padding: 16px;
+}
 </style>
