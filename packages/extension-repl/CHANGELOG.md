@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-repl-1.1.0...extension-repl-1.2.0) (2024-01-18)
+
+
+### Features
+
+* **extension-repl:** handle compile error ([61d32c3](https://github.com/purocean/yank-note-extension/commit/61d32c3fd71032b4882779a85e34a814b3e25bbc))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-repl-1.0.1...extension-repl-1.1.0) (2024-01-18)
 
 
