@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.3.0...extension-ai-copilot-1.3.1) (2024-01-18)
+
+
+### Bug Fixes
+
+* **extension-ai:** fix scroll suffix and prefix textarea ([cf36771](https://github.com/purocean/yank-note-extension/commit/cf367714bd7fd69ec2b5f6b418dc0fbd40254fd9))
+
+
+
 # [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.2.2...extension-ai-copilot-1.3.0) (2023-12-29)
 
 
