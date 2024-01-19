@@ -46,7 +46,7 @@ export async function createDrawioFile (node: Doc) {
     throw new Error('Need Path')
   }
 
-  const file: Doc = { repo: node.repo, path: path, type: 'file', name: '', contentHash: 'new' }
+  const file: Doc = { repo: node.repo, path: path, type: 'file', name: filename, contentHash: 'new' }
   let isBase64: boolean
   let content: string
 
