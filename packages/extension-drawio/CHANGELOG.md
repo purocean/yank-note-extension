@@ -1,3 +1,12 @@
+## [2.1.1](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.1.0...extension-drawio-2.1.1) (2024-01-19)
+
+
+### Bug Fixes
+
+* **extension-drawio:** fix missing filename in createDrawioFile function ([fe68d3e](https://github.com/purocean/yank-note-extension/commit/fe68d3edc25aee24a9b8e731f76cba501ddf0af1))
+
+
+
 # [2.1.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.0.0...extension-drawio-2.1.0) (2024-01-16)
 
 
