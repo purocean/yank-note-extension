@@ -144,8 +144,15 @@ export function MarkdownItPlugin (md: Markdown) {
   const render = ({ url, content, page = 1, env }: any) => {
     const currentFile = (env as RenderEnv).file
     if (url && currentFile) {
-      const basePath = ctx.utils.path.dirname(currentFile.path)
-      const path = ctx.utils.path.resolve(basePath, url)
+      let path: string
+      if (url.startsWith('/api/attachment/')) {
+        const params = new URLSearchParams(url.replace(/^.*\?/, ''))
+        path = params.get('path') || ''
+      } else {
+        const basePath = ctx.utils.path.dirname(currentFile.path)
+        path = ctx.utils.path.resolve(basePath, decodeURIComponent(url))
+      }
+
       const repo = FLAG_DEMO ? 'help' : currentFile?.repo
       return h(DrawioComponent, { repo, path, name: basename(path), content, page })
     }
@@ -161,7 +168,7 @@ export function MarkdownItPlugin (md: Markdown) {
       return linkTemp(tokens, idx, options, env, slf)
     }
 
-    const url = decodeURIComponent(token.attrGet('href') || '')
+    const url = token.attrGet('href') || ''
     const page = parseInt(token.attrGet('page') || '1', 10)
     const nextToken = tokens[idx + 1]
     if (nextToken && nextToken.type === 'text') {
