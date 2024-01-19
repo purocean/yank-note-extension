@@ -1,3 +1,12 @@
+## [2.1.2](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.1.1...extension-drawio-2.1.2) (2024-01-19)
+
+
+### Bug Fixes
+
+* **extension-drawio:** fix drawio file path resolution ([a130ff7](https://github.com/purocean/yank-note-extension/commit/a130ff7d65959617210c39ae91f3250b77130da0))
+
+
+
 ## [2.1.1](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.1.0...extension-drawio-2.1.1) (2024-01-19)
 
 
