@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-git-push",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "displayName": "Git Push",
   "displayName_ZH-CN": "Git 推送",
   "description": "Run Git commit and push to remote repository. Note: This plugin is not available for Mac App Store downloaded Yank Note.",

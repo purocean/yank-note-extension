@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-git-push-1.3.0...extension-git-push-1.4.0) (2024-01-23)
+
+
+### Features
+
+* **extension-git-push:** add git pull command ([5d3defd](https://github.com/purocean/yank-note-extension/commit/5d3defd98fbee5e715b5d07353dc57d3caa14b8d))
+
+
+
 # [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-git-push-1.2.0...extension-git-push-1.3.0) (2023-08-17)
 
 
