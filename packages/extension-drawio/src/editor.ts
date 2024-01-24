@@ -23,7 +23,9 @@ class EditorContent extends BaseCustomEditorContent {
       (iframe!.contentWindow as any).EXPORT_URL = 'https://convert.diagrams.net/node/export?__allow-open-window__'
     })
 
-    const asPng = this.io.file.path.endsWith('.png')
+    const path = this.io.file.path.toLowerCase()
+    const asPng = path.endsWith('.png')
+    const asSvg = path.endsWith('.svg')
 
     const receive = async (evt: { data: string }) => {
       const win: any = iframe.contentWindow!
@@ -78,7 +80,7 @@ class EditorContent extends BaseCustomEditorContent {
           this.io.setStatus('loaded')
         } else if (event === 'export') {
           this.logger.debug('export', msg.format)
-          if (asPng && msg.format === 'xmlpng') {
+          if ((asPng && msg.format === 'xmlpng') || (asSvg && msg.format === 'svg')) {
             await this.io.write(msg.data, true)
             this.io.setStatus('saved')
             win.postMessage(JSON.stringify({ action: 'status', modified: false }), '*')
@@ -86,11 +88,11 @@ class EditorContent extends BaseCustomEditorContent {
         } else if (event === 'save') {
           this.logger.debug('save', asPng)
 
-          if (asPng) {
+          if (asPng || asSvg) {
             win.postMessage(JSON.stringify({
               xml: msg.xml,
               action: 'export',
-              format: 'xmlpng',
+              format: asPng ? 'xmlpng' : 'xmlsvg',
               border: 5,
               shadow: (window as any).drawioApp.editor.graph.shadowVisible,
               spin: 'Updating page',

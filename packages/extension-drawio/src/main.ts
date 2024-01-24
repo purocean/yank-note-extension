@@ -11,7 +11,7 @@ const extensionId = __EXTENSION_ID__
 registerPlugin({
   name: extensionId,
   register: ctx => {
-    const supportedFileTypes = ['.drawio', '.drawio.png']
+    const supportedFileTypes = ['.drawio', '.drawio.svg', '.drawio.png']
     ctx.markdown.registerPlugin(MarkdownItPlugin)
 
     ctx.registerHook('VIEW_ON_GET_HTML_FILTER_NODE', ({ node }) => {
