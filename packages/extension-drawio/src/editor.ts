@@ -91,6 +91,8 @@ class EditorContent extends BaseCustomEditorContent {
               xml: msg.xml,
               action: 'export',
               format: 'xmlpng',
+              border: 5,
+              shadow: (window as any).drawioApp.editor.graph.shadowVisible,
               spin: 'Updating page',
             }), '*')
           } else {
