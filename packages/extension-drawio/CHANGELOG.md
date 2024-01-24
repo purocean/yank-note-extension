@@ -1,3 +1,14 @@
+# [2.2.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.1.3...extension-drawio-2.2.0) (2024-01-24)
+
+
+### Features
+
+* **extension-drawio:** optimize export ([4d39099](https://github.com/purocean/yank-note-extension/commit/4d390997027c6aca5e70b90887ff036431053539))
+* **extension-drawio:** support svg file ([dbe7b16](https://github.com/purocean/yank-note-extension/commit/dbe7b16f55c9e5a38cb8c19aaf55618c0dc6232e))
+* **extension:** upgrade drawio to v23.0.0 ([cf9d5f0](https://github.com/purocean/yank-note-extension/commit/cf9d5f0a78830288d55debd01300ff38343fb6c5))
+
+
+
 ## [2.1.3](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.1.2...extension-drawio-2.1.3) (2024-01-19)
 
 
