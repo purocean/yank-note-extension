@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-kroki",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "displayName": "Kroki",
   "description": "Kroki diagram extension for Yank Note",
   "displayName_ZH-CN": "Kroki",
@@ -22,7 +22,7 @@
   "requirements": {
     "premium": true
   },
-   "files": [
+  "files": [
     "*.md",
     "dist",
     "types",
