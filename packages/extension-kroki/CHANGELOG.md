@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-kroki-1.0.1...extension-kroki-1.1.0) (2024-01-25)
+
+
+### Features
+
+* **extension-kroki:** support wikijs style ([e7e4c04](https://github.com/purocean/yank-note-extension/commit/e7e4c04066b4d7c4ad3a077bdd32ebd683bde34c))
+
+
+
 ## [1.0.1](https://github.com/purocean/yank-note-extension/compare/extension-kroki-1.0.0...extension-kroki-1.0.1) (2024-01-25)
 
 
