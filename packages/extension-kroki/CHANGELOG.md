@@ -1,3 +1,7 @@
+## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-kroki-1.1.0...extension-kroki-1.1.1) (2024-01-25)
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-kroki-1.0.1...extension-kroki-1.1.0) (2024-01-25)
 
 
