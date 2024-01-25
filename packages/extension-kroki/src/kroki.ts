@@ -69,6 +69,16 @@ export const MarkdownItPlugin = (md: Markdown) => {
     const token = tokens[idx]
     const content = token.content.trim()
     const firstLine = content.split(/\n/)[0].trim()
+
+    if (token.info === 'kroki') {
+      const type = firstLine.trim()
+      if (type) {
+        // remove first line
+        const code = content.substring(content.indexOf('\n') + 1)
+        return h(Mermaid, { attrs: token.meta?.attrs, code, type }) as any
+      }
+    }
+
     const matchs = firstLine.match(/--kroki--\s*(\w+)/)
     if (matchs) {
       const type = matchs[1]

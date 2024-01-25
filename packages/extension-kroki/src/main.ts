@@ -3,9 +3,20 @@ import { MarkdownItPlugin, defaultKrokiImgUrl, settingKeyKrokiUrl } from './krok
 
 const extensionId = __EXTENSION_ID__
 
-const insertText = `\`\`\`\${2:js}
+const textFormatA = `\`\`\`\${2:js}
 // --kroki-- \${1|wavedrom,blockdiag,bpmn,bytefield,seqdiag,actdiag,nwdiag,packetdiag,rackdiag,c4plantuml,d2,dbml,ditaa,erd,excalidraw,graphviz,mermaid,nomnoml,pikchr,plantuml,structurizr,svgbob,symbolator,tikz,vega,vegalite,wireviz|}
 \${3:{ signal: [
+  { name: "clk",         wave: "p.....|..." \\},
+  { name: "Data",        wave: "x.345x|=.x", data: ["head", "body", "tail", "data"] \\},
+  { name: "Request",     wave: "0.1..0|1.0" \\},
+  {\\},
+  { name: "Acknowledge", wave: "1.....|01." \\}
+]\\}}
+\`\`\``
+
+const textFormatB = `\`\`\`kroki
+\${1|wavedrom,blockdiag,bpmn,bytefield,seqdiag,actdiag,nwdiag,packetdiag,rackdiag,c4plantuml,d2,dbml,ditaa,erd,excalidraw,graphviz,mermaid,nomnoml,pikchr,plantuml,structurizr,svgbob,symbolator,tikz,vega,vegalite,wireviz|}
+\${2:{ signal: [
   { name: "clk",         wave: "p.....|..." \\},
   { name: "Data",        wave: "x.345x|=.x", data: ["head", "body", "tail", "data"] \\},
   { name: "Request",     wave: "0.1..0|1.0" \\},
@@ -31,10 +42,8 @@ registerPlugin({
     ctx.editor.tapSimpleCompletionItems(items => {
       /* eslint-disable no-template-curly-in-string */
       items.push(
-        {
-          label: '/ ``` Kroki',
-          insertText,
-        },
+        { label: '/ ``` Kroki Format: ```[lang]', insertText: textFormatA },
+        { label: '/ ``` kroki Format: ```kroki', insertText: textFormatB },
       )
     })
 

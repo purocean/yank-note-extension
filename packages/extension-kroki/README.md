@@ -21,6 +21,19 @@ For example, if you want to create a `wavedrom` diagram, you can use the followi
 ```
 ~~~
 
+Or you can use the following code block:
+
+```kroki
+wavedrom
+{ signal: [
+  { name: "clk",         wave: "p.....|..." },
+  { name: "Data",        wave: "x.345x|=.x", data: ["head", "body", "tail", "data"] },
+  { name: "Request",     wave: "0.1..0|1.0" },
+  {},
+  { name: "Acknowledge", wave: "1.....|01." }
+]}
+```
+
 If you want to customize the kroki server, you can go `Settings` -> `Plugin` -> `Kroki Image URL` to set it.
 
 ## Screenshots
