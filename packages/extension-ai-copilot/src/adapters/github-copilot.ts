@@ -69,6 +69,10 @@ export class GithubCopilotCompletionAdapter implements CompletionAdapter {
 
     const res = await x.json()
 
+    if (res && res.message) {
+      throw new Error(res.message)
+    }
+
     if (token.isCancellationRequested) {
       return []
     }
