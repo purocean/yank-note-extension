@@ -1,3 +1,12 @@
+## [1.3.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.3.1...extension-ai-copilot-1.3.2) (2024-02-01)
+
+
+### Features
+
+* **extension-ai-copilot:** add error handling for response message in GithubCopilotCompletionAdapter ([9913e5a](https://github.com/purocean/yank-note-extension/commit/9913e5ad4450020af01e5dd09698c9cbde4aa253))
+
+
+
 ## [1.3.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.3.0...extension-ai-copilot-1.3.1) (2024-01-18)
 
 
