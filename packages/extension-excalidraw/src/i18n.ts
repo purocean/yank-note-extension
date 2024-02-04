@@ -11,6 +11,7 @@ export default ctx.i18n.createI18n({
     'saving': 'Saving...',
     'edit-with-excalidraw': 'Edit with Excalidraw',
     'edit-with-excalidraw-new-window': 'Edit with Excalidraw (New Window)',
+    'handwriting-font': 'Excalidraw - Hand-drawn Font',
   },
   'zh-CN': {
     'create-file': '创建 Excalidraw 文件',
@@ -21,5 +22,6 @@ export default ctx.i18n.createI18n({
     'saving': '保存中...',
     'edit-with-excalidraw': '使用 Excalidraw 编辑',
     'edit-with-excalidraw-new-window': '使用 Excalidraw 编辑 (新窗口)',
+    'handwriting-font': 'Excalidraw - 手写字体',
   }
 })

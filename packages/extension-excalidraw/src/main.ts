@@ -1,7 +1,7 @@
 import { registerPlugin, BaseCustomEditor } from '@yank-note/runtime-api'
 import type { Components, CustomEditorCtx, Doc } from '@yank-note/runtime-api/types/types/renderer/types'
 import i18n from './i18n'
-import { FILE_JSON, FILE_PNG, FILE_SVG, buildEditorUrl } from './lib'
+import { FILE_JSON, FILE_PNG, FILE_SVG, SETTING_KEY_FONT_HANDWRITING, buildEditorUrl } from './lib'
 
 const extensionName = __EXTENSION_ID__
 
@@ -84,6 +84,16 @@ registerPlugin({
         openFile: i18n.t('edit-in-new-window'),
       }
 
+      constructor () {
+        super()
+        ctx.registerHook('SETTING_CHANGED', ({ changedKeys }) => {
+          if (changedKeys.includes(SETTING_KEY_FONT_HANDWRITING as any)) {
+            const iframe: HTMLIFrameElement | null = document.getElementById(this.iframeId) as HTMLIFrameElement
+            iframe?.contentWindow?.location.reload()
+          }
+        })
+      }
+
       buildEditorUrl (ctx: CustomEditorCtx) {
         if (!ctx.doc) {
           throw new Error('Need Doc')
@@ -146,5 +156,31 @@ registerPlugin({
     })
 
     ctx.editor.registerCustomEditor(new ExcalidrawEditor())
+
+    ctx.setting.changeSchema(schema => {
+      if (!schema.groups.some((x: any) => x.value === 'plugin')) {
+        schema.groups.push({ value: 'plugin', label: 'Plugin' } as any)
+      }
+
+      schema.properties[SETTING_KEY_FONT_HANDWRITING] = {
+        title: i18n.$$t('handwriting-font'),
+        type: 'string',
+        group: 'plugin',
+        enum: [''],
+        options: {
+          enum_titles: ['DEFAULT'],
+        },
+        required: true,
+        defaultValue: '',
+      }
+    })
+
+    ctx.registerHook('SETTING_PANEL_BEFORE_SHOW', async () => {
+      const fonts = ctx.lib.lodash.uniq((await (window as any).queryLocalFonts()).map(x => x.family))
+
+      ctx.setting.changeSchema((schema) => {
+        schema.properties[SETTING_KEY_FONT_HANDWRITING].enum = [''].concat(fonts)
+      })
+    })
   }
 })

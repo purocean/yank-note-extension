@@ -4,7 +4,7 @@ import { Excalidraw, Footer, exportToBlob, exportToSvg, getSceneVersion, loadFro
 import type { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types'
 import type { AppState, BinaryFiles, LibraryItems } from '@excalidraw/excalidraw/types/types'
 import { BaseCustomEditorContent } from '@yank-note/runtime-api'
-import { LIBRARY_FILE, LIBRARY_RETURN_URL } from './lib'
+import { LIBRARY_FILE, LIBRARY_RETURN_URL, SETTING_KEY_FONT_HANDWRITING } from './lib'
 import i18n from './i18n'
 
 class EditorContent extends BaseCustomEditorContent {
@@ -97,6 +97,26 @@ class EditorContent extends BaseCustomEditorContent {
   async loadLibrary () {
     const res = await this.ctx.api.readUserFile(LIBRARY_FILE)
     return res.json()
+  }
+
+  changeHandWritingFont () {
+    const styleId = 'x-custom-font-style'
+    const oldStyle = document.getElementById(styleId)
+    if (oldStyle) {
+      oldStyle.remove()
+    }
+
+    const handwritingFont: string = this.ctx.setting.getSetting(SETTING_KEY_FONT_HANDWRITING as any)
+    if (handwritingFont) {
+      const style = document.createElement('style')
+      style.id = styleId
+      style.textContent = `@font-face {
+        font-family: 'Virgil';
+        src: local('${handwritingFont}');
+        font-display: swap;
+      }`
+      document.head.appendChild(style)
+    }
   }
 
   App = () => {
@@ -259,6 +279,7 @@ class EditorContent extends BaseCustomEditorContent {
     const excalidrawWrapper = document.getElementById('app')
     const root = ReactDOM.createRoot(excalidrawWrapper)
     root.render(React.createElement(this.App))
+    this.changeHandWritingFont()
   }
 }
 
