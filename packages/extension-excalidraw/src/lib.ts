@@ -94,11 +94,11 @@ export const FILE_SVG = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" v
   <style class="style-fonts">
     @font-face {
       font-family: "Virgil";
-      src: url("https://unpkg.com/@excalidraw/excalidraw@undefined/dist/excalidraw-assets/Virgil.woff2");
+      src: url("https://unpkg.com/@excalidraw/excalidraw/dist/excalidraw-assets/Virgil.woff2");
     }
     @font-face {
       font-family: "Cascadia";
-      src: url("https://unpkg.com/@excalidraw/excalidraw@undefined/dist/excalidraw-assets/Cascadia.woff2");
+      src: url("https://unpkg.com/@excalidraw/excalidraw/dist/excalidraw-assets/Cascadia.woff2");
     }
   </style>
 
