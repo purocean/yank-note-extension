@@ -1,3 +1,17 @@
+# [1.5.0](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.4.0...extension-excalidraw-1.5.0) (2024-02-04)
+
+
+### Bug Fixes
+
+* **extension-excalidraw:** fix font of exported svg ([7c0fa15](https://github.com/purocean/yank-note-extension/commit/7c0fa15955d2ed6f43c815cb67ab6b9c22ed8a01))
+
+
+### Features
+
+* **extension-excalidraw:** support customize hand drawn font ([2edf49e](https://github.com/purocean/yank-note-extension/commit/2edf49e32fe46b8b1097bb9c832fff9e7e17603b))
+
+
+
 # [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.3.0...extension-excalidraw-1.4.0) (2024-01-15)
 
 
