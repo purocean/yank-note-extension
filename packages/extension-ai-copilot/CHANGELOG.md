@@ -1,3 +1,12 @@
+## [1.4.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.4.0...extension-ai-copilot-1.4.1) (2024-04-24)
+
+
+### Bug Fixes
+
+* remove debug code ([faa4a4e](https://github.com/purocean/yank-note-extension/commit/faa4a4e199f2787cfda30158ad4472e9e0499cc6))
+
+
+
 # [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.3.2...extension-ai-copilot-1.4.0) (2024-04-24)
 
 
