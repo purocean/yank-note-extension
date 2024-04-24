@@ -6,6 +6,7 @@ import { registerAdapter } from './adapter'
 import { OpenAICompletionAdapter, OpenAIEditAdapter } from './adapters/openai'
 import { GoogleAICompletionAdapter, GoogleAIEditAdapter } from './adapters/google'
 import { GithubCopilotCompletionAdapter } from './adapters/github-copilot'
+import { SparkAICompletionAdapter, SparkAIEditAdapter } from './adapters/spark'
 import { createWidget, disposeWidget } from './ai-widget'
 import { CompletionProvider } from './completion'
 import { CodeActionProvider, executeEdit } from './edit'
@@ -20,6 +21,8 @@ registerPlugin({
     registerAdapter(new GoogleAICompletionAdapter())
     registerAdapter(new GoogleAIEditAdapter())
     registerAdapter(new GithubCopilotCompletionAdapter())
+    registerAdapter(new SparkAICompletionAdapter())
+    registerAdapter(new SparkAIEditAdapter())
 
     ctx.editor.whenEditorReady().then(({ monaco }) => {
       monaco.languages.registerInlineCompletionsProvider('markdown', new CompletionProvider())
