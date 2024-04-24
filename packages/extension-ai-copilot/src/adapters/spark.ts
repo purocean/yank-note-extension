@@ -58,7 +58,6 @@ class BaseAdapter {
       }
 
       ws.onclose = () => {
-        alert('xxx')
         this._inRequest = false
       }
 
