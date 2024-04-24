@@ -1,3 +1,17 @@
+# [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.3.2...extension-ai-copilot-1.4.0) (2024-04-24)
+
+
+### Bug Fixes
+
+* **extension-ai-copilot:** fix password input style ([300eb79](https://github.com/purocean/yank-note-extension/commit/300eb791a6e4cb6ea1141990098fb77d1a33dcb7))
+
+
+### Features
+
+* **extension-ai-copilot:** add spark adapter ([2203dbf](https://github.com/purocean/yank-note-extension/commit/2203dbfda4ea5b64509c69c955893177f2f1441f))
+
+
+
 ## [1.3.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.3.1...extension-ai-copilot-1.3.2) (2024-02-01)
 
 
