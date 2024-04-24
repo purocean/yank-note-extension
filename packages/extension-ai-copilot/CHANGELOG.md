@@ -1,3 +1,12 @@
+## [1.4.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.4.1...extension-ai-copilot-1.4.2) (2024-04-24)
+
+
+### Features
+
+* **extension-ai-copilot:** update field label ([d163dbf](https://github.com/purocean/yank-note-extension/commit/d163dbf460e07bafe66ad722dcb5dbb2c2841272))
+
+
+
 ## [1.4.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.4.0...extension-ai-copilot-1.4.1) (2024-04-24)
 
 
