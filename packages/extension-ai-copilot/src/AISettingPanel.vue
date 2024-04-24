@@ -216,7 +216,7 @@ watchEffect(() => {
   padding-top: 4px;
 
   &.has-icon-btn {
-    input[type=text], textarea {
+    input[type=text], input[type=password], textarea {
       padding-right: 26px;
     }
   }
@@ -258,6 +258,7 @@ watchEffect(() => {
 
   select,
   input[type=text],
+  input[type=password],
   input[type=number] {
     font-size: 13px;
     padding: 4px;
