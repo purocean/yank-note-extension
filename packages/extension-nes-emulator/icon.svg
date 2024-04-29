@@ -1,0 +1,43 @@
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="200"
+   height="200"
+   viewBox="0 0 52.916668 52.916668"
+   version="1.1">
+  <g transform="scale(0.95)" transform-origin="center">
+    <rect
+       style="fill:none;stroke-width:0.264583"
+       id="rect833"
+       width="52.916668"
+       height="52.916668"
+       x="0"
+       y="0" />
+    <path
+       style="fill:#ffff00;stroke-width:0.264583"
+       d="m 13.229167,13.229167 h 26.458333 v 26.458333 H 13.229167 Z"
+       id="rect835" />
+    <rect
+       style="fill:#ff0000;stroke-width:0.293538"
+       id="rect837"
+       width="6.6145835"
+       height="6.6145835"
+       x="6.6145835"
+       y="39.6875" />
+    <rect
+       style="fill:#ff0000;stroke-width:0.262657"
+       id="rect839"
+       width="5.8208337"
+       height="5.8208337"
+       x="39.6875"
+       y="6.6145835" />
+    <text
+       xml:space="preserve"
+       style="font-size:19.7556px;line-height:1.25;font-family:sans-serif;fill:#ff0000;stroke-width:0.264583;text-align:center;text-anchor:middle"
+       x="26.458334"
+       y="35.15625"
+       id="text843"><tspan
+         x="26.458334"
+         y="35.15625">NES</tspan></text>
+  </g>
+</svg>

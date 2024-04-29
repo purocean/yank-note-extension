@@ -4,3 +4,6 @@
 [submodule "packages/extension-drawio/drawio"]
 	path = packages/extension-drawio/drawio
 	url = https://github.com/jgraph/drawio.git
+[submodule "packages/extension-nes-emulator/jsnes-web"]
+	path = packages/extension-nes-emulator/jsnes-web
+	url = https://github.com/bfirsh/jsnes-web.git
