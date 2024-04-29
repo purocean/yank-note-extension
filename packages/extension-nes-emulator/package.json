@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-nes-emulator",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "displayName": "NES Emulator",
   "description": "Run NES games in Yank Note",
   "displayName_ZH-CN": "NES 模拟器",
