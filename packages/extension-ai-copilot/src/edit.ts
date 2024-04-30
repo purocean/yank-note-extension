@@ -40,7 +40,36 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
       return false
     }
 
-    const res = await adapter.fetchEditResults(selectedText, adapter.state.instruction, token)
+    const initSelectedRange = ctx.editor.getEditor().getSelection()!
+
+    const getEditRange = () => {
+      const selection = ctx.editor.getEditor().getSelection()!
+      if (selection.startLineNumber !== initSelectedRange.startLineNumber || selection.startColumn !== initSelectedRange.startColumn) {
+        globalCancelTokenSource.value?.cancel()
+        throw new Error('Edit range changed, cancel editing.')
+      }
+
+      return selection
+    }
+
+    const res = await adapter.fetchEditResults(selectedText, adapter.state.instruction, token, res => {
+      let text = res.text
+
+      const textLines = text.split('\n')
+      const selectedTextLines = selectedText.split('\n')
+
+      if (textLines.length < selectedTextLines.length) {
+        text = textLines.join('\n') + '🚧\n' + selectedTextLines.slice(textLines.length).join('\n')
+      } else {
+        text += '🚧'
+      }
+
+      editor.executeEdits('ai-copilot', [{
+        range: getEditRange(),
+        text,
+      }])
+    })
+
     const result = await Promise.race([res, cancelPromise])
 
     if (!result || token.isCancellationRequested || model !== editor.getModel()) {
@@ -48,7 +77,7 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
     }
 
     editor.executeEdits('ai-copilot', [{
-      range: ctx.editor.getEditor().getSelection()!,
+      range: getEditRange(),
       text: result,
     }])
     editor.focus()

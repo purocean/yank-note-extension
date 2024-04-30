@@ -1,6 +1,6 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
 import { ctx } from '@yank-note/runtime-api'
-import { Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
+import { Position, editor, languages, CancellationToken } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { reactive } from 'vue'
 
 interface Params {
@@ -39,7 +39,7 @@ class BaseAdapter {
     return `wss://${host}/${params.versionStr}/chat?${arr.join('&')}`
   }
 
-  async request (params: Params) {
+  async request (params: Params, token: CancellationToken, onProgress?: (res: { text: string }) => void) {
     return new Promise<string>((resolve, reject) => {
       const url = this._generateUrl(params)
 
@@ -90,6 +90,13 @@ class BaseAdapter {
 
       const answers: string[] = []
 
+      token.onCancellationRequested(() => {
+        if (this._inRequest) {
+          ws.close()
+          this._inRequest = false
+        }
+      })
+
       ws.onmessage = (e: any) => {
         const { header, payload } = JSON.parse(e.data)
         if (header.code !== 0) {
@@ -102,6 +109,12 @@ class BaseAdapter {
         const seq = payload.choices.seq
 
         answers[seq] = seqContent
+
+        try {
+          onProgress && onProgress({ text: answers.join('') })
+        } catch (error) {
+          console.error(error)
+        }
 
         const end = header.status === 2
 
@@ -160,7 +173,7 @@ export class SparkAICompletionAdapter extends BaseAdapter implements CompletionA
     }
   }
 
-  async fetchCompletionResults (_model: editor.ITextModel, position: Position, context: languages.InlineCompletionContext): Promise<languages.InlineCompletions> {
+  async fetchCompletionResults (_model: editor.ITextModel, position: Position, context: languages.InlineCompletionContext, token: CancellationToken): Promise<languages.InlineCompletions> {
     if (context.triggerKind !== this.monaco.languages.InlineCompletionTriggerKind.Explicit) {
       return { items: [] }
     }
@@ -189,7 +202,7 @@ export class SparkAICompletionAdapter extends BaseAdapter implements CompletionA
       temperature: this._state.temperature,
       maxTokens: this._state.maxTokens,
       topK: this._state.topK
-    })
+    }, token)
 
     return {
       items: [{
@@ -244,7 +257,7 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
     }
   }
 
-  async fetchEditResults (selectedText: string, instruction: string): Promise<string | null | undefined> {
+  async fetchEditResults (selectedText: string, instruction: string, token: CancellationToken, onProgress: (res: { text: string }) => void): Promise<string | null | undefined> {
     if (!this.state.selection || !this.state.appid || !this.state.apiSecret || !this.state.apiKey) {
       return
     }
@@ -269,7 +282,7 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
       temperature: this.state.temperature,
       maxTokens: this.state.maxTokens,
       topK: this.state.topK
-    })
+    }, token, onProgress)
 
     return result
   }

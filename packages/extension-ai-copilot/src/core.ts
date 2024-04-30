@@ -45,11 +45,50 @@ watch(state, saveState)
 export const loading = ref(false)
 export const globalCancelTokenSource = shallowRef<CancellationTokenSource>()
 
-export function proxyRequest (url: string, reqOptions?: Record<string, any> | undefined) {
+export function proxyRequest (url: string, reqOptions?: Record<string, any> | undefined, abortSignal?: AbortSignal) {
   reqOptions = {
     ...reqOptions,
     proxyUrl: state.proxy
   }
 
-  return ctx.api.proxyRequest(url, reqOptions, true)
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return ctx.api.proxyRequest(url, reqOptions, true, abortSignal)
+}
+
+export async function readReader (
+  reader: ReadableStreamDefaultReader,
+  onLineReceived: (line: string) => void
+): Promise<string> {
+  let result = ''
+  let currentValue = ''
+
+  // read stream
+  while (true) {
+    const { done, value } = await reader.read()
+    if (done) {
+      return result
+    }
+
+    const val = new TextDecoder().decode(value)
+
+    currentValue += val
+    result += val
+
+    const idx = currentValue.lastIndexOf('\n')
+    if (idx === -1) {
+      continue
+    }
+
+    const lines = currentValue.slice(0, idx)
+    currentValue = currentValue.slice(idx + 1)
+
+    for (const line of lines.split('\n')) {
+      try {
+        onLineReceived(line)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  }
 }

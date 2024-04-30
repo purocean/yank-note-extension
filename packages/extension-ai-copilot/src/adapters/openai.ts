@@ -1,7 +1,7 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { proxyRequest } from '@/core'
+import { proxyRequest, readReader } from '@/core'
 import { ctx } from '@yank-note/runtime-api'
-import { Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
+import { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { reactive, watch } from 'vue'
 
 const defaultApiUrl = 'https://api.openai.com/v1/chat/completions'
@@ -240,7 +240,7 @@ export class OpenAIEditAdapter implements EditAdapter {
     }
   }
 
-  private async _requestApi (url: string, body?: any) {
+  private async _requestApi (url: string, body: any, cancelToken: CancellationToken, onProgress: (text: string) => void): Promise<string> {
     const token = this.state.api_token
 
     const headers = { Authorization: `Bearer ${token}` }
@@ -250,8 +250,50 @@ export class OpenAIEditAdapter implements EditAdapter {
       headers['Content-Type'] = 'application/json'
     }
 
-    const res = await proxyRequest(url, { headers, body: body, method: 'post' })
-    return await res.json()
+    const controller = new AbortController()
+    const { signal } = controller
+
+    cancelToken?.onCancellationRequested(() => {
+      controller.abort()
+    })
+
+    const res = await proxyRequest(url, { headers, body: body, method: 'post', sse: true }, signal)
+    const reader = res.body?.getReader()
+    if (!reader) {
+      throw new Error('No reader')
+    }
+
+    let text = ''
+    let hasError = false
+
+    const result = await readReader(reader, (line) => {
+      if (hasError) {
+        return
+      }
+
+      const json = line.replace('data:', '').trim()
+      if (json && !json.includes('[DONE]')) {
+        try {
+          const res = JSON.parse(json)
+          const val = res.choices[0]?.delta?.content
+          if (val) {
+            text += val
+            onProgress(text)
+          }
+        } catch (err) {
+          hasError = true
+        }
+      }
+    })
+
+    if (hasError) {
+      const res = JSON.parse(result.replace('data:', '').trim())
+      console.error(res)
+      ctx.ui.useToast().show('warning', JSON.stringify(res), 5000)
+      return ''
+    }
+
+    return text
   }
 
   activate (): { dispose: () => void, state: Record<string, any> } {
@@ -295,7 +337,7 @@ export class OpenAIEditAdapter implements EditAdapter {
     }
   }
 
-  async fetchEditResults (selectedText: string, instruction: string): Promise<string | null | undefined> {
+  async fetchEditResults (selectedText: string, instruction: string, token: CancellationToken, onProgress: (res: { text: string }) => void): Promise<string | null | undefined> {
     if (!this.state.selection || !this.state.model) {
       return
     }
@@ -327,22 +369,15 @@ export class OpenAIEditAdapter implements EditAdapter {
       delete params.max_tokens
     }
 
-    const body = { messages, ...params }
+    const body = { messages, ...params, stream: true }
 
     this.logger.debug('fetchEditResults', 'request', body)
-    const res = await this._requestApi(url, body)
-    this.logger.debug('fetchEditResults', 'result', res)
-
-    if (!res.choices || res.choices.length === 0) {
-      ctx.ui.useToast().show('warning', JSON.stringify(res), 5000)
-      return
-    }
-
-    const items = (res.choices).map((x: any) => {
-      const text = x.message ? x.message.content : x.text
-      return { text: text }
+    const text = await this._requestApi(url, body, token, text => {
+      onProgress({ text })
     })
 
-    return items[0].text
+    this.logger.debug('fetchEditResults', 'result', text)
+
+    return text || null
   }
 }

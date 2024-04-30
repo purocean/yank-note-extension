@@ -1,13 +1,15 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { proxyRequest } from '@/core'
+import { proxyRequest, readReader } from '@/core'
 import { ctx } from '@yank-note/runtime-api'
-import { Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
+import { Position, editor, languages, CancellationToken } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { reactive, watch } from 'vue'
 
 class BaseGoogleAIAdapter {
   description = 'Powered by <a target="_blank" href="https://ai.google.dev">GoogleAI</a>'
-  private async _requestApi (model: string, token: string, body?: any) {
-    const url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${token}`
+  private async _requestApi (model: string, token: string, body?: any, onProgress?: ((text: string) => void), cancelToken?: CancellationToken): Promise<string> {
+    const url = onProgress
+      ? `https://generativelanguage.googleapis.com/v1/models/${model}:streamGenerateContent?alt=sse&key=${token}`
+      : `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${token}`
 
     const headers = {}
     if (body) {
@@ -15,8 +17,62 @@ class BaseGoogleAIAdapter {
       headers['Content-Type'] = 'application/json'
     }
 
-    const res = await proxyRequest(url, { headers, body: body, method: 'post' })
-    return await res.json()
+    const controller = new AbortController()
+    const { signal } = controller
+
+    cancelToken?.onCancellationRequested(() => {
+      controller.abort()
+    })
+
+    if (onProgress) {
+      const res = await proxyRequest(url, { headers, body: body, method: 'post', sse: true }, signal)
+      const reader = res.body?.getReader()
+      if (!reader) {
+        throw new Error('No reader')
+      }
+
+      let text = ''
+      let hasError = false
+
+      const result = await readReader(reader, (line) => {
+        if (hasError) {
+          return
+        }
+
+        const json = line.replace('data:', '').trim()
+        if (json) {
+          try {
+            const res = JSON.parse(json)
+            const val = res.candidates[0].content?.parts?.[0]?.text
+            if (val) {
+              text += val
+              onProgress(text)
+            }
+          } catch (err) {
+            hasError = true
+          }
+        }
+      })
+
+      if (hasError) {
+        const res = JSON.parse(result)
+        console.error(res)
+        ctx.ui.useToast().show('warning', JSON.stringify(res), 5000)
+        return ''
+      }
+
+      return text
+    } else {
+      const result = await proxyRequest(url, { headers, body: body, method: 'post' })
+      const res = await result.json()
+
+      if (!res.candidates) {
+        ctx.ui.useToast().show('warning', JSON.stringify(res), 5000)
+        return ''
+      }
+
+      return res.candidates[0].content?.parts?.[0]?.text
+    }
   }
 
   _parseJson (str: string, defaultValue?: any) {
@@ -36,8 +92,10 @@ class BaseGoogleAIAdapter {
     apiToken: string,
     content: string,
     system: string,
-    params: Record<string, any>
-  ): Promise<string[]> {
+    params: Record<string, any>,
+    onProgress?: (text: string) => void,
+    cancelToken?: CancellationToken
+  ): Promise<string | null> {
     const contents: { role: 'user' | 'model', parts: [{ text: string }] }[] = []
 
     if (system) {
@@ -53,21 +111,8 @@ class BaseGoogleAIAdapter {
 
     const body = { contents, generationConfig: params }
 
-    const res = await this._requestApi(model, apiToken, body)
-
-    if (!res.candidates) {
-      ctx.ui.useToast().show('warning', JSON.stringify(res), 5000)
-      return []
-    }
-
-    return (res.candidates).map((x: any) => {
-      const text = x.content?.parts?.[0]?.text
-      if (!text) {
-        return null
-      }
-
-      return text
-    }).filter(Boolean)
+    const res = this._requestApi(model, apiToken, body, onProgress, cancelToken)
+    return res || null
   }
 }
 
@@ -176,7 +221,7 @@ export class GoogleAICompletionAdapter extends BaseGoogleAIAdapter implements Co
     const params = this._parseJson(this._state.paramsJson, {})
 
     const result = await this.request(this._state.model, this._state.apiToken, content, system, params)
-    const items = result.map((text) => ({ text: text, insertText: { snippet: text }, range, }))
+    const items = result ? [{ text: result, insertText: { snippet: result }, range }] : []
 
     return { items }
   }
@@ -263,7 +308,7 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
     }
   }
 
-  async fetchEditResults (selectedText: string, instruction: string): Promise<string | null | undefined> {
+  async fetchEditResults (selectedText: string, instruction: string, token: CancellationToken, onProgress: (res: { text: string }) => void): Promise<string | null | undefined> {
     if (!this.state.selection || !this.state.model) {
       return
     }
@@ -280,7 +325,8 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
     const content = 'Instruction: ' + instruction + '\n\n' + selectedText
     const params = this._parseJson(this.state.paramsJson, {})
 
-    const result = await this.request(this.state.model, this.state.apiToken, content, '', params)
-    return result[0]
+    return this.request(this.state.model, this.state.apiToken, content, '', params, text => {
+      onProgress({ text })
+    }, token)
   }
 }
