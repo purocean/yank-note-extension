@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.4.2...extension-ai-copilot-1.5.0) (2024-04-30)
+
+
+### Features
+
+* **extension-ai-copilot:** support sse ([acd7a07](https://github.com/purocean/yank-note-extension/commit/acd7a0706e73c487d9922bf35b316849ad7740b0))
+
+
+
 ## [1.4.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.4.1...extension-ai-copilot-1.4.2) (2024-04-24)
 
 
