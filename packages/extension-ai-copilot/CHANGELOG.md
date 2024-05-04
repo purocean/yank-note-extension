@@ -1,3 +1,13 @@
+# [1.6.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.5.0...extension-ai-copilot-1.6.0) (2024-05-04)
+
+
+### Features
+
+* **extension-ai-copilot:** support context when rewrite/generate content ([b7d01f2](https://github.com/purocean/yank-note-extension/commit/b7d01f24e4b1fcbb60a3c158ee0f75e733189d03))
+* **extension-ai-copilot:** support generate action ([681eb1a](https://github.com/purocean/yank-note-extension/commit/681eb1a7f34eae6277ae9604ba21260fe97d236f))
+
+
+
 # [1.5.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.4.2...extension-ai-copilot-1.5.0) (2024-04-30)
 
 
