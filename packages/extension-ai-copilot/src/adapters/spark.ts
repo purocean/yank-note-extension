@@ -1,4 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
+import { CURSOR_PLACEHOLDER } from '@/core'
 import { ctx } from '@yank-note/runtime-api'
 import { Position, editor, languages, CancellationToken } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { reactive } from 'vue'
@@ -134,12 +135,10 @@ export class SparkAICompletionAdapter extends BaseAdapter implements CompletionA
   displayname = 'Spark'
   monaco = ctx.editor.getMonaco()
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.SparkAICompletionAdapter')
-  cursorPlaceholder = '{CURSOR}'
-  defaultSystemMessage = `Fill content at the \`${this.cursorPlaceholder}\`. \n\nExample 1:\nInput: I like {CURSOR} dance with my hands\nOutput: dance\n\nExample 2:\nInput: I like dance with my {CURSOR}\nOutput: hands\n\nAttention: Only output the filled content, do not output the surrounding content.`
+  defaultSystemMessage = `Fill content at the \`${CURSOR_PLACEHOLDER}\`. \n\nExample 1:\nInput: I like {CURSOR} dance with my hands\nOutput: dance\n\nExample 2:\nInput: I like dance with my {CURSOR}\nOutput: hands\n\nAttention: Only output the filled content, do not output the surrounding content.`
 
-  private _state = reactive({
-    prefix: '',
-    suffix: '',
+  state = reactive({
+    context: '',
     systemMessage: this.defaultSystemMessage,
     version: 'v3.5',
     appid: '',
@@ -153,8 +152,7 @@ export class SparkAICompletionAdapter extends BaseAdapter implements CompletionA
   panel: Panel = {
     type: 'form',
     items: [
-      { type: 'prefix', key: 'prefix', label: 'Prefix', hasError: v => !v },
-      { type: 'suffix', key: 'suffix', label: 'Suffix' },
+      { type: 'context', key: 'context', label: 'Context', hasError: v => !v },
       { type: 'input', key: 'appid', label: 'APPID', hasError: v => !v },
       { type: 'input', key: 'apiSecret', label: 'API Secret', props: { type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'apiKey', label: 'API Key', props: { type: 'password' }, hasError: v => !v },
@@ -168,7 +166,7 @@ export class SparkAICompletionAdapter extends BaseAdapter implements CompletionA
 
   activate (): { dispose: () => void, state: Record<string, any> } {
     return {
-      state: this._state,
+      state: this.state,
       dispose: () => 0
     }
   }
@@ -185,23 +183,23 @@ export class SparkAICompletionAdapter extends BaseAdapter implements CompletionA
       position.column,
     )
 
-    if (!this._state.prefix || !this._state.version || !this._state.appid || !this._state.apiSecret || !this._state.apiKey) {
+    if (!this.state.context || !this.state.version || !this.state.appid || !this.state.apiSecret || !this.state.apiKey) {
       return { items: [] }
     }
 
-    const content = `${this._state.prefix}${this.cursorPlaceholder}${this._state.suffix}`
-    const system = this._state.systemMessage
+    const content = this.state.context
+    const system = this.state.systemMessage
 
     const text = await this.request({
       content,
       system,
-      secret: this._state.apiSecret,
-      key: this._state.apiKey,
-      appid: this._state.appid,
-      versionStr: this._state.version,
-      temperature: this._state.temperature,
-      maxTokens: this._state.maxTokens,
-      topK: this._state.topK
+      secret: this.state.apiSecret,
+      key: this.state.apiKey,
+      appid: this.state.appid,
+      versionStr: this.state.version,
+      temperature: this.state.temperature,
+      maxTokens: this.state.maxTokens,
+      topK: this.state.topK
     }, token)
 
     return {
@@ -221,11 +219,14 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
   monaco = ctx.editor.getMonaco()
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.SparkAIEditAdapter')
   defaultInstruction = 'Translate to English'
+  defaultSystemMessage = 'Generate/Modify content based on the context at the {CURSOR} position.\n--CONTEXT BEGIN--\n{CONTEXT}\n--CONTEXT END--\n\nAttention: Output the content directly, no surrounding content.'
 
   state = reactive({
     selection: '',
+    context: '',
     historyInstructions: [] as string[],
     instruction: this.defaultInstruction,
+    systemMessage: this.defaultSystemMessage,
     version: 'v3.5',
     appid: '',
     apiSecret: '',
@@ -239,7 +240,9 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
     type: 'form',
     items: [
       { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true } },
+      { type: 'context', key: 'context', label: 'Context' },
       { type: 'instruction', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
+      { type: 'textarea', key: 'systemMessage', label: 'System Message', defaultValue: this.defaultSystemMessage },
       { type: 'input', key: 'appid', label: 'APPID', hasError: v => !v },
       { type: 'input', key: 'apiSecret', label: 'API Secret', props: { type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'apiKey', label: 'API Key', props: { type: 'password' }, hasError: v => !v },
@@ -272,9 +275,11 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
     this.state.historyInstructions = ctx.lib.lodash.uniq(this.state.historyInstructions.slice(0, 10))
 
     const content = 'Instruction: ' + instruction + '\n\n' + selectedText
+    const system = this.buildSystem(this.state.systemMessage, this.state.context)
 
     const result = await this.request({
       content,
+      system,
       secret: this.state.apiSecret,
       key: this.state.apiKey,
       appid: this.state.appid,
@@ -285,5 +290,9 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
     }, token, onProgress)
 
     return result
+  }
+
+  buildSystem (prompt: string, context: string) {
+    return context.trim() ? prompt.replace('{CONTEXT}', context) : ''
   }
 }

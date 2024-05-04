@@ -1,5 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { proxyRequest, readReader } from '@/core'
+import { CURSOR_PLACEHOLDER, proxyRequest, readReader } from '@/core'
 import { ctx } from '@yank-note/runtime-api'
 import { Position, editor, languages, CancellationToken } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { reactive, watch } from 'vue'
@@ -122,12 +122,10 @@ export class GoogleAICompletionAdapter extends BaseGoogleAIAdapter implements Co
   displayname = 'GoogleAI'
   monaco = ctx.editor.getMonaco()
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.GoogleAICompletionAdapter')
-  cursorPlaceholder = '{CURSOR}'
-  defaultSystemMessage = `Fill content at the \`${this.cursorPlaceholder}\`. \n\nExample 1:\nInput: I like {CURSOR} dance with my hands\nOutput: dance\n\nExample 2:\nInput: I like dance with my {CURSOR}\nOutput: hands\n\nAttention: Only output the filled content, do not output the surrounding content.`
+  defaultSystemMessage = `Fill content at the \`${CURSOR_PLACEHOLDER}\`. \n\nExample 1:\nInput: I like {CURSOR} dance with my hands\nOutput: dance\n\nExample 2:\nInput: I like dance with my {CURSOR}\nOutput: hands\n\nAttention: Only output the filled content, do not output the surrounding content.`
 
-  private _state = reactive({
-    prefix: '',
-    suffix: '',
+  state = reactive({
+    context: '',
     systemMessage: this.defaultSystemMessage,
     model: 'gemini-pro',
     apiToken: '',
@@ -139,8 +137,7 @@ export class GoogleAICompletionAdapter extends BaseGoogleAIAdapter implements Co
   panel: Panel = {
     type: 'form',
     items: [
-      { type: 'prefix', key: 'prefix', label: 'Prefix', hasError: v => !v },
-      { type: 'suffix', key: 'suffix', label: 'Suffix' },
+      { type: 'context', key: 'context', label: 'Context', hasError: v => !v },
       { type: 'input', key: 'apiToken', label: 'Api Token', props: { type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gemini-pro', props: { placeholder: 'e.g. gemini-pro' }, hasError: v => !v },
       { type: 'textarea', key: 'systemMessage', label: 'System Message', defaultValue: this.defaultSystemMessage },
@@ -165,34 +162,34 @@ export class GoogleAICompletionAdapter extends BaseGoogleAIAdapter implements Co
 
   activate (): { dispose: () => void, state: Record<string, any> } {
     const dispose = [
-      watch(() => this._state.paramsJson, (json) => {
+      watch(() => this.state.paramsJson, (json) => {
         const params = {
-          maxOutputTokens: this._state.maxOutputTokens,
-          temperature: this._state.temperature,
+          maxOutputTokens: this.state.maxOutputTokens,
+          temperature: this.state.temperature,
           ...this._parseJson(json),
         }
 
-        this._state.maxOutputTokens = params.maxOutputTokens
-        this._state.temperature = params.temperature
-        this._state.paramsJson = JSON.stringify(params, null, 2)
+        this.state.maxOutputTokens = params.maxOutputTokens
+        this.state.temperature = params.temperature
+        this.state.paramsJson = JSON.stringify(params, null, 2)
       }),
       watch([
-        () => this._state.maxOutputTokens,
-        () => this._state.temperature,
+        () => this.state.maxOutputTokens,
+        () => this.state.temperature,
       // eslint-disable-next-line camelcase
       ], ([maxOutputTokens, temperature]) => {
         const params = {
-          ...this._parseJson(this._state.paramsJson, {}),
+          ...this._parseJson(this.state.paramsJson, {}),
           maxOutputTokens,
           temperature,
         }
 
-        this._state.paramsJson = JSON.stringify(params, null, 2)
+        this.state.paramsJson = JSON.stringify(params, null, 2)
       }, { immediate: true })
     ]
 
     return {
-      state: this._state,
+      state: this.state,
       dispose: () => {
         this.logger.debug('dispose')
         dispose.forEach((d) => d())
@@ -212,15 +209,15 @@ export class GoogleAICompletionAdapter extends BaseGoogleAIAdapter implements Co
       position.column,
     )
 
-    if (!this._state.prefix || !this._state.model) {
+    if (!this.state.context) {
       return { items: [] }
     }
 
-    const content = `${this._state.prefix}${this.cursorPlaceholder}${this._state.suffix}`
-    const system = this._state.systemMessage
-    const params = this._parseJson(this._state.paramsJson, {})
+    const content = this.state.context
+    const system = this.state.systemMessage
+    const params = this._parseJson(this.state.paramsJson, {})
 
-    const result = await this.request(this._state.model, this._state.apiToken, content, system, params)
+    const result = await this.request(this.state.model, this.state.apiToken, content, system, params)
     const items = result ? [{ text: result, insertText: { snippet: result }, range }] : []
 
     return { items }
@@ -234,11 +231,14 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
   monaco = ctx.editor.getMonaco()
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.googleAIEditAdapter')
   defaultInstruction = 'Translate to English'
+  defaultSystemMessage = 'Generate/Modify content based on the context at the {CURSOR} position.\n--CONTEXT BEGIN--\n{CONTEXT}\n--CONTEXT END--\n\nAttention: Output the content directly, no surrounding content.'
 
   state = reactive({
     selection: '',
+    context: '',
     historyInstructions: [] as string[],
     instruction: this.defaultInstruction,
+    systemMessageV2: this.defaultSystemMessage,
     model: 'gemini-pro',
     apiToken: '',
     maxOutputTokens: -1,
@@ -250,7 +250,9 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
     type: 'form',
     items: [
       { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true } },
+      { type: 'context', key: 'context', label: 'Context' },
       { type: 'instruction', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
+      { type: 'textarea', key: 'systemMessageV2', label: 'System Message', defaultValue: this.defaultSystemMessage },
       { type: 'input', key: 'apiToken', label: 'Api Token', props: { type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gemini-pro', props: { placeholder: 'e.g. gemini-pro' }, hasError: v => !v },
       { type: 'range', key: 'maxOutputTokens', label: 'Max Tokens', max: 4096, min: -1, step: 1, description: '-1 means unlimited', defaultValue: -1 },
@@ -323,10 +325,15 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
     this.state.historyInstructions = ctx.lib.lodash.uniq(this.state.historyInstructions.slice(0, 10))
 
     const content = 'Instruction: ' + instruction + '\n\n' + selectedText
+    const system = this.buildSystem(this.state.systemMessageV2, this.state.context)
     const params = this._parseJson(this.state.paramsJson, {})
 
-    return this.request(this.state.model, this.state.apiToken, content, '', params, text => {
+    return this.request(this.state.model, this.state.apiToken, content, system, params, text => {
       onProgress({ text })
     }, token)
+  }
+
+  buildSystem (prompt: string, context: string) {
+    return context.trim() ? prompt.replace('{CONTEXT}', context) : ''
   }
 }

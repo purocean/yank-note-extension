@@ -5,6 +5,8 @@ import { reactive, ref, shallowRef, watch } from 'vue'
 export const COMPLETION_ACTION_NAME = __EXTENSION_ID__ + '.inlineSuggest.trigger'
 export const EDIT_ACTION_NAME = __EXTENSION_ID__ + '.edit.trigger'
 
+export const CURSOR_PLACEHOLDER = '{CURSOR}'
+
 export const i18n = ctx.i18n.createI18n({
   en: {
     'ai-complete': 'Complete using AI Copilot',

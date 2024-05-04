@@ -1,5 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { proxyRequest, readReader } from '@/core'
+import { CURSOR_PLACEHOLDER, proxyRequest, readReader } from '@/core'
 import { ctx } from '@yank-note/runtime-api'
 import { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { reactive, watch } from 'vue'
@@ -13,13 +13,11 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
   description = 'Powered by <a target="_blank" href="http://openai.com">OpenAI</a>'
   monaco = ctx.editor.getMonaco()
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.OpenAICompletionAdapter')
-  cursorPlaceholder = '{CURSOR}'
-  defaultSystemMessage = `Fill content at the \`${this.cursorPlaceholder}\`. \n\nExample 1:\nInput: I like {CURSOR} dance with my hands\nOutput: dance\n\nExample 2:\nInput: I like dance with my {CURSOR}\nOutput: hands\n\nAttention: Only output the filled content, do not output the surrounding content.`
+  defaultSystemMessage = `Fill content at the \`${CURSOR_PLACEHOLDER}\`. \n\nExample 1:\nInput: I like {CURSOR} dance with my hands\nOutput: dance\n\nExample 2:\nInput: I like dance with my {CURSOR}\nOutput: hands\n\nAttention: Only output the filled content, do not output the surrounding content.`
 
-  private _state = reactive({
+  state = reactive({
     api_url: defaultApiUrl,
-    prefix: '',
-    suffix: '',
+    context: '',
     system_message: this.defaultSystemMessage,
     model: 'gpt-3.5-turbo',
     api_token: '',
@@ -31,8 +29,7 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
   panel: Panel = {
     type: 'form',
     items: [
-      { type: 'prefix', key: 'prefix', label: 'Prefix', hasError: v => !v },
-      { type: 'suffix', key: 'suffix', label: 'Suffix' },
+      { type: 'context', key: 'context', label: 'Context', hasError: v => !v },
       { type: 'input', key: 'api_token', label: 'Api Token', props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
       { type: 'textarea', key: 'system_message', label: 'System Message', defaultValue: this.defaultSystemMessage },
@@ -69,7 +66,7 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
   }
 
   private async _requestApi (url: string, body?: any) {
-    const token = this._state.api_token
+    const token = this.state.api_token
 
     const headers = { Authorization: `Bearer ${token}` }
 
@@ -84,38 +81,38 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
 
   activate (): { dispose: () => void, state: Record<string, any> } {
     const dispose = [
-      watch(() => this._state.paramsJson, (json) => {
+      watch(() => this.state.paramsJson, (json) => {
         const params = {
-          model: this._state.model,
-          max_tokens: this._state.max_tokens,
-          temperature: this._state.temperature,
+          model: this.state.model,
+          max_tokens: this.state.max_tokens,
+          temperature: this.state.temperature,
           ...this._parseJson(json),
         }
 
-        this._state.model = params.model
-        this._state.max_tokens = params.max_tokens
-        this._state.temperature = params.temperature
-        this._state.paramsJson = JSON.stringify(params, null, 2)
+        this.state.model = params.model
+        this.state.max_tokens = params.max_tokens
+        this.state.temperature = params.temperature
+        this.state.paramsJson = JSON.stringify(params, null, 2)
       }),
       watch([
-        () => this._state.model,
-        () => this._state.max_tokens,
-        () => this._state.temperature,
+        () => this.state.model,
+        () => this.state.max_tokens,
+        () => this.state.temperature,
       // eslint-disable-next-line camelcase
       ], ([model, max_tokens, temperature]) => {
         const params = {
-          ...this._parseJson(this._state.paramsJson, {}),
+          ...this._parseJson(this.state.paramsJson, {}),
           model,
           max_tokens,
           temperature,
         }
 
-        this._state.paramsJson = JSON.stringify(params, null, 2)
+        this.state.paramsJson = JSON.stringify(params, null, 2)
       }, { immediate: true })
     ]
 
     return {
-      state: this._state,
+      state: this.state,
       dispose: () => {
         this.logger.debug('dispose')
         dispose.forEach((d) => d())
@@ -135,12 +132,12 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
       position.column,
     )
 
-    if (!this._state.prefix || !this._state.model) {
+    if (!this.state.context || !this.state.model) {
       return { items: [] }
     }
 
-    const content = `${this._state.prefix}${this.cursorPlaceholder}${this._state.suffix}`
-    const system = this._state.system_message
+    const content = this.state.context
+    const system = this.state.system_message
 
     const messages = [
       { role: 'user', content }
@@ -150,9 +147,9 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
       messages.unshift({ role: 'system', content: system })
     }
 
-    const url = this._state.api_url || defaultApiUrl
+    const url = this.state.api_url || defaultApiUrl
 
-    const params = this._parseJson(this._state.paramsJson, {})
+    const params = this._parseJson(this.state.paramsJson, {})
 
     if (params.max_tokens === -1) {
       delete params.max_tokens
@@ -186,12 +183,13 @@ export class OpenAIEditAdapter implements EditAdapter {
   monaco = ctx.editor.getMonaco()
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.OpenAIEditAdapter')
   defaultInstruction = 'Translate to English'
-  defaultSystemMessage = 'Follow with the instruction and rewrite the text.\n\nExample 1: \nInstruction: Translate to English\nInput: 你好\nOutput: Hello\n\nExample 2: \nInstruction: Fix the grammar\nInput: I are a boy\nOutput: I am a boy\n\nAttention: Only output the rewritten content.'
+  defaultSystemMessage = 'Generate/Modify content based on the context at the {CURSOR} position.\n--CONTEXT BEGIN--\n{CONTEXT}\n--CONTEXT END--\n\nAttention: Output the content directly, no surrounding content.'
 
   state = reactive({
+    context: '',
     api_url: defaultApiUrl,
     selection: '',
-    system_message: this.defaultSystemMessage,
+    systemMessageV2: this.defaultSystemMessage,
     historyInstructions: [] as string[],
     instruction: this.defaultInstruction,
     model: 'gpt-3.5-turbo',
@@ -205,10 +203,11 @@ export class OpenAIEditAdapter implements EditAdapter {
     type: 'form',
     items: [
       { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true } },
+      { type: 'context', key: 'context', label: 'Context' },
       { type: 'instruction', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
       { type: 'input', key: 'api_token', label: 'Api Token', props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
-      { type: 'textarea', key: 'system_message', label: 'System Message', defaultValue: this.defaultSystemMessage },
+      { type: 'textarea', key: 'systemMessageV2', label: 'System Message', defaultValue: this.defaultSystemMessage },
       { type: 'range', key: 'max_tokens', label: 'Max Tokens', max: 4096, min: -1, step: 1, description: '-1 means unlimited', defaultValue: -1 },
       { type: 'range', key: 'temperature', label: 'Temperature', max: 2, min: 0, step: 0.01, defaultValue: 1 },
       { type: 'input', key: 'api_url', label: 'Api Url', defaultValue: defaultApiUrl, props: { placeholder: 'https://' }, hasError: v => !v },
@@ -342,7 +341,7 @@ export class OpenAIEditAdapter implements EditAdapter {
       return
     }
 
-    const system = this.state.system_message
+    const system = this.buildSystem(this.state.systemMessageV2, this.state.context)
 
     if (!instruction) {
       return
@@ -379,5 +378,9 @@ export class OpenAIEditAdapter implements EditAdapter {
     this.logger.debug('fetchEditResults', 'result', text)
 
     return text || null
+  }
+
+  buildSystem (prompt: string, context: string) {
+    return context.trim() ? prompt.replace('{CONTEXT}', context) : ''
   }
 }

@@ -6,8 +6,7 @@ export type AdapterType = 'completion' | 'chat' | 'edit'
 export type CustomVueComponent = { type: 'custom', component: any }
 
 export type FormItem = CustomVueComponent
-  | { type: 'prefix', key: 'prefix', label: string, hasError?: (val: string) => boolean, props?: any }
-  | { type: 'suffix', key: 'suffix', label: string, hasError?: (val: string) => boolean, props?: any }
+  | { type: 'context', key: 'context', label: string, hasError?: (val: string) => boolean, props?: any }
   | { type: 'selection', key: 'selection', label: string, hasError?: (val: string) => boolean, props?: any }
   | { type: 'instruction', key: 'instruction', label: string, historyValueKey: 'historyInstructions', hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
   | { type: 'textarea' | 'input', key: string, label: string, description?: string, historyValueKey?: string, hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
@@ -29,12 +28,13 @@ export interface Adapter {
   state?: Record<string, any>,
   activate(): {
     dispose: () => void,
-    state?: Record<string, any>
+    state: Record<string, any>
   }
 }
 
 export interface CompletionAdapter extends Adapter {
   type: 'completion'
+  state: Record<string, any> & { context: string},
   fetchCompletionResults(
     model: Monaco.editor.IModel,
     position: Monaco.Position,
@@ -43,14 +43,9 @@ export interface CompletionAdapter extends Adapter {
   ): Promise<Monaco.languages.InlineCompletions>
 }
 
-export interface ChatAdapter extends Adapter {
-  type: 'chat'
-  fetchChatResults(): Promise<any>
-}
-
 export interface EditAdapter extends Adapter {
   type: 'edit'
-  state: Record<string, any> & { instruction: string, selection: string },
+  state: Record<string, any> & { instruction: string, selection: string, context: string},
   fetchEditResults(
     selectedText: string,
     instruction: string,
@@ -63,10 +58,8 @@ const adapters: Record<string, Adapter> = {}
 
 export function getAdapter <T extends AdapterType> (type: T, id: string): (T extends 'completion'
   ? CompletionAdapter
-  : T extends 'chat'
-    ? ChatAdapter
-    : T extends 'edit'
-      ? EditAdapter : never) | undefined {
+  : T extends 'edit'
+    ? EditAdapter : never) | undefined {
   return adapters[type + '/' + id] as any
 }
 

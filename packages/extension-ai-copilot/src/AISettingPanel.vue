@@ -10,18 +10,11 @@
           'has-error': !!item.hasError?.(adapterState[item.key])
         }">
           <div class="label">{{ item.label }}</div>
-            <div v-if="item.type === 'prefix'">
-              <textarea ref="prefixContextRef" v-model="adapterState.prefix" v-bind="item.props" />
+            <div v-if="item.type === 'context'">
+              <textarea v-model="adapterState.context" v-bind="item.props" placeholder="No context available" />
               <div class="input">
-                <input type="range" max="4000" min="1" v-model.number="(adapterState as any)._prefixLength" />
-                <input type="number" max="4000" min="1" v-model.number="(adapterState as any)._prefixLength" />
-              </div>
-            </div>
-            <div v-else-if="item.type === 'suffix'">
-              <textarea ref="suffixContextRef" v-model="adapterState.suffix" v-bind="item.props" />
-              <div class="input">
-                <input type="range" max="4000" min="0" v-model.number="(adapterState as any)._suffixLength" />
-                <input type="number" max="4000" min="0" v-model.number="(adapterState as any)._suffixLength" />
+                <input style="outline: none" type="range" max="8000" min="0" v-model.number="(adapterState as any)._contextLength" />
+                <input style="outline: none" type="number" max="8000" min="0" v-model.number="(adapterState as any)._contextLength" />
               </div>
             </div>
             <div v-else-if="item.type === 'selection'">
@@ -69,8 +62,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, unref, defineProps, ref, nextTick, watchEffect, onBeforeUnmount, watch, onMounted } from 'vue'
-import { state } from './core'
+import { computed, unref, defineProps, watchEffect, onBeforeUnmount, watch, onMounted } from 'vue'
+import { CURSOR_PLACEHOLDER, state } from './core'
 import { ctx } from '@yank-note/runtime-api'
 import { Adapter, AdapterType, FormItem } from './adapter'
 import type { Components } from '../../api/types/types/renderer/types'
@@ -90,15 +83,11 @@ const adapterKey = computed(() => props.type + '-' + state.adapter[props.type])
 const adapter = computed(() => props.adapter)
 const panel = computed(() => unref(adapter.value.panel))
 
-const suffixContextRef = ref<HTMLElement[] | HTMLElement | null>(null)
-const prefixContextRef = ref<HTMLElement[] | HTMLElement | null>(null)
-
 const adapterRes = adapter.value.activate()
 const adapterState = adapterRes.state
 
 if (adapterState) {
-  adapterState._prefixLength = 128
-  adapterState._suffixLength = 128
+  adapterState._contextLength = props.type === 'completion' ? 256 : 0
   Object.keys(state.adapterState[adapterKey.value] || {}).forEach(key => {
     adapterState[key] = state.adapterState[adapterKey.value][key]
   })
@@ -111,7 +100,7 @@ function buildContent () {
 
   const model = editor.getModel()!
   const position = editor.getPosition()!
-  let contentPrefix = model.getValueInRange(new monaco.Range(
+  const contentPrefix = model.getValueInRange(new monaco.Range(
     1,
     1,
     position.lineNumber,
@@ -121,7 +110,7 @@ function buildContent () {
   const maxLine = model.getLineCount()
   const maxColumn = model.getLineMaxColumn(maxLine)
 
-  let contentSuffix = model.getValueInRange(new monaco.Range(
+  const contentSuffix = model.getValueInRange(new monaco.Range(
     position.lineNumber,
     position.column,
     maxLine,
@@ -129,36 +118,31 @@ function buildContent () {
   ))
 
   const selection = editor.getSelection()
-  let useSelection = false
   if (selection) {
     const selectedText = model.getValueInRange(selection)
-    if (selectedText) {
-      contentPrefix = selectedText
-      contentSuffix = ''
-      useSelection = true
-    }
-
     adapterState.selection = selectedText
   } else {
     adapterState.selection = ''
   }
 
-  const prefix = contentPrefix.slice(useSelection ? 0 : -adapterState._prefixLength)
-  const suffix = contentSuffix.slice(0, adapterState._suffixLength)
+  const contextMaxLength = adapterState._contextLength
+  const contextRadius = Math.floor(contextMaxLength / 2)
 
-  adapterState.prefix = prefix
-  adapterState.suffix = suffix
+  let context: string
 
-  function toArray<T> (obj?: T | T[] | null) {
-    return obj
-      ? (Array.isArray(obj) ? obj : [obj])
-      : []
+  if (contextRadius < 1) {
+    context = ''
+  } else if (contentPrefix.length > contextRadius && contentSuffix.length > contextRadius) {
+    context = contentPrefix.slice(-contextRadius) + CURSOR_PLACEHOLDER + contentSuffix.slice(0, contextRadius)
+  } else if (contentPrefix.length > contextRadius) {
+    context = contentPrefix.slice(-(contextMaxLength - contentSuffix.length)) + CURSOR_PLACEHOLDER + contentSuffix
+  } else if (contentSuffix.length > contextRadius) {
+    context = contentPrefix + CURSOR_PLACEHOLDER + contentSuffix.slice(0, contextMaxLength - contentPrefix.length)
+  } else {
+    context = contentPrefix + CURSOR_PLACEHOLDER + contentSuffix
   }
 
-  nextTick(() => {
-    toArray(suffixContextRef.value).forEach(x => x.scrollTo(0, 0))
-    toArray(prefixContextRef.value).forEach(x => x.scrollTo(0, x.scrollHeight))
-  })
+  adapterState.context = context
 }
 
 function showHistoryMenu (item: FormItem) {
@@ -201,7 +185,7 @@ onBeforeUnmount(() => {
 })
 
 watchEffect(() => {
-  state.adapterState[adapterKey.value] = ctx.lib.lodash.omit(adapterState, 'suffix', 'prefix', 'selection')
+  state.adapterState[adapterKey.value] = ctx.lib.lodash.omit(adapterState, 'context', 'selection')
 }, { flush: 'post' })
 </script>
 

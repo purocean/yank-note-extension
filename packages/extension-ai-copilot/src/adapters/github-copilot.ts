@@ -12,7 +12,8 @@ export class GithubCopilotCompletionAdapter implements CompletionAdapter {
   defaultApiPoint = 'http://127.0.0.1:3223/calculateInlineCompletions'
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.GithubCopilotCompletionAdapter')
 
-  private _state = reactive({
+  state = reactive({
+    context: '',
     apiPoint: this.defaultApiPoint,
   })
 
@@ -25,7 +26,7 @@ export class GithubCopilotCompletionAdapter implements CompletionAdapter {
 
   activate (): { dispose: () => void, state: Record<string, any> } {
     return {
-      state: this._state,
+      state: this.state,
       dispose: () => {
         this.logger.debug('dispose')
       }
@@ -62,7 +63,7 @@ export class GithubCopilotCompletionAdapter implements CompletionAdapter {
     })
 
     const x = await ctx.api.proxyRequest(
-      this._state.apiPoint,
+      this.state.apiPoint,
       { headers, body: body, method: 'post' },
       true
     )

@@ -99,11 +99,6 @@ export class CodeActionProvider implements Monaco.languages.CodeActionProvider {
       return { dispose: () => 0, actions: [] }
     }
 
-    const editor = ctx.editor.getEditor()
-    const selection = editor.getSelection()!
-    const line = ctx.editor.getLineContent(selection.startLineNumber)
-    console.error('xxx', line)
-
     return {
       dispose: () => 0,
       actions: [{

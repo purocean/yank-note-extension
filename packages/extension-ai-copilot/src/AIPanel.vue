@@ -92,12 +92,9 @@ function doWork () {
     const editor = ctx.editor.getEditor()
     const selection = editor.getSelection()
 
-    // if no selection, trigger completion
-    if (!selection || selection.isEmpty()) {
-      state.type = 'completion'
-      ctx.action.getActionHandler(COMPLETION_ACTION_NAME)()
+    if (selection && !selection.isEmpty()) {
+      ctx.action.getActionHandler(EDIT_ACTION_NAME)(false)
     } else {
-      // display rewrite widget
       ctx.action.getActionHandler(EDIT_ACTION_NAME)(true)
     }
   }
@@ -321,7 +318,7 @@ const onMouseUp = () => {
 
   &.pined {
     max-height: 80vh;
-    width: 400px;
+    width: 440px;
 
     .head {
       border-bottom: 1px solid var(--g-color-70);
