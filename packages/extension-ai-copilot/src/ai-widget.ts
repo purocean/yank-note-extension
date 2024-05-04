@@ -7,7 +7,7 @@ import directives from './directives'
 let widget: App | null = null
 let zone: (editor.IViewZone & { id: string }) | null = null
 
-export function createWidget () {
+export function createWidget (type: 'edit' | 'generate') {
   if (zone) {
     disposeWidget()
   }
@@ -15,7 +15,7 @@ export function createWidget () {
   const editor = ctx.editor.getEditor()
   const selection = editor.getSelection()
 
-  if (!selection || selection.isEmpty()) {
+  if (!selection) {
     return
   }
 
@@ -39,6 +39,7 @@ export function createWidget () {
       widget = createApp(defineComponent({
         setup () {
           return () => h(AIWidget, {
+            type,
             onLayout: (height : number) => {
               if (zone) {
                 zone.heightInPx = height

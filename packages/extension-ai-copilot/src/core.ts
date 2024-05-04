@@ -9,11 +9,15 @@ export const i18n = ctx.i18n.createI18n({
   en: {
     'ai-complete': 'Complete using AI Copilot',
     'ai-edit': 'Modify using AI Copilot',
+    'ai-generate': 'Generate using AI Copilot',
+    'ai-edit-or-gen': 'Edit or Generate using AI Copilot',
     'enable-ai-copilot': 'Enable AI Copilot',
   },
   'zh-CN': {
     'ai-complete': '使用 AI Copilot 自动补全',
     'ai-edit': '使用 AI Copilot 修改',
+    'ai-generate': '使用 AI Copilot 生成',
+    'ai-edit-or-gen': '使用 AI Copilot 修改或生成',
     'enable-ai-copilot': '启用 AI Copilot',
   }
 })

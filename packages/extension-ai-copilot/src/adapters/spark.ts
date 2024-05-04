@@ -238,7 +238,7 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
   panel: Panel = {
     type: 'form',
     items: [
-      { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true }, hasError: v => !v },
+      { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true } },
       { type: 'instruction', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
       { type: 'input', key: 'appid', label: 'APPID', hasError: v => !v },
       { type: 'input', key: 'apiSecret', label: 'API Secret', props: { type: 'password' }, hasError: v => !v },
@@ -258,7 +258,7 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
   }
 
   async fetchEditResults (selectedText: string, instruction: string, token: CancellationToken, onProgress: (res: { text: string }) => void): Promise<string | null | undefined> {
-    if (!this.state.selection || !this.state.appid || !this.state.apiSecret || !this.state.apiKey) {
+    if (!this.state.appid || !this.state.apiSecret || !this.state.apiKey) {
       return
     }
 

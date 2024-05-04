@@ -249,7 +249,7 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
   panel: Panel = {
     type: 'form',
     items: [
-      { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true }, hasError: v => !v },
+      { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true } },
       { type: 'instruction', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
       { type: 'input', key: 'apiToken', label: 'Api Token', props: { type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gemini-pro', props: { placeholder: 'e.g. gemini-pro' }, hasError: v => !v },
@@ -309,7 +309,7 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
   }
 
   async fetchEditResults (selectedText: string, instruction: string, token: CancellationToken, onProgress: (res: { text: string }) => void): Promise<string | null | undefined> {
-    if (!this.state.selection || !this.state.model) {
+    if (!this.state.model) {
       return
     }
 

@@ -50,7 +50,7 @@ export interface ChatAdapter extends Adapter {
 
 export interface EditAdapter extends Adapter {
   type: 'edit'
-  state: Record<string, any> & { instruction: string },
+  state: Record<string, any> & { instruction: string, selection: string },
   fetchEditResults(
     selectedText: string,
     instruction: string,

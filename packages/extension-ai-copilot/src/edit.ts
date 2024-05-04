@@ -34,16 +34,17 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
     const editor = ctx.editor.getEditor()
     const model = editor.getModel()
 
-    const selectedText = model?.getValueInRange(ctx.editor.getEditor().getSelection()!)
-
-    if (!selectedText) {
-      return false
-    }
+    const selectedText = model?.getValueInRange(ctx.editor.getEditor().getSelection()!) || ''
 
     const initSelectedRange = ctx.editor.getEditor().getSelection()!
 
     const getEditRange = () => {
       const selection = ctx.editor.getEditor().getSelection()!
+
+      if (initSelectedRange.isEmpty() && selection.isEmpty()) {
+        return initSelectedRange.setEndPosition(selection.endLineNumber, selection.endColumn)
+      }
+
       if (selection.startLineNumber !== initSelectedRange.startLineNumber || selection.startColumn !== initSelectedRange.startColumn) {
         globalCancelTokenSource.value?.cancel()
         throw new Error('Edit range changed, cancel editing.')
@@ -98,21 +99,27 @@ export class CodeActionProvider implements Monaco.languages.CodeActionProvider {
       return { dispose: () => 0, actions: [] }
     }
 
+    const editor = ctx.editor.getEditor()
+    const selection = editor.getSelection()!
+    const line = ctx.editor.getLineContent(selection.startLineNumber)
+    console.error('xxx', line)
+
     return {
       dispose: () => 0,
-      actions: range.isEmpty()
-        ? []
-        : [{
-            title: i18n.t('ai-edit'),
-            kind: 'refactor',
-            diagnostics: [],
-            isPreferred: true,
-          }]
+      actions: [{
+        title: range.isEmpty() ? i18n.t('ai-generate') : i18n.t('ai-edit'),
+        kind: 'refactor',
+        diagnostics: [],
+        isPreferred: true,
+      }]
     }
   }
 
   async resolveCodeAction (): Promise<Monaco.languages.CodeAction | undefined> {
-    createWidget()
+    const editor = ctx.editor.getEditor()
+    const selection = editor.getSelection()!
+
+    createWidget(selection.isEmpty() ? 'generate' : 'edit')
 
     return undefined
   }

@@ -26,7 +26,7 @@
       </div>
       <div class="actions" v-if="adapter">
         <button v-if="loading" class="small tr" @click="cancel">Cancel</button>
-        <button v-else-if="!finished" class="small primary tr" @click="rewrite">Rewrite</button>
+        <button v-else-if="!finished" class="small primary tr" @click="process">{{ type === 'edit' ? 'Rewrite' : 'Generate' }}</button>
         <template v-else>
           <button class="small primary tr" @click="close">Accept</button>
           <button class="small tr" @click="undo">Discard</button>
@@ -43,7 +43,7 @@
 <script lang="ts" setup>
 import { ctx } from '@yank-note/runtime-api'
 import type { Components } from '@yank-note/runtime-api/types/types/renderer/types'
-import { computed, defineEmits, ref, watch, onBeforeUnmount, onMounted } from 'vue'
+import { computed, defineEmits, defineProps, ref, watch, onBeforeUnmount, onMounted } from 'vue'
 import { state, loading, globalCancelTokenSource } from './core'
 import { getAdapter, getAllAdapters } from './adapter'
 import { executeEdit } from './edit'
@@ -53,6 +53,7 @@ const SvgIcon = ctx.components.SvgIcon
 const wrapperRef = ref<HTMLElement>()
 const textareaRef = ref<HTMLTextAreaElement>()
 const emits = defineEmits<{(event: 'layout', height: number): void, (event: 'dispose'): void}>()
+defineProps<{type: 'generate' | 'edit'}>()
 
 const adapter = computed(() => getAdapter('edit', state.adapter.edit))
 const finished = ref(false)
@@ -81,7 +82,7 @@ function onEnter (e: KeyboardEvent) {
   if (finished.value) {
     close()
   } else {
-    rewrite()
+    process()
   }
 }
 
@@ -134,14 +135,17 @@ function showHistoryMenu () {
   )
 }
 
-async function rewrite () {
+async function process () {
   if (!adapter.value) {
     return
   }
 
   const cts = new (ctx.editor.getMonaco().CancellationTokenSource)()
   finished.value = false
-  if (await executeEdit(cts.token)) {
+
+  const doAction = executeEdit
+
+  if (await doAction(cts.token)) {
     finished.value = true
   }
 
@@ -158,7 +162,7 @@ function undo () {
 function reload () {
   const editor = ctx.editor.getEditor()
   editor.trigger('editor', 'undo', null)
-  rewrite()
+  process()
 }
 
 function layout () {
@@ -173,7 +177,10 @@ watch(() => adapter.value?.state?.instruction, async () => {
 
 onMounted(() => {
   layout()
-  setTimeout(layout, 50)
+  setTimeout(() => {
+    layout()
+    textareaRef.value?.select()
+  }, 50)
 })
 
 onBeforeUnmount(() => {

@@ -204,7 +204,7 @@ export class OpenAIEditAdapter implements EditAdapter {
   panel: Panel = {
     type: 'form',
     items: [
-      { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true }, hasError: v => !v },
+      { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true } },
       { type: 'instruction', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
       { type: 'input', key: 'api_token', label: 'Api Token', props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
@@ -338,7 +338,7 @@ export class OpenAIEditAdapter implements EditAdapter {
   }
 
   async fetchEditResults (selectedText: string, instruction: string, token: CancellationToken, onProgress: (res: { text: string }) => void): Promise<string | null | undefined> {
-    if (!this.state.selection || !this.state.model) {
+    if (!this.state.model) {
       return
     }
 
@@ -353,7 +353,7 @@ export class OpenAIEditAdapter implements EditAdapter {
     this.state.historyInstructions.unshift(instruction)
     this.state.historyInstructions = ctx.lib.lodash.uniq(this.state.historyInstructions.slice(0, 10))
 
-    const messages = [{ role: 'user', content: selectedText }]
+    const messages = selectedText ? [{ role: 'user', content: selectedText }] : []
 
     messages.unshift({ role: 'user', content: 'Instruction: ' + instruction })
 

@@ -3,7 +3,7 @@
     <div class="content">
       <div class="head" @mousedown.self="startDrag">
         <svg-icon v-if="state.type === 'completion'" class="logo-icon" :name="AIIcon" @click="doWork" :title="i18n.t('ai-complete') + ' ' + ctx.keybinding.getKeysLabel(COMPLETION_ACTION_NAME)" />
-        <svg-icon v-else-if="state.type === 'edit'" class="logo-icon" style="color: #009688" :name="AIIcon" @click="doWork" :title="i18n.t('ai-edit') + ' ' + ctx.keybinding.getKeysLabel(EDIT_ACTION_NAME)" />
+        <svg-icon v-else-if="state.type === 'edit'" class="logo-icon" style="color: #009688" :name="AIIcon" @click="doWork" :title="i18n.t('ai-edit-or-gen') + ' ' + ctx.keybinding.getKeysLabel(EDIT_ACTION_NAME)" />
         <svg-icon v-else class="logo-icon" :name="AIIcon" @click="doWork" />
         <b class="title">
           <select v-model="state.adapter[state.type]">
@@ -31,7 +31,7 @@
         </div>
         <template v-if="!loading">
           <button v-if="state.type === 'completion'" @click="doWork" class="primary tr">Complete</button>
-          <button v-if="state.type === 'edit'" @click="doWork" class="primary tr">Rewrite</button>
+          <button v-if="state.type === 'edit'" @click="doWork" class="primary tr">Rewrite / Generate</button>
         </template>
         <template v-else>
           <button v-if="state.type === 'edit'" @click="cancel" class="primary tr">Cancel</button>
@@ -54,7 +54,7 @@ const editor = ctx.editor.getEditor()
 const tabs: { label: string, value: typeof state.type }[] = [
   { label: 'Completion', value: 'completion' },
   // { label: 'Chat', value: 'chat' },
-  { label: 'Rewrite', value: 'edit' },
+  { label: 'Rewrite / Generate', value: 'edit' }
 ]
 
 const { SvgIcon, GroupTabs } = ctx.components

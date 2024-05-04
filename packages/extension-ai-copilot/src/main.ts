@@ -25,8 +25,8 @@ registerPlugin({
     registerAdapter(new SparkAIEditAdapter())
 
     ctx.editor.whenEditorReady().then(({ monaco }) => {
-      monaco.languages.registerInlineCompletionsProvider('markdown', new CompletionProvider())
-      monaco.languages.registerCodeActionProvider('markdown', new CodeActionProvider())
+      monaco.languages.registerInlineCompletionsProvider('*', new CompletionProvider())
+      monaco.languages.registerCodeActionProvider('*', new CodeActionProvider())
     })
 
     ctx.action.registerAction({
@@ -45,19 +45,14 @@ registerPlugin({
 
     ctx.action.registerAction({
       name: EDIT_ACTION_NAME,
-      description: i18n.t('ai-edit'),
+      description: i18n.t('ai-edit-or-gen'),
       forUser: true,
       handler: async (showWidget = true) => {
         const editor = ctx.editor.getEditor()
-        const selection = editor.getSelection()
-
-        if (!selection || selection.isEmpty()) {
-          ctx.ui.useToast().show('warning', 'Please select some text first', 3000)
-          return
-        }
+        const selection = editor.getSelection()!
 
         if (showWidget) {
-          createWidget()
+          createWidget(selection.isEmpty() ? 'generate' : 'edit')
         } else {
           const cts = new (ctx.editor.getMonaco().CancellationTokenSource)()
           await executeEdit(cts.token)
