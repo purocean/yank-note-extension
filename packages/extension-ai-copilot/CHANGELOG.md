@@ -1,3 +1,12 @@
+# [1.7.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.6.0...extension-ai-copilot-1.7.0) (2024-05-06)
+
+
+### Features
+
+* **extension-ai-copilot:** add support for proxy in AI adapters ([d520cb6](https://github.com/purocean/yank-note-extension/commit/d520cb6a074f88296b71b1387014c1da2425dc11))
+
+
+
 # [1.6.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.5.0...extension-ai-copilot-1.6.0) (2024-05-04)
 
 
