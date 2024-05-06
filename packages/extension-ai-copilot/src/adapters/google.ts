@@ -6,6 +6,7 @@ import { reactive, watch } from 'vue'
 
 class BaseGoogleAIAdapter {
   description = 'Powered by <a target="_blank" href="https://ai.google.dev">GoogleAI</a>'
+  supportProxy = true
   private async _requestApi (model: string, token: string, body?: any, onProgress?: ((text: string) => void), cancelToken?: CancellationToken): Promise<string> {
     const url = onProgress
       ? `https://generativelanguage.googleapis.com/v1/models/${model}:streamGenerateContent?alt=sse&key=${token}`

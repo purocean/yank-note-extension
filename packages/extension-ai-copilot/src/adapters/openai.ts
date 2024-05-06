@@ -11,6 +11,7 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
   id = 'openai-completion'
   displayname = 'OpenAI'
   description = 'Powered by <a target="_blank" href="http://openai.com">OpenAI</a>'
+  supportProxy = true
   monaco = ctx.editor.getMonaco()
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.OpenAICompletionAdapter')
   defaultSystemMessage = `Fill content at the \`${CURSOR_PLACEHOLDER}\`. \n\nExample 1:\nInput: I like {CURSOR} dance with my hands\nOutput: dance\n\nExample 2:\nInput: I like dance with my {CURSOR}\nOutput: hands\n\nAttention: Only output the filled content, do not output the surrounding content.`
@@ -180,6 +181,7 @@ export class OpenAIEditAdapter implements EditAdapter {
   id = 'openai-edit'
   displayname = 'OpenAI'
   description = 'Powered by <a target="_blank" href="http://openai.com">OpenAI</a>'
+  supportProxy = true
   monaco = ctx.editor.getMonaco()
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.OpenAIEditAdapter')
   defaultInstruction = 'Translate to English'

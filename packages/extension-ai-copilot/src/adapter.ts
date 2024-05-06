@@ -26,6 +26,7 @@ export interface Adapter {
 
   panel?: Panel
   state?: Record<string, any>,
+  supportProxy?: boolean
   activate(): {
     dispose: () => void,
     state: Record<string, any>

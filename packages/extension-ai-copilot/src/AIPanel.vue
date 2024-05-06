@@ -27,7 +27,9 @@
       </div>
       <div class="action" @mousedown.self="startDrag">
         <div class="proxy-input">
-          Proxy: <input placeholder="eg: http://127.0.0.1:8000" v-model="state.proxy" />
+          <template v-if="(state.type === 'completion' ? completionAdapter : state.type === 'edit' ? editAdapter : null)?.supportProxy">
+            Proxy: <input placeholder="eg: http://127.0.0.1:8000" v-model="state.proxy" />
+          </template>
         </div>
         <template v-if="!loading">
           <button v-if="state.type === 'completion'" @click="doWork" class="primary tr">Complete</button>
