@@ -228,6 +228,7 @@ declare const data: {
         nav: {
             nav: string;
             goto: string;
+            'reveal-current-file-in-sidebar': string;
             forward: string;
             back: string;
         };
@@ -384,6 +385,7 @@ declare const data: {
                 'complete-emoji': string;
                 'todo-with-time': string;
                 'suggest-on-trigger-characters': string;
+                'sticky-scroll-enabled': string;
                 'quick-suggestions': string;
             };
             render: {

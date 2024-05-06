@@ -24,6 +24,10 @@ export declare const MONACO_EDITOR_NLS: {
     ko: string;
     ru: string;
     'zh-cn': string;
+    'zh-tw': string;
+};
+export declare const CSS_VAR_NAME: {
+    PREVIEWER_HEIGHT: string;
 };
 export declare const DOM_ATTR_NAME: {
     SOURCE_LINE_START: string;

@@ -1,3 +1,7 @@
+# [3.69.0](https://github.com/purocean/yank-note-extension/compare/api-3.66.0...api-3.69.0) (2024-05-06)
+
+
+
 ## 3.66.0 (2024-01-11)
 
 * chore(api): upgrade dependence ([ee77694](https://github.com/purocean/yank-note-extension/commit/ee77694))

@@ -14,9 +14,14 @@ export declare function fetchHttp(input: RequestInfo, init?: RequestInit): Promi
  * @param url URL
  * @param reqOptions
  * @param usePost
+ * @param abortSignal
  * @returns
  */
-export declare function proxyRequest(url: string, reqOptions?: Record<string, any>, usePost?: boolean): Promise<Response>;
+export declare function proxyRequest(url: string, reqOptions?: {
+    sse?: boolean;
+    proxyUrl?: string;
+    [key: string]: any;
+}, usePost?: boolean, abortSignal?: AbortSignal): Promise<Response>;
 /**
  * Read a file.
  * @param file
@@ -109,13 +114,13 @@ type SearchReturn = (onResult: (result: ISerializedFileMatch[]) => void, onMessa
  */
 export declare function search(controller: AbortController, query: ITextQuery): Promise<SearchReturn>;
 /**
- * Watch a file.
+ * Watch file or dir.
  * @param controller
  * @param query
  * @returns
  */
-export declare function watchFile(repo: string, path: string, options: WatchOptions, onResult: (result: {
-    eventName: 'add' | 'change' | 'unlink';
+export declare function watchFs(repo: string, path: string, options: WatchOptions, onResult: (result: {
+    eventName: 'add' | 'change' | 'unlink' | 'addDir' | 'unlinkDir';
     path: string;
     stats?: Stats;
 }) => void, onError: (error: Error) => void): Promise<{
