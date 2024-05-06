@@ -44,10 +44,10 @@ export declare function useI18n(): {
  * @returns
  */
 export declare function createI18n<T extends Record<string, any>>(data: {
-    [lang in Language]: T;
+    [lang in Language]?: T;
 }, defaultLanguage?: Language): {
-    t: (path: keyof Flat<T, "">, ...args: string[]) => string;
-    $t: import("vue").Ref<(path: keyof Flat<T, "">, ...args: string[]) => string>;
+    t: (path: keyof Flat<T, "">, ...args: string[]) => string | keyof Flat<T, "">;
+    $t: import("vue").Ref<(path: keyof Flat<T, "">, ...args: string[]) => string | keyof Flat<T, "">>;
     $$t: (path: keyof Flat<T, "">, ...args: string[]) => string;
 };
 declare module '@vue/runtime-core' {
