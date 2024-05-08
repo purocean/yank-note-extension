@@ -1,3 +1,7 @@
+## [1.9.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.9.0...extension-ai-copilot-1.9.1) (2024-05-08)
+
+
+
 ## 1.9.0 (2024-05-08)
 
 * chore(extension-ai-copilot): improve inline completion behavior and loading state handling ([9de529a](https://github.com/purocean/yank-note-extension/commit/9de529a))
