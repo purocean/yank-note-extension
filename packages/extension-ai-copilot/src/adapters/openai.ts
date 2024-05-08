@@ -192,7 +192,6 @@ export class OpenAIEditAdapter implements EditAdapter {
     api_url: defaultApiUrl,
     selection: '',
     systemMessageV2: this.defaultSystemMessage,
-    historyInstructions: [] as string[],
     instruction: this.defaultInstruction,
     model: 'gpt-3.5-turbo',
     api_token: '',
@@ -206,7 +205,7 @@ export class OpenAIEditAdapter implements EditAdapter {
     items: [
       { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true } },
       { type: 'context', key: 'context', label: 'Context' },
-      { type: 'instruction', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
+      { type: 'instruction', key: 'instruction', label: 'Instruction', hasError: v => !v },
       { type: 'input', key: 'api_token', label: 'Api Token', props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
       { type: 'textarea', key: 'systemMessageV2', label: 'System Message', defaultValue: this.defaultSystemMessage },
@@ -350,9 +349,6 @@ export class OpenAIEditAdapter implements EditAdapter {
     }
 
     this.state.instruction = instruction
-
-    this.state.historyInstructions.unshift(instruction)
-    this.state.historyInstructions = ctx.lib.lodash.uniq(this.state.historyInstructions.slice(0, 10))
 
     const messages = selectedText ? [{ role: 'user', content: selectedText }] : []
 

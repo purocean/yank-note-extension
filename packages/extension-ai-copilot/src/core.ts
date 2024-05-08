@@ -34,6 +34,7 @@ const defaultState = {
     chat: '',
     edit: 'openai-edit',
   },
+  instructionHistory: [] as string[],
   adapterState: {} as Record<string, any>
 }
 
@@ -100,7 +101,8 @@ export async function readReader (
   }
 }
 
-export function showHistoryInstructionsMenu (list: string[], setFn: (val: string) => void, setHistoryFn: (val: string[]) => void) {
+export function showInstructionHistoryMenu (setFn: (val: string) => void) {
+  const list = state.instructionHistory
   const items: Components.ContextMenu.Item[] = list.map(x => ({
     id: x,
     label: h('span', { class: 'ai-copilot-history-instruction-item', title: x }, [
@@ -112,7 +114,7 @@ export function showHistoryInstructionsMenu (list: string[], setFn: (val: string
         height: '13px',
         onClick: (e: MouseEvent) => {
           e.stopPropagation()
-          setHistoryFn(list.filter(y => y !== x))
+          state.instructionHistory = list.filter(y => y !== x)
           ;(ctx.ui.useContextMenu() as any).hide()
         }
       })
@@ -128,7 +130,7 @@ export function showHistoryInstructionsMenu (list: string[], setFn: (val: string
       id: 'clear',
       label: 'Clear',
       onClick: () => {
-        setHistoryFn([])
+        state.instructionHistory = []
       }
     }
   )

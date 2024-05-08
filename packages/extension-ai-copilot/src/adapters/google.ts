@@ -237,7 +237,6 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
   state = reactive({
     selection: '',
     context: '',
-    historyInstructions: [] as string[],
     instruction: this.defaultInstruction,
     systemMessageV2: this.defaultSystemMessage,
     model: 'gemini-pro',
@@ -252,7 +251,7 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
     items: [
       { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true } },
       { type: 'context', key: 'context', label: 'Context' },
-      { type: 'instruction', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
+      { type: 'instruction', key: 'instruction', label: 'Instruction', hasError: v => !v },
       { type: 'textarea', key: 'systemMessageV2', label: 'System Message', defaultValue: this.defaultSystemMessage },
       { type: 'input', key: 'apiToken', label: 'Api Token', props: { type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gemini-pro', props: { placeholder: 'e.g. gemini-pro' }, hasError: v => !v },
@@ -321,9 +320,6 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
     }
 
     this.state.instruction = instruction
-
-    this.state.historyInstructions.unshift(instruction)
-    this.state.historyInstructions = ctx.lib.lodash.uniq(this.state.historyInstructions.slice(0, 10))
 
     const content = 'Instruction: ' + instruction + '\n\n' + selectedText
     const system = this.buildSystem(this.state.systemMessageV2, this.state.context)

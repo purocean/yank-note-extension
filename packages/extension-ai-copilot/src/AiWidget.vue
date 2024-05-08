@@ -15,7 +15,7 @@
           @keydown.stop
         />
         <svg-icon
-          v-if="adapter.state.historyInstructions?.length"
+          v-if="state.instructionHistory?.length"
           title="History"
           class="input-action-icon"
           name="chevron-down"
@@ -43,7 +43,7 @@
 <script lang="ts" setup>
 import { ctx } from '@yank-note/runtime-api'
 import { computed, defineEmits, defineProps, ref, watch, onBeforeUnmount, onMounted } from 'vue'
-import { showHistoryInstructionsMenu, state, loading, globalCancelTokenSource } from './core'
+import { showInstructionHistoryMenu, state, loading, globalCancelTokenSource } from './core'
 import { getAdapter, getAllAdapters } from './adapter'
 import { executeEdit } from './edit'
 
@@ -110,15 +110,10 @@ function showHistoryMenu () {
     return
   }
 
-  const list: string[] = adapter.value.state.historyInstructions
-  showHistoryInstructionsMenu(list, (val) => {
+  showInstructionHistoryMenu((val) => {
     if (adapter.value) {
       adapter.value.state.instruction = val
       textareaRef.value?.focus()
-    }
-  }, (val) => {
-    if (adapter.value) {
-      adapter.value.state.historyInstructions = val
     }
   })
 }

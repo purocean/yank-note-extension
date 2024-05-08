@@ -224,7 +224,6 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
   state = reactive({
     selection: '',
     context: '',
-    historyInstructions: [] as string[],
     instruction: this.defaultInstruction,
     systemMessage: this.defaultSystemMessage,
     version: 'v3.5',
@@ -241,7 +240,7 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
     items: [
       { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true } },
       { type: 'context', key: 'context', label: 'Context' },
-      { type: 'instruction', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions', hasError: v => !v },
+      { type: 'instruction', key: 'instruction', label: 'Instruction', hasError: v => !v },
       { type: 'textarea', key: 'systemMessage', label: 'System Message', defaultValue: this.defaultSystemMessage },
       { type: 'input', key: 'appid', label: 'APPID', hasError: v => !v },
       { type: 'input', key: 'apiSecret', label: 'API Secret', props: { type: 'password' }, hasError: v => !v },
@@ -270,9 +269,6 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
     }
 
     this.state.instruction = instruction
-
-    this.state.historyInstructions.unshift(instruction)
-    this.state.historyInstructions = ctx.lib.lodash.uniq(this.state.historyInstructions.slice(0, 10))
 
     const content = 'Instruction: ' + instruction + '\n\n' + selectedText
     const system = this.buildSystem(this.state.systemMessage, this.state.context)

@@ -8,8 +8,8 @@ export type CustomVueComponent = { type: 'custom', component: any }
 export type FormItem = CustomVueComponent
   | { type: 'context', key: 'context', label: string, hasError?: (val: string) => boolean, props?: any }
   | { type: 'selection', key: 'selection', label: string, hasError?: (val: string) => boolean, props?: any }
-  | { type: 'instruction', key: 'instruction', label: string, historyValueKey: 'historyInstructions', hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
-  | { type: 'textarea' | 'input', key: string, label: string, description?: string, historyValueKey?: string, hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
+  | { type: 'instruction', key: 'instruction', label: string, hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
+  | { type: 'textarea' | 'input', key: string, label: string, description?: string, hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
   | { type: 'select', key: string, label: string, options: {label: string, value: string}[], description?: string, hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
   | { type: 'range', key: string, label: string, max: number, min: number, step: number, description?: string, hasError?: (val: string) => boolean, defaultValue?: number, props?: any }
 

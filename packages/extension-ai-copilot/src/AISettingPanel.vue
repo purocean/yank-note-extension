@@ -6,7 +6,7 @@
         <component v-if="item.type === 'custom'" :is="item.component"/>
         <div v-else-if="adapterState" :class="{
           row : true,
-          'has-icon-btn': !!(item as any).defaultValue || (item as any).historyValueKey,
+          'has-icon-btn': !!(item as any).defaultValue || item.key === 'instruction',
           'has-error': !!item.hasError?.(adapterState[item.key])
         }">
           <div class="label">{{ item.label }}</div>
@@ -33,7 +33,7 @@
                 </template>
               </div>
               <svg-icon
-                v-if="(item as any).historyValueKey && adapterState[(item as any).historyValueKey]?.length"
+                v-if="item.key === 'instruction'"
                 title="History"
                 class="input-action-icon"
                 name="chevron-down"
@@ -63,7 +63,7 @@
 
 <script lang="ts" setup>
 import { computed, unref, defineProps, watchEffect, onBeforeUnmount, watch, onMounted } from 'vue'
-import { CURSOR_PLACEHOLDER, showHistoryInstructionsMenu, state } from './core'
+import { CURSOR_PLACEHOLDER, showInstructionHistoryMenu, state } from './core'
 import { ctx } from '@yank-note/runtime-api'
 import { Adapter, AdapterType, FormItem } from './adapter'
 
@@ -149,11 +149,8 @@ function showHistoryMenu (item: FormItem) {
     return
   }
 
-  const list: string[] = adapterState![(item as any).historyValueKey!]
-  showHistoryInstructionsMenu(list, val => {
+  showInstructionHistoryMenu(val => {
     adapterState![item.key] = val
-  }, val => {
-    adapterState![(item as any).historyValueKey!] = val
   })
 }
 

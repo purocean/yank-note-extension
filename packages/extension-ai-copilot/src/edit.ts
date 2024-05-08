@@ -53,7 +53,11 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
       return selection
     }
 
-    const res = await adapter.fetchEditResults(selectedText, adapter.state.instruction, token, res => {
+    const instruction = adapter.state.instruction
+    state.instructionHistory.unshift(instruction)
+    state.instructionHistory = ctx.lib.lodash.uniq(state.instructionHistory.slice(0, 16))
+
+    const res = await adapter.fetchEditResults(selectedText, instruction, token, res => {
       let text = res.text
 
       const textLines = text.split('\n')
