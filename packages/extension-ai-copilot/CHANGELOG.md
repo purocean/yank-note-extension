@@ -1,3 +1,10 @@
+## 1.9.0 (2024-05-08)
+
+* chore(extension-ai-copilot): improve inline completion behavior and loading state handling ([9de529a](https://github.com/purocean/yank-note-extension/commit/9de529a))
+* feat(extension-ai-copilot): share instruction history between adapters ([10767f1](https://github.com/purocean/yank-note-extension/commit/10767f1))
+
+
+
 ## 1.8.0 (2024-05-08)
 
 * feat(extension-ai-copilot): add remove history instruction button ([0b5d824](https://github.com/purocean/yank-note-extension/commit/0b5d824))
