@@ -1,3 +1,11 @@
+## 1.8.0 (2024-05-08)
+
+* feat(extension-ai-copilot): add remove history instruction button ([0b5d824](https://github.com/purocean/yank-note-extension/commit/0b5d824))
+* chore: bump @yank-note/runtime-api to ([5af6c48](https://github.com/purocean/yank-note-extension/commit/5af6c48))
+* chore: bump @yank-note/runtime-api to ([3bfcb9d](https://github.com/purocean/yank-note-extension/commit/3bfcb9d))
+
+
+
 # [1.7.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.6.0...extension-ai-copilot-1.7.0) (2024-05-06)
 
 
