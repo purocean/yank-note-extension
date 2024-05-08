@@ -2,16 +2,27 @@ import { ctx } from '@yank-note/runtime-api'
 import type Monaco from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { globalCancelTokenSource, loading, state } from './core'
 import { getAdapter } from './adapter'
+import { widgetIsVisible } from './ai-widget'
 
 export class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
   private logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CompletionProvider')
 
+  setLoading (val) {
+    if (this.enabled()) {
+      loading.value = val
+    }
+  }
+
+  enabled () {
+    return state.enable && !widgetIsVisible()
+  }
+
   freeInlineCompletions (): void {
-    loading.value = false
+    this.setLoading(false)
   }
 
   handleItemDidShow (): void {
-    loading.value = false
+    this.setLoading(false)
   }
 
   public async provideInlineCompletions (
@@ -20,7 +31,7 @@ export class CompletionProvider implements Monaco.languages.InlineCompletionsPro
     context: Monaco.languages.InlineCompletionContext,
     token: Monaco.CancellationToken
   ): Promise<Monaco.languages.InlineCompletions> {
-    if (!state.enable) {
+    if (!this.enabled()) {
       return { items: [] }
     }
 
@@ -43,7 +54,7 @@ export class CompletionProvider implements Monaco.languages.InlineCompletionsPro
     })
 
     token.onCancellationRequested(() => {
-      loading.value = false
+      this.setLoading(false)
     })
 
     try {
@@ -66,7 +77,7 @@ export class CompletionProvider implements Monaco.languages.InlineCompletionsPro
       this.logger.error('provideSuggestions', 'error', error)
       throw error
     } finally {
-      loading.value = false
+      this.setLoading(false)
     }
   }
 }

@@ -7,6 +7,10 @@ import directives from './directives'
 let widget: App | null = null
 let zone: (editor.IViewZone & { id: string }) | null = null
 
+export function widgetIsVisible () {
+  return !!zone
+}
+
 export function createWidget (type: 'edit' | 'generate') {
   if (zone) {
     disposeWidget()
