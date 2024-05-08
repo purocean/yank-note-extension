@@ -1,5 +1,6 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { CURSOR_PLACEHOLDER, proxyRequest, readReader } from '@/core'
+import { CURSOR_PLACEHOLDER, proxyRequest } from '@/core'
+import { fetchEventSource, EventStreamContentType } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
 import { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { reactive, watch } from 'vue'
@@ -257,41 +258,63 @@ export class OpenAIEditAdapter implements EditAdapter {
       controller.abort()
     })
 
-    const res = await proxyRequest(url, { headers, body: body, method: 'post', sse: true }, signal)
-    const reader = res.body?.getReader()
-    if (!reader) {
-      throw new Error('No reader')
-    }
-
     let text = ''
-    let hasError = false
 
-    const result = await readReader(reader, (line) => {
-      if (hasError) {
-        return
-      }
+    class FatalError extends Error { }
 
-      const json = line.replace('data:', '').trim()
-      if (json && !json.includes('[DONE]')) {
-        try {
-          const res = JSON.parse(json)
-          const val = res.choices[0]?.delta?.content
+    await fetchEventSource(url, {
+      fetch: () => proxyRequest(url, { sse: true, headers, body: body, method: 'post' }, signal),
+      async onopen (response) {
+        if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
+          return
+        }
+
+        if (response.headers.get('content-type')?.includes('application/json')) {
+          const text = await response.text()
+          throw new Error(text)
+        } else {
+          throw new Error(response.statusText)
+        }
+      },
+      onmessage: (e) => {
+        const data = e.data
+        if (data.includes('[DONE]')) {
+          throw new FatalError('DONE')
+        }
+
+        const res = JSON.parse(data)
+        if (!res.choices[0]?.delta) {
+          console.error(res)
+          ctx.ui.useToast().show('warning', JSON.stringify(res), 5000)
+        } else {
+          const val = res.choices[0].delta.content
           if (val) {
             text += val
             onProgress(text)
           }
-        } catch (err) {
-          hasError = true
+        }
+      },
+      onclose: () => {
+        throw new FatalError('CLOSED')
+        // controller.abort()
+      },
+      onerror: (err) => {
+        if (err instanceof FatalError) {
+          throw err
+        } else {
+          console.error(err)
+          ctx.ui.useToast().show('warning', err.message, 5000)
+          throw new FatalError(err.message)
         }
       }
-    })
+    }).catch(e => {
+      if (e instanceof FatalError) {
+        return
+      }
 
-    if (hasError) {
-      const res = JSON.parse(result.replace('data:', '').trim())
-      console.error(res)
-      ctx.ui.useToast().show('warning', JSON.stringify(res), 5000)
-      return ''
-    }
+      console.error(e)
+      throw e
+    })
 
     return text
   }

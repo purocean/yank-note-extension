@@ -40,6 +40,7 @@
     "prepublish": "npm run build"
   },
   "devDependencies": {
+    "@microsoft/fetch-event-source": "^2.0.1",
     "@rollup/plugin-node-resolve": "^13.2.1",
     "@rollup/plugin-replace": "^4.0.0",
     "@vitejs/plugin-vue": "^3.2.0",
