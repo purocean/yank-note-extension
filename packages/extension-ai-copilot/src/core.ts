@@ -1,6 +1,7 @@
 import { ctx } from '@yank-note/runtime-api'
+import { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 import type { CancellationTokenSource } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
-import { reactive, ref, shallowRef, watch } from 'vue'
+import { h, reactive, ref, shallowRef, watch } from 'vue'
 
 export const COMPLETION_ACTION_NAME = __EXTENSION_ID__ + '.inlineSuggest.trigger'
 export const EDIT_ACTION_NAME = __EXTENSION_ID__ + '.edit.trigger'
@@ -97,4 +98,40 @@ export async function readReader (
       }
     }
   }
+}
+
+export function showHistoryInstructionsMenu (list: string[], setFn: (val: string) => void, setHistoryFn: (val: string[]) => void) {
+  const items: Components.ContextMenu.Item[] = list.map(x => ({
+    id: x,
+    label: h('span', { class: 'ai-copilot-history-instruction-item', title: x }, [
+      h('span', x),
+      h(ctx.components.SvgIcon, {
+        title: 'Remove',
+        name: 'times',
+        width: '13px',
+        height: '13px',
+        onClick: (e: MouseEvent) => {
+          e.stopPropagation()
+          setHistoryFn(list.filter(y => y !== x))
+          ;(ctx.ui.useContextMenu() as any).hide()
+        }
+      })
+    ]),
+    onClick: () => {
+      setFn(x)
+    }
+  }))
+
+  items.push(
+    { type: 'separator' },
+    {
+      id: 'clear',
+      label: 'Clear',
+      onClick: () => {
+        setHistoryFn([])
+      }
+    }
+  )
+
+  ctx.ui.useContextMenu().show(items)
 }

@@ -63,10 +63,9 @@
 
 <script lang="ts" setup>
 import { computed, unref, defineProps, watchEffect, onBeforeUnmount, watch, onMounted } from 'vue'
-import { CURSOR_PLACEHOLDER, state } from './core'
+import { CURSOR_PLACEHOLDER, showHistoryInstructionsMenu, state } from './core'
 import { ctx } from '@yank-note/runtime-api'
 import { Adapter, AdapterType, FormItem } from './adapter'
-import type { Components } from '../../api/types/types/renderer/types'
 
 const SvgIcon = ctx.components.SvgIcon
 
@@ -151,24 +150,11 @@ function showHistoryMenu (item: FormItem) {
   }
 
   const list: string[] = adapterState![(item as any).historyValueKey!]
-  const items: Components.ContextMenu.Item[] = list.map(x => ({
-    id: x,
-    label: x.slice(0, 20) + (x.length > 20 ? '...' : ''),
-    onClick: () => {
-      adapterState![item.key] = x
-    }
-  }))
-
-  ctx.ui.useContextMenu().show(items.concat(
-    { type: 'separator' },
-    {
-      id: 'clear',
-      label: 'Clear',
-      onClick: () => {
-        adapterState![(item as any).historyValueKey!] = []
-      }
-    })
-  )
+  showHistoryInstructionsMenu(list, val => {
+    adapterState![item.key] = val
+  }, val => {
+    adapterState![(item as any).historyValueKey!] = val
+  })
 }
 
 watchEffect(buildContent)

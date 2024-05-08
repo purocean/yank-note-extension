@@ -42,9 +42,8 @@
 
 <script lang="ts" setup>
 import { ctx } from '@yank-note/runtime-api'
-import type { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 import { computed, defineEmits, defineProps, ref, watch, onBeforeUnmount, onMounted } from 'vue'
-import { state, loading, globalCancelTokenSource } from './core'
+import { showHistoryInstructionsMenu, state, loading, globalCancelTokenSource } from './core'
 import { getAdapter, getAllAdapters } from './adapter'
 import { executeEdit } from './edit'
 
@@ -112,27 +111,16 @@ function showHistoryMenu () {
   }
 
   const list: string[] = adapter.value.state.historyInstructions
-  const items: Components.ContextMenu.Item[] = list.map(x => ({
-    id: x,
-    label: x.slice(0, 20) + (x.length > 20 ? '...' : ''),
-    onClick: () => {
-      adapter.value!.state.instruction = x
+  showHistoryInstructionsMenu(list, (val) => {
+    if (adapter.value) {
+      adapter.value.state.instruction = val
       textareaRef.value?.focus()
     }
-  }))
-
-  ctx.ui.useContextMenu().show(items.concat(
-    { type: 'separator' },
-    {
-      id: 'clear',
-      label: 'Clear',
-      onClick: () => {
-        if (adapter.value) {
-          adapter.value.state.historyInstructions = []
-        }
-      }
-    })
-  )
+  }, (val) => {
+    if (adapter.value) {
+      adapter.value.state.historyInstructions = val
+    }
+  })
 }
 
 async function process () {

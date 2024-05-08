@@ -1,0 +1,32 @@
+.ai-copilot-history-instruction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+
+  & > span {
+    max-width: 200px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .svg-icon {
+    opacity: 0;
+    position: absolute;
+    right: 4px;
+    color: var(--g-color-30);
+    cursor: pointer;
+    padding: 2px;
+
+    &:hover {
+      color: var(--g-color-10);
+      background: rgba(var(--g-color-20-rgb), 0.2);
+      border-radius: 50%;
+    }
+  }
+}
+
+ul.menu > li.normal:hover > .ai-copilot-history-instruction-item > .svg-icon {
+  opacity: 1;
+}

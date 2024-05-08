@@ -11,6 +11,8 @@ import { createWidget, disposeWidget } from './ai-widget'
 import { CompletionProvider } from './completion'
 import { CodeActionProvider, executeEdit } from './edit'
 
+import './index.scss'
+
 const extensionId = __EXTENSION_ID__
 
 registerPlugin({
