@@ -42,6 +42,10 @@ export class CompletionProvider implements Monaco.languages.InlineCompletionsPro
       await ctx.utils.sleep(1500)
     }
 
+    if (!this.enabled()) {
+      return { items: [] }
+    }
+
     if (token.isCancellationRequested) {
       return { items: [] }
     }
