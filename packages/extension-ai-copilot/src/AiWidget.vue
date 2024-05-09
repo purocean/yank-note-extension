@@ -3,7 +3,7 @@
     <div class="content">
       <div class="input" v-if="adapter && adapter.state">
         <textarea
-          placeholder="Ask Copilot to edit text..."
+          :placeholder="$t('ask-ai-edit-or-gen')"
           ref="textareaRef"
           v-model="adapter.state.instruction"
           v-auto-focus="{delay: 50}"

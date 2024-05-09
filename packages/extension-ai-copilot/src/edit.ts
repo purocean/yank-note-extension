@@ -31,6 +31,15 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
       throw new Error(`No Completion adapter [${state.adapter.edit}]`)
     }
 
+    const instruction = adapter.state.instruction
+
+    if (!instruction.trim()) {
+      throw new Error('Instruction is required')
+    }
+
+    state.instructionHistory.unshift(instruction)
+    state.instructionHistory = ctx.lib.lodash.uniq(state.instructionHistory.slice(0, 16))
+
     const editor = ctx.editor.getEditor()
     const model = editor.getModel()
 
@@ -52,10 +61,6 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
 
       return selection
     }
-
-    const instruction = adapter.state.instruction
-    state.instructionHistory.unshift(instruction)
-    state.instructionHistory = ctx.lib.lodash.uniq(state.instructionHistory.slice(0, 16))
 
     const res = await adapter.fetchEditResults(selectedText, instruction, token, res => {
       let text = res.text
