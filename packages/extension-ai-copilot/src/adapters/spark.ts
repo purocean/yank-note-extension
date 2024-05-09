@@ -222,6 +222,7 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
   defaultSystemMessage = 'Generate/Modify content based on the context at the {CURSOR} position.\n--CONTEXT BEGIN--\n{CONTEXT}\n--CONTEXT END--\n\nAttention: Output the content directly, no surrounding content.'
 
   state = reactive({
+    withContext: true,
     selection: '',
     context: '',
     instruction: this.defaultInstruction,
@@ -289,6 +290,10 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
   }
 
   buildSystem (prompt: string, context: string) {
+    if (!this.state.withContext) {
+      return ''
+    }
+
     return context.trim() ? prompt.replace('{CONTEXT}', context) : ''
   }
 }

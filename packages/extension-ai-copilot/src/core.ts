@@ -28,6 +28,7 @@ export const i18n = ctx.i18n.createI18n({
     'rewrite-or-generate': 'Rewrite / Generate',
     'proxy': 'Proxy',
     'no-context-available': 'No context available',
+    'with-context': 'With context',
   },
   'zh-CN': {
     'ai-complete': '使用 AI Copilot 自动补全',
@@ -47,6 +48,7 @@ export const i18n = ctx.i18n.createI18n({
     'rewrite-or-generate': '重写 / 生成',
     'proxy': '代理',
     'no-context-available': '无上下文可用',
+    'with-context': '包含上下文',
   }
 })
 

@@ -235,6 +235,7 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
   defaultSystemMessage = 'Generate/Modify content based on the context at the {CURSOR} position.\n--CONTEXT BEGIN--\n{CONTEXT}\n--CONTEXT END--\n\nAttention: Output the content directly, no surrounding content.'
 
   state = reactive({
+    withContext: true,
     selection: '',
     context: '',
     instruction: this.defaultInstruction,
@@ -331,6 +332,10 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
   }
 
   buildSystem (prompt: string, context: string) {
+    if (!this.state.withContext) {
+      return ''
+    }
+
     return context.trim() ? prompt.replace('{CONTEXT}', context) : ''
   }
 }

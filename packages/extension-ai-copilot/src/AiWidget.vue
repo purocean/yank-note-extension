@@ -32,6 +32,14 @@
           <button class="small tr" @click="undo">{{ $t('discard') }}</button>
           <button class="small tr" @click="reload"><svg-icon name="sync-alt-solid" width="11px" height="13px" /></button>
         </template>
+
+        <label>
+          <template v-if="adapter && adapter.state">
+            <input type="checkbox" v-model="adapter.state.withContext" />
+            {{ $t('with-context') }}
+          </template>
+        </label>
+
         <select v-model="state.adapter.edit" @change="textareaRef?.focus()">
           <option v-for="item in adapters" :key="item.id" :value="item.id">{{item.displayname}}</option>
         </select>
@@ -179,7 +187,7 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .ai-widget {
-  width: 400px;
+  width: 500px;
   position: relative;
   overflow: hidden;
   padding: 2px;
@@ -229,11 +237,20 @@ onBeforeUnmount(() => {
     }
 
     select {
-      margin-left: auto;
       font-size: 13px;
       padding: 1px;
       width: 120px;
       height: 22px;
+    }
+
+    label {
+      margin-left: auto;
+      margin-right: 4px;
+      display: flex;
+      align-items: center;
+      input {
+        margin-right: 4px;
+      }
     }
   }
 
