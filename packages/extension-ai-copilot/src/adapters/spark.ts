@@ -93,12 +93,17 @@ class BaseAdapter {
 
       token.onCancellationRequested(() => {
         if (this._inRequest) {
+          reject(new Error('CANCELLED'))
           ws.close()
           this._inRequest = false
         }
       })
 
       ws.onmessage = (e: any) => {
+        if (!this._inRequest) {
+          return
+        }
+
         const { header, payload } = JSON.parse(e.data)
         if (header.code !== 0) {
           reject(new Error('MESSAGE_ERROR:' + header.message))
