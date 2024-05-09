@@ -1,3 +1,13 @@
+# [1.10.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.9.2...extension-ai-copilot-1.10.0) (2024-05-09)
+
+
+### Features
+
+* **extension-ai-copilot:** i18n ([4fb2c7d](https://github.com/purocean/yank-note-extension/commit/4fb2c7d1c01c5a73b36c7dcf6de1b3d4a8691fe2))
+* **extension-ai-copilot:** optimize UX ([6d2aa80](https://github.com/purocean/yank-note-extension/commit/6d2aa80a67767d511d7d65e69aa79c75e1650daa))
+
+
+
 ## [1.9.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.9.1...extension-ai-copilot-1.9.2) (2024-05-08)
 
 
