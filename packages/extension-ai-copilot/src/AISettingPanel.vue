@@ -11,7 +11,7 @@
         }">
           <div class="label">{{ item.label }}</div>
             <div v-if="item.type === 'context'">
-              <textarea v-model="adapterState.context" v-bind="item.props" placeholder="No context available" />
+              <textarea v-model="adapterState.context" v-bind="item.props" :placeholder="i18n.$t.value('no-context-available')" />
               <div class="input">
                 <input style="outline: none" type="range" max="8000" min="0" v-model.number="(adapterState as any)._contextLength" />
                 <input style="outline: none" type="number" max="8000" min="0" v-model.number="(adapterState as any)._contextLength" />
@@ -63,7 +63,7 @@
 
 <script lang="ts" setup>
 import { computed, unref, defineProps, watchEffect, onBeforeUnmount, watch, onMounted } from 'vue'
-import { CURSOR_PLACEHOLDER, showInstructionHistoryMenu, state } from './core'
+import { CURSOR_PLACEHOLDER, i18n, showInstructionHistoryMenu, state } from './core'
 import { ctx } from '@yank-note/runtime-api'
 import { Adapter, AdapterType, FormItem } from './adapter'
 

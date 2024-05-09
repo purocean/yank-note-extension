@@ -1,5 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { CURSOR_PLACEHOLDER, proxyRequest } from '@/core'
+import { i18n, CURSOR_PLACEHOLDER, proxyRequest } from '@/core'
 import { fetchEventSource, EventStreamContentType } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
 import { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
@@ -31,7 +31,7 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
   panel: Panel = {
     type: 'form',
     items: [
-      { type: 'context', key: 'context', label: 'Context', hasError: v => !v },
+      { type: 'context', key: 'context', label: i18n.t('context'), hasError: v => !v },
       { type: 'input', key: 'api_token', label: 'Api Token', props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
       { type: 'textarea', key: 'system_message', label: 'System Message', defaultValue: this.defaultSystemMessage },
@@ -204,9 +204,9 @@ export class OpenAIEditAdapter implements EditAdapter {
   panel: Panel = {
     type: 'form',
     items: [
-      { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true } },
-      { type: 'context', key: 'context', label: 'Context' },
-      { type: 'instruction', key: 'instruction', label: 'Instruction', hasError: v => !v },
+      { type: 'selection', key: 'selection', label: i18n.t('selected-text'), props: { readonly: true } },
+      { type: 'context', key: 'context', label: i18n.t('context') },
+      { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
       { type: 'input', key: 'api_token', label: 'Api Token', props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
       { type: 'textarea', key: 'systemMessageV2', label: 'System Message', defaultValue: this.defaultSystemMessage },

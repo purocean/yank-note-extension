@@ -1,5 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { CURSOR_PLACEHOLDER } from '@/core'
+import { i18n, CURSOR_PLACEHOLDER } from '@/core'
 import { ctx } from '@yank-note/runtime-api'
 import { Position, editor, languages, CancellationToken } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { reactive } from 'vue'
@@ -152,7 +152,7 @@ export class SparkAICompletionAdapter extends BaseAdapter implements CompletionA
   panel: Panel = {
     type: 'form',
     items: [
-      { type: 'context', key: 'context', label: 'Context', hasError: v => !v },
+      { type: 'context', key: 'context', label: i18n.t('context'), hasError: v => !v },
       { type: 'input', key: 'appid', label: 'APPID', hasError: v => !v },
       { type: 'input', key: 'apiSecret', label: 'API Secret', props: { type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'apiKey', label: 'API Key', props: { type: 'password' }, hasError: v => !v },
@@ -238,9 +238,9 @@ export class SparkAIEditAdapter extends BaseAdapter implements EditAdapter {
   panel: Panel = {
     type: 'form',
     items: [
-      { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true } },
-      { type: 'context', key: 'context', label: 'Context' },
-      { type: 'instruction', key: 'instruction', label: 'Instruction', hasError: v => !v },
+      { type: 'selection', key: 'selection', label: i18n.t('selected-text'), props: { readonly: true } },
+      { type: 'context', key: 'context', label: i18n.t('context') },
+      { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
       { type: 'textarea', key: 'systemMessage', label: 'System Message', defaultValue: this.defaultSystemMessage },
       { type: 'input', key: 'appid', label: 'APPID', hasError: v => !v },
       { type: 'input', key: 'apiSecret', label: 'API Secret', props: { type: 'password' }, hasError: v => !v },

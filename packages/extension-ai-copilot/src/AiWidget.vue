@@ -25,11 +25,11 @@
         />
       </div>
       <div class="actions" v-if="adapter">
-        <button v-if="loading" class="small tr" @click="cancel">Cancel</button>
-        <button v-else-if="!finished" class="small primary tr" @click="process">{{ type === 'edit' ? 'Rewrite' : 'Generate' }}</button>
+        <button v-if="loading" class="small tr" @click="cancel">{{ $t('cancel') }}</button>
+        <button v-else-if="!finished" class="small primary tr" @click="process">{{ type === 'edit' ? $t('rewrite') : $t('generate') }}</button>
         <template v-else>
-          <button class="small primary tr" @click="close">Accept</button>
-          <button class="small tr" @click="undo">Discard</button>
+          <button class="small primary tr" @click="close">{{ $t('accept') }}</button>
+          <button class="small tr" @click="undo">{{ $t('discard') }}</button>
           <button class="small tr" @click="reload"><svg-icon name="sync-alt-solid" width="11px" height="13px" /></button>
         </template>
         <select v-model="state.adapter.edit" @change="textareaRef?.focus()">
@@ -43,11 +43,13 @@
 <script lang="ts" setup>
 import { ctx } from '@yank-note/runtime-api'
 import { computed, defineEmits, defineProps, ref, watch, onBeforeUnmount, onMounted } from 'vue'
-import { showInstructionHistoryMenu, state, loading, globalCancelTokenSource } from './core'
+import { i18n, showInstructionHistoryMenu, state, loading, globalCancelTokenSource } from './core'
 import { getAdapter, getAllAdapters } from './adapter'
 import { executeEdit } from './edit'
 
 const SvgIcon = ctx.components.SvgIcon
+
+const { $t } = i18n
 
 const wrapperRef = ref<HTMLElement>()
 const textareaRef = ref<HTMLTextAreaElement>()

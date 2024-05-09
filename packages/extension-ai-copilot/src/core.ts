@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 import { ctx } from '@yank-note/runtime-api'
 import { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 import type { CancellationTokenSource } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
@@ -15,6 +16,18 @@ export const i18n = ctx.i18n.createI18n({
     'ai-generate': 'Generate using AI Copilot',
     'ai-edit-or-gen': 'Edit or Generate using AI Copilot',
     'enable-ai-copilot': 'Enable AI Copilot',
+    'cancel': 'Cancel',
+    'accept': 'Accept',
+    'rewrite': 'Rewrite',
+    'generate': 'Generate',
+    'discard': 'Discard',
+    'context': 'Context',
+    'instruction': 'Instruction',
+    'selected-text': 'Selected Text',
+    'completion': 'Completion',
+    'rewrite-or-generate': 'Rewrite / Generate',
+    'proxy': 'Proxy',
+    'no-context-available': 'No context available',
   },
   'zh-CN': {
     'ai-complete': '使用 AI Copilot 自动补全',
@@ -22,6 +35,18 @@ export const i18n = ctx.i18n.createI18n({
     'ai-generate': '使用 AI Copilot 生成',
     'ai-edit-or-gen': '使用 AI Copilot 修改或生成',
     'enable-ai-copilot': '启用 AI Copilot',
+    'cancel': '取消',
+    'accept': '接受',
+    'rewrite': '重写',
+    'generate': '生成',
+    'discard': '放弃',
+    'context': '上下文',
+    'instruction': '指令',
+    'selected-text': '选中文本',
+    'completion': '补全文本',
+    'rewrite-or-generate': '重写 / 生成',
+    'proxy': '代理',
+    'no-context-available': '无上下文可用',
   }
 })
 

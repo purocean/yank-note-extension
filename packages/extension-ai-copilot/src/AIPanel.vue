@@ -28,15 +28,17 @@
       <div class="action" @mousedown.self="startDrag">
         <div class="proxy-input">
           <template v-if="(state.type === 'completion' ? completionAdapter : state.type === 'edit' ? editAdapter : null)?.supportProxy">
-            Proxy: <input placeholder="eg: http://127.0.0.1:8000" v-model="state.proxy" />
+            {{ i18n.$t.value('proxy') }}: <input placeholder="eg: http://127.0.0.1:8000" v-model="state.proxy" />
           </template>
         </div>
         <template v-if="!loading">
-          <button v-if="state.type === 'completion'" @click="doWork" class="primary tr">Complete</button>
-          <button v-if="state.type === 'edit'" @click="doWork" class="primary tr">Rewrite / Generate</button>
+          <button v-if="state.type === 'completion'" @click="doWork" class="primary tr">{{ i18n.$t.value('completion') }}</button>
+          <button v-if="state.type === 'edit' && editAdapter" @click="doWork" class="primary tr">
+            {{ editAdapter.state.selection ? i18n.$t.value('rewrite') : i18n.$t.value('generate') }}
+          </button>
         </template>
         <template v-else>
-          <button v-if="state.type === 'edit'" @click="cancel" class="primary tr">Cancel</button>
+          <button v-if="state.type === 'edit'" @click="cancel" class="primary tr">{{ i18n.$t.value('cancel') }}</button>
         </template>
       </div>
     </div>
@@ -54,9 +56,9 @@ const AIIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" v
 const editor = ctx.editor.getEditor()
 
 const tabs: { label: string, value: typeof state.type }[] = [
-  { label: 'Completion', value: 'completion' },
+  { label: i18n.t('completion'), value: 'completion' },
   // { label: 'Chat', value: 'chat' },
-  { label: 'Rewrite / Generate', value: 'edit' }
+  { label: i18n.t('rewrite-or-generate'), value: 'edit' }
 ]
 
 const { SvgIcon, GroupTabs } = ctx.components
@@ -403,6 +405,7 @@ const onMouseUp = () => {
     display: flex;
     font-size: 13px;
     align-items: center;
+    white-space: nowrap;
 
     input {
       font-size: 13px;

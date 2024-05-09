@@ -1,5 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { CURSOR_PLACEHOLDER, proxyRequest, readReader } from '@/core'
+import { i18n, CURSOR_PLACEHOLDER, proxyRequest, readReader } from '@/core'
 import { ctx } from '@yank-note/runtime-api'
 import { Position, editor, languages, CancellationToken } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { reactive, watch } from 'vue'
@@ -138,7 +138,7 @@ export class GoogleAICompletionAdapter extends BaseGoogleAIAdapter implements Co
   panel: Panel = {
     type: 'form',
     items: [
-      { type: 'context', key: 'context', label: 'Context', hasError: v => !v },
+      { type: 'context', key: 'context', label: i18n.t('context'), hasError: v => !v },
       { type: 'input', key: 'apiToken', label: 'Api Token', props: { type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gemini-pro', props: { placeholder: 'e.g. gemini-pro' }, hasError: v => !v },
       { type: 'textarea', key: 'systemMessage', label: 'System Message', defaultValue: this.defaultSystemMessage },
@@ -249,9 +249,9 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
   panel: Panel = {
     type: 'form',
     items: [
-      { type: 'selection', key: 'selection', label: 'Selected Text', props: { readonly: true } },
-      { type: 'context', key: 'context', label: 'Context' },
-      { type: 'instruction', key: 'instruction', label: 'Instruction', hasError: v => !v },
+      { type: 'selection', key: 'selection', label: i18n.t('selected-text'), props: { readonly: true } },
+      { type: 'context', key: 'context', label: i18n.t('context') },
+      { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
       { type: 'textarea', key: 'systemMessageV2', label: 'System Message', defaultValue: this.defaultSystemMessage },
       { type: 'input', key: 'apiToken', label: 'Api Token', props: { type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: 'Model', defaultValue: 'gemini-pro', props: { placeholder: 'e.g. gemini-pro' }, hasError: v => !v },
