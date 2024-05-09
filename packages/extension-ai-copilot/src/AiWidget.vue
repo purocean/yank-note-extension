@@ -54,7 +54,7 @@ const { $t } = i18n
 const wrapperRef = ref<HTMLElement>()
 const textareaRef = ref<HTMLTextAreaElement>()
 const emits = defineEmits<{(event: 'layout', height: number): void, (event: 'dispose'): void}>()
-defineProps<{type: 'generate' | 'edit'}>()
+const props = defineProps<{type: 'generate' | 'edit', runImmediately: boolean}>()
 
 const adapter = computed(() => getAdapter('edit', state.adapter.edit))
 const finished = ref(false)
@@ -165,6 +165,9 @@ onMounted(() => {
   setTimeout(() => {
     layout()
     textareaRef.value?.select()
+    if (props.runImmediately) {
+      process()
+    }
   }, 50)
 })
 

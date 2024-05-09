@@ -88,19 +88,7 @@ function doWork () {
   if (state.type === 'completion') {
     ctx.action.getActionHandler(COMPLETION_ACTION_NAME)()
   } else if (state.type === 'edit') {
-    if (pined.value) {
-      ctx.action.getActionHandler(EDIT_ACTION_NAME)(false)
-      return
-    }
-
-    const editor = ctx.editor.getEditor()
-    const selection = editor.getSelection()
-
-    if (selection && !selection.isEmpty()) {
-      ctx.action.getActionHandler(EDIT_ACTION_NAME)(false)
-    } else {
-      ctx.action.getActionHandler(EDIT_ACTION_NAME)(true)
-    }
+    ctx.action.getActionHandler(EDIT_ACTION_NAME)(pined.value)
   }
 }
 
@@ -334,6 +322,8 @@ const onMouseUp = () => {
       .logo-icon {
         width: 18px;
         height: 18px;
+        cursor: default;
+        pointer-events: none;
       }
 
       .title {

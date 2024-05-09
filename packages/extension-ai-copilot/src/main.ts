@@ -9,7 +9,7 @@ import { GithubCopilotCompletionAdapter } from './adapters/github-copilot'
 import { SparkAICompletionAdapter, SparkAIEditAdapter } from './adapters/spark'
 import { createWidget, disposeWidget } from './ai-widget'
 import { CompletionProvider } from './completion'
-import { CodeActionProvider, executeEdit } from './edit'
+import { CodeActionProvider } from './edit'
 
 import './index.scss'
 
@@ -49,16 +49,10 @@ registerPlugin({
       name: EDIT_ACTION_NAME,
       description: i18n.t('ai-edit-or-gen'),
       forUser: true,
-      handler: async (showWidget = true) => {
+      handler: async (runImmediately = false) => {
         const editor = ctx.editor.getEditor()
         const selection = editor.getSelection()!
-
-        if (showWidget) {
-          createWidget(selection.isEmpty() ? 'generate' : 'edit')
-        } else {
-          const cts = new (ctx.editor.getMonaco().CancellationTokenSource)()
-          await executeEdit(cts.token)
-        }
+        createWidget(selection.isEmpty() ? 'generate' : 'edit', runImmediately)
       },
       when: () => ctx.store.state.showEditor && !ctx.store.state.presentation,
     })

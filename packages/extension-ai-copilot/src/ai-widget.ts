@@ -11,7 +11,7 @@ export function widgetIsVisible () {
   return !!zone
 }
 
-export function createWidget (type: 'edit' | 'generate') {
+export function createWidget (type: 'edit' | 'generate', runImmediately = false) {
   if (zone) {
     disposeWidget()
   }
@@ -44,6 +44,7 @@ export function createWidget (type: 'edit' | 'generate') {
         setup () {
           return () => h(AIWidget, {
             type,
+            runImmediately,
             onLayout: (height : number) => {
               if (zone) {
                 zone.heightInPx = height
