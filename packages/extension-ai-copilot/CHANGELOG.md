@@ -1,3 +1,12 @@
+## [1.11.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.11.0...extension-ai-copilot-1.11.1) (2024-05-09)
+
+
+### Features
+
+* **extension-ai-copilot:** update AISettingPanel.vue to handle 'edit' type correctly ([74c8557](https://github.com/purocean/yank-note-extension/commit/74c8557c6b9a5f3a7dc1f5275124bb8a8b97b1e5))
+
+
+
 # [1.11.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.10.0...extension-ai-copilot-1.11.0) (2024-05-09)
 
 
