@@ -11,7 +11,7 @@
         }">
           <div class="label"> {{ item.label }} </div>
             <div v-if="item.type === 'context'">
-              <template v-if="adapterState.withContext">
+              <template v-if="type !== 'edit' || adapterState.withContext">
                 <textarea v-model="adapterState.context" v-bind="item.props" :placeholder="i18n.$t.value('no-context-available')" />
                 <div class="input">
                   <input style="outline: none" type="range" max="8000" min="0" v-model.number="(adapterState as any)._contextLength" />
