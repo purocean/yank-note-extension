@@ -1,3 +1,13 @@
+# [1.11.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.10.0...extension-ai-copilot-1.11.0) (2024-05-09)
+
+
+### Features
+
+* **extension-ai-copilot:** add 'with-context' option to adapters ([c479f25](https://github.com/purocean/yank-note-extension/commit/c479f25883db9505aac4249d64d3644bd5c7ff54))
+* **extension-ai-copilot:** improve error handling in spark adapter ([5040559](https://github.com/purocean/yank-note-extension/commit/5040559529083a85d344c5a3014455827715e0ec))
+
+
+
 # [1.10.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.9.2...extension-ai-copilot-1.10.0) (2024-05-09)
 
 
