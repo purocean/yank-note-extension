@@ -168,6 +168,12 @@ watch(() => adapter.value?.state?.instruction, async () => {
   layout()
 })
 
+watch(() => adapter.value, (val, oldValue) => {
+  if (val && oldValue) {
+    val.state.instruction = oldValue.state.instruction
+  }
+}, { flush: 'post' })
+
 onMounted(() => {
   layout()
   setTimeout(() => {
