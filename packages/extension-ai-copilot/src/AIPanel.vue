@@ -63,7 +63,7 @@ const tabs: { label: string, value: typeof state.type }[] = [
 
 const { SvgIcon, GroupTabs } = ctx.components
 
-const pined = ref(false)
+const pined = ref(true)
 const adapters = computed(() => {
   return (pined.value || true) && getAllAdapters(state.type).map(x => ({ id: x.id, displayname: x.displayname }))
 })
