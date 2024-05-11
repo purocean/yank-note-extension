@@ -1,3 +1,12 @@
+## [1.11.4](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.11.3...extension-ai-copilot-1.11.4) (2024-05-11)
+
+
+### Features
+
+* **extension-ai-copilot:** make ai panel pined when enabled ([0f134a2](https://github.com/purocean/yank-note-extension/commit/0f134a256b872ede233d161a3cac40a3862ca7b9))
+
+
+
 ## [1.11.3](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.11.2...extension-ai-copilot-1.11.3) (2024-05-10)
 
 
