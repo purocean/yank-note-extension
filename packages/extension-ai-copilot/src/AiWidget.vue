@@ -110,9 +110,8 @@ function onEsc (e: KeyboardEvent) {
 }
 
 function cancel () {
-  if (loading.value) {
-    globalCancelTokenSource.value?.cancel()
-  }
+  globalCancelTokenSource.value?.cancel()
+  loading.value = false
 }
 
 function showHistoryMenu () {
