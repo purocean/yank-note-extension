@@ -86,7 +86,8 @@ window.registerPlugin({
           type: 'form',
           items: [
             { type: 'input', key: 'apiPoint', label: 'Api Point', defaultValue: 'demo', props: { placeholder: 'demo' }, hasError: v => !v },
-            { type: 'instruction', key: 'instruction', label: 'Instruction', historyValueKey: 'historyInstructions' },
+            { type: 'instruction', key: 'instruction', label: 'Instruction' },
+            { type: 'context', key: 'context', label: 'Context' },
           ],
         }
 
@@ -97,8 +98,12 @@ window.registerPlugin({
           }
         }
 
-        async fetchEditResults (selectedText) {
-          return [...selectedText].reverse().join('')
+        async fetchEditResults (selectedText, instruction) {
+          if (!selectedText) {
+            return instruction + Date.now().toString()
+          }
+
+          return instruction + [...selectedText].reverse().join('')
         }
       }
 
