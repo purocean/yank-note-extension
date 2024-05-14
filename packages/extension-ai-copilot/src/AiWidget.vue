@@ -119,9 +119,14 @@ function showHistoryMenu () {
     return
   }
 
-  showInstructionHistoryMenu((val) => {
+  showInstructionHistoryMenu((val, clear) => {
     if (adapter.value) {
-      adapter.value.state.instruction = val
+      if (clear && val === adapter.value.state.instruction) {
+        adapter.value.state.instruction = ''
+      } else if (!clear) {
+        adapter.value.state.instruction = val
+      }
+
       textareaRef.value?.focus()
     }
   })

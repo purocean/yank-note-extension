@@ -130,7 +130,7 @@ export async function readReader (
   }
 }
 
-export function showInstructionHistoryMenu (setFn: (val: string) => void) {
+export function showInstructionHistoryMenu (setFn: (val: string, clear?: boolean) => void) {
   const list = state.instructionHistory
   const items: Components.ContextMenu.Item[] = list.map(x => ({
     id: x,
@@ -144,6 +144,7 @@ export function showInstructionHistoryMenu (setFn: (val: string) => void) {
         onClick: (e: MouseEvent) => {
           e.stopPropagation()
           state.instructionHistory = list.filter(y => y !== x)
+          setFn(x, true)
           ;(ctx.ui.useContextMenu() as any).hide()
         }
       })

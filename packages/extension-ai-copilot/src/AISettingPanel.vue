@@ -155,8 +155,12 @@ function showHistoryMenu (item: FormItem) {
     return
   }
 
-  showInstructionHistoryMenu(val => {
-    adapterState![item.key] = val
+  showInstructionHistoryMenu((val, clear) => {
+    if (clear && val === adapterState[item.key]) {
+      adapterState[item.key] = ''
+    } else if (!clear) {
+      adapterState![item.key] = val
+    }
   })
 }
 
