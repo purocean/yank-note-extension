@@ -1,6 +1,6 @@
 import { App, createApp } from 'vue'
 import { registerPlugin } from '@yank-note/runtime-api'
-import { COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, i18n, loading, proxyRequest, state } from './core'
+import { COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, i18n, loading, proxyFetch, state } from './core'
 import AIPanel from './AIPanel.vue'
 import { registerAdapter } from './adapter'
 import { OpenAICompletionAdapter, OpenAIEditAdapter } from './adapters/openai'
@@ -104,7 +104,7 @@ registerPlugin({
     return {
       registerAdapter,
       state,
-      proxyRequest,
+      proxyFetch,
       loading,
     }
   }

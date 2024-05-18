@@ -27,7 +27,7 @@ window.registerPlugin({
         throw new Error('Can not find extension @yank-note/extension-ai-copilot')
       }
 
-      const { registerAdapter, proxyRequest } = ctx.getPluginApi('@yank-note/extension-ai-copilot')
+      const { registerAdapter, proxyFetch } = ctx.getPluginApi('@yank-note/extension-ai-copilot')
 
       class DemoCompletionAdapter {
         type = 'completion'
@@ -61,7 +61,7 @@ window.registerPlugin({
             position.column,
           )
 
-          // proxyRequest(url, { headers, body, method })
+          // proxyFetch(url, { headers, body, method })
           const text = 'Hello World!' + Math.random()
 
           return {

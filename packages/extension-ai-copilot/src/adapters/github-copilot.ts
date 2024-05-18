@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
 import { CompletionAdapter, Panel } from '@/adapter'
 import type { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
-import { state } from '@/core'
+import { proxyFetch, state } from '@/core'
 import { ctx } from '@yank-note/runtime-api'
 
 export class GithubCopilotCompletionAdapter implements CompletionAdapter {
@@ -62,10 +62,9 @@ export class GithubCopilotCompletionAdapter implements CompletionAdapter {
       column: position.column - 1,
     })
 
-    const x = await ctx.api.proxyRequest(
+    const x = await proxyFetch(
       this.state.apiPoint,
       { headers, body: body, method: 'post' },
-      true
     )
 
     const res = await x.json()

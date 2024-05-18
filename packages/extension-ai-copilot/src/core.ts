@@ -82,7 +82,18 @@ watch(state, saveState)
 export const loading = ref(false)
 export const globalCancelTokenSource = shallowRef<CancellationTokenSource>()
 
-export function proxyRequest (url: string, reqOptions?: Record<string, any> | undefined, abortSignal?: AbortSignal) {
+export function proxyFetch (url: string, reqOptions?: Record<string, any> | undefined, abortSignal?: AbortSignal) {
+  if (ctx.api.proxyFetch) {
+    return ctx.api.proxyFetch(url, {
+      ...reqOptions,
+      headers: {
+        ...reqOptions?.headers,
+        'x-proxy-url': state.proxy
+      },
+      signal: abortSignal
+    })
+  }
+
   reqOptions = {
     ...reqOptions,
     proxyUrl: state.proxy

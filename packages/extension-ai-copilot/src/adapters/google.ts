@@ -1,5 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { i18n, CURSOR_PLACEHOLDER, proxyRequest, readReader } from '@/core'
+import { i18n, CURSOR_PLACEHOLDER, proxyFetch, readReader } from '@/core'
 import { ctx } from '@yank-note/runtime-api'
 import { Position, editor, languages, CancellationToken } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { reactive, watch } from 'vue'
@@ -26,7 +26,7 @@ class BaseGoogleAIAdapter {
     })
 
     if (onProgress) {
-      const res = await proxyRequest(url, { headers, body: body, method: 'post', sse: true }, signal)
+      const res = await proxyFetch(url, { headers, body: body, method: 'post', sse: true }, signal)
       const reader = res.body?.getReader()
       if (!reader) {
         throw new Error('No reader')
@@ -64,7 +64,7 @@ class BaseGoogleAIAdapter {
 
       return text
     } else {
-      const result = await proxyRequest(url, { headers, body: body, method: 'post' })
+      const result = await proxyFetch(url, { headers, body: body, method: 'post' })
       const res = await result.json()
 
       if (!res.candidates) {

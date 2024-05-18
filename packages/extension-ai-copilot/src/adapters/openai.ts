@@ -1,5 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { i18n, CURSOR_PLACEHOLDER, proxyRequest } from '@/core'
+import { i18n, CURSOR_PLACEHOLDER, proxyFetch } from '@/core'
 import { fetchEventSource, EventStreamContentType } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
 import { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
@@ -77,7 +77,7 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
       headers['Content-Type'] = 'application/json'
     }
 
-    const res = await proxyRequest(url, { headers, body: body, method: 'post' })
+    const res = await proxyFetch(url, { headers, body: body, method: 'post' })
     return await res.json()
   }
 
@@ -264,7 +264,7 @@ export class OpenAIEditAdapter implements EditAdapter {
     class FatalError extends Error { }
 
     await fetchEventSource(url, {
-      fetch: () => proxyRequest(url, { sse: true, headers, body: body, method: 'post' }, signal),
+      fetch: () => proxyFetch(url, { sse: true, headers, body: body, method: 'post' }, signal),
       async onopen (response) {
         if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
           return
