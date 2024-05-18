@@ -1,3 +1,12 @@
+# [1.12.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.11.6...extension-ai-copilot-1.12.0) (2024-05-18)
+
+
+### Features
+
+* **extension:** supoort runtime 3.70.0 ([d014031](https://github.com/purocean/yank-note-extension/commit/d01403135bc850092cab2a7f25cc4c9c3972e78c))
+
+
+
 ## [1.11.6](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.11.5...extension-ai-copilot-1.11.6) (2024-05-14)
 
 
