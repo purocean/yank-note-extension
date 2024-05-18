@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/runtime-api",
-  "version": "3.69.1",
+  "version": "3.70.0",
   "description": "Yank Note Api",
   "keywords": [],
   "author": "purocean",
@@ -46,7 +46,7 @@
     "rollup": "^2.48.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.30.0",
+    "rollup-plugin-typescript2": "^0.32.0",
     "tslib": "^2.2.0",
     "ttypescript": "^1.5.15",
     "typescript": "^4.2.4"

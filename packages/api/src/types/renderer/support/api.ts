@@ -10,18 +10,17 @@ export type ApiResult<T = any> = {
 };
 export declare function fetchHttp(input: RequestInfo, init?: RequestInit): Promise<any>;
 /**
- * Proxy request.
- * @param url URL
- * @param reqOptions
- * @param usePost
- * @param abortSignal
+ * Proxy fetch.
+ * @param url string
+ * @param init RequestInit
  * @returns
  */
-export declare function proxyRequest(url: string, reqOptions?: {
-    sse?: boolean;
-    proxyUrl?: string;
-    [key: string]: any;
-}, usePost?: boolean, abortSignal?: AbortSignal): Promise<Response>;
+export declare function proxyFetch(url: string, init?: Omit<RequestInit, 'body'> & {
+    body?: any;
+    timeout?: number;
+    proxy?: string;
+    jsonBody?: boolean;
+}): Promise<Response>;
 /**
  * Read a file.
  * @param file

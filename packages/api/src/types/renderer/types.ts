@@ -236,7 +236,10 @@ export type Keybinding = {
 };
 export type PrintOpts = {
     landscape?: boolean;
-    pageSize?: string;
+    pageSize?: 'A0' | 'A1' | 'A2' | 'A3' | 'A4' | 'A5' | 'A6' | 'Legal' | 'Letter' | 'Tabloid' | 'Ledger' | {
+        height: number;
+        width: number;
+    };
     scaleFactor?: number;
     printBackground?: boolean;
 };
