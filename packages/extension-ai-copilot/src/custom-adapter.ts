@@ -23,8 +23,8 @@ export class CustomCompletionAdapter implements CompletionAdapter {
 
   defaultBuildRequestCode = `// https://developers.cloudflare.com/workers-ai/models/llama-3-8b-instruct/
 
-const API_TOKEN = 'YOUR_API_TOKEN_HERE'
 const API_ACCOUNT_ID = 'YOUR_ACCOUNT_ID_HERE'
+const API_TOKEN = 'YOUR_API_TOKEN_HERE'
 
 // data is the input object
 const { context, system, editorContext } = data
@@ -165,8 +165,8 @@ export class CustomEditAdapter implements EditAdapter {
   defaultSystemMessage = 'Generate/Modify content based on the context at the {CURSOR} position.\n--CONTEXT BEGIN--\n{CONTEXT}\n--CONTEXT END--\n\nAttention: Output the content directly, no surrounding content.'
   defaultBuildRequestCode = `// https://developers.cloudflare.com/workers-ai/models/llama-3-8b-instruct/
 
-const API_TOKEN = 'YOUR_API_TOKEN_HERE'
 const API_ACCOUNT_ID = 'YOUR_ACCOUNT_ID_HERE'
+const API_TOKEN = 'YOUR_API_TOKEN_HERE'
 
 // data is the input object
 const { selectedText, instruction, context, system } = data
