@@ -1,3 +1,12 @@
+# [1.13.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.12.0...extension-ai-copilot-1.13.0) (2024-05-19)
+
+
+### Features
+
+* **extension-ai-copilot:** support custom adapter, such as Cloudflare Works AI ([0043eae](https://github.com/purocean/yank-note-extension/commit/0043eae2109b876862526001da01e967ac5e8dc9))
+
+
+
 # [1.12.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.11.6...extension-ai-copilot-1.12.0) (2024-05-18)
 
 
