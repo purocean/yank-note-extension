@@ -8,6 +8,8 @@
         <b class="title">
           <select v-model="state.adapter[state.type]">
             <option v-for="item in adapters" :key="item.id" :value="item.id">{{item.displayname}}</option>
+            <option disabled>---------</option>
+            <option value="--new-adapter--">{{ i18n.$t.value('create-custom-adapter') }}</option>
           </select>
           <group-tabs v-if="pined" class="tabs" v-model="state.type" :tabs="tabs" />
         </b>
@@ -18,11 +20,17 @@
       <div class="setting">
         <div v-if="editAdapter" v-show="state.type === 'edit'">
           <AISettingPanel type="edit" :adapter="editAdapter" :key="state.adapter.edit" />
-          <div v-if="editAdapter" class="adapter-desc" v-html="editAdapter.description" />
+          <div v-if="editAdapter" class="adapter-desc">
+            <span v-html="editAdapter.description" />
+            <a v-if="editAdapter.removable" @click.stop.prevent="removeAdapter" class="remove-adapter">{{ i18n.$t.value('remove') }}</a>
+          </div>
         </div>
         <div v-if="completionAdapter" v-show="state.type === 'completion'">
           <AISettingPanel type="completion" :adapter="completionAdapter" :key="state.adapter.completion" />
-          <div v-if="completionAdapter" class="adapter-desc" v-html="completionAdapter.description" />
+          <div v-if="completionAdapter" class="adapter-desc">
+            <span v-html="completionAdapter.description" />
+            <a v-if="completionAdapter.removable" @click.stop.prevent="removeAdapter" class="remove-adapter">{{ i18n.$t.value('remove') }}</a>
+          </div>
         </div>
       </div>
       <div class="action" @mousedown.self="startDrag">
@@ -46,9 +54,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, watch, watchEffect, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, watch, watchEffect, ref, triggerRef } from 'vue'
 import { ctx } from '@yank-note/runtime-api'
-import { i18n, state, loading, COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, globalCancelTokenSource } from './core'
+import { i18n, state, loading, COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, globalCancelTokenSource, addCustomAdapters, removeCustomAdapter } from './core'
 import { getAdapter, getAllAdapters } from './adapter'
 import AISettingPanel from './AISettingPanel.vue'
 
@@ -63,20 +71,13 @@ const tabs: { label: string, value: typeof state.type }[] = [
 
 const { SvgIcon, GroupTabs } = ctx.components
 
-const pined = ref(true)
+const pined = ref(false)
 const adapters = computed(() => {
   return (pined.value || true) && getAllAdapters(state.type).map(x => ({ id: x.id, displayname: x.displayname }))
 })
 
 const completionAdapter = computed(() => getAdapter('completion', state.adapter.completion))
-if (!completionAdapter.value) {
-  state.adapter[state.type] = adapters.value[0].id
-}
-
 const editAdapter = computed(() => getAdapter('edit', state.adapter.edit))
-if (!editAdapter.value) {
-  state.adapter[state.type] = adapters.value[0].id
-}
 
 function focusEditor () {
   nextTick(() => {
@@ -110,9 +111,68 @@ function resetPanelContainer () {
   panelContainer.value!.style.bottom = '20px'
 }
 
+async function createCustomAdapter () {
+  if (!ctx.api.proxyFetch) {
+    ctx.ui.useToast().show('warning', 'Please use the latest version of Yank Note to use this feature')
+    return
+  }
+
+  const name = await ctx.ui.useModal().input({
+    title: i18n.t('create-custom-adapter'),
+    hint: i18n.t('adapter-name'),
+    value: 'Workers AI',
+    select: true,
+  })
+
+  if (!name) return
+
+  if (adapters.value.some(x => x.id === name || x.displayname === name)) {
+    ctx.ui.useToast().show('warning', i18n.t('adapter-name-exists'))
+    return
+  }
+
+  addCustomAdapters({ name, type: state.type })
+  triggerRef(pined)
+  setTimeout(() => {
+    state.adapter[state.type] = name
+  }, 0)
+}
+
+async function removeAdapter () {
+  const adapter = state.adapter[state.type]
+  if (!adapter) return
+
+  const res = await ctx.ui.useModal().confirm({
+    title: i18n.t('remove-adapter'),
+    content: i18n.t('remove-adapter-confirm', adapter),
+  })
+
+  if (res) {
+    const stateKey = state.type + '-' + adapter
+    removeCustomAdapter({ type: state.type, name: adapter })
+    triggerRef(pined)
+    setTimeout(() => {
+      state.adapter[state.type] = adapters.value[0].id
+      delete state.adapterState[stateKey]
+    }, 0)
+  }
+}
+
 ctx.registerHook('GLOBAL_KEYDOWN', escHandler)
 
 onMounted(() => {
+  setTimeout(() => {
+    pined.value = true
+
+    if (!completionAdapter.value && state.type === 'completion') {
+      state.adapter[state.type] = adapters.value[0].id
+    }
+
+    if (!editAdapter.value && state.type === 'edit') {
+      state.adapter[state.type] = adapters.value[0].id
+    }
+  }, 0)
+
   resetPanelContainer()
 })
 
@@ -178,6 +238,13 @@ watchEffect(refreshPanelSize, { flush: 'post' })
 watch(editAdapter, () => {
   refreshPanelSize()
   cancel()
+})
+
+watch(() => state.adapter[state.type], (val, oldVal) => {
+  if (val === '--new-adapter--') {
+    state.adapter[state.type] = oldVal
+    createCustomAdapter()
+  }
 })
 
 const onMouseUp = () => {
@@ -405,6 +472,12 @@ const onMouseUp = () => {
       height: 24px;
       margin-left: 3px;
     }
+  }
+
+  .remove-adapter {
+    text-decoration: underline;
+    margin-left: 0.5em;
+    cursor: pointer;
   }
 
   &::after {

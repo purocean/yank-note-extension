@@ -3,11 +3,18 @@ import { ctx } from '@yank-note/runtime-api'
 import { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 import type { CancellationTokenSource } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { h, reactive, ref, shallowRef, watch } from 'vue'
+import { registerAdapter, removeAdapter, type AdapterType } from './adapter'
+import { CustomCompletionAdapter, CustomEditAdapter } from './custom-adapter'
 
 export const COMPLETION_ACTION_NAME = __EXTENSION_ID__ + '.inlineSuggest.trigger'
 export const EDIT_ACTION_NAME = __EXTENSION_ID__ + '.edit.trigger'
 
 export const CURSOR_PLACEHOLDER = '{CURSOR}'
+
+export interface CustomAdapter {
+  name: string,
+  type: AdapterType,
+}
 
 export const i18n = ctx.i18n.createI18n({
   en: {
@@ -30,6 +37,12 @@ export const i18n = ctx.i18n.createI18n({
     'no-context-available': 'No context available',
     'with-context': 'With context',
     'ask-ai-edit-or-gen': 'Ask Copilot to edit or generate text...',
+    'create-custom-adapter': 'Create Custom adapter',
+    'adapter-name': 'adapter Name',
+    'adapter-name-exists': 'adapter name already exists',
+    'remove': 'Remove',
+    'remove-adapter': 'Remove adapter',
+    'remove-adapter-confirm': 'Are you sure you want to remove the [%s] adapter?',
   },
   'zh-CN': {
     'ai-complete': '使用 AI Copilot 自动补全',
@@ -51,6 +64,12 @@ export const i18n = ctx.i18n.createI18n({
     'no-context-available': '无上下文可用',
     'with-context': '包含上下文',
     'ask-ai-edit-or-gen': '让 Copilot 修改或生成文本...',
+    'create-custom-adapter': '创建自定义适配器',
+    'adapter-name': '适配器名称',
+    'adapter-name-exists': '适配器名称已存在',
+    'remove': '移除',
+    'remove-adapter': '移除适配器',
+    'remove-adapter-confirm': '确定要移除 [%s] 适配器吗？',
   }
 })
 
@@ -64,7 +83,8 @@ const defaultState = {
     edit: 'openai-edit',
   },
   instructionHistory: [] as string[],
-  adapterState: {} as Record<string, any>
+  adapterState: {} as Record<string, any>,
+  customAdapters: [] as CustomAdapter[],
 }
 
 const storageStateKey = __EXTENSION_ID__ + '.state'
@@ -78,6 +98,19 @@ const saveState = ctx.lib.lodash.debounce(() => {
 }, 1000, { leading: true })
 
 watch(state, saveState)
+
+try {
+  // register custom adapters
+  for (const adapter of state.customAdapters) {
+    if (adapter.type === 'completion') {
+      registerAdapter(new CustomCompletionAdapter(adapter))
+    } else if (adapter.type === 'edit') {
+      registerAdapter(new CustomEditAdapter(adapter))
+    }
+  }
+} catch (error) {
+  console.error(error)
+}
 
 export const loading = ref(false)
 export const globalCancelTokenSource = shallowRef<CancellationTokenSource>()
@@ -177,4 +210,19 @@ export function showInstructionHistoryMenu (setFn: (val: string, clear?: boolean
   )
 
   ctx.ui.useContextMenu().show(items)
+}
+
+export function addCustomAdapters (adapter: CustomAdapter) {
+  if (adapter.type === 'completion') {
+    registerAdapter(new CustomCompletionAdapter(adapter))
+  } else if (adapter.type === 'edit') {
+    registerAdapter(new CustomEditAdapter(adapter))
+  }
+
+  state.customAdapters = ctx.lib.lodash.unionBy([adapter, ...state.customAdapters], 'name')
+}
+
+export function removeCustomAdapter (adapter: CustomAdapter) {
+  removeAdapter(adapter.type, adapter.name)
+  state.customAdapters = state.customAdapters.filter(x => x.name !== adapter.name)
 }

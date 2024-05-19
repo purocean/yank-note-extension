@@ -24,6 +24,7 @@ export interface Adapter {
   displayname: string
   description: string
 
+  removable?: boolean
   panel?: Panel
   state?: Record<string, any>,
   supportProxy?: boolean
@@ -75,4 +76,9 @@ export function registerAdapter (adapter: Adapter) {
   }
 
   adapters[key] = adapter
+}
+
+export function removeAdapter (type: AdapterType, id: string) {
+  const key = type + '/' + id
+  delete adapters[key]
 }
