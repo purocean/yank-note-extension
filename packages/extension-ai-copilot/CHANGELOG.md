@@ -1,3 +1,12 @@
+# [1.14.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.13.3...extension-ai-copilot-1.14.0) (2024-05-20)
+
+
+### Features
+
+* **extension-ai-copilot:** add text to image feature ([34b41d4](https://github.com/purocean/yank-note-extension/commit/34b41d4d6f0b900c1d03f8d05ae5108a61d21adf))
+
+
+
 ## [1.13.3](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.13.2...extension-ai-copilot-1.13.3) (2024-05-20)
 
 
