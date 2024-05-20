@@ -219,7 +219,10 @@ export function addCustomAdapters (adapter: CustomAdapter) {
     registerAdapter(new CustomEditAdapter(adapter))
   }
 
-  state.customAdapters = ctx.lib.lodash.unionBy([adapter, ...state.customAdapters], 'name')
+  state.customAdapters = ctx.lib.lodash.unionWith(
+    [adapter, ...state.customAdapters],
+    (a: any, b: any) => a.name === b.name && a.type === b.type
+  )
 }
 
 export function removeCustomAdapter (adapter: CustomAdapter) {
