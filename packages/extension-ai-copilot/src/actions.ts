@@ -1,8 +1,8 @@
 import type Monaco from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { ctx } from '@yank-note/runtime-api'
-import { globalCancelTokenSource, i18n, loading, state } from './core'
+import { EDIT_ACTION_NAME, TEXT_TO_IMAGE_ACTION_NAME, globalCancelTokenSource, i18n, loading, state } from './core'
 import { getAdapter } from './adapter'
-import { createWidget } from './ai-widget'
+import { languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 
 export async function executeEdit (token: Monaco.CancellationToken): Promise<boolean> {
   if (!state.enable) {
@@ -28,7 +28,7 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
     loading.value = true
     const adapter = getAdapter('edit', state.adapter.edit)
     if (!adapter) {
-      throw new Error(`No Completion adapter [${state.adapter.edit}]`)
+      throw new Error(`No edit adapter [${state.adapter.edit}]`)
     }
 
     const instruction = adapter.state.instruction
@@ -37,8 +37,8 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
       throw new Error('Instruction is required')
     }
 
-    state.instructionHistory.unshift(instruction)
-    state.instructionHistory = ctx.lib.lodash.uniq(state.instructionHistory.slice(0, 16))
+    state.instructionHistory.edit.unshift(instruction)
+    state.instructionHistory.edit = ctx.lib.lodash.uniq(state.instructionHistory.edit.slice(0, 16))
 
     const editor = ctx.editor.getEditor()
     const model = editor.getModel()
@@ -62,7 +62,7 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
       return selection
     }
 
-    const res = await adapter.fetchEditResults(selectedText, instruction, token, res => {
+    const res = adapter.fetchEditResults(selectedText, instruction, token, res => {
       let text = res.text
 
       const textLines = text.split('\n')
@@ -100,6 +100,59 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
   }
 }
 
+export async function executeTextToImage (token: Monaco.CancellationToken): Promise<false | Blob> {
+  if (!state.enable) {
+    return false
+  }
+
+  globalCancelTokenSource.value = new (ctx.editor.getMonaco().CancellationTokenSource)(token)
+  token = globalCancelTokenSource.value.token
+
+  if (token.isCancellationRequested) {
+    return false
+  }
+
+  const cancelPromise = new Promise<void>((resolve) => {
+    token.onCancellationRequested(() => { resolve() })
+  })
+
+  token.onCancellationRequested(() => {
+    loading.value = false
+  })
+
+  try {
+    loading.value = true
+    const adapter = getAdapter('text2image', state.adapter.text2image)
+    if (!adapter) {
+      throw new Error(`No text to image adapter [${state.adapter.edit}]`)
+    }
+
+    const instruction = adapter.state.instruction
+
+    if (!instruction.trim()) {
+      throw new Error('Instruction is required')
+    }
+
+    state.instructionHistory.text2image.unshift(instruction)
+    state.instructionHistory.text2image = ctx.lib.lodash.uniq(state.instructionHistory.text2image.slice(0, 16))
+
+    const res = adapter.fetchTextToImageResults(instruction, token)
+
+    const result = await Promise.race([res, cancelPromise])
+
+    if (!result || token.isCancellationRequested) {
+      return false
+    }
+
+    return result
+  } catch (error: any) {
+    ctx.ui.useToast().show('warning', error.message || `${error}`, 5000)
+    throw error
+  } finally {
+    loading.value = false
+  }
+}
+
 export class CodeActionProvider implements Monaco.languages.CodeActionProvider {
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CodeActionProvider')
 
@@ -108,22 +161,38 @@ export class CodeActionProvider implements Monaco.languages.CodeActionProvider {
       return { dispose: () => 0, actions: [] }
     }
 
+    const editTitle = range.isEmpty() ? i18n.t('ai-generate') : i18n.t('ai-edit')
+    const text2imageTitle = i18n.t('ai-text-to-image')
+
     return {
       dispose: () => 0,
-      actions: [{
-        title: range.isEmpty() ? i18n.t('ai-generate') : i18n.t('ai-edit'),
-        kind: 'refactor',
-        diagnostics: [],
-        isPreferred: true,
-      }]
+      actions: [
+        {
+          title: editTitle,
+          command: { id: EDIT_ACTION_NAME, title: editTitle },
+          kind: 'refactor',
+          diagnostics: [],
+          isPreferred: true,
+          isAI: true
+        },
+        {
+          title: text2imageTitle,
+          isAI: true,
+          command: {
+            id: TEXT_TO_IMAGE_ACTION_NAME,
+            title: text2imageTitle
+          },
+          kind: 'refactor',
+          diagnostics: [],
+        }
+      ]
     }
   }
 
-  async resolveCodeAction (): Promise<Monaco.languages.CodeAction | undefined> {
-    const editor = ctx.editor.getEditor()
-    const selection = editor.getSelection()!
-
-    createWidget(selection.isEmpty() ? 'generate' : 'edit')
+  async resolveCodeAction (codeAction: languages.CodeAction): Promise<Monaco.languages.CodeAction | undefined> {
+    if (codeAction.command?.id) {
+      ctx.action.getActionHandler(codeAction.command.id)?.()
+    }
 
     return undefined
   }

@@ -1,6 +1,6 @@
 import { App, createApp } from 'vue'
 import { registerPlugin } from '@yank-note/runtime-api'
-import { COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, i18n, loading, proxyFetch, state } from './core'
+import { COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, TEXT_TO_IMAGE_ACTION_NAME, i18n, loading, proxyFetch, state } from './core'
 import AIPanel from './AIPanel.vue'
 import { registerAdapter } from './adapter'
 import { OpenAICompletionAdapter, OpenAIEditAdapter } from './adapters/openai'
@@ -9,7 +9,7 @@ import { GithubCopilotCompletionAdapter } from './adapters/github-copilot'
 import { SparkAICompletionAdapter, SparkAIEditAdapter } from './adapters/spark'
 import { createWidget, disposeWidget } from './ai-widget'
 import { CompletionProvider } from './completion'
-import { CodeActionProvider } from './edit'
+import { CodeActionProvider } from './actions'
 
 import './index.scss'
 
@@ -53,6 +53,16 @@ registerPlugin({
         const editor = ctx.editor.getEditor()
         const selection = editor.getSelection()!
         createWidget(selection.isEmpty() ? 'generate' : 'edit', runImmediately)
+      },
+      when: () => ctx.store.state.showEditor && !ctx.store.state.presentation,
+    })
+
+    ctx.action.registerAction({
+      name: TEXT_TO_IMAGE_ACTION_NAME,
+      description: i18n.t('ai-text-to-image'),
+      forUser: true,
+      handler: async (runImmediately = false) => {
+        createWidget('text2image', runImmediately)
       },
       when: () => ctx.store.state.showEditor && !ctx.store.state.presentation,
     })

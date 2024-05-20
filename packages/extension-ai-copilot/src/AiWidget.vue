@@ -1,9 +1,12 @@
 <template>
   <div ref="wrapperRef" :class="{'ai-widget': true, loading}">
     <div class="content">
+      <h4 v-if="adapterType === 'edit' && type === 'edit'">{{ $t('ai-edit') }}</h4>
+      <h4 v-if="adapterType === 'edit' && type === 'generate'">{{ $t('ai-generate') }}</h4>
+      <h4 v-if="adapterType === 'text2image'">{{ $t('ai-text-to-image') }}</h4>
       <div class="input" v-if="adapter && adapter.state">
         <textarea
-          :placeholder="$t('ask-ai-edit-or-gen')"
+          :placeholder="adapterType === 'edit' ? $t('ask-ai-edit-or-gen') : $t('ask-ai-text2image')"
           ref="textareaRef"
           v-model="adapter.state.instruction"
           v-auto-focus="{delay: 50}"
@@ -15,7 +18,7 @@
           @keydown.stop
         />
         <svg-icon
-          v-if="state.instructionHistory?.length"
+          v-if="state.instructionHistory[adapterType]?.length"
           title="History"
           class="input-action-icon"
           name="chevron-down"
@@ -24,17 +27,18 @@
           @click="showHistoryMenu()"
         />
       </div>
+      <img class="img-result" v-if="image && image.src" :src="image.src" />
       <div class="actions" v-if="adapter">
         <button v-if="loading" class="small tr" @click="cancel">{{ $t('cancel') }}</button>
         <button v-else-if="!finished" class="small primary tr" @click="process">{{ type === 'edit' ? $t('rewrite') : $t('generate') }}</button>
         <template v-else>
-          <button class="small primary tr" @click="close">{{ $t('accept') }}</button>
+          <button class="small primary tr" @click="accept">{{ $t('accept') }}</button>
           <button class="small tr" @click="undo">{{ $t('discard') }}</button>
           <button class="small tr" @click="reload"><svg-icon name="sync-alt-solid" width="11px" height="13px" /></button>
         </template>
 
         <label>
-          <template v-if="adapter && adapter.state">
+          <template v-if="adapter && adapter.state && adapterType === 'edit'">
             <input type="checkbox" v-model="adapter.state.withContext" />
             {{ $t('with-context') }}
           </template>
@@ -50,10 +54,10 @@
 
 <script lang="ts" setup>
 import { ctx } from '@yank-note/runtime-api'
-import { computed, defineEmits, defineProps, ref, watch, onBeforeUnmount, onMounted } from 'vue'
+import { computed, defineEmits, defineProps, ref, watch, onBeforeUnmount, onMounted, shallowRef } from 'vue'
 import { i18n, showInstructionHistoryMenu, state, loading, globalCancelTokenSource } from './core'
 import { getAdapter, getAllAdapters } from './adapter'
-import { executeEdit } from './edit'
+import { executeEdit, executeTextToImage } from './actions'
 
 const SvgIcon = ctx.components.SvgIcon
 
@@ -62,13 +66,19 @@ const { $t } = i18n
 const wrapperRef = ref<HTMLElement>()
 const textareaRef = ref<HTMLTextAreaElement>()
 const emits = defineEmits<{(event: 'layout', height: number): void, (event: 'dispose'): void}>()
-const props = defineProps<{type: 'generate' | 'edit', runImmediately: boolean}>()
+const props = defineProps<{
+  type: 'generate' | 'edit',
+  adapterType: 'edit' | 'text2image',
+  runImmediately: boolean
+}>()
 
-const adapter = computed(() => getAdapter('edit', state.adapter.edit))
+const image = shallowRef<{ src: string, blob: Blob }>()
+
+const adapter = computed(() => getAdapter(props.adapterType, state.adapter.edit))
 const finished = ref(false)
 
 const adapters = computed(() => {
-  return getAllAdapters('edit').map(x => ({ id: x.id, displayname: x.displayname }))
+  return getAllAdapters(props.adapterType).map(x => ({ id: x.id, displayname: x.displayname }))
 })
 
 const editor = ctx.editor.getEditor()
@@ -80,6 +90,7 @@ const disposable = editor.onDidChangeCursorSelection((e) => {
 })
 
 function close () {
+  image.value = undefined
   emits('dispose')
 }
 
@@ -119,7 +130,7 @@ function showHistoryMenu () {
     return
   }
 
-  showInstructionHistoryMenu((val, clear) => {
+  showInstructionHistoryMenu(props.adapterType, (val, clear) => {
     if (adapter.value) {
       if (clear && val === adapter.value.state.instruction) {
         adapter.value.state.instruction = ''
@@ -132,6 +143,13 @@ function showHistoryMenu () {
   })
 }
 
+function setImage (img: typeof image.value) {
+  image.value = img
+  setTimeout(() => {
+    layout()
+  }, 50)
+}
+
 async function process () {
   if (!adapter.value) {
     return
@@ -140,16 +158,32 @@ async function process () {
   const cts = new (ctx.editor.getMonaco().CancellationTokenSource)()
   finished.value = false
 
-  const doAction = executeEdit
+  const doAction = props.adapterType === 'edit' ? executeEdit : executeTextToImage
 
-  if (await doAction(cts.token)) {
+  image.value = undefined
+  const res = await doAction(cts.token)
+
+  if (res) {
     finished.value = true
+  }
+
+  if (props.adapterType === 'text2image' && res) {
+    setImage({
+      src: await ctx.utils.fileToBase64URL(res as Blob),
+      blob: res as Blob
+    })
   }
 
   textareaRef.value?.focus()
 }
 
 function undo () {
+  if (props.adapterType === 'text2image') {
+    image.value = undefined
+    close()
+    return
+  }
+
   const editor = ctx.editor.getEditor()
   editor.focus()
   editor.trigger('editor', 'undo', null)
@@ -157,9 +191,30 @@ function undo () {
 }
 
 function reload () {
+  if (props.adapterType === 'text2image') {
+    setImage(undefined)
+    process()
+    return
+  }
+
   const editor = ctx.editor.getEditor()
   editor.trigger('editor', 'undo', null)
   process()
+}
+
+function accept () {
+  if (props.adapterType === 'text2image' && image.value) {
+    const editor = ctx.editor.getEditor()
+    editor.focus()
+
+    const clipboardData = new DataTransfer()
+    const file = new File([image.value.blob], 'image.png', { type: image.value.blob.type })
+    clipboardData.items.add(file)
+    const pasteEvent = new ClipboardEvent('paste', { clipboardData, bubbles: true, cancelable: true })
+    document.dispatchEvent(pasteEvent)
+  }
+
+  close()
 }
 
 function layout () {
@@ -214,6 +269,18 @@ onBeforeUnmount(() => {
     font-size: 14px;
     overflow: hidden;
     padding: 6px;
+
+    h4 {
+      margin: 0;
+      margin-bottom: 10px;
+    }
+  }
+
+  .img-result {
+    max-width: 50%;
+    max-height: 50%;
+    margin: 10px 0;
+    display: block;
   }
 
   .input {

@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
 import type Monaco from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 
-export type AdapterType = 'completion' | 'chat' | 'edit'
+export type AdapterType = 'completion' | 'edit' | 'text2image'
 
 export type CustomVueComponent = { type: 'custom', component: any }
 
@@ -56,12 +56,22 @@ export interface EditAdapter extends Adapter {
   ): Promise<string | null | undefined>
 }
 
+export interface TextToImageAdapter extends Adapter {
+  type: 'text2image'
+  state: Record<string, any> & { instruction: string },
+  fetchTextToImageResults(
+    instruction: string,
+    cancelToken: Monaco.CancellationToken,
+  ): Promise<Blob | null | undefined>
+}
+
 const adapters: Record<string, Adapter> = {}
 
 export function getAdapter <T extends AdapterType> (type: T, id: string): (T extends 'completion'
   ? CompletionAdapter
   : T extends 'edit'
-    ? EditAdapter : never) | undefined {
+    ? EditAdapter
+    : T extends 'text2image' ? TextToImageAdapter : never) | undefined {
   return adapters[type + '/' + id] as any
 }
 

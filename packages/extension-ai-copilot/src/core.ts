@@ -4,10 +4,11 @@ import { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 import type { CancellationTokenSource } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { h, reactive, ref, shallowRef, watch } from 'vue'
 import { registerAdapter, removeAdapter, type AdapterType } from './adapter'
-import { CustomCompletionAdapter, CustomEditAdapter } from './custom-adapter'
+import { CustomCompletionAdapter, CustomEditAdapter, CustomTextToImageAdapter } from './custom-adapter'
 
 export const COMPLETION_ACTION_NAME = __EXTENSION_ID__ + '.inlineSuggest.trigger'
 export const EDIT_ACTION_NAME = __EXTENSION_ID__ + '.edit.trigger'
+export const TEXT_TO_IMAGE_ACTION_NAME = __EXTENSION_ID__ + '.text2image.trigger'
 
 export const CURSOR_PLACEHOLDER = '{CURSOR}'
 
@@ -22,6 +23,8 @@ export const i18n = ctx.i18n.createI18n({
     'ai-edit': 'Modify using AI Copilot',
     'ai-generate': 'Generate using AI Copilot',
     'ai-edit-or-gen': 'Edit or Generate using AI Copilot',
+    'ai-text-to-image': 'Generate Image using AI Copilot',
+    'text-to-image': 'Text to Image',
     'enable-ai-copilot': 'Enable AI Copilot',
     'cancel': 'Cancel',
     'accept': 'Accept',
@@ -37,18 +40,22 @@ export const i18n = ctx.i18n.createI18n({
     'no-context-available': 'No context available',
     'with-context': 'With context',
     'ask-ai-edit-or-gen': 'Ask Copilot to edit or generate text...',
+    'ask-ai-text2image': 'Ask Copilot to generate image...',
     'create-custom-adapter': 'Create Custom adapter',
     'adapter-name': 'adapter Name',
     'adapter-name-exists': 'adapter name already exists',
     'remove': 'Remove',
     'remove-adapter': 'Remove adapter',
     'remove-adapter-confirm': 'Are you sure you want to remove the [%s] adapter?',
+    'no-adapters': 'No adapters available',
   },
   'zh-CN': {
     'ai-complete': '使用 AI Copilot 自动补全',
     'ai-edit': '使用 AI Copilot 修改',
     'ai-generate': '使用 AI Copilot 生成',
     'ai-edit-or-gen': '使用 AI Copilot 修改或生成',
+    'ai-text-to-image': '使用 AI Copilot 生成图片',
+    'text-to-image': '文本转图片',
     'enable-ai-copilot': '启用 AI Copilot',
     'cancel': '取消',
     'accept': '接受',
@@ -64,33 +71,54 @@ export const i18n = ctx.i18n.createI18n({
     'no-context-available': '无上下文可用',
     'with-context': '包含上下文',
     'ask-ai-edit-or-gen': '让 Copilot 修改或生成文本...',
+    'ask-ai-text2image': '让 Copilot 生成图片...',
     'create-custom-adapter': '创建自定义适配器',
     'adapter-name': '适配器名称',
     'adapter-name-exists': '适配器名称已存在',
     'remove': '移除',
     'remove-adapter': '移除适配器',
     'remove-adapter-confirm': '确定要移除 [%s] 适配器吗？',
+    'no-adapters': '无可用适配器',
   }
 })
 
 const defaultState = {
   enable: true,
-  type: 'completion' as 'completion' | 'chat' | 'edit',
+  type: 'completion' as AdapterType,
   proxy: '',
   adapter: {
     completion: 'openai-completion',
     chat: '',
     edit: 'openai-edit',
+    text2image: '',
   },
-  instructionHistory: [] as string[],
+  instructionHistory: {
+    edit: [] as string[],
+    text2image: [] as string[],
+  },
   adapterState: {} as Record<string, any>,
   customAdapters: [] as CustomAdapter[],
 }
 
 const storageStateKey = __EXTENSION_ID__ + '.state'
+const storageData = ctx.utils.storage.get(storageStateKey, defaultState)
+
+const instructionHistory = Array.isArray(storageData.instructionHistory)
+  ? { edit: storageData.instructionHistory as string[], text2image: [] }
+  : storageData.instructionHistory
+
+if (!Array.isArray(instructionHistory.edit)) {
+  instructionHistory.edit = []
+}
+
+if (!Array.isArray(instructionHistory.text2image)) {
+  instructionHistory.text2image = []
+}
+
 export const state = reactive({
   ...defaultState,
-  ...ctx.utils.storage.get(storageStateKey, defaultState)
+  ...storageData,
+  instructionHistory: { ...instructionHistory }
 })
 
 const saveState = ctx.lib.lodash.debounce(() => {
@@ -99,14 +127,20 @@ const saveState = ctx.lib.lodash.debounce(() => {
 
 watch(state, saveState)
 
+function registerCustomAdapter (adapter: CustomAdapter) {
+  if (adapter.type === 'completion') {
+    registerAdapter(new CustomCompletionAdapter(adapter))
+  } else if (adapter.type === 'edit') {
+    registerAdapter(new CustomEditAdapter(adapter))
+  } else if (adapter.type === 'text2image') {
+    registerAdapter(new CustomTextToImageAdapter(adapter))
+  }
+}
+
 try {
   // register custom adapters
   for (const adapter of state.customAdapters) {
-    if (adapter.type === 'completion') {
-      registerAdapter(new CustomCompletionAdapter(adapter))
-    } else if (adapter.type === 'edit') {
-      registerAdapter(new CustomEditAdapter(adapter))
-    }
+    registerCustomAdapter(adapter)
   }
 } catch (error) {
   console.error(error)
@@ -174,8 +208,8 @@ export async function readReader (
   }
 }
 
-export function showInstructionHistoryMenu (setFn: (val: string, clear?: boolean) => void) {
-  const list = state.instructionHistory
+export function showInstructionHistoryMenu (type: AdapterType, setFn: (val: string, clear?: boolean) => void) {
+  const list = state.instructionHistory[type]
   const items: Components.ContextMenu.Item[] = list.map(x => ({
     id: x,
     label: h('span', { class: 'ai-copilot-history-instruction-item', title: x }, [
@@ -187,7 +221,7 @@ export function showInstructionHistoryMenu (setFn: (val: string, clear?: boolean
         height: '13px',
         onClick: (e: MouseEvent) => {
           e.stopPropagation()
-          state.instructionHistory = list.filter(y => y !== x)
+          state.instructionHistory[type] = list.filter(y => y !== x)
           setFn(x, true)
           ;(ctx.ui.useContextMenu() as any).hide()
         }
@@ -204,7 +238,7 @@ export function showInstructionHistoryMenu (setFn: (val: string, clear?: boolean
       id: 'clear',
       label: 'Clear',
       onClick: () => {
-        state.instructionHistory = []
+        state.instructionHistory[type] = []
       }
     }
   )
@@ -213,12 +247,7 @@ export function showInstructionHistoryMenu (setFn: (val: string, clear?: boolean
 }
 
 export function addCustomAdapters (adapter: CustomAdapter) {
-  if (adapter.type === 'completion') {
-    registerAdapter(new CustomCompletionAdapter(adapter))
-  } else if (adapter.type === 'edit') {
-    registerAdapter(new CustomEditAdapter(adapter))
-  }
-
+  registerCustomAdapter(adapter)
   state.customAdapters = ctx.lib.lodash.unionWith(
     [adapter, ...state.customAdapters],
     (a: any, b: any) => a.name === b.name && a.type === b.type

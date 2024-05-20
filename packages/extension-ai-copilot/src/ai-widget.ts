@@ -11,7 +11,7 @@ export function widgetIsVisible () {
   return !!zone
 }
 
-export function createWidget (type: 'edit' | 'generate', runImmediately = false) {
+export function createWidget (type: 'edit' | 'generate' | 'text2image', runImmediately = false) {
   if (zone) {
     disposeWidget()
   }
@@ -43,7 +43,8 @@ export function createWidget (type: 'edit' | 'generate', runImmediately = false)
       widget = createApp(defineComponent({
         setup () {
           return () => h(AIWidget, {
-            type,
+            type: type === 'text2image' ? 'generate' : type,
+            adapterType: type === 'text2image' ? 'text2image' : 'edit',
             runImmediately,
             onLayout: (height : number) => {
               if (zone) {

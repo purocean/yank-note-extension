@@ -32,6 +32,19 @@
             <a v-if="completionAdapter.removable" @click.stop.prevent="removeAdapter" class="remove-adapter">{{ i18n.$t.value('remove') }}</a>
           </div>
         </div>
+        <div v-if="text2imageAdapter" v-show="state.type === 'text2image'">
+          <AISettingPanel type="text2image" :adapter="text2imageAdapter" :key="state.adapter.text2image" />
+          <div v-if="text2imageAdapter" class="adapter-desc">
+            <span v-html="text2imageAdapter.description" />
+            <a v-if="text2imageAdapter.removable" @click.stop.prevent="removeAdapter" class="remove-adapter">{{ i18n.$t.value('remove') }}</a>
+          </div>
+        </div>
+        <div v-if="!adapters.length">
+          <div class="adapter-desc">
+            {{ i18n.$t.value('no-adapters') }}
+            <a @click.stop.prevent="createCustomAdapter" class="remove-adapter">{{ i18n.$t.value('create-custom-adapter') }}</a>
+          </div>
+        </div>
       </div>
       <div class="action" @mousedown.self="startDrag">
         <div class="proxy-input">
@@ -41,6 +54,7 @@
         </div>
         <template v-if="!loading">
           <button v-if="state.type === 'completion'" @click="doWork" class="primary tr">{{ i18n.$t.value('completion') }}</button>
+          <button v-if="state.type === 'text2image'" @click="doWork" class="primary tr">{{ i18n.$t.value('generate') }}</button>
           <button v-if="state.type === 'edit' && editAdapter" @click="doWork" class="primary tr">
             {{ editAdapter.state.selection ? i18n.$t.value('rewrite') : i18n.$t.value('generate') }}
           </button>
@@ -66,7 +80,8 @@ const editor = ctx.editor.getEditor()
 const tabs: { label: string, value: typeof state.type }[] = [
   { label: i18n.t('completion'), value: 'completion' },
   // { label: 'Chat', value: 'chat' },
-  { label: i18n.t('rewrite-or-generate'), value: 'edit' }
+  { label: i18n.t('rewrite-or-generate'), value: 'edit' },
+  { label: i18n.t('text-to-image'), value: 'text2image' }
 ]
 
 const { SvgIcon, GroupTabs } = ctx.components
@@ -78,6 +93,7 @@ const adapters = computed(() => {
 
 const completionAdapter = computed(() => getAdapter('completion', state.adapter.completion))
 const editAdapter = computed(() => getAdapter('edit', state.adapter.edit))
+const text2imageAdapter = computed(() => getAdapter('text2image', state.adapter.text2image))
 
 function focusEditor () {
   nextTick(() => {
@@ -152,7 +168,7 @@ async function removeAdapter () {
     removeCustomAdapter({ type: state.type, name: adapter })
     triggerRef(pined)
     setTimeout(() => {
-      state.adapter[state.type] = adapters.value[0].id
+      state.adapter[state.type] = adapters.value[0]?.id
       delete state.adapterState[stateKey]
     }, 0)
   }
@@ -165,11 +181,15 @@ onMounted(() => {
     pined.value = true
 
     if (!completionAdapter.value && state.type === 'completion') {
-      state.adapter[state.type] = adapters.value[0].id
+      state.adapter[state.type] = adapters.value[0]?.id
     }
 
     if (!editAdapter.value && state.type === 'edit') {
-      state.adapter[state.type] = adapters.value[0].id
+      state.adapter[state.type] = adapters.value[0]?.id
+    }
+
+    if (!text2imageAdapter.value && state.type === 'text2image') {
+      state.adapter[state.type] = adapters.value[0]?.id
     }
   }, 0)
 
@@ -377,7 +397,7 @@ const onMouseUp = () => {
 
   &.pined {
     max-height: 80vh;
-    width: 440px;
+    width: 530px;
 
     .head {
       border-bottom: 1px solid var(--g-color-70);
