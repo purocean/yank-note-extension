@@ -1,3 +1,12 @@
+## [1.13.3](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.13.2...extension-ai-copilot-1.13.3) (2024-05-20)
+
+
+### Bug Fixes
+
+* **extension-ai-copilot:** fix adapter create ([3367fb4](https://github.com/purocean/yank-note-extension/commit/3367fb4b1f0db63f41ee52929273307bab0f56e8))
+
+
+
 ## [1.13.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.13.1...extension-ai-copilot-1.13.2) (2024-05-20)
 
 
