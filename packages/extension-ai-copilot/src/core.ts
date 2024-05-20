@@ -256,5 +256,5 @@ export function addCustomAdapters (adapter: CustomAdapter) {
 
 export function removeCustomAdapter (adapter: CustomAdapter) {
   removeAdapter(adapter.type, adapter.name)
-  state.customAdapters = state.customAdapters.filter(x => x.name !== adapter.name)
+  state.customAdapters = state.customAdapters.filter(x => x.name !== adapter.name || x.type !== adapter.type)
 }
