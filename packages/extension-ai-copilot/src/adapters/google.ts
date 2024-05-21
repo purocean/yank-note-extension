@@ -140,8 +140,8 @@ export class GoogleAICompletionAdapter extends BaseGoogleAIAdapter implements Co
     items: [
       { type: 'context', key: 'context', label: i18n.t('context'), hasError: v => !v },
       { type: 'input', key: 'apiToken', label: 'Api Token', props: { type: 'password' }, hasError: v => !v },
-      { type: 'input', key: 'model', label: 'Model', defaultValue: 'gemini-pro', props: { placeholder: 'e.g. gemini-pro' }, hasError: v => !v },
-      { type: 'textarea', key: 'systemMessage', label: 'System Message', defaultValue: this.defaultSystemMessage },
+      { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: 'gemini-pro', props: { placeholder: 'e.g. gemini-pro' }, hasError: v => !v },
+      { type: 'textarea', key: 'systemMessage', label: i18n.t('system-message'), defaultValue: this.defaultSystemMessage },
       { type: 'range', key: 'maxOutputTokens', label: 'Max Tokens', max: 4096, min: -1, step: 1, description: '-1 means unlimited', defaultValue: -1 },
       { type: 'range', key: 'temperature', label: 'Temperature', max: 2, min: 0, step: 0.01, defaultValue: 1 },
       {
@@ -253,9 +253,9 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
       { type: 'selection', key: 'selection', label: i18n.t('selected-text'), props: { readonly: true } },
       { type: 'context', key: 'context', label: i18n.t('context') },
       { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
-      { type: 'textarea', key: 'systemMessageV2', label: 'System Message', defaultValue: this.defaultSystemMessage },
+      { type: 'textarea', key: 'systemMessageV2', label: i18n.t('system-message'), defaultValue: this.defaultSystemMessage },
       { type: 'input', key: 'apiToken', label: 'Api Token', props: { type: 'password' }, hasError: v => !v },
-      { type: 'input', key: 'model', label: 'Model', defaultValue: 'gemini-pro', props: { placeholder: 'e.g. gemini-pro' }, hasError: v => !v },
+      { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: 'gemini-pro', props: { placeholder: 'e.g. gemini-pro' }, hasError: v => !v },
       { type: 'range', key: 'maxOutputTokens', label: 'Max Tokens', max: 4096, min: -1, step: 1, description: '-1 means unlimited', defaultValue: -1 },
       { type: 'range', key: 'temperature', label: 'Temperature', max: 1, min: 0, step: 0.01, defaultValue: 0.5 },
       {
