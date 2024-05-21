@@ -4,6 +4,7 @@
       <h4 v-if="adapterType === 'edit' && type === 'edit'">{{ $t('ai-edit') }}</h4>
       <h4 v-if="adapterType === 'edit' && type === 'generate'">{{ $t('ai-generate') }}</h4>
       <h4 v-if="adapterType === 'text2image'">{{ $t('ai-text-to-image') }}</h4>
+      <svg-icon v-if="!loading" name="times" class="close-icon" @click="close" title="Close" />
       <div class="input" v-if="adapter && adapter.state">
         <textarea
           :placeholder="adapterType === 'edit' ? $t('ask-ai-edit-or-gen') : $t('ask-ai-text2image')"
@@ -260,6 +261,22 @@ onBeforeUnmount(() => {
   background: rgba(var(--g-color-85-rgb), 0.8);
   backdrop-filter: var(--g-backdrop-filter);
   margin-top: 8px;
+
+  .close-icon {
+    border-radius: 50%;
+    padding: 2px;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    color: var(--g-color-35);
+
+    &:hover {
+      background: var(--g-color-75);
+      color: var(--g-color-20);
+    }
+  }
 
   .content {
     position: relative;
