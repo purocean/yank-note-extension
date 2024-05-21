@@ -60,7 +60,7 @@
           </button>
         </template>
         <template v-else>
-          <button v-if="state.type === 'edit'" @click="cancel" class="primary tr">{{ i18n.$t.value('cancel') }}</button>
+          <button v-if="state.type !== 'completion'" @click="cancel" class="primary tr">{{ i18n.$t.value('cancel') }}</button>
         </template>
       </div>
     </div>
