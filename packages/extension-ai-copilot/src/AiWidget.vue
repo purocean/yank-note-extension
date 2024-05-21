@@ -45,10 +45,11 @@
           </template>
         </label>
 
-        <select v-model="state.adapter.edit" @change="textareaRef?.focus()">
+        <select v-model="state.adapter[adapterType]" @change="textareaRef?.focus()">
           <option v-for="item in adapters" :key="item.id" :value="item.id">{{item.displayname}}</option>
         </select>
       </div>
+      <div v-else>{{ $t('no-adapters') }}</div>
     </div>
   </div>
 </template>
@@ -75,11 +76,12 @@ const props = defineProps<{
 
 const image = shallowRef<{ src: string, blob: Blob }>()
 
-const adapter = computed(() => getAdapter(props.adapterType, state.adapter.edit))
+const adapter = computed(() => getAdapter(props.adapterType, state.adapter[props.adapterType]))
 const finished = ref(false)
 
 const adapters = computed(() => {
-  return getAllAdapters(props.adapterType).map(x => ({ id: x.id, displayname: x.displayname }))
+  const adapterId = state.adapter[props.adapterType]
+  return adapterId && getAllAdapters(props.adapterType).map(x => ({ id: x.id, displayname: x.displayname }))
 })
 
 const editor = ctx.editor.getEditor()
