@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapperRef" :class="{'ai-widget': true, loading}">
+  <div ref="wrapperRef" :class="{'ai-widget': true, loading}" @mousemove.capture.stop>
     <div class="content">
       <h4 v-if="adapterType === 'edit' && type === 'edit'">{{ $t('ai-edit') }}</h4>
       <h4 v-if="adapterType === 'edit' && type === 'generate'">{{ $t('ai-generate') }}</h4>
@@ -14,6 +14,8 @@
           rows="1"
           v-auto-resize="{minRows: 1, maxRows: 5}"
           v-textarea-on-enter
+          @keydown.arrow-up="(e: any) => e.target.selectionStart === 0 && e.target.selectionEnd === 0 && showHistoryMenu()"
+          @mousedown.right="$event.preventDefault(); showHistoryMenu()"
           @keydown.escape="onEsc"
           @keydown.enter="onEnter"
           @keydown.stop
