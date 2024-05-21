@@ -32,7 +32,7 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
     type: 'form',
     items: [
       { type: 'context', key: 'context', label: i18n.t('context'), hasError: v => !v },
-      { type: 'input', key: 'api_token', label: 'Api Token', props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
+      { type: 'input', key: 'api_token', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
       { type: 'textarea', key: 'system_message', label: i18n.t('system-message'), defaultValue: this.defaultSystemMessage },
       { type: 'range', key: 'max_tokens', label: 'Max Tokens', max: 4096, min: -1, step: 1, description: '-1 means unlimited', defaultValue: -1 },
@@ -208,7 +208,7 @@ export class OpenAIEditAdapter implements EditAdapter {
       { type: 'selection', key: 'selection', label: i18n.t('selected-text'), props: { readonly: true } },
       { type: 'context', key: 'context', label: i18n.t('context') },
       { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
-      { type: 'input', key: 'api_token', label: 'Api Token', props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
+      { type: 'input', key: 'api_token', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
       { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
       { type: 'textarea', key: 'systemMessageV2', label: i18n.t('system-message'), defaultValue: this.defaultSystemMessage },
       { type: 'range', key: 'max_tokens', label: 'Max Tokens', max: 4096, min: -1, step: 1, description: '-1 means unlimited', defaultValue: -1 },

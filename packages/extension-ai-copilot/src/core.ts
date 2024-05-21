@@ -55,6 +55,7 @@ export const i18n = ctx.i18n.createI18n({
     'endpoint': 'Endpoint',
     'model': 'Model',
     'system-message': 'System Message',
+    'api-token': 'API Token',
   },
   'zh-CN': {
     'ai-complete': '使用 AI Copilot 自动补全',
@@ -92,6 +93,7 @@ export const i18n = ctx.i18n.createI18n({
     'endpoint': '端点',
     'model': '模型',
     'system-message': '系统提示',
+    'api-token': 'API 密钥',
   }
 })
 
