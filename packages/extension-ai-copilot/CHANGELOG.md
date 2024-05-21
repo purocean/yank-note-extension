@@ -1,3 +1,12 @@
+## [1.15.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.15.1...extension-ai-copilot-1.15.2) (2024-05-21)
+
+
+### Bug Fixes
+
+* **extension-ai-copilot:** update cancel button behavior based on state type ([032d968](https://github.com/purocean/yank-note-extension/commit/032d9684b0fe396f6cd6d1662b0870c4e86574e8))
+
+
+
 ## [1.15.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.15.0...extension-ai-copilot-1.15.1) (2024-05-21)
 
 
