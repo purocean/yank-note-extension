@@ -1,3 +1,12 @@
+## [1.15.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.15.0...extension-ai-copilot-1.15.1) (2024-05-21)
+
+
+### Features
+
+* **extension-ai-copilot:** update AiWidget to display 'no-adapters' message when no adapters are available ([0f6a8ce](https://github.com/purocean/yank-note-extension/commit/0f6a8ce90df72bdbe5eaaf5fa5f6d195de1550c5))
+
+
+
 # [1.15.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.14.2...extension-ai-copilot-1.15.0) (2024-05-21)
 
 
