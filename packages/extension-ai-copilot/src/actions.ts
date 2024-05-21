@@ -156,36 +156,42 @@ export async function executeTextToImage (token: Monaco.CancellationToken): Prom
 export class CodeActionProvider implements Monaco.languages.CodeActionProvider {
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CodeActionProvider')
 
-  provideCodeActions (_model: Monaco.editor.ITextModel, range: Monaco.Range): Monaco.languages.ProviderResult<Monaco.languages.CodeActionList> {
+  provideCodeActions (model: Monaco.editor.ITextModel, range: Monaco.Range): Monaco.languages.ProviderResult<Monaco.languages.CodeActionList> {
     if (!state.enable) {
       return { dispose: () => 0, actions: [] }
     }
 
+    // no selection and cursor not in end of line, no actions
+    if (range.isEmpty() && model.getLineMaxColumn(range.startLineNumber) !== range.endColumn) {
+      return { dispose: () => 0, actions: [] }
+    }
+
     const editTitle = range.isEmpty() ? i18n.t('ai-generate') : i18n.t('ai-edit')
-    const text2imageTitle = i18n.t('ai-text-to-image')
+
+    const actions: Monaco.languages.CodeAction[] = [{
+      title: editTitle,
+      command: { id: EDIT_ACTION_NAME, title: editTitle },
+      kind: 'refactor',
+      diagnostics: [],
+      isPreferred: true,
+      isAI: true
+    }]
+
+    // on empty line, and no selection, add text2image action
+    if (range.isEmpty() && model.getLineContent(range.startLineNumber).trim() === '') {
+      const text2imageTitle = i18n.t('ai-text-to-image')
+      actions.push({
+        title: text2imageTitle,
+        command: { id: TEXT_TO_IMAGE_ACTION_NAME, title: text2imageTitle },
+        kind: 'refactor',
+        diagnostics: [],
+        isAI: true
+      })
+    }
 
     return {
       dispose: () => 0,
-      actions: [
-        {
-          title: editTitle,
-          command: { id: EDIT_ACTION_NAME, title: editTitle },
-          kind: 'refactor',
-          diagnostics: [],
-          isPreferred: true,
-          isAI: true
-        },
-        {
-          title: text2imageTitle,
-          isAI: true,
-          command: {
-            id: TEXT_TO_IMAGE_ACTION_NAME,
-            title: text2imageTitle
-          },
-          kind: 'refactor',
-          diagnostics: [],
-        }
-      ]
+      actions: actions
     }
   }
 
