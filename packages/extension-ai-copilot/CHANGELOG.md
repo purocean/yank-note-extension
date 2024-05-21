@@ -1,3 +1,13 @@
+# [1.15.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.14.2...extension-ai-copilot-1.15.0) (2024-05-21)
+
+
+### Features
+
+* **extension-ai-copilot:** add close button to AiWidget ([f0815b5](https://github.com/purocean/yank-note-extension/commit/f0815b5bba094533b44f5e7b54806e463e56bda4))
+* **extension-ai-copilot:** improve code action provider ([99e6d1d](https://github.com/purocean/yank-note-extension/commit/99e6d1d7d1a01e7e36a836cc75c3b7ce803bd91e))
+
+
+
 ## [1.14.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.14.1...extension-ai-copilot-1.14.2) (2024-05-21)
 
 
