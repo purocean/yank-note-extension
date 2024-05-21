@@ -70,7 +70,7 @@
 <script lang="ts" setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, watch, watchEffect, ref, triggerRef } from 'vue'
 import { ctx } from '@yank-note/runtime-api'
-import { i18n, state, loading, COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, globalCancelTokenSource, addCustomAdapters, removeCustomAdapter } from './core'
+import { i18n, state, loading, COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, globalCancelTokenSource, addCustomAdapters, removeCustomAdapter, TEXT_TO_IMAGE_ACTION_NAME } from './core'
 import { getAdapter, getAllAdapters } from './adapter'
 import AISettingPanel from './AISettingPanel.vue'
 
@@ -106,6 +106,8 @@ function doWork () {
     ctx.action.getActionHandler(COMPLETION_ACTION_NAME)()
   } else if (state.type === 'edit') {
     ctx.action.getActionHandler(EDIT_ACTION_NAME)(pined.value)
+  } else if (state.type === 'text2image') {
+    ctx.action.getActionHandler(TEXT_TO_IMAGE_ACTION_NAME)(pined.value)
   }
 }
 
