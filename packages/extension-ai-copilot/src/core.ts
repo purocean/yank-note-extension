@@ -15,6 +15,7 @@ export const CURSOR_PLACEHOLDER = '{CURSOR}'
 export interface CustomAdapter {
   name: string,
   type: AdapterType,
+  preset: 'openai' | 'custom'
 }
 
 export const i18n = ctx.i18n.createI18n({
@@ -48,6 +49,10 @@ export const i18n = ctx.i18n.createI18n({
     'remove-adapter': 'Remove adapter',
     'remove-adapter-confirm': 'Are you sure you want to remove the [%s] adapter?',
     'no-adapters': 'No adapters available',
+    'custom-adapter-type': 'Adapter type',
+    'openai-compatible': 'OpenAI Compatible',
+    'custom': 'Custom',
+    'endpoint': 'Endpoint',
   },
   'zh-CN': {
     'ai-complete': '使用 AI Copilot 自动补全',
@@ -79,6 +84,10 @@ export const i18n = ctx.i18n.createI18n({
     'remove-adapter': '移除适配器',
     'remove-adapter-confirm': '确定要移除 [%s] 适配器吗？',
     'no-adapters': '无可用适配器',
+    'custom-adapter-type': '适配器类型',
+    'openai-compatible': 'OpenAI 兼容',
+    'custom': '自定义',
+    'endpoint': '端点',
   }
 })
 
@@ -254,7 +263,7 @@ export function addCustomAdapters (adapter: CustomAdapter) {
   )
 }
 
-export function removeCustomAdapter (adapter: CustomAdapter) {
+export function removeCustomAdapter (adapter: Pick<CustomAdapter, 'name' | 'type'>) {
   removeAdapter(adapter.type, adapter.name)
   state.customAdapters = state.customAdapters.filter(x => x.name !== adapter.name || x.type !== adapter.type)
 }

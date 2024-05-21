@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
 import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
-import { CompletionAdapter, EditAdapter, Panel, TextToImageAdapter } from '@/adapter'
+import { CompletionAdapter, EditAdapter, FormItem, Panel, TextToImageAdapter } from '@/adapter'
 import { CURSOR_PLACEHOLDER, CustomAdapter, i18n } from '@/core'
 import type { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 
@@ -67,7 +67,50 @@ const text = obj.result.response
 return [text]
 `
 
+ defaultOpenAIBuildRequestCode = `// data is the input object
+const { context, system, editorContext, state } = data
+
+// 0: Automatic, Completion was triggered automatically while editing.
+// 1: Explicit, Completion was triggered explicitly by a user gesture.
+if (editorContext.triggerKind !== 1) {
+  return
+}
+
+const messages = [
+  {
+    role: "system",
+    content: system.replace('{CONTEXT}', context)
+  },
+  {
+    role: "user",
+    content: context
+  },
+]
+
+const url = state.endpoint
+
+const headers = {
+  'Authorization': \`Bearer \${state.apiToken}\`,
+  'Content-Type': 'application/json',
+}
+
+const body = JSON.stringify({ messages, model: state.model })
+
+return { url, headers, body, method: 'POST' }`
+
+  defaultOpenAIHandleResponseCode = `// data is the input object
+const { res } = data
+
+const obj = await res.json()
+const text = obj?.choices[0]?.message?.content
+return [text]`
+
+  panel: Panel
+
   state = reactive({
+    endpoint: '',
+    apiToken: '',
+    model: 'gpt-3.5-turbo',
     context: '',
     proxy: '',
     systemMessage: this.defaultSystemMessage,
@@ -75,22 +118,36 @@ return [text]
     handleResponseCode: this.defaultHandleResponseCode,
   })
 
-  panel: Panel = {
-    type: 'form',
-    items: [
-      { type: 'context', key: 'context', label: i18n.t('context') },
-      { type: 'textarea', key: 'systemMessage', label: 'System Message', defaultValue: this.defaultSystemMessage },
-      { type: 'textarea', key: 'buildRequestCode', label: 'Build Request Code', defaultValue: this.defaultBuildRequestCode, hasError: v => !v, props: { style: { height: '10em' } } },
-      { type: 'textarea', key: 'handleResponseCode', label: 'Handle Response Code', defaultValue: this.defaultHandleResponseCode, hasError: v => !v, props: { style: { height: '10em' } } },
-      { type: 'input', key: 'proxy', label: i18n.t('proxy'), props: { placeholder: 'eg: http://127.0.0.1:8000' } },
-    ],
-  }
-
   constructor (adapter: CustomAdapter) {
     this.id = adapter.name
     this.displayname = adapter.name
     this.description = 'Custom Completion Adapter'
     this.logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CustomCompletionAdapter.' + this.id)
+
+    const defaultApiPoint = 'https://api.openai.com/v1/chat/completions'
+
+    this.panel = {
+      type: 'form',
+      items: [
+        { type: 'context', key: 'context', label: i18n.t('context') },
+        { type: 'textarea', key: 'systemMessage', label: 'System Message', defaultValue: this.defaultSystemMessage },
+        ...(adapter.preset === 'openai'
+          ? [
+            { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultApiPoint }, defaultValue: defaultApiPoint, hasError: v => !v },
+            { type: 'input', key: 'apiToken', label: 'Api Token', props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
+            { type: 'input', key: 'model', label: 'Model', defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
+          ] as FormItem[]
+          : []),
+        { type: 'textarea', key: 'buildRequestCode', label: 'Build Request Code', defaultValue: adapter.preset === 'openai' ? this.defaultOpenAIBuildRequestCode : this.defaultBuildRequestCode, hasError: v => !v },
+        { type: 'textarea', key: 'handleResponseCode', label: 'Handle Response Code', defaultValue: adapter.preset === 'openai' ? this.defaultOpenAIHandleResponseCode : this.defaultHandleResponseCode, hasError: v => !v },
+        { type: 'input', key: 'proxy', label: i18n.t('proxy'), props: { placeholder: 'eg: http://127.0.0.1:8000' } },
+      ],
+    }
+
+    if (adapter.preset === 'openai') {
+      this.state.buildRequestCode = this.defaultOpenAIBuildRequestCode
+      this.state.handleResponseCode = this.defaultOpenAIHandleResponseCode
+    }
   }
 
   activate () {
@@ -113,7 +170,8 @@ return [text]
       const data = {
         context: this.state.context,
         system: this.state.systemMessage,
-        editorContext
+        editorContext,
+        state: this.state,
       }
 
       const request = await buildRequestFn.apply(this, [data])
@@ -184,12 +242,10 @@ const messages = [{
   content: userMessage
 }]
 
-if (systemMessage) {
-  messages.unshift({
-    role: "system",
-    content: systemMessage
-  })
-}
+messages.unshift({
+  role: "system",
+  content: systemMessage || 'ATTENTION: OUTPUT THE CONTENT DIRECTLY, NO SURROUNDING OR OTHER CONTENT.'
+})
 
 const url = \`https://api.cloudflare.com/client/v4/accounts/\${API_ACCOUNT_ID}/ai/run/@cf/meta/llama-3-8b-instruct\`
 
@@ -223,7 +279,55 @@ if (sse) { // SSE message, res is a string
   return { text }
 }`
 
+defaultOpenAIBuildRequestCode = `// data is the input object
+const { selectedText, instruction, context, system, state } = data
+
+// if context is not provided, system message will be empty
+const systemMessage = context ? system.replace('{CONTEXT}', context) : ''
+const userMessage = \`
+Instruction: \${instruction}
+
+\${selectedText}
+\`.trim()
+
+const messages = [{
+  role: "user",
+  content: userMessage
+}]
+
+messages.unshift({
+  role: "system",
+  content: systemMessage || 'ATTENTION: OUTPUT THE CONTENT DIRECTLY, NO SURROUNDING OR OTHER CONTENT.'
+})
+
+const url = state.endpoint
+
+const headers = {
+  'Authorization': \`Bearer \${state.apiToken}\`,
+  'Content-Type': 'application/json',
+}
+
+const body = JSON.stringify({ messages, model: state.model, stream: true })
+const sse = true // use server-sent events to stream the response
+
+return { url, headers, body, method: 'POST', sse }`
+
+defaultOpenAIHandleResponseCode = `// data is the input object
+const { res } = data
+
+if (res === '[DONE]') {
+  return { done: true }
+}
+
+const payload = JSON.parse(res)
+const delta = payload?.choices[0]?.delta?.content
+
+return { delta }`
+
   state = reactive({
+    endpoint: '',
+    apiToken: '',
+    model: 'gpt-3.5-turbo',
     context: '',
     withContext: true,
     selection: '',
@@ -234,24 +338,40 @@ if (sse) { // SSE message, res is a string
     handleResponseCode: this.defaultHandleResponseCode,
   })
 
-  panel: Panel = {
-    type: 'form',
-    items: [
-      { type: 'selection', key: 'selection', label: i18n.t('selected-text'), props: { readonly: true } },
-      { type: 'context', key: 'context', label: i18n.t('context') },
-      { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
-      { type: 'textarea', key: 'systemMessage', label: 'System Message', defaultValue: this.defaultSystemMessage },
-      { type: 'textarea', key: 'buildRequestCode', label: 'Build Request Code', defaultValue: this.defaultBuildRequestCode, hasError: v => !v, props: { style: { height: '10em' } } },
-      { type: 'textarea', key: 'handleResponseCode', label: 'Handle Response Code', defaultValue: this.defaultHandleResponseCode, hasError: v => !v, props: { style: { height: '10em' } } },
-      { type: 'input', key: 'proxy', label: i18n.t('proxy'), props: { placeholder: 'eg: http://127.0.0.1:8000' } },
-    ],
-  }
+  panel: Panel
 
   constructor (adapter: CustomAdapter) {
     this.id = adapter.name
     this.displayname = adapter.name
     this.description = 'Custom Edit Adapter'
     this.logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CustomEditAdapter.' + this.id)
+
+    const defaultApiPoint = 'https://api.openai.com/v1/chat/completions'
+
+    this.panel = {
+      type: 'form',
+      items: [
+        { type: 'selection', key: 'selection', label: i18n.t('selected-text'), props: { readonly: true } },
+        { type: 'context', key: 'context', label: i18n.t('context') },
+        { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
+        { type: 'textarea', key: 'systemMessage', label: 'System Message', defaultValue: this.defaultSystemMessage },
+        ...(adapter.preset === 'openai'
+          ? [
+            { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultApiPoint }, defaultValue: defaultApiPoint, hasError: v => !v },
+            { type: 'input', key: 'apiToken', label: 'Api Token', props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
+            { type: 'input', key: 'model', label: 'Model', defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
+          ] as FormItem[]
+          : []),
+        { type: 'textarea', key: 'buildRequestCode', label: 'Build Request Code', defaultValue: adapter.preset === 'openai' ? this.defaultOpenAIBuildRequestCode : this.defaultBuildRequestCode, hasError: v => !v },
+        { type: 'textarea', key: 'handleResponseCode', label: 'Handle Response Code', defaultValue: adapter.preset === 'openai' ? this.defaultOpenAIHandleResponseCode : this.defaultHandleResponseCode, hasError: v => !v },
+        { type: 'input', key: 'proxy', label: i18n.t('proxy'), props: { placeholder: 'eg: http://127.0.0.1:8000' } },
+      ],
+    }
+
+    if (adapter.preset === 'openai') {
+      this.state.buildRequestCode = this.defaultOpenAIBuildRequestCode
+      this.state.handleResponseCode = this.defaultOpenAIHandleResponseCode
+    }
   }
 
   activate () {
@@ -280,7 +400,8 @@ if (sse) { // SSE message, res is a string
       selectedText,
       instruction,
       context: this.state.context,
-      system: this.state.withContext ? this.state.systemMessage : ''
+      system: this.state.withContext ? this.state.systemMessage : '',
+      state: this.state,
     }
 
     const request = await buildRequestFn.apply(this, [data])

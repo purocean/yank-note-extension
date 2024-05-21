@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, watch, watchEffect, ref, triggerRef } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, watch, watchEffect, ref, triggerRef, h } from 'vue'
 import { ctx } from '@yank-note/runtime-api'
 import { i18n, state, loading, COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, globalCancelTokenSource, addCustomAdapters, removeCustomAdapter, TEXT_TO_IMAGE_ACTION_NAME } from './core'
 import { getAdapter, getAllAdapters } from './adapter'
@@ -135,10 +135,22 @@ async function createCustomAdapter () {
     return
   }
 
+  const adapterPreset = ref<'openai' | 'custom'>(state.type === 'text2image' ? 'custom' : 'openai')
+
   const name = await ctx.ui.useModal().input({
     title: i18n.t('create-custom-adapter'),
     hint: i18n.t('adapter-name'),
     value: 'Workers AI',
+    component: state.type === 'text2image'
+      ? undefined
+      : h('div', [
+        h('div', { style: 'margin: 8px 0' }, [
+          i18n.t('custom-adapter-type'),
+          h('label', { style: 'margin-left: 8px' }, [h('input', { type: 'radio', name: 'type', value: 'openai', checked: adapterPreset.value === 'openai', onChange: () => { adapterPreset.value = 'openai' } }), ' ' + i18n.t('openai-compatible')]),
+          h('label', { style: 'margin: 0 8px' }, [h('input', { type: 'radio', name: 'type', value: 'custom', checked: adapterPreset.value === 'custom', onChange: () => { adapterPreset.value = 'custom' } }), ' ' + i18n.t('custom')]),
+        ]),
+      ]),
+
     select: true,
   })
 
@@ -149,7 +161,7 @@ async function createCustomAdapter () {
     return
   }
 
-  addCustomAdapters({ name, type: state.type })
+  addCustomAdapters({ name, type: state.type, preset: adapterPreset.value })
   triggerRef(pined)
   setTimeout(() => {
     state.adapter[state.type] = name
