@@ -21,9 +21,9 @@ export interface CustomAdapter {
 export const i18n = ctx.i18n.createI18n({
   en: {
     'ai-complete': 'Complete using AI Copilot',
-    'ai-edit': 'Modify using AI Copilot',
-    'ai-generate': 'Generate using AI Copilot',
-    'ai-edit-or-gen': 'Edit or Generate using AI Copilot',
+    'ai-edit': 'Modify Text using AI Copilot',
+    'ai-generate': 'Generate Text using AI Copilot',
+    'ai-edit-or-gen': 'Edit or Generate Text using AI Copilot',
     'ai-text-to-image': 'Generate Image using AI Copilot',
     'text-to-image': 'Text to Image',
     'enable-ai-copilot': 'Enable AI Copilot',
@@ -59,9 +59,9 @@ export const i18n = ctx.i18n.createI18n({
   },
   'zh-CN': {
     'ai-complete': '使用 AI Copilot 自动补全',
-    'ai-edit': '使用 AI Copilot 修改',
-    'ai-generate': '使用 AI Copilot 生成',
-    'ai-edit-or-gen': '使用 AI Copilot 修改或生成',
+    'ai-edit': '使用 AI Copilot 修改文本',
+    'ai-generate': '使用 AI Copilot 生成文本',
+    'ai-edit-or-gen': '使用 AI Copilot 修改或生成文本',
     'ai-text-to-image': '使用 AI Copilot 生成图片',
     'text-to-image': '文本转图片',
     'enable-ai-copilot': '启用 AI Copilot',
