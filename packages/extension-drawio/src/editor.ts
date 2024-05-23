@@ -42,9 +42,26 @@ class EditorContent extends BaseCustomEditorContent {
           const _updateActionStates = win.App.prototype.updateActionStates
           // eslint-disable-next-line @typescript-eslint/no-this-alias
           const that = this
+          let converter
+
           win.App.prototype.updateActionStates = function (...args: any[]) {
             (window as any).drawioApp = this
             win.App.prototype.updateActionStates = _updateActionStates
+
+            // patch for drawio, fix image url
+            if (!converter) {
+              converter = this.createImageUrlConverter()
+              // eslint-disable-next-line no-proto
+              const isRelativeUrl = converter.__proto__.isRelativeUrl
+              // eslint-disable-next-line no-proto
+              converter.__proto__.isRelativeUrl = function (url) {
+                if (url && url.match(/^([a-zA-Z0-9_-]+:)\/\//)) {
+                  return false
+                }
+
+                return isRelativeUrl.apply(this, [url])
+              }
+            }
 
             that.save = async () => {
               this.actions.actions.save.funct(false)
