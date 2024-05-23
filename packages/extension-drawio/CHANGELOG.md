@@ -1,3 +1,17 @@
+# [2.3.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.2.0...extension-drawio-2.3.0) (2024-05-23)
+
+
+### Bug Fixes
+
+* **extension-drawio:** patch drawio to fix image URL issue ([5615086](https://github.com/purocean/yank-note-extension/commit/56150866840711758ab001bc10fd4c4b654753b8))
+
+
+### Features
+
+* **extension-drawio:** upgrade drawio ([0b8e42a](https://github.com/purocean/yank-note-extension/commit/0b8e42a96cf04b79b63bc7c7ae3fc45c37685984))
+
+
+
 # [2.2.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.1.3...extension-drawio-2.2.0) (2024-01-24)
 
 
