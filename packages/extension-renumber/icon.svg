@@ -1,0 +1,20 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <g transform="scale(0.95)" transform-origin="center">
+    <!-- 背景圆圈 -->
+    <circle cx="50" cy="50" r="47" fill="#e0f7fa" stroke="#00796b" stroke-width="6"/>
+
+    <!-- 列表数字 -->
+    <text x="25" y="32" font-family="Arial, sans-serif" font-size="14" fill="#d32f2f" text-anchor="middle" dominant-baseline="middle">1</text>
+    <text x="25" y="52" font-family="Arial, sans-serif" font-size="14" fill="#d32f2f" text-anchor="middle" dominant-baseline="middle">2</text>
+    <text x="25" y="72" font-family="Arial, sans-serif" font-size="14" fill="#d32f2f" text-anchor="middle" dominant-baseline="middle">3</text>
+
+    <!-- 列表线条 -->
+    <line x1="35" y1="32" x2="73" y2="32" stroke="#00796b" stroke-width="4"/>
+    <line x1="35" y1="52" x2="73" y2="52" stroke="#00796b" stroke-width="4"/>
+    <line x1="35" y1="72" x2="73" y2="72" stroke="#00796b" stroke-width="4"/>
+
+    <!-- 重新排列箭头 -->
+    <path d="M75,80 L75,40 L65,50" fill="none" stroke="#d32f2f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M75,40 L85,50" fill="none" stroke="#d32f2f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
