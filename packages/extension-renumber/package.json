@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-renumber",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "displayName": "Renumber",
   "displayName_ZH-CN": "自动编号",
   "description": "Automatically renumber the list items in the note.",
