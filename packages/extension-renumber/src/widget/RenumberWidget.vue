@@ -4,7 +4,7 @@
       <h4>{{ $t('renumber') }}</h4>
       <svg-icon name="times" class="close-icon" @click="close" title="Close" />
       <p>
-        更改有序列表的起始编号，更多功能开发中……
+        {{ $t('renumber-desc') }}
       </p>
       <div class="actions">
         <button v-if="!finished" class="small primary tr" @click="process">{{ $t('modify') }}</button>
