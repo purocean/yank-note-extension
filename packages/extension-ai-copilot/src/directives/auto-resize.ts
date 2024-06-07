@@ -32,6 +32,7 @@ export function install (app: App) {
       }
 
       el.addEventListener('input', resize)
+      el.addEventListener('focus', resize)
       nextTick(resize)
     }
   })
