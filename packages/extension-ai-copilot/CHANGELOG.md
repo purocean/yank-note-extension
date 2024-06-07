@@ -1,3 +1,14 @@
+## [1.16.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.16.1...extension-ai-copilot-1.16.2) (2024-06-07)
+
+
+### Features
+
+* **extension-ai-copilot:** add focus event listener to auto-resize directive ([2d30e26](https://github.com/purocean/yank-note-extension/commit/2d30e2638a03e35e74c1e8311ffe2b946955bb2a))
+* **extension-ai-copilot:** add i18n support for more labels ([be9e0c0](https://github.com/purocean/yank-note-extension/commit/be9e0c0ef0d856b4173b063589c3faf2950bd96a))
+* **extension-ai-copilot:** update AI Copilot labels for better clarity and consistency ([944bcc2](https://github.com/purocean/yank-note-extension/commit/944bcc24278a8d4ab63bd6692cd8ef506e706b9f))
+
+
+
 ## [1.16.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.16.0...extension-ai-copilot-1.16.1) (2024-05-21)
 
 
