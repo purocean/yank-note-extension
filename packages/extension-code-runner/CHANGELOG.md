@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-code-runner-1.2.0...extension-code-runner-1.3.0) (2024-06-18)
+
+
+### Features
+
+* **extension-code-runner:** support for runtime 3.71.0 ([dd10da1](https://github.com/purocean/yank-note-extension/commit/dd10da1db021f84b552878979d81a9772a33aa28))
+
+
+
 # [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-code-runner-1.1.1...extension-code-runner-1.2.0) (2022-08-15)
 
 
