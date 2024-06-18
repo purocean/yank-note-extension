@@ -382,6 +382,7 @@ declare const data: {
                 'line-numbers': string;
                 'enable-preview': string;
                 'font-family': string;
+                'font-ligatures': string;
                 'complete-emoji': string;
                 'todo-with-time': string;
                 'suggest-on-trigger-characters': string;
@@ -392,6 +393,7 @@ declare const data: {
                 'md-html': string;
                 'md-breaks': string;
                 'md-linkify': string;
+                'md-wiki-links': string;
                 'md-typographer': string;
                 'md-sup': string;
                 'md-sub': string;
@@ -489,6 +491,7 @@ declare const data: {
     };
     'code-run': {
         run: string;
+        stop: string;
         'run-in-xterm-tips': string;
         'run-in-xterm': string;
         running: string;

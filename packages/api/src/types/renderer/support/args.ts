@@ -38,6 +38,7 @@ export declare const DOM_ATTR_NAME: {
     ONLY_CHILD: string;
     TOKEN_IDX: string;
     DISPLAY_NONE: string;
+    WIKI_LINK: string;
 };
 export declare const DOM_CLASS_NAME: {
     PREVIEW_HIGHLIGHT: string;

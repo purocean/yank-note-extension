@@ -190,17 +190,23 @@ export declare function convertFile(source: string, fromType: 'html' | 'markdown
  * Run code.
  * @param cmd
  * @param code
- * @param outputStream
+ * @param opts
  * @returns result
  */
 export declare function runCode(cmd: string | {
     cmd: string;
     args: string[];
-}, code: string, outputStream: true): Promise<ReadableStreamDefaultReader>;
+}, code: string, opts?: {
+    stream?: false;
+    signal?: AbortSignal;
+}): Promise<ReadableStreamDefaultReader>;
 export declare function runCode(cmd: string | {
     cmd: string;
     args: string[];
-}, code: string, outputStream?: false): Promise<string>;
+}, code: string, opts?: {
+    stream?: false;
+    signal?: AbortSignal;
+}): Promise<string>;
 /**
  * Eval cade on Electron main process
  *
