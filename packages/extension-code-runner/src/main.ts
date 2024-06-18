@@ -46,7 +46,7 @@ registerPlugin({
       getTerminalCmd (language) {
         return terminalCmds[language.toLowerCase()] || null
       },
-      async run (language, code) {
+      async run (language, code, opts) {
         const cmd = getCmd(language, code)
         if (!cmd) {
           return {
@@ -66,7 +66,7 @@ registerPlugin({
           }
         }
 
-        const reader: any = await ctx.api.runCode(cmd, code, true)
+        const reader: any = await ctx.api.runCode(cmd, code, { ...opts, stream: true })
         return {
           type: 'plain',
           value: reader
