@@ -197,14 +197,14 @@ export declare function runCode(cmd: string | {
     cmd: string;
     args: string[];
 }, code: string, opts?: {
-    stream?: false;
+    stream?: boolean;
     signal?: AbortSignal;
 }): Promise<ReadableStreamDefaultReader>;
 export declare function runCode(cmd: string | {
     cmd: string;
     args: string[];
 }, code: string, opts?: {
-    stream?: false;
+    stream?: boolean;
     signal?: AbortSignal;
 }): Promise<string>;
 /**
