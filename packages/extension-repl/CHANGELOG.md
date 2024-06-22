@@ -1,3 +1,12 @@
+## [1.2.2](https://github.com/purocean/yank-note-extension/compare/extension-repl-1.2.1...extension-repl-1.2.2) (2024-06-22)
+
+
+### Features
+
+* update code completion items to use block formatting ([aa67d7e](https://github.com/purocean/yank-note-extension/commit/aa67d7ea480f7845cc73fffd3fc92708c7bf3c45))
+
+
+
 ## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-repl-1.2.0...extension-repl-1.2.1) (2024-01-18)
 
 
