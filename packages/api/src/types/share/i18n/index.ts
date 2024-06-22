@@ -177,6 +177,7 @@ declare const languages: {
         };
         document: {
             'current-path': string;
+            'invalid-filename': string;
             'password-create': string;
             'password-save': string;
             'password-open': string;
@@ -920,6 +921,7 @@ declare const languages: {
         };
         document: {
             'current-path': string;
+            'invalid-filename': string;
             'password-create': string;
             'password-save': string;
             'password-open': string;
@@ -1663,6 +1665,7 @@ declare const languages: {
         };
         document: {
             'current-path': string;
+            'invalid-filename': string;
             'password-create': string;
             'password-save': string;
             'password-open': string;

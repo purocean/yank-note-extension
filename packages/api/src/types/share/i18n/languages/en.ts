@@ -175,6 +175,7 @@ declare const data: {
     };
     document: {
         'current-path': string;
+        'invalid-filename': string;
         'password-create': string;
         'password-save': string;
         'password-open': string;
