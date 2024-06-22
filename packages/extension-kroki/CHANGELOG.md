@@ -1,3 +1,15 @@
+## <small>1.1.2 (2024-06-22)</small>
+
+* chore: bump @yank-note/runtime-api to ([710dfee](https://github.com/purocean/yank-note-extension/commit/710dfee))
+* chore: bump @yank-note/runtime-api to ([4c68632](https://github.com/purocean/yank-note-extension/commit/4c68632))
+* chore: bump @yank-note/runtime-api to ([2849cb1](https://github.com/purocean/yank-note-extension/commit/2849cb1))
+* chore: bump @yank-note/runtime-api to ([a731a7a](https://github.com/purocean/yank-note-extension/commit/a731a7a))
+* chore: bump @yank-note/runtime-api to ([5af6c48](https://github.com/purocean/yank-note-extension/commit/5af6c48))
+* chore: bump @yank-note/runtime-api to ([3bfcb9d](https://github.com/purocean/yank-note-extension/commit/3bfcb9d))
+* feat: update code completion items to use block formatting ([aa67d7e](https://github.com/purocean/yank-note-extension/commit/aa67d7e))
+
+
+
 ## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-kroki-1.1.0...extension-kroki-1.1.1) (2024-01-25)
 
 
