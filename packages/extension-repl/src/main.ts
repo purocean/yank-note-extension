@@ -106,7 +106,8 @@ registerPlugin({
           label: '/ ``` Applet Vue Repl',
           insertText: '```vue\n<!-- --applet-- ${1:DEMO} -->\n' +
             appSrc.replace(/<style.*>.*<\/style>/s, '<style>\nh1 {\n  color: red;\n}\n</style>') +
-            '```\n'
+            '```\n',
+          block: true,
         },
       )
     })

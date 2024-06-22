@@ -42,8 +42,8 @@ registerPlugin({
     ctx.editor.tapSimpleCompletionItems(items => {
       /* eslint-disable no-template-curly-in-string */
       items.push(
-        { label: '/ ``` Kroki Format: ```[lang]', insertText: textFormatA },
-        { label: '/ ``` kroki Format: ```kroki', insertText: textFormatB },
+        { label: '/ ``` Kroki Format: ```[lang]', insertText: textFormatA, block: true },
+        { label: '/ ``` kroki Format: ```kroki', insertText: textFormatB, block: true },
       )
     })
 
