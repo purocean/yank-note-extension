@@ -20,9 +20,11 @@
 
 <script lang="ts" setup>
 import { ctx } from '@yank-note/runtime-api'
+import type { Doc } from '@yank-note/runtime-api/types/types/share/types'
+import type MarkdownIt from '@yank-note/runtime-api/types/types/third-party/markdown-it'
 import type { Markmap } from 'markmap-view'
-import type { Transformer } from 'markmap-lib'
-import { buildHTML, handleLink, transformLink } from './helper'
+import type { ITransformHooks, Transformer } from 'markmap-lib'
+import { buildHTML, linkApi, wikiLinksApi } from './helper'
 
 const logger = ctx.utils.getLogger('markmap-previewer')
 const Fragment = ctx.lib.vue.defineComponent({
@@ -38,6 +40,10 @@ const { $t: _$t } = ctx.i18n.useI18n()
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
+  file: {
+    type: Object as () => Doc,
+    require: true,
+  },
   source: {
     type: String,
     required: true,
@@ -78,11 +84,7 @@ function render (win?: Window) {
 
       const mm: Markmap = (_win as any).markmap.Markmap.create('#markmap', opts, root)
 
-      mm.viewHooks.transformHtml.tap((_, nodes) => {
-        transformLink(nodes)
-      })
-
-      const toolbar = (_win as any).markmap.Toolbar.create(mm)
+      const toolbar = (_win as any).markmap.Toolbar.create(mm).el
       toolbar.style.position = 'fixed'
       toolbar.style.top = '6px'
       toolbar.style.left = '6px'
@@ -186,7 +188,30 @@ async function onLoad (win?: Window) {
   if (_win) {
     const markmap = (_win as any).markmap
     const { loadCSS, loadJS } = markmap
-    const transformer: Transformer = new markmap.Transformer()
+    const transformer: Transformer = new markmap.Transformer([
+      ...markmap.builtInPlugins,
+      {
+        name: 'convert-link',
+        transform (hooks: ITransformHooks) {
+          hooks.parser.tap((md: MarkdownIt) => {
+            console.log('xxx', md)
+            md.core.ruler.push('convert-relative-path', (state) => {
+              state.env = {
+                ...state.env,
+                file: {
+                  name: props.file?.name,
+                  repo: props.file?.repo,
+                  path: props.file?.path,
+                }
+              }
+              linkApi.mdRuleConvertLink(state)
+            })
+            md.inline.ruler.after('link', 'wiki-links', wikiLinksApi.mdRuleWikiLinks)
+            md.validateLink = () => true
+          })
+        }
+      }
+    ])
 
     ;(_win as any).transformer = transformer
 
@@ -206,10 +231,13 @@ async function onLoad (win?: Window) {
 
     render(_win)
 
-    _win.document.addEventListener('click', e => {
+    _win.addEventListener('click', e => {
       const target = e.target as HTMLAnchorElement
       if (target.tagName === 'A') {
-        handleLink(e)
+        if (linkApi.htmlHandleLink(target)) {
+          e.preventDefault()
+          e.stopPropagation()
+        }
       }
     }, true)
   }

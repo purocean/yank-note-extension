@@ -8,9 +8,9 @@ import { YN_LIBS } from '@yank-note/runtime-api'
 export default defineConfig({
   plugins: [vue(), copy({
     targets: [
-      { src: 'node_modules/markmap-lib/dist/browser/index.min.js', dest: 'dist', rename: 'markmap-lib.min.js' },
-      { src: 'node_modules/markmap-view/dist/index.min.js', dest: 'dist', rename: 'markmap-view.min.js' },
-      { src: 'node_modules/markmap-toolbar/dist/index.umd.min.js', dest: 'dist', rename: 'markmap-toolbar.umd.min.js' },
+      { src: 'node_modules/markmap-lib/dist/browser/index.iife.js', dest: 'dist', rename: 'markmap-lib.iife.js' },
+      { src: 'node_modules/markmap-view/dist/browser/index.js', dest: 'dist', rename: 'markmap-view.js' },
+      { src: 'node_modules/markmap-toolbar/dist/index.js', dest: 'dist', rename: 'markmap-toolbar.js' },
       { src: 'node_modules/markmap-toolbar/dist/style.css', dest: 'dist', rename: 'markmap-toolbar.css' },
       { src: 'node_modules/d3/dist/d3.min.js', dest: 'dist' },
     ],
@@ -30,7 +30,7 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'src/main.ts'),
       formats: ['iife'],
-      name: process.env.npm_package_name.replace(/[^a-zA-Z0-9_]/g, '_'),
+      name: process.env.npm_package_name!.replace(/[^a-zA-Z0-9_]/g, '_'),
       fileName: () => 'index.js',
     },
     rollupOptions: {

@@ -1,17 +1,20 @@
 <template>
   <div class="markmap-preview-wrapper">
-    <markmap-preview :source="source" />
+    <markmap-preview :source="source" :file="file" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ctx } from '@yank-note/runtime-api'
+import type { Doc } from '@yank-note/runtime-api/types/types/share/types'
 import MarkmapPreview from './MarkmapPreview.vue'
 
 const source = ctx.lib.vue.ref('')
+const file = ctx.lib.vue.shallowRef<Doc | null>()
 
 function render () {
   source.value = ctx.view.getRenderEnv()?.source || ''
+  file.value = ctx.view.getRenderEnv()?.file
 }
 
 ctx.registerHook('VIEW_RENDERED', render)

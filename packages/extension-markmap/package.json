@@ -18,7 +18,7 @@
   "icon": "./icon.png",
   "engines": {
     "node": ">=14.6.0",
-    "yank-note": "^3.41.0"
+    "yank-note": "^3.72.1"
   },
   "requirements": {
     "premium": true
@@ -53,9 +53,9 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^8.7.1",
-    "markmap-lib": "^0.14.1",
-    "markmap-toolbar": "^0.14.0",
-    "markmap-view": "^0.14.0",
+    "markmap-lib": "^0.17.0",
+    "markmap-toolbar": "^0.17.0",
+    "markmap-view": "^0.17.0",
     "rollup-plugin-copy": "^3.4.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.3",
