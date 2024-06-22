@@ -1,3 +1,12 @@
+## [1.5.4](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.5.3...extension-markmap-1.5.4) (2024-06-22)
+
+
+### Features
+
+* update code completion items to use block formatting ([aa67d7e](https://github.com/purocean/yank-note-extension/commit/aa67d7ea480f7845cc73fffd3fc92708c7bf3c45))
+
+
+
 ## [1.5.3](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.5.2...extension-markmap-1.5.3) (2023-11-11)
 
 
