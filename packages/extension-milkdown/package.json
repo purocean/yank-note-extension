@@ -17,7 +17,7 @@
   "style": "./main/style.css",
   "icon": "./icon.svg",
   "engines": {
-    "node": ">=14.6.0",
+    "node": ">=18.20.2",
     "yank-note": "^3.43.0"
   },
   "requirements": {

@@ -19,7 +19,7 @@
   "readmeUrl": "https://fastly.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/README.md",
   "changelogUrl": "https://fastly.jsdelivr.net/gh/purocean/yank-note-extension/packages/extension-drawio/CHANGELOG.md",
   "engines": {
-    "node": ">=14.6.0",
+    "node": ">=18.20.2",
     "yank-note": "^3.66.0"
   },
   "files": [

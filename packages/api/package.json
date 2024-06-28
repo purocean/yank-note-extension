@@ -17,7 +17,7 @@
     "link-yn-extension": "./bin/link-extension.js"
   },
   "engines": {
-    "node": ">=14.6.0"
+    "node": ">=18.20.2"
   },
   "files": [
     "bin",

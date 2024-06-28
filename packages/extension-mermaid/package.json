@@ -17,7 +17,7 @@
   "style": "./dist/style.css",
   "icon": "./icon.png",
   "engines": {
-    "node": ">=14.6.0",
+    "node": ">=18.20.2",
     "yank-note": "^3.41.0"
   },
   "files": [

@@ -16,7 +16,7 @@
   "main": "./main/index.js",
   "icon": "./icon.png",
   "engines": {
-    "node": ">=14.6.0",
+    "node": ">=18.20.2",
     "yank-note": "^3.66.0"
   },
   "requirements": {
