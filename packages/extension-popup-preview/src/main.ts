@@ -155,8 +155,10 @@ registerPlugin({
     ctx.editor.whenEditorReady().then(({ editor }) => {
       editor.onDidScrollChange(() => {
         const visibleRange = editor.getVisibleRanges()[0]
-        const startLine = Math.max(1, visibleRange.startLineNumber - 1)
-        updateViewScroll(startLine)
+        if (visibleRange) {
+          const startLine = Math.max(1, visibleRange.startLineNumber - 1)
+          updateViewScroll(startLine)
+        }
       })
     })
   }
