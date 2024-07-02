@@ -1,3 +1,12 @@
+## [1.2.3](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.2.2...extension-pop-preview-1.2.3) (2024-07-02)
+
+
+### Bug Fixes
+
+* **extension-popup-preview:** fix npe ([1bcc3c2](https://github.com/purocean/yank-note-extension/commit/1bcc3c27cfe1613ff2f6057b472b41dc75b2cf02))
+
+
+
 ## [1.2.2](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.2.1...extension-pop-preview-1.2.2) (2023-11-11)
 
 
