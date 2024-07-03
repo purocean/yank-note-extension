@@ -1,3 +1,12 @@
+## [1.7.1](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.7.0...extension-mermaid-1.7.1) (2024-07-03)
+
+
+### Bug Fixes
+
+* **extension-mermaid:** fix png export https://github.com/purocean/yank-note-extension/issues/27 ([e3328f9](https://github.com/purocean/yank-note-extension/commit/e3328f93d131195cfa818c4ba6f4d438495e0080))
+
+
+
 # [1.7.0](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.6.2...extension-mermaid-1.7.0) (2023-11-23)
 
 
