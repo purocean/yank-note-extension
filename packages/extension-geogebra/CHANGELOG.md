@@ -1,3 +1,7 @@
+## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-geogebra-1.1.0...extension-geogebra-1.1.1) (2024-07-03)
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-geogebra-1.0.0...extension-geogebra-1.1.0) (2024-07-03)
 
 
