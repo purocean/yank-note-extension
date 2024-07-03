@@ -1,6 +1,6 @@
 # GeoGebra
 
-Integrate GeoGebra into Yank Note.
+Integrate [GeoGebra](https://www.geogebra.org/) into Yank Note.
 
 ## Screenshots
 
