@@ -83,10 +83,6 @@ function initCustomEditor (ctx: Ctx) {
 registerPlugin({
   name: extensionName,
   register (ctx) {
-    if (!ctx.getPremium()) {
-      return
-    }
-
     ctx.markdown.registerPlugin(MarkdownItPlugin)
 
     initCustomEditor(ctx)

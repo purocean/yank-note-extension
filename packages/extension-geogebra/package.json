@@ -19,9 +19,7 @@
     "node": ">=18.20.2",
     "yank-note": "^3.72.1"
   },
-  "requirements": {
-    "premium": true
-  },
+  "requirements": {},
   "files": [
     "dist",
     "main",
