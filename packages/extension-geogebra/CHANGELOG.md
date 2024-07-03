@@ -1,0 +1,9 @@
+# 1.0.0 (2024-07-03)
+
+
+### Features
+
+* **extension-geogebra:** add geogebra extension ([110d5ad](https://github.com/purocean/yank-note-extension/commit/110d5ad01dea3ef1bfeeee28081ce26177471db7))
+
+
+
