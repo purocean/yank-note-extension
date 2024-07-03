@@ -24,8 +24,8 @@ class EditorContent extends BaseCustomEditorContent {
     }
 
     // https://geogebra.github.io/docs/reference/en/GeoGebra_App_Parameters/
-    const onChange = (api) => {
-      if (api.isSaved()) {
+    const onChange = (api, force = false) => {
+      if (api.isSaved() && !force) {
         return
       }
 
@@ -55,6 +55,12 @@ class EditorContent extends BaseCustomEditorContent {
         api.registerRenameListener(() => onChange(api))
         api.registerClearListener(() => onChange(api))
         api.registerUpdateListener(() => onChange(api))
+        api.registerClientListener((x) => {
+          this.logger.debug(x)
+          if (['undo', 'redo', 'setMode'].includes(x.type)) {
+            onChange(api, true)
+          }
+        })
       }
     }
     const applet = new (window as any).GGBApplet(params, true)
