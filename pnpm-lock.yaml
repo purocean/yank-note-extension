@@ -304,6 +304,48 @@ importers:
       vue: 3.2.33
       vue-tsc: 0.34.11_typescript@4.6.4
 
+  packages/extension-geogebra:
+    specifiers:
+      '@rollup/plugin-node-resolve': ^13.2.1
+      '@vitejs/plugin-vue': ^4.6.2
+      '@vue/eslint-config-standard': ^6.1.0
+      '@vue/eslint-config-typescript': ^10.0.0
+      '@yank-note/runtime-api': workspace:^3.72.0
+      conventional-changelog-cli: ^2.2.2
+      eslint: ^7.32.0
+      eslint-plugin-import: ^2.26.0
+      eslint-plugin-node: ^11.1.0
+      eslint-plugin-promise: ^6.0.0
+      eslint-plugin-vue: ^8.7.1
+      rollup-plugin-copy: ^3.5.0
+      rollup-plugin-terser: ^7.0.2
+      sass: ^1.56.1
+      terser: ^5.26.0
+      typescript: ^4.6.4
+      vite: ^3.2.3
+      vue: ^3.4.10
+      vue-tsc: ^0.34.11
+    devDependencies:
+      '@rollup/plugin-node-resolve': 13.3.0
+      '@vitejs/plugin-vue': 4.6.2_vite@3.2.3+vue@3.4.10
+      '@vue/eslint-config-standard': 6.1.0_tixguow53u6a3uudjr4t2dcshu
+      '@vue/eslint-config-typescript': 10.0.0_yzev4ryi2uowr3tzgilgj3i2em
+      '@yank-note/runtime-api': link:../api
+      conventional-changelog-cli: 2.2.2
+      eslint: 7.32.0
+      eslint-plugin-import: 2.26.0_eslint@7.32.0
+      eslint-plugin-node: 11.1.0_eslint@7.32.0
+      eslint-plugin-promise: 6.0.0_eslint@7.32.0
+      eslint-plugin-vue: 8.7.1_eslint@7.32.0
+      rollup-plugin-copy: 3.5.0
+      rollup-plugin-terser: 7.0.2
+      sass: 1.56.1
+      terser: 5.26.0
+      typescript: 4.6.4
+      vite: 3.2.3_sass@1.56.1+terser@5.26.0
+      vue: 3.4.10_typescript@4.6.4
+      vue-tsc: 0.34.11_typescript@4.6.4
+
   packages/extension-git-push:
     specifiers:
       '@rollup/plugin-node-resolve': ^13.2.1

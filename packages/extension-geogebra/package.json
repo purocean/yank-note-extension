@@ -1,0 +1,70 @@
+{
+  "name": "@yank-note/extension-geogebra",
+  "version": "0.0.1",
+  "displayName": "GeoGebra",
+  "description": "GeoGebra integration.",
+  "displayName_ZH-CN": "GeoGebra",
+  "description_ZH-CN": "GeoGebra 集成",
+  "author": "Yank Note",
+  "license": "AGPL-3.0",
+  "keywords": [],
+  "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/extension-geogebra",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/purocean/yank-note-extension.git"
+  },
+  "main": "./main/index.js",
+  "icon": "./icon.svg",
+  "engines": {
+    "node": ">=18.20.2",
+    "yank-note": "^3.72.1"
+  },
+  "requirements": {
+    "premium": true
+  },
+  "files": [
+    "dist",
+    "main",
+    "editor",
+    "themes",
+    "GeoGebra",
+    "*.md",
+    "icon.svg"
+  ],
+  "scripts": {
+    "link-extension": "link-yn-extension",
+    "unlink-extension": "link-yn-extension --unlink",
+    "dev:main": "vite build --mode main --watch",
+    "dev:editor": "vite build --mode editor --watch",
+    "build:main": "vue-tsc --noEmit && env NODE_ENV=production vite build --mode main",
+    "build:editor": "vue-tsc --noEmit && env NODE_ENV=production vite build --mode editor",
+    "build": "npm run build:main && npm run build:editor",
+    "lint": "vue-tsc --noEmit && yarn run eslint '{src,__tests__}/**/*.{js,ts,tsx,vue}'",
+    "version": "conventional-changelog -t extension-geogebra- --commit-path . -p angular -i CHANGELOG.md -s && npm run tag-version",
+    "tag-version": "git add . && git commit -m 'chore(release): bump extension-geogebra version' && git tag extension-geogebra-$npm_package_version",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.2.1",
+    "@vitejs/plugin-vue": "^4.6.2",
+    "@vue/eslint-config-standard": "^6.1.0",
+    "@vue/eslint-config-typescript": "^10.0.0",
+    "@yank-note/runtime-api": "workspace:^3.72.0",
+    "conventional-changelog-cli": "^2.2.2",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-vue": "^8.7.1",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "sass": "^1.56.1",
+    "terser": "^5.26.0",
+    "typescript": "^4.6.4",
+    "vite": "^3.2.3",
+    "vue": "^3.4.10",
+    "vue-tsc": "^0.34.11"
+  },
+  "dependencies": {
+  }
+}
