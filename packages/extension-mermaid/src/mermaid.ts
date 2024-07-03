@@ -6,7 +6,6 @@ const { registerHook, removeHook } = ctx
 const { debounce } = ctx.lib.lodash
 const { defineComponent, h, onBeforeUnmount, onMounted, ref, watch } = ctx.lib.vue
 const { downloadDataURL, getLogger, strToBase64 } = ctx.utils
-const DomToImage = ctx.lib.domtoimage
 
 const extensionId = __EXTENSION_ID__
 
@@ -80,8 +79,11 @@ const Mermaid = defineComponent({
       const width = imgRef.value.clientWidth
       const height = imgRef.value.clientHeight
 
-      const dataUrl = await DomToImage
-        .toPng(imgRef.value, { width: width * 2, height: height * 2 })
+      const canvas = document.createElement('canvas')
+      canvas.width = width * 2
+      canvas.height = height * 2
+      canvas.getContext('2d')?.drawImage(imgRef.value, 0, 0, canvas.width, canvas.height)
+      const dataUrl = canvas.toDataURL('image/png')
 
       downloadDataURL(`mermaid-${Date.now()}.png`, dataUrl)
     }
