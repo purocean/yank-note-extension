@@ -32,12 +32,20 @@ export declare function revealLine(startLine: number): Promise<HTMLElement | nul
  * @@param reveal
  * @param duration
  */
-export declare function highlightLine(line: number, reveal: boolean, duration?: number): Promise<void>;
+export declare function highlightLine(line: number, reveal: boolean, duration?: number): Promise<HTMLElement | null | undefined>;
+/**
+ * Highlight anchor.
+ * @param anchor
+ * @param reveal
+ * @param duration
+ */
+export declare function highlightAnchor(anchor: string, reveal: boolean, duration?: number): Promise<HTMLElement | null>;
 /**
  * Scroll to a position.
  * @param top
  */
 export declare function scrollTopTo(top: number): Promise<void>;
+export declare function getScrollTop(): number | undefined;
 export declare function getPreviewStyles(): string;
 /**
  * Get rendered HTML.

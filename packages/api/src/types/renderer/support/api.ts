@@ -62,7 +62,7 @@ export declare function copyFile(file: FileItem, newPath: string): Promise<ApiRe
  * @param file
  * @returns
  */
-export declare function deleteFile(file: FileItem): Promise<ApiResult<any>>;
+export declare function deleteFile(file: PathItem): Promise<ApiResult<any>>;
 export declare function fetchHistoryList(file: PathItem): Promise<{
     size: number;
     list: {

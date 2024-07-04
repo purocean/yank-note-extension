@@ -743,6 +743,11 @@ declare const languages: {
             results: string;
             'toast-no-more': string;
         };
+        'view-context-menu': {
+            'copy-image': string;
+            'delete-image': string;
+            'open-in-new-tab': string;
+        };
     };
     'zh-CN': {
         'app-name': string;
@@ -1487,6 +1492,11 @@ declare const languages: {
             results: string;
             'toast-no-more': string;
         };
+        'view-context-menu': {
+            'copy-image': string;
+            'delete-image': string;
+            'open-in-new-tab': string;
+        };
     };
     'zh-TW': {
         'app-name': string;
@@ -2230,6 +2240,11 @@ declare const languages: {
             };
             results: string;
             'toast-no-more': string;
+        };
+        'view-context-menu': {
+            'copy-image': string;
+            'delete-image': string;
+            'open-in-new-tab': string;
         };
     };
 };

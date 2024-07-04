@@ -34,6 +34,8 @@ export declare const DOM_ATTR_NAME: {
     SOURCE_LINE_END: string;
     ORIGIN_SRC: string;
     ORIGIN_HREF: string;
+    TARGET_REPO: string;
+    TARGET_PATH: string;
     LOCAL_IMAGE: string;
     ONLY_CHILD: string;
     TOKEN_IDX: string;

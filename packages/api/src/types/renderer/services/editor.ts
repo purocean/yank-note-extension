@@ -6,6 +6,12 @@ export type SimpleCompletionItem = {
     insertText: string;
     detail?: string;
     block?: boolean;
+    command?: {
+        id: string;
+        title: string;
+        tooltip?: string;
+        arguments?: any[];
+    };
 };
 export type SimpleCompletionItemTappers = (items: SimpleCompletionItem[]) => void;
 declare let monaco: typeof Monaco;
@@ -31,7 +37,6 @@ export declare function getEditor(): Monaco.editor.IStandaloneCodeEditor;
  * @param duration
  * @returns dispose function
  */
-export declare function highlightLine(line: number | [number, number], reveal: boolean, duration: number): Promise<void>;
 export declare function highlightLine(line: number | [number, number], reveal?: boolean, duration?: number): (() => void) | Promise<void>;
 /**
  * Get one indent

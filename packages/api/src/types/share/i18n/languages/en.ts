@@ -741,6 +741,11 @@ declare const data: {
         results: string;
         'toast-no-more': string;
     };
+    'view-context-menu': {
+        'copy-image': string;
+        'delete-image': string;
+        'open-in-new-tab': string;
+    };
 };
 export type BaseLanguage = typeof data;
 export default data;

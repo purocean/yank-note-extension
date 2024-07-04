@@ -1,5 +1,5 @@
 import { Optional } from 'utility-types';
-import type { Doc, PathItem } from '@fe/types';
+import type { Doc, PathItem, SwitchDocOpts } from '@fe/types';
 /**
  * Get absolutePath of document
  * @param doc
@@ -39,27 +39,27 @@ export declare function isEncrypted(doc?: Pick<Doc, 'path' | 'type'> | null): bo
  * @param docB
  * @returns
  */
-export declare function isSameRepo(docA?: Doc | null, docB?: Doc | null): boolean | null | undefined;
+export declare function isSameRepo(docA: Doc | null | undefined, docB: Doc | null | undefined): boolean | null | undefined;
 /**
  * Determine if it is the same document.
  * @param docA
  * @param docB
  * @returns
  */
-export declare function isSameFile(docA?: Doc | null, docB?: Doc | null): boolean | null | undefined;
+export declare function isSameFile(docA: PathItem | null | undefined, docB: PathItem | null | undefined): boolean | null | undefined;
 /**
  * Determine whether document B is the same as document A or a subordinate to directory A.
  * @param docA
  * @param docB
  * @returns
  */
-export declare function isSubOrSameFile(docA?: Doc | null, docB?: Doc | null): boolean | null | undefined;
+export declare function isSubOrSameFile(docA: PathItem | null | undefined, docB?: PathItem | null | undefined): boolean | null | undefined;
 /**
  * Get file URI.
  * @param doc
  * @returns
  */
-export declare function toUri(doc?: Doc | null): string;
+export declare function toUri(doc?: PathItem | null): string;
 /**
  * Create a document.
  * @param doc
@@ -88,7 +88,7 @@ export declare function duplicateDoc(originDoc: Doc, newPath?: string): Promise<
  * @param doc
  * @param skipConfirm
  */
-export declare function deleteDoc(doc: Doc, skipConfirm?: boolean): Promise<void>;
+export declare function deleteDoc(doc: PathItem, skipConfirm?: boolean): Promise<void>;
 /**
  * Move or rename a document.
  * @param doc
@@ -108,9 +108,9 @@ export declare function ensureCurrentFileSaved(): Promise<void>;
 /**
  * Switch document.
  * @param doc
- * @param force
+ * @param opts
  */
-export declare function switchDoc(doc: Doc | null, force?: boolean): Promise<void>;
+export declare function switchDoc(doc: Doc | null, opts?: SwitchDocOpts): Promise<void>;
 export declare function switchDocByPath(path: string): Promise<void>;
 /**
  * Mark document.
@@ -131,7 +131,7 @@ export declare function isMarked(doc: PathItem & {
  * @param doc
  * @param reveal
  */
-export declare function openInOS(doc: Doc, reveal?: boolean): Promise<void>;
+export declare function openInOS(doc: PathItem, reveal?: boolean): Promise<void>;
 /**
  * Show help file.
  * @param docName

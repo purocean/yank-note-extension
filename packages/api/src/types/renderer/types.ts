@@ -1,10 +1,25 @@
 import type { VNode } from 'vue';
 import type { Language, MsgPath } from '@share/i18n';
-import type { Doc, FileItem, Repo } from '@share/types';
+import type { Doc, FileItem, PathItem, Repo } from '@share/types';
 import type MarkdownIt from 'markdown-it';
 import type Token from 'markdown-it/lib/token';
 import type * as Monaco from 'monaco-editor';
 export * from '@share/types';
+export type PositionScrollState = {
+    editorScrollTop?: number;
+    viewScrollTop?: number;
+};
+export type PositionState = {
+    line: number;
+    column?: number;
+} | {
+    anchor: string;
+} | PositionScrollState;
+export type SwitchDocOpts = {
+    force?: boolean;
+    source?: 'markdown-link' | 'history-stack';
+    position?: PositionState | null;
+};
 export type TTitle = keyof {
     [K in MsgPath as `T_${K}`]: never;
 };
@@ -334,7 +349,7 @@ export interface BuildInSettings {
     'editor.font-size': number;
     'editor.font-ligatures': boolean;
     'editor.tab-size': 2 | 4;
-    'editor.ordered-list-completion': 'auto' | 'increase' | 'one';
+    'editor.ordered-list-completion': 'auto' | 'increase' | 'one' | 'off';
     'editor.minimap': boolean;
     'editor.line-numbers': 'on' | 'off' | 'relative' | 'interval';
     'editor.enable-preview': boolean;
@@ -539,7 +554,7 @@ export type BuildInHookTypes = {
         doc: Doc;
     };
     DOC_DELETED: {
-        doc: Doc;
+        doc: PathItem;
     };
     DOC_MOVED: {
         oldDoc: Doc;
@@ -547,6 +562,7 @@ export type BuildInHookTypes = {
     };
     DOC_PRE_SWITCH: {
         doc?: Doc | null;
+        opts?: SwitchDocOpts;
     };
     DOC_BEFORE_SAVE: {
         doc: Doc;
@@ -557,16 +573,24 @@ export type BuildInHookTypes = {
     };
     DOC_BEFORE_SWITCH: {
         doc?: Doc | null;
+        opts?: SwitchDocOpts;
     };
     DOC_SWITCHING: {
         doc?: Doc | null;
+        opts?: SwitchDocOpts;
     };
     DOC_SWITCHED: {
         doc: Doc | null;
+        opts?: SwitchDocOpts;
     };
     DOC_SWITCH_FAILED: {
         doc?: Doc | null;
         message: string;
+        opts?: SwitchDocOpts;
+    };
+    DOC_SWITCH_SKIPPED: {
+        doc?: Doc | null;
+        opts?: SwitchDocOpts;
     };
     DOC_CHANGED: {
         doc: Doc;
