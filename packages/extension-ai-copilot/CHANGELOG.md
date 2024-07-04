@@ -1,3 +1,12 @@
+# [1.17.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.16.2...extension-ai-copilot-1.17.0) (2024-07-04)
+
+
+### Features
+
+* **extension-ai-copilot:** add copy button to edit/generate widget ([f5911d8](https://github.com/purocean/yank-note-extension/commit/f5911d843486661851b50720e09e2abefe15cc04))
+
+
+
 ## [1.16.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.16.1...extension-ai-copilot-1.16.2) (2024-06-07)
 
 
