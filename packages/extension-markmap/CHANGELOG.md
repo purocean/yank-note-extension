@@ -1,3 +1,12 @@
+# [1.6.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.5.4...extension-markmap-1.6.0) (2024-07-04)
+
+
+### Features
+
+* **extension-markmap:** upgrade markmap to 0.17.0, supports wiki links ([1847b0e](https://github.com/purocean/yank-note-extension/commit/1847b0e52320a88e9e2e700738bf570e5cfcdab7))
+
+
+
 ## [1.5.4](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.5.3...extension-markmap-1.5.4) (2024-06-22)
 
 
