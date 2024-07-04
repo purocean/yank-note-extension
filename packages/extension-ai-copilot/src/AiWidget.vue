@@ -37,6 +37,7 @@
         <template v-else>
           <button class="small primary tr" @click="accept">{{ $t('accept') }}</button>
           <button class="small tr" @click="undo">{{ $t('discard') }}</button>
+          <button v-if="adapterType === 'edit'" class="small tr" @click="copy">{{ $t('copy') }}</button>
           <button class="small tr" @click="reload"><svg-icon name="sync-alt-solid" width="11px" height="13px" /></button>
         </template>
 
@@ -193,6 +194,20 @@ function undo () {
   editor.focus()
   editor.trigger('editor', 'undo', null)
   close()
+}
+
+function copy () {
+  if (props.adapterType !== 'edit') {
+    return
+  }
+
+  const editor = ctx.editor.getEditor()
+  const selection = editor.getSelection()
+  const model = editor.getModel()
+  if (selection && model) {
+    const text = model.getValueInRange(selection)
+    ctx.utils.copyText(text)
+  }
 }
 
 function reload () {
