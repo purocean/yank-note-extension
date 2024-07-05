@@ -72,9 +72,11 @@ function initCustomEditor (ctx: Ctx) {
       return buildEditorUrl(ctx.doc)
     }
 
-    createFile (node: Components.Tree.Node) {
-      return createFile(node)
-    }
+    createFile = 'registerDocCategory' in ctx.doc
+      ? undefined
+      : function (node: Components.Tree.Node) {
+        return createFile(node)
+      }
   }
 
   ctx.editor.registerCustomEditor(new GeoGebraEditor())
@@ -94,5 +96,20 @@ registerPlugin({
         { label: '/ []() GeoGebra Link', insertText: '[${2:GeoGebra}]($1){link-type="geogebra"}', block: true },
       )
     })
+
+    if ('registerDocCategory' in ctx.doc) {
+      ctx.doc.registerDocCategory({
+        category: 'geogebra',
+        displayName: 'GeoGebra',
+        types: [
+          {
+            id: 'geogebra-ggb',
+            displayName: 'GeoGebra File',
+            extension: ['.ggb'],
+            buildNewContent: () => ({ base64Content: FILE_BASE64 })
+          },
+        ]
+      })
+    }
   }
 })
