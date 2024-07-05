@@ -653,6 +653,21 @@ export type Renderer = {
     when: (env: RenderEnv) => boolean | Promise<boolean>;
     render(src: string, env: RenderEnv): string | VNode | VNode[];
 };
+type BuildNewContentResult = string | Blob | {
+    base64Content: string;
+};
+export type DocType = {
+    id: string;
+    extension: [string, ...string[]];
+    displayName: string;
+    plain?: boolean;
+    buildNewContent?: (filename: string) => Promise<BuildNewContentResult> | BuildNewContentResult;
+};
+export type DocCategory = {
+    category: string;
+    displayName: string;
+    types: DocType[];
+};
 export interface CodeRunner {
     name: string;
     order?: number;
@@ -684,6 +699,7 @@ export type BuildInIOCTypes = {
     EDITOR_CUSTOM_EDITOR: CustomEditor;
     RENDERERS: Renderer;
     CODE_RUNNER: CodeRunner;
+    DOC_CATEGORIES: DocCategory;
 };
 export type FrontMatterAttrs = {
     headingNumber?: boolean;

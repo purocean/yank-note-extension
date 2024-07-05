@@ -12,6 +12,13 @@ export declare function getCurrentLanguage(): Language;
  */
 export declare function t(path: MsgPath, ...args: string[]): string;
 /**
+ * Dynamic translate
+ * @param path
+ * @param args
+ * @returns
+ */
+export declare function $$t(path: MsgPath, ...args: string[]): string;
+/**
  * Get language
  * @returns
  */

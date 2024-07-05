@@ -1,5 +1,5 @@
 import { Optional } from 'utility-types';
-import type { Doc, PathItem, SwitchDocOpts } from '@fe/types';
+import { DocType, type Doc, type DocCategory, type PathItem, type SwitchDocOpts } from '@fe/types';
 /**
  * Get absolutePath of document
  * @param doc
@@ -21,6 +21,7 @@ export declare function createCurrentDocChecker(): {
  * @returns
  */
 export declare function isMarkdownFile(doc: Doc): boolean;
+export declare function supported(doc: Doc): boolean;
 /**
  * Check if the document is out of a repository.
  * @param doc
@@ -146,3 +147,26 @@ export declare function showHistory(doc: Doc): void;
  * hide history panel
  */
 export declare function hideHistory(): void;
+/**
+ * register document category
+ * @param docCategory
+ */
+export declare function registerDocCategory(docCategory: DocCategory): void;
+/**
+ * remove document category
+ * @param category
+ */
+export declare function removeDocCategory(category: string): void;
+/**
+ * get all document categories
+ * @returns
+ */
+export declare function getAllDocCategories(): DocCategory[];
+/**
+ * resolve document type
+ * @param filename
+ */
+export declare function resolveDocType(filename: string): {
+    type: DocType;
+    category: DocCategory;
+} | null | undefined;

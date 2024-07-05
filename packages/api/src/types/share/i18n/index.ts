@@ -36,6 +36,8 @@ declare const languages: {
         'learn-more': string;
         default: string;
         print: string;
+        'markdown-file': string;
+        'encrypted-markdown-file': string;
         premium: {
             confetti: string;
             'need-purchase': string;
@@ -785,6 +787,8 @@ declare const languages: {
         'learn-more': string;
         default: string;
         print: string;
+        'markdown-file': string;
+        'encrypted-markdown-file': string;
         premium: {
             confetti: string;
             'need-purchase': string;
@@ -1534,6 +1538,8 @@ declare const languages: {
         'learn-more': string;
         default: string;
         print: string;
+        'markdown-file': string;
+        'encrypted-markdown-file': string;
         premium: {
             confetti: string;
             'need-purchase': string;
