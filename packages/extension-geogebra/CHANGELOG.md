@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-geogebra-1.1.2...extension-geogebra-1.2.0) (2024-07-05)
+
+
+### Features
+
+* **extension-geogebra:** support runtime 3.73.0 ([0fa32ea](https://github.com/purocean/yank-note-extension/commit/0fa32ea252cae1c128554a7662fa7f61fa7ca54d))
+
+
+
 ## [1.1.2](https://github.com/purocean/yank-note-extension/compare/extension-geogebra-1.1.1...extension-geogebra-1.1.2) (2024-07-03)
 
 
