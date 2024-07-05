@@ -102,9 +102,11 @@ registerPlugin({
         return buildEditorUrl(ctx.doc)
       }
 
-      createFile (node: Components.Tree.Node) {
-        return createFile(node)
-      }
+      createFile = 'registerDocCategory' in ctx.doc
+        ? undefined
+        : function (node: Components.Tree.Node) {
+          return createFile(node)
+        }
     }
 
     ctx.view.tapContextMenus((items, e) => {
@@ -182,5 +184,32 @@ registerPlugin({
         schema.properties[SETTING_KEY_FONT_HANDWRITING].enum = [''].concat(fonts)
       })
     })
+
+    if ('registerDocCategory' in ctx.doc) {
+      ctx.doc.registerDocCategory({
+        category: 'excalidraw',
+        displayName: 'Excalidraw',
+        types: [
+          {
+            id: 'excalidraw-excalidraw',
+            displayName: 'Excalidraw File',
+            extension: ['.excalidraw'] as [FileTypes],
+            buildNewContent: () => FILE_JSON
+          },
+          {
+            id: 'excalidraw-svg',
+            displayName: 'Excalidraw SVG',
+            extension: ['.excalidraw.svg'] as [FileTypes],
+            buildNewContent: () => FILE_SVG
+          },
+          {
+            id: 'excalidraw-png',
+            displayName: 'Excalidraw PNG',
+            extension: ['.excalidraw.png'] as [FileTypes],
+            buildNewContent: () => ({ base64Content: FILE_PNG })
+          }
+        ]
+      })
+    }
   }
 })
