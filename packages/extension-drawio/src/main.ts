@@ -1,6 +1,6 @@
 import { BaseCustomEditor, registerPlugin } from '@yank-note/runtime-api'
 import type { Components, CustomEditorCtx, Doc } from '@yank-note/runtime-api/types/types/renderer/types'
-import { buildEditorUrl, createDrawioFile } from './lib'
+import { buildEditorUrl, createDrawioFile, FILE_PNG, FILE_SVG, FILE_XML } from './lib'
 import { MarkdownItPlugin } from './drawio'
 import i18n from './i18n'
 
@@ -8,10 +8,12 @@ import './style.css'
 
 const extensionId = __EXTENSION_ID__
 
+type FileTypes = '.drawio' | '.drawio.svg' | '.drawio.png'
+
 registerPlugin({
   name: extensionId,
   register: ctx => {
-    const supportedFileTypes = ['.drawio', '.drawio.svg', '.drawio.png']
+    const supportedFileTypes: FileTypes[] = ['.drawio', '.drawio.svg', '.drawio.png']
     ctx.markdown.registerPlugin(MarkdownItPlugin)
 
     ctx.registerHook('VIEW_ON_GET_HTML_FILTER_NODE', ({ node }) => {
@@ -44,9 +46,11 @@ registerPlugin({
         return buildEditorUrl(ctx.doc)
       }
 
-      createFile (node: Components.Tree.Node) {
-        return createDrawioFile(node)
-      }
+      createFile = 'registerDocCategory' in ctx.doc
+        ? undefined
+        : function (node: Components.Tree.Node) {
+          return createDrawioFile(node)
+        }
     }
 
     const editor = new DrawioEditor()
@@ -88,5 +92,32 @@ registerPlugin({
         )
       }
     })
+
+    if ('registerDocCategory' in ctx.doc) {
+      ctx.doc.registerDocCategory({
+        category: 'drawio',
+        displayName: 'Drawio',
+        types: [
+          {
+            id: 'drawio-drawio',
+            displayName: 'Drawio File',
+            extension: ['.drawio'] as [FileTypes],
+            buildNewContent: () => FILE_XML
+          },
+          {
+            id: 'drawio-svg',
+            displayName: 'Drawio SVG',
+            extension: ['.drawio.svg'] as [FileTypes],
+            buildNewContent: () => FILE_SVG
+          },
+          {
+            id: 'drawio-png',
+            displayName: 'Drawio PNG',
+            extension: ['.drawio.png'] as [FileTypes],
+            buildNewContent: () => ({ base64Content: FILE_PNG })
+          }
+        ]
+      })
+    }
   }
 })

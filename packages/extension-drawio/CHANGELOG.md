@@ -1,3 +1,12 @@
+# [2.4.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.3.0...extension-drawio-2.4.0) (2024-07-05)
+
+
+### Features
+
+* **extension-drawio:** support runtime 3.73.0 ([c02a83f](https://github.com/purocean/yank-note-extension/commit/c02a83f64354485817acb6305477fc3325ae0361))
+
+
+
 # [2.3.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.2.0...extension-drawio-2.3.0) (2024-05-23)
 
 
