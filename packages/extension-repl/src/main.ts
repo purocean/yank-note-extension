@@ -6,10 +6,12 @@ import appSrc from './vue/template/src/App.vue?raw'
 
 const extensionName = __EXTENSION_ID__
 
+type FileTypes = '.vueapp.zip' | '.reactapp.zip'
+
 function initCustomEditor (ctx: Ctx) {
   async function createFile (node: Doc) {
     const currentPath = node.path
-    const fileExt = ctx.lib.vue.ref<'.vueapp.zip' | '.reactapp.zip'>('.vueapp.zip')
+    const fileExt = ctx.lib.vue.ref<FileTypes>('.vueapp.zip')
     const { h } = ctx.lib.vue
 
     let filename = await ctx.ui.useModal().input({
@@ -82,9 +84,11 @@ function initCustomEditor (ctx: Ctx) {
       return buildEditorUrl(ctx.doc)
     }
 
-    createFile (node: Components.Tree.Node) {
-      return createFile(node)
-    }
+    createFile = 'registerDocCategory' in ctx.doc
+      ? undefined
+      : function (node: Components.Tree.Node) {
+        return createFile(node)
+      }
   }
 
   ctx.editor.registerCustomEditor(new ReplEditor())
@@ -111,5 +115,22 @@ registerPlugin({
         },
       )
     })
+
+    if ('registerDocCategory' in ctx.doc) {
+      ctx.doc.registerDocCategory({
+        category: 'repl',
+        displayName: 'Repl Application',
+        types: [
+          {
+            id: 'repl-vueapp',
+            displayName: i18n.$$t('vue-file'),
+            extension: ['.vueapp.zip'] as [FileTypes],
+            buildNewContent: async () => {
+              return (await fetch(getEditorPath('vue-project.zip'))).blob()
+            }
+          },
+        ]
+      })
+    }
   }
 })
