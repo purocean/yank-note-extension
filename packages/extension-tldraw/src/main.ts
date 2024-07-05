@@ -97,9 +97,11 @@ registerPlugin({
         return buildEditorUrl(ctx.doc)
       }
 
-      createFile (node: Components.Tree.Node) {
-        return createFile(node)
-      }
+      createFile = 'registerDocCategory' in ctx.doc
+        ? undefined
+        : function (node: Components.Tree.Node) {
+          return createFile(node)
+        }
     }
 
     ctx.view.tapContextMenus((items, e) => {
@@ -151,5 +153,32 @@ registerPlugin({
     })
 
     ctx.editor.registerCustomEditor(new TldrawEditor())
+
+    if ('registerDocCategory' in ctx.doc) {
+      ctx.doc.registerDocCategory({
+        category: 'tldraw',
+        displayName: 'Tldraw',
+        types: [
+          {
+            id: 'tldraw-tldr',
+            displayName: 'Tldraw File',
+            extension: ['.tldr'] as [FileTypes],
+            buildNewContent: () => FILE_JSON
+          },
+          // {
+          //   id: 'tldraw-svg',
+          //   displayName: 'Tldraw SVG',
+          //   extension: ['.tldraw.svg'] as [FileTypes],
+          //   buildNewContent: () => FILE_SVG
+          // },
+          // {
+          //   id: 'tldraw-png',
+          //   displayName: 'Tldraw PNG',
+          //   extension: ['.tldraw.png'] as [FileTypes],
+          //   buildNewContent: () => ({ base64Content: FILE_PNG })
+          // }
+        ]
+      })
+    }
   }
 })
