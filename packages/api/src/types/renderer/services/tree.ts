@@ -18,6 +18,15 @@ export declare function tapContextMenus(fun: BuildContextMenu): void;
  */
 export declare function getContextMenuItems(node: Components.Tree.Node, vueCtx: VueCtx): Components.ContextMenu.Item[];
 /**
+ * Add a node action buttons processor.
+ * @param fun
+ */
+export declare function tapNodeActionButtons(fun: (btns: Components.Tree.NodeActionBtn[], currentNode: Components.Tree.Node) => void): void;
+/**
+ * Get node action buttons.
+ */
+export declare function getNodeActionButtons(currentNode: Components.Tree.Node): Components.Tree.NodeActionBtn[];
+/**
  * Refresh file tree.
  */
 export declare function refreshTree(): Promise<void>;
