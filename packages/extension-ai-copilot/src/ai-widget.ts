@@ -3,6 +3,7 @@ import type { editor } from '@yank-note/runtime-api/types/types/third-party/mona
 import { createApp, type App, h, defineComponent } from 'vue'
 import AIWidget from './AIWidget.vue'
 import directives from './directives'
+import { state } from './core'
 
 let widget: App | null = null
 let zone: (editor.IViewZone & { id: string }) | null = null
@@ -12,6 +13,10 @@ export function widgetIsVisible () {
 }
 
 export function createWidget (type: 'edit' | 'generate' | 'text2image', runImmediately = false) {
+  if (!state.enable) {
+    return
+  }
+
   if (zone) {
     disposeWidget()
   }

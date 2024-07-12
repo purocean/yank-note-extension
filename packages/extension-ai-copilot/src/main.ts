@@ -42,7 +42,7 @@ registerPlugin({
         ctx.editor.getEditor().getAction('editor.action.inlineSuggest.trigger')?.run()
         ctx.editor.getEditor().focus()
       },
-      when: () => ctx.store.state.showEditor && !ctx.store.state.presentation,
+      when: () => state.enable && ctx.store.state.showEditor && !ctx.store.state.presentation,
     })
 
     ctx.action.registerAction({
@@ -54,7 +54,7 @@ registerPlugin({
         const selection = editor.getSelection()!
         createWidget(selection.isEmpty() ? 'generate' : 'edit', runImmediately)
       },
-      when: () => ctx.store.state.showEditor && !ctx.store.state.presentation,
+      when: () => state.enable && ctx.store.state.showEditor && !ctx.store.state.presentation,
     })
 
     ctx.action.registerAction({
@@ -64,7 +64,7 @@ registerPlugin({
       handler: async (runImmediately = false) => {
         createWidget('text2image', runImmediately)
       },
-      when: () => ctx.store.state.showEditor && !ctx.store.state.presentation,
+      when: () => state.enable && ctx.store.state.showEditor && !ctx.store.state.presentation,
     })
 
     ctx.statusBar.tapMenus((menus) => {
