@@ -12,15 +12,19 @@ export class GithubCopilotCompletionAdapter implements CompletionAdapter {
   defaultApiPoint = 'http://127.0.0.1:3223/calculateInlineCompletions'
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.GithubCopilotCompletionAdapter')
 
+  monaco = ctx.editor.getMonaco()
+
   state = reactive({
     context: '',
     apiPoint: this.defaultApiPoint,
+    autoTrigger: true,
   })
 
   panel: Panel = {
     type: 'form',
     items: [
       { type: 'input', key: 'apiPoint', label: 'Api Point', defaultValue: this.defaultApiPoint, props: { placeholder: this.defaultApiPoint }, hasError: v => !v },
+      { type: 'checkbox', key: 'autoTrigger', label: 'Auto Trigger', description: 'Auto trigger completion when typing', defaultValue: true },
     ],
   }
 
@@ -34,7 +38,12 @@ export class GithubCopilotCompletionAdapter implements CompletionAdapter {
   }
 
   async fetchCompletionResults (_model: editor.ITextModel, position: Position, context: languages.InlineCompletionContext, cancelToken: CancellationToken): Promise<languages.InlineCompletions> {
-    if (!state.enable) {
+    if (!state.enable || !this.state.apiPoint) {
+      return { items: [] }
+    }
+
+    // Only trigger when the triggerKind is Explicit if autoTrigger is disabled
+    if (!this.state.autoTrigger && context.triggerKind !== this.monaco.languages.InlineCompletionTriggerKind.Explicit) {
       return { items: [] }
     }
 

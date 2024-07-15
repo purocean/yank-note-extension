@@ -18,13 +18,19 @@
                   <input style="outline: none" type="number" max="8000" min="0" v-model.number="(adapterState as any)._contextLength" />
                 </div>
               </template>
-              <label v-if="type === 'edit'" style="display: flex; align-items: center;">
-                <input type="checkbox" v-model="adapterState.withContext" style="width: fit-content; margin-right: 4px;" />
+              <label v-if="type === 'edit'" class="checkbox">
+                <input type="checkbox" v-model="adapterState.withContext" />
                 {{ i18n.$t.value('with-context') }}
               </label>
             </div>
             <div v-else-if="item.type === 'selection'">
               <textarea v-model="adapterState.selection" v-bind="item.props" />
+            </div>
+            <div v-else-if="item.type === 'checkbox'">
+              <label class="checkbox">
+                <input type="checkbox" v-model="adapterState[item.key]" v-bind="item.props" />
+                <span>{{ item.description }}</span>
+              </label>
             </div>
             <div v-else style="position: relative">
               <div class="input" :title="(item as any).description">
@@ -227,6 +233,16 @@ watchEffect(() => {
   .input {
     display: flex;
     justify-content: space-between;
+
+  }
+
+  label.checkbox {
+    display: flex;
+    align-items: center;
+    input {
+      width: fit-content;
+      margin-right: 4px;
+    }
   }
 
   input, select {

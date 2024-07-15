@@ -12,6 +12,7 @@ export type FormItem = CustomVueComponent
   | { type: 'textarea' | 'input', key: string, label: string, description?: string, hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
   | { type: 'select', key: string, label: string, options: {label: string, value: string}[], description?: string, hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
   | { type: 'range', key: string, label: string, max: number, min: number, step: number, description?: string, hasError?: (val: string) => boolean, defaultValue?: number, props?: any }
+  | { type: 'checkbox', key: string, label: string, description: string, hasError?: (val: boolean) => boolean, defaultValue?: boolean, props?: any }
 
 export type Panel = CustomVueComponent | {
   type: 'form',
