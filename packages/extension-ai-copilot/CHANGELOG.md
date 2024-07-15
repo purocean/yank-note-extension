@@ -1,3 +1,12 @@
+# [1.18.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.17.1...extension-ai-copilot-1.18.0) (2024-07-15)
+
+
+### Features
+
+* **extension-ai-copilot:** add auto trigger option to GithubCopilotCompletionAdapter ([8935b25](https://github.com/purocean/yank-note-extension/commit/8935b254b6f6af2804b3b7c575193ccd321eefe7))
+
+
+
 ## [1.17.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.17.0...extension-ai-copilot-1.17.1) (2024-07-12)
 
 
