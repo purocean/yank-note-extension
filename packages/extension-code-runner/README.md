@@ -11,7 +11,6 @@ The first line of the code block needs to contain the string `--run--`.
 ```js
 // --run--
 await new Promise(r => setTimeout(r, 500))
-ctx.ui.useToast().show("info", "HELLOWORLD!")
 console.log('HELLOWORLD')
 ```
 
