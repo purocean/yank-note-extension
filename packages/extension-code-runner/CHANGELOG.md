@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-code-runner-1.3.0...extension-code-runner-1.4.0) (2024-07-21)
+
+
+### Features
+
+* **extension-code-runner:** add support for --output-html-- flag in code execution ([ab9a3ec](https://github.com/purocean/yank-note-extension/commit/ab9a3ec5891bb09041b83461fb24e4c015dee5c6))
+
+
+
 # [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-code-runner-1.2.0...extension-code-runner-1.3.0) (2024-06-18)
 
 
