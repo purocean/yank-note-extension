@@ -29,7 +29,7 @@ registerPlugin({
   register (ctx) {
     function getCmd (language: string, code: string) {
       const firstLine = code.split('\n')[0].trim()
-      const customCmd = firstLine.replace(/^.*--run--/, '').trim()
+      const customCmd = firstLine.replace(/^.*--run--/, '').trim().replace('--output-html--', '')
       if (customCmd) {
         return customCmd
       }
@@ -66,9 +66,12 @@ registerPlugin({
           }
         }
 
+        const firstLine = code.split('\n')[0].trim()
+        const outputHtml = firstLine.includes('--output-html--')
+
         const reader: any = await ctx.api.runCode(cmd, code, { ...opts, stream: true })
         return {
-          type: 'plain',
+          type: outputHtml ? 'html' : 'plain',
           value: reader
         }
       },
