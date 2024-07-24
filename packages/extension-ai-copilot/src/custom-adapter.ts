@@ -161,33 +161,28 @@ return [text]`
     const buildRequestFn = new AsyncFunction('data', this.state.buildRequestCode)
     const handleResponseFn = new AsyncFunction('data', this.state.handleResponseCode)
 
-    try {
-      const data = {
-        context: this.state.context,
-        system: this.state.systemMessage,
-        editorContext,
-        state: this.state,
-      }
-
-      const request = await buildRequestFn.apply(this, [data])
-      this.logger.debug('Request:', request)
-
-      if (!request) {
-        return { items: [] }
-      }
-
-      const { url, headers, body, method } = request
-
-      const controller = new AbortController()
-      cancelToken.onCancellationRequested(() => controller.abort())
-      const response = await ctx.api.proxyFetch(url, { method, headers, body, signal: controller.signal, proxy: this.state.proxy })
-      this.logger.debug('Response:', response)
-
-      res = await handleResponseFn.apply(this, [{ res: response }])
-    } catch (error) {
-      ctx.ui.useToast().show('warning', error.message)
-      throw error
+    const data = {
+      context: this.state.context,
+      system: this.state.systemMessage,
+      editorContext,
+      state: this.state,
     }
+
+    const request = await buildRequestFn.apply(this, [data])
+    this.logger.debug('Request:', request)
+
+    if (!request) {
+      return { items: [] }
+    }
+
+    const { url, headers, body, method } = request
+
+    const controller = new AbortController()
+    cancelToken.onCancellationRequested(() => controller.abort())
+    const response = await ctx.api.proxyFetch(url, { method, headers, body, signal: controller.signal, proxy: this.state.proxy })
+    this.logger.debug('Response:', response)
+
+    res = await handleResponseFn.apply(this, [{ res: response }])
 
     const range = new this.monaco.Range(
       position.lineNumber,
