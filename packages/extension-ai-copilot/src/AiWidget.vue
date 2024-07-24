@@ -272,7 +272,7 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .ai-widget {
-  width: 500px;
+  width: 464px;
   position: relative;
   overflow: hidden;
   padding: 2px;
