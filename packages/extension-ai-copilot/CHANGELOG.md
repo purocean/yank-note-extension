@@ -1,3 +1,12 @@
+## [1.19.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.19.0...extension-ai-copilot-1.19.1) (2024-07-24)
+
+
+### Bug Fixes
+
+* **extension-ai-copilot:** avoid cancel error toast ([5c5e4c5](https://github.com/purocean/yank-note-extension/commit/5c5e4c517d52273f6d2bdebbea9e112da47f7f7c))
+
+
+
 # [1.19.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.18.0...extension-ai-copilot-1.19.0) (2024-07-24)
 
 
