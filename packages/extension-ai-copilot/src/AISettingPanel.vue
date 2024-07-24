@@ -98,7 +98,7 @@ const adapterRes = adapter.value.activate()
 const adapterState = adapterRes.state
 
 if (adapterState) {
-  adapterState._contextLength = props.type === 'completion' ? 256 : 0
+  adapterState._contextLength = 256
   Object.keys(state.adapterState[adapterKey.value] || {}).forEach(key => {
     adapterState[key] = state.adapterState[adapterKey.value][key]
   })
