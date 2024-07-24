@@ -27,13 +27,7 @@ const API_ACCOUNT_ID = 'YOUR_ACCOUNT_ID_HERE'
 const API_TOKEN = 'YOUR_API_TOKEN_HERE'
 
 // data is the input object
-const { context, system, editorContext } = data
-
-// 0: Automatic, Completion was triggered automatically while editing.
-// 1: Explicit, Completion was triggered explicitly by a user gesture.
-if (editorContext.triggerKind !== 1) {
-  return
-}
+const { context, system } = data
 
 const messages = [
   {
@@ -68,13 +62,7 @@ return [text]
 `
 
  defaultOpenAIBuildRequestCode = `// data is the input object
-const { context, system, editorContext, state } = data
-
-// 0: Automatic, Completion was triggered automatically while editing.
-// 1: Explicit, Completion was triggered explicitly by a user gesture.
-if (editorContext.triggerKind !== 1) {
-  return
-}
+const { context, system, state } = data
 
 const messages = [
   {
@@ -116,6 +104,7 @@ return [text]`
     systemMessage: this.defaultSystemMessage,
     buildRequestCode: this.defaultBuildRequestCode,
     handleResponseCode: this.defaultHandleResponseCode,
+    autoTrigger: false,
   })
 
   constructor (adapter: CustomAdapter) {
@@ -130,11 +119,12 @@ return [text]`
       type: 'form',
       items: [
         { type: 'context', key: 'context', label: i18n.t('context') },
+        { type: 'checkbox', key: 'autoTrigger', label: i18n.t('auto-trigger'), description: i18n.t('auto-trigger-completion-desc'), defaultValue: false },
         { type: 'textarea', key: 'systemMessage', label: i18n.t('system-message'), defaultValue: this.defaultSystemMessage },
         ...(adapter.preset === 'openai'
           ? [
             { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultApiPoint }, defaultValue: defaultApiPoint, hasError: v => !v },
-            { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
+            { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' } },
             { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
           ] as FormItem[]
           : []),
@@ -159,6 +149,11 @@ return [text]`
 
   async fetchCompletionResults (_model: editor.ITextModel, position: Position, editorContext: languages.InlineCompletionContext, cancelToken: CancellationToken) {
     if (!this.state.context) {
+      return { items: [] }
+    }
+
+    // Only trigger when the triggerKind is Explicit if autoTrigger is disabled
+    if (!this.state.autoTrigger && editorContext.triggerKind !== this.monaco.languages.InlineCompletionTriggerKind.Explicit) {
       return { items: [] }
     }
 
@@ -358,7 +353,7 @@ return { delta }`
         ...(adapter.preset === 'openai'
           ? [
             { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultApiPoint }, defaultValue: defaultApiPoint, hasError: v => !v },
-            { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' }, hasError: v => !v },
+            { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' } },
             { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
           ] as FormItem[]
           : []),
