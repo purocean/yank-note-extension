@@ -39,7 +39,17 @@ export class CompletionProvider implements Monaco.languages.InlineCompletionsPro
     token = globalCancelTokenSource.value.token
 
     if (context.triggerKind === 0) { // auto trigger
-      await ctx.utils.sleep(1500)
+      const res = await new Promise<boolean>(resolve => {
+        const timer = setTimeout(() => resolve(true), 1500)
+        token.onCancellationRequested(() => {
+          clearTimeout(timer)
+          resolve(false)
+        })
+      })
+
+      if (!res) {
+        return { items: [] }
+      }
     }
 
     if (!this.enabled()) {
