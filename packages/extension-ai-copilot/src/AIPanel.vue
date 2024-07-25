@@ -90,7 +90,7 @@ const pined = computed({
   get () {
     return !!state.aiPanelPined
   },
-  set (val) {
+  set (val: boolean) {
     state.aiPanelPined = val
   }
 })
@@ -177,6 +177,8 @@ async function createCustomAdapter () {
     hint: i18n.t('adapter-name'),
     value: state.type === 'text2image' ? 'Workers AI' : 'Adapter',
     modalWidth: '500px',
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     maxlength: 32,
     component: state.type === 'text2image'
       ? undefined
