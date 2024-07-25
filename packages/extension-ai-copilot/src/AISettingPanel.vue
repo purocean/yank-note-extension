@@ -60,7 +60,7 @@
                 name="sync-alt-solid"
                 width="13px"
                 height="13px"
-                @click="adapterState[item.key] = item.defaultValue"
+                @click="resetToDefault(item)"
               />
             </div>
         </div>
@@ -168,6 +168,15 @@ function showHistoryMenu (item: FormItem) {
       adapterState![item.key] = val
     }
   })
+}
+
+async function resetToDefault (item: FormItem) {
+  if ('defaultValue' in item && await ctx.ui.useModal().confirm({
+    title: i18n.t('reset-to-default'),
+    content: i18n.t('reset-to-default-value-confirm'),
+  })) {
+    adapterState[item.key] = item.defaultValue
+  }
 }
 
 watchEffect(buildContent)

@@ -60,6 +60,8 @@ export const i18n = ctx.i18n.createI18n({
     'api-token': 'API Token',
     'auto-trigger': 'Auto Trigger',
     'auto-trigger-completion-desc': 'Auto trigger completion when typing',
+    'reset-to-default': 'Reset to default',
+    'reset-to-default-value-confirm': 'Are you sure you want to reset to default value?',
   },
   'zh-CN': {
     'ai-complete': '使用 AI Copilot 自动补全',
@@ -102,6 +104,8 @@ export const i18n = ctx.i18n.createI18n({
     'api-token': 'API 密钥',
     'auto-trigger': '自动触发',
     'auto-trigger-completion-desc': '输入时自动触发补全',
+    'reset-to-default': '重置为默认值',
+    'reset-to-default-value-confirm': '确定要重置为默认值吗？',
   }
 })
 
