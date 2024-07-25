@@ -75,7 +75,7 @@
 
 <script lang="ts" setup>
 import { computed, unref, defineProps, watchEffect, onBeforeUnmount, watch, onMounted } from 'vue'
-import { CURSOR_PLACEHOLDER, i18n, showInstructionHistoryMenu, state } from './core'
+import { CURSOR_PLACEHOLDER, buildAdapterStateKey, i18n, showInstructionHistoryMenu, state } from './core'
 import { ctx } from '@yank-note/runtime-api'
 import { Adapter, AdapterType, FormItem } from './adapter'
 
@@ -89,7 +89,7 @@ const props = defineProps<{
   type: AdapterType
 }>()
 
-const adapterKey = computed(() => props.type + '-' + state.adapter[props.type])
+const adapterKey = computed(() => buildAdapterStateKey(props.type, state.adapter[props.type]))
 
 const adapter = computed(() => props.adapter)
 const panel = computed(() => unref(adapter.value.panel))

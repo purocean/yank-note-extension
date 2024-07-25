@@ -145,18 +145,54 @@ async function createCustomAdapter () {
 
   const adapterPreset = ref<'openai' | 'custom'>(state.type === 'text2image' ? 'custom' : 'openai')
 
+  type AdapterParamsName = 'ollama' | 'kimi' | 'dashscope' | 'openai' | 'custom'
+
+  const adapterParamsName = ref<AdapterParamsName>('ollama')
+
+  const adapterOpenAIPresets = {
+    ollama: {
+      displayName: 'Ollama',
+      params: { model: 'llama3.1', endpoint: 'http://127.0.0.1:11434/v1/chat/completions' },
+    },
+    kimi: {
+      displayName: 'Kimi',
+      params: { model: 'moonshot-v1-8k', endpoint: 'https://api.moonshot.cn/v1/chat/completions' },
+    },
+    dashscope: {
+      displayName: '阿里云-灵积',
+      params: { model: 'qwen-turbo', endpoint: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' },
+    },
+    openai: {
+      displayName: 'OpenAI',
+      params: { model: 'gpt-3.5-turbo', endpoint: 'https://api.openai.com/v1/chat/completions' },
+    },
+    custom: {
+      displayName: i18n.t('custom'),
+      params: { model: '', endpoint: '' },
+    },
+  }
+
   const name = await ctx.ui.useModal().input({
     title: i18n.t('create-custom-adapter'),
     hint: i18n.t('adapter-name'),
-    value: 'Workers AI',
+    value: state.type === 'text2image' ? 'Workers AI' : 'Adapter',
+    modalWidth: '500px',
     maxlength: 32,
     component: state.type === 'text2image'
       ? undefined
-      : h('div', [
+      : h('div', { style: 'margin-top: 16px' }, [
         h('div', { style: 'margin: 8px 0' }, [
           i18n.t('custom-adapter-type'),
           h('label', { style: 'margin-left: 8px' }, [h('input', { type: 'radio', name: 'type', value: 'openai', checked: adapterPreset.value === 'openai', onChange: () => { adapterPreset.value = 'openai' } }), ' ' + i18n.t('openai-compatible')]),
-          h('label', { style: 'margin: 0 8px' }, [h('input', { type: 'radio', name: 'type', value: 'custom', checked: adapterPreset.value === 'custom', onChange: () => { adapterPreset.value = 'custom' } }), ' ' + i18n.t('custom')]),
+          h('label', { style: 'margin: 0 8px' }, [h('input', { type: 'radio', name: 'type', value: 'custom', checked: adapterPreset.value === 'custom', onChange: () => { adapterPreset.value = 'custom' } }), ' ' + i18n.t('custom') + '-Workers AI']),
+        ]),
+        h('div', { style: 'margin: 8px 0' }, [
+          i18n.t('custom-adapter-params'),
+          h(
+            'select',
+            { style: 'margin-left: 8px', value: adapterParamsName.value, onChange: e => { adapterParamsName.value = e.target.value as AdapterParamsName } },
+            Object.entries(adapterOpenAIPresets).map(([key, { displayName }]) => h('option', { value: key }, displayName))
+          ),
         ]),
       ]),
 
@@ -170,7 +206,10 @@ async function createCustomAdapter () {
     return
   }
 
-  addCustomAdapters({ name, type: state.type, preset: adapterPreset.value })
+  addCustomAdapters(
+    { name, type: state.type, preset: adapterPreset.value },
+    adapterOpenAIPresets[adapterParamsName.value || 'custom'].params,
+  )
   triggerRef(pined)
   setTimeout(() => {
     state.adapter[state.type] = name

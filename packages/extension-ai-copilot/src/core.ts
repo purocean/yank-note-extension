@@ -51,6 +51,7 @@ export const i18n = ctx.i18n.createI18n({
     'remove-adapter-confirm': 'Are you sure you want to remove the [%s] adapter?',
     'no-adapters': 'No adapters available',
     'custom-adapter-type': 'Adapter type',
+    'custom-adapter-params': 'Adapter params',
     'openai-compatible': 'OpenAI Compatible',
     'custom': 'Custom',
     'endpoint': 'Endpoint',
@@ -92,6 +93,7 @@ export const i18n = ctx.i18n.createI18n({
     'remove-adapter-confirm': '确定要移除 [%s] 适配器吗？',
     'no-adapters': '无可用适配器',
     'custom-adapter-type': '适配器类型',
+    'custom-adapter-params': '适配器参数',
     'openai-compatible': 'OpenAI 兼容',
     'custom': '自定义',
     'endpoint': '端点',
@@ -268,12 +270,19 @@ export function showInstructionHistoryMenu (type: AdapterType, setFn: (val: stri
   ctx.ui.useContextMenu().show(items)
 }
 
-export function addCustomAdapters (adapter: CustomAdapter) {
+export function buildAdapterStateKey (type: AdapterType, name: string) {
+  return `${type}-${name}`
+}
+
+export function addCustomAdapters (adapter: CustomAdapter, params: Record<string, any>) {
   registerCustomAdapter(adapter)
   state.customAdapters = ctx.lib.lodash.unionWith(
     [adapter, ...state.customAdapters],
     (a: any, b: any) => a.name === b.name && a.type === b.type
   )
+
+  const adapterKey = buildAdapterStateKey(adapter.type, adapter.name)
+  state.adapterState[adapterKey] = { ...state.adapterState[adapterKey], ...params }
 }
 
 export function removeCustomAdapter (adapter: Pick<CustomAdapter, 'name' | 'type'>) {
