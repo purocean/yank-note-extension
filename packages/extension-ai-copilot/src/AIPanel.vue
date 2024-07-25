@@ -145,7 +145,7 @@ async function createCustomAdapter () {
 
   const adapterPreset = ref<'openai' | 'custom'>(state.type === 'text2image' ? 'custom' : 'openai')
 
-  type AdapterParamsName = 'ollama' | 'kimi' | 'dashscope' | 'openai' | 'custom'
+  type AdapterParamsName = 'ollama' | 'kimi' | 'dashscope' | 'openai' | 'spark' | 'custom'
 
   const adapterParamsName = ref<AdapterParamsName>('ollama')
 
@@ -165,6 +165,10 @@ async function createCustomAdapter () {
     openai: {
       displayName: 'OpenAI',
       params: { model: 'gpt-3.5-turbo', endpoint: 'https://api.openai.com/v1/chat/completions' },
+    },
+    spark: {
+      displayName: 'Spark',
+      params: { model: 'generalv3.5', endpoint: 'https://spark-api-open.xf-yun.com/v1/chat/completions' },
     },
     custom: {
       displayName: i18n.t('custom'),
