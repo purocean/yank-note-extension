@@ -210,7 +210,7 @@ export class CustomEditAdapter implements EditAdapter {
   logger: ReturnType<typeof ctx.utils.getLogger>
   monaco = ctx.editor.getMonaco()
 
-  defaultSystemMessage = 'Generate/Modify content based on the context at the {CURSOR} position.\n--CONTEXT BEGIN--\n{CONTEXT}\n--CONTEXT END--\n\nATTENTION: OUTPUT THE CONTENT DIRECTLY, NO SURROUNDING OR OTHER CONTENT.'
+  defaultSystemMessage = 'Generate/Modify content based on the CONTEXT at the {CURSOR} position.\n--CONTEXT BEGIN--\n{CONTEXT}\n--CONTEXT END--\n\nATTENTION: OUTPUT THE CONTENT DIRECTLY, NO SURROUNDING OR OTHER CONTENT.'
   defaultBuildRequestCode = `// https://developers.cloudflare.com/workers-ai/models/llama-3-8b-instruct/
 
 const API_ACCOUNT_ID = 'YOUR_ACCOUNT_ID_HERE'

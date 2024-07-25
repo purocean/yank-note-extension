@@ -186,7 +186,7 @@ export class OpenAIEditAdapter implements EditAdapter {
   monaco = ctx.editor.getMonaco()
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.OpenAIEditAdapter')
   defaultInstruction = 'Translate to English'
-  defaultSystemMessage = 'Generate/Modify content based on the context at the {CURSOR} position.\n--CONTEXT BEGIN--\n{CONTEXT}\n--CONTEXT END--\n\nAttention: Output the content directly, no surrounding content.'
+  defaultSystemMessage = 'Generate/Modify content based on the CONTEXT at the {CURSOR} position.\n--CONTEXT BEGIN--\n{CONTEXT}\n--CONTEXT END--\n\nAttention: Output the content directly, no surrounding content.'
 
   state = reactive({
     withContext: true,
