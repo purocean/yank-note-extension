@@ -119,6 +119,7 @@ const defaultState = {
   },
   adapterState: {} as Record<string, any>,
   customAdapters: [] as CustomAdapter[],
+  aiPanelPined: undefined as boolean | undefined,
 }
 
 const storageStateKey = __EXTENSION_ID__ + '.state'
@@ -139,7 +140,7 @@ if (!Array.isArray(instructionHistory.text2image)) {
 export const state = reactive({
   ...defaultState,
   ...storageData,
-  instructionHistory: { ...instructionHistory }
+  instructionHistory: { ...instructionHistory },
 })
 
 const saveState = ctx.lib.lodash.debounce(() => {

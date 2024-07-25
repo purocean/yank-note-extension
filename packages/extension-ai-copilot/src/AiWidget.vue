@@ -4,7 +4,8 @@
       <h4 v-if="adapterType === 'edit' && type === 'edit'">{{ $t('ai-edit') }}</h4>
       <h4 v-if="adapterType === 'edit' && type === 'generate'">{{ $t('ai-generate') }}</h4>
       <h4 v-if="adapterType === 'text2image'">{{ $t('ai-text-to-image') }}</h4>
-      <svg-icon v-if="!loading" name="times" class="close-icon" @click="close" title="Close" />
+      <svg-icon v-if="!loading && !pined" name="cog" class="head-icon setting-icon" @click="toggleSetting" title="Setting" />
+      <svg-icon v-if="!loading" name="times" class="head-icon" @click="close" title="Close" />
       <div class="input" v-if="adapter && adapter.state">
         <textarea
           :placeholder="adapterType === 'edit' ? $t('ask-ai-edit-or-gen') : $t('ask-ai-text2image')"
@@ -243,6 +244,11 @@ function layout () {
   }
 }
 
+function toggleSetting () {
+  state.type = props.adapterType
+  state.aiPanelPined = !state.aiPanelPined
+}
+
 watch(() => adapter.value?.state?.instruction, async () => {
   layout()
 })
@@ -281,7 +287,7 @@ onBeforeUnmount(() => {
   backdrop-filter: var(--g-backdrop-filter);
   margin-top: 8px;
 
-  .close-icon {
+  .head-icon {
     border-radius: 50%;
     padding: 2px;
     position: absolute;
@@ -294,6 +300,17 @@ onBeforeUnmount(() => {
     &:hover {
       background: var(--g-color-75);
       color: var(--g-color-20);
+    }
+
+    &.setting-icon {
+      right: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      ::v-deep(svg) {
+        width: 80%;
+        height: 80%;
+      }
     }
   }
 

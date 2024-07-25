@@ -4,7 +4,7 @@
       <div class="head" @mousedown.self="startDrag">
         <svg-icon v-if="state.type === 'completion'" class="logo-icon" :name="AIIcon" @click="doWork" :title="i18n.t('ai-complete') + ' ' + ctx.keybinding.getKeysLabel(COMPLETION_ACTION_NAME)" />
         <svg-icon v-else-if="state.type === 'edit'" class="logo-icon" style="color: #009688" :name="AIIcon" @click="doWork" :title="i18n.t('ai-edit-or-gen') + ' ' + ctx.keybinding.getKeysLabel(EDIT_ACTION_NAME)" />
-        <svg-icon v-else class="logo-icon" :name="AIIcon" @click="doWork" />
+        <svg-icon v-else class="logo-icon" style="color: #9c27b0" :name="AIIcon" @click="doWork" />
         <b class="title">
           <select v-model="state.adapter[state.type]">
             <option v-for="item in adapters" :key="item.id" :value="item.id">{{item.displayname}}</option>
@@ -86,7 +86,15 @@ const tabs: { label: string, value: typeof state.type }[] = [
 
 const { SvgIcon, GroupTabs } = ctx.components
 
-const pined = ref(false)
+const pined = computed({
+  get () {
+    return !!state.aiPanelPined
+  },
+  set (val) {
+    state.aiPanelPined = val
+  }
+})
+
 const adapters = computed(() => {
   return (pined.value || true) && getAllAdapters(state.type).map(x => ({ id: x.id, displayname: x.displayname }))
 })
@@ -141,6 +149,7 @@ async function createCustomAdapter () {
     title: i18n.t('create-custom-adapter'),
     hint: i18n.t('adapter-name'),
     value: 'Workers AI',
+    maxlength: 32,
     component: state.type === 'text2image'
       ? undefined
       : h('div', [
@@ -192,7 +201,9 @@ ctx.registerHook('GLOBAL_KEYDOWN', escHandler)
 
 onMounted(() => {
   setTimeout(() => {
-    pined.value = true
+    if (typeof state.aiPanelPined === 'undefined') {
+      pined.value = true
+    }
 
     if (!completionAdapter.value && state.type === 'completion') {
       state.adapter[state.type] = adapters.value[0]?.id
