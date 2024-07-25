@@ -1,3 +1,12 @@
+## [1.20.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.20.0...extension-ai-copilot-1.20.1) (2024-07-25)
+
+
+### Features
+
+* **extension-ai-copilot:** improve custom adapter creation UI ([ac5e304](https://github.com/purocean/yank-note-extension/commit/ac5e30425ae2b2aa83d96b47d89d880a842ce750))
+
+
+
 # [1.20.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.19.1...extension-ai-copilot-1.20.0) (2024-07-25)
 
 
