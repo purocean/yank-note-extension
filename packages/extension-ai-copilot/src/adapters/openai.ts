@@ -1,5 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { i18n, CURSOR_PLACEHOLDER, proxyFetch } from '@/core'
+import { i18n, proxyFetch, COMPLETION_DEFAULT_SYSTEM_MESSAGE } from '@/core'
 import { fetchEventSource, EventStreamContentType } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
 import { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
@@ -15,7 +15,7 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
   supportProxy = true
   monaco = ctx.editor.getMonaco()
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.OpenAICompletionAdapter')
-  defaultSystemMessage = `Fill content at the \`${CURSOR_PLACEHOLDER}\`. \n\nExample 1:\nInput: I like {CURSOR} dance with my hands\nOutput: dance\n\nExample 2:\nInput: I like dance with my {CURSOR}\nOutput: hands\n\nAttention: Only output the filled content, do not output the surrounding content.`
+  defaultSystemMessage = COMPLETION_DEFAULT_SYSTEM_MESSAGE
 
   state = reactive({
     api_url: defaultApiUrl,

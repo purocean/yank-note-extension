@@ -2,7 +2,7 @@ import { reactive } from 'vue'
 import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
 import { CompletionAdapter, EditAdapter, FormItem, Panel, TextToImageAdapter } from '@/adapter'
-import { CURSOR_PLACEHOLDER, CustomAdapter, i18n } from '@/core'
+import { COMPLETION_DEFAULT_SYSTEM_MESSAGE, CustomAdapter, i18n } from '@/core'
 import type { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -19,7 +19,7 @@ export class CustomCompletionAdapter implements CompletionAdapter {
   logger: ReturnType<typeof ctx.utils.getLogger>
   monaco = ctx.editor.getMonaco()
 
-  defaultSystemMessage = `Fill content at the \`${CURSOR_PLACEHOLDER}\`. \n\nExample 1:\nInput: I like {CURSOR} dance with my hands\nOutput: dance\n\nExample 2:\nInput: I like dance with my {CURSOR}\nOutput: hands\n\nATTENTION: OUTPUT THE CONTENT DIRECTLY, NO SURROUNDING OR OTHER CONTENT.`
+  defaultSystemMessage = COMPLETION_DEFAULT_SYSTEM_MESSAGE
 
   defaultBuildRequestCode = `// https://developers.cloudflare.com/workers-ai/models/llama-3-8b-instruct/
 
@@ -53,7 +53,6 @@ return { url, headers, body, method: 'POST' }`
 
   defaultHandleResponseCode = `// https://developers.cloudflare.com/workers-ai/models/llama-3-8b-instruct/#using-streaming
 
-// data is the input object
 const { res } = data
 
 const obj = await res.json()
@@ -61,8 +60,7 @@ const text = obj.result.response
 return [text]
 `
 
- defaultOpenAIBuildRequestCode = `// data is the input object
-const { context, system, state } = data
+ defaultOpenAIBuildRequestCode = `const { context, system, state } = data
 
 const messages = [
   {
@@ -86,11 +84,10 @@ const body = JSON.stringify({ messages, model: state.model })
 
 return { url, headers, body, method: 'POST' }`
 
-  defaultOpenAIHandleResponseCode = `// data is the input object
-const { res } = data
+  defaultOpenAIHandleResponseCode = `const { res } = data
 
 const obj = await res.json()
-const text = obj?.choices[0]?.message?.content
+const text = obj.choices[0].message.content
 return [text]`
 
   panel: Panel
@@ -181,6 +178,10 @@ return [text]`
     cancelToken.onCancellationRequested(() => controller.abort())
     const response = await ctx.api.proxyFetch(url, { method, headers, body, signal: controller.signal, proxy: this.state.proxy })
     this.logger.debug('Response:', response)
+
+    if (!response.ok) {
+      throw new Error(await response.text())
+    }
 
     res = await handleResponseFn.apply(this, [{ res: response }])
 

@@ -12,6 +12,20 @@ export const TEXT_TO_IMAGE_ACTION_NAME = __EXTENSION_ID__ + '.text2image.trigger
 
 export const CURSOR_PLACEHOLDER = '{CURSOR}'
 
+export const COMPLETION_DEFAULT_SYSTEM_MESSAGE = `## Task: Content Completion, Fill Text at the \`${CURSOR_PLACEHOLDER}\` Position.
+
+### Instructions:
+- You are a world class writing assistant.
+- Given the current text, context, and the \`${CURSOR_PLACEHOLDER}\` position, provide a suggestion for text completion.
+- The suggestion must be based on the current text, as well as the text before the cursor.
+- THIS IS NOT A CONVERSATION, SO PLEASE DO NOT ASK QUESTIONS OR PROMPT FOR ADDITIONAL INFORMATION.
+
+### Notes
+- Never include any annotations such as "Suggestion:" or "Suggestions:".
+- Never suggest a newline after a space or newline.
+- If you do not have a suggestion, return an empty string.
+- DO NOT RETURN ANY TEXT THAT IS ALREADY PRESENT IN THE CURRENT TEXT.`
+
 export interface CustomAdapter {
   name: string,
   type: AdapterType,

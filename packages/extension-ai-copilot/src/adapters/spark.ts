@@ -1,5 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { i18n, CURSOR_PLACEHOLDER } from '@/core'
+import { i18n, COMPLETION_DEFAULT_SYSTEM_MESSAGE } from '@/core'
 import { ctx } from '@yank-note/runtime-api'
 import { Position, editor, languages, CancellationToken } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { reactive } from 'vue'
@@ -140,7 +140,7 @@ export class SparkAICompletionAdapter extends BaseAdapter implements CompletionA
   displayname = 'Spark'
   monaco = ctx.editor.getMonaco()
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.SparkAICompletionAdapter')
-  defaultSystemMessage = `Fill content at the \`${CURSOR_PLACEHOLDER}\`. \n\nExample 1:\nInput: I like {CURSOR} dance with my hands\nOutput: dance\n\nExample 2:\nInput: I like dance with my {CURSOR}\nOutput: hands\n\nAttention: Only output the filled content, do not output the surrounding content.`
+  defaultSystemMessage = COMPLETION_DEFAULT_SYSTEM_MESSAGE
 
   state = reactive({
     context: '',
