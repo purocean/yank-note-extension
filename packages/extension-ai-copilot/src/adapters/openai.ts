@@ -1,5 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { i18n, proxyFetch, COMPLETION_DEFAULT_SYSTEM_MESSAGE } from '@/core'
+import { i18n, proxyFetch, COMPLETION_DEFAULT_SYSTEM_MESSAGE, EDIT_DEFAULT_SYSTEM_MESSAGE } from '@/core'
 import { fetchEventSource, EventStreamContentType } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
 import { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
@@ -186,7 +186,7 @@ export class OpenAIEditAdapter implements EditAdapter {
   monaco = ctx.editor.getMonaco()
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.OpenAIEditAdapter')
   defaultInstruction = 'Translate to English'
-  defaultSystemMessage = 'Generate/Modify content based on the CONTEXT at the {CURSOR} position.\n--CONTEXT BEGIN--\n{CONTEXT}\n--CONTEXT END--\n\nAttention: Output the content directly, no surrounding content.'
+  defaultSystemMessage = EDIT_DEFAULT_SYSTEM_MESSAGE
 
   state = reactive({
     withContext: true,

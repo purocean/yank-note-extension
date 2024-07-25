@@ -2,7 +2,7 @@ import { reactive } from 'vue'
 import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
 import { CompletionAdapter, EditAdapter, FormItem, Panel, TextToImageAdapter } from '@/adapter'
-import { COMPLETION_DEFAULT_SYSTEM_MESSAGE, CustomAdapter, i18n } from '@/core'
+import { COMPLETION_DEFAULT_SYSTEM_MESSAGE, CustomAdapter, EDIT_DEFAULT_SYSTEM_MESSAGE, i18n } from '@/core'
 import type { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -211,13 +211,13 @@ export class CustomEditAdapter implements EditAdapter {
   logger: ReturnType<typeof ctx.utils.getLogger>
   monaco = ctx.editor.getMonaco()
 
-  defaultSystemMessage = 'Generate/Modify content based on the CONTEXT at the {CURSOR} position.\n--CONTEXT BEGIN--\n{CONTEXT}\n--CONTEXT END--\n\nATTENTION: OUTPUT THE CONTENT DIRECTLY, NO SURROUNDING OR OTHER CONTENT.'
+  defaultSystemMessage = EDIT_DEFAULT_SYSTEM_MESSAGE
+
   defaultBuildRequestCode = `// https://developers.cloudflare.com/workers-ai/models/llama-3-8b-instruct/
 
 const API_ACCOUNT_ID = 'YOUR_ACCOUNT_ID_HERE'
 const API_TOKEN = 'YOUR_API_TOKEN_HERE'
 
-// data is the input object
 const { selectedText, instruction, context, system } = data
 
 // if context is not provided, system message will be empty
@@ -252,7 +252,6 @@ return { url, headers, body, method: 'POST', sse }`
 
   defaultHandleResponseCode = `// https://developers.cloudflare.com/workers-ai/models/llama-3-8b-instruct/#using-streaming
 
-// data is the input object
 const { res, sse } = data
 
 if (sse) { // SSE message, res is a string
@@ -451,7 +450,9 @@ return { delta }`
             throw err
           } else {
             console.error(err)
-            ctx.ui.useToast().show('warning', err.message, 5000)
+            if (!String(err).includes('aborted')) {
+              ctx.ui.useToast().show('warning', err.message, 5000)
+            }
             throw new FatalError(err.message)
           }
         }
