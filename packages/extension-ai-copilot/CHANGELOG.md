@@ -1,3 +1,15 @@
+# [1.21.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.20.1...extension-ai-copilot-1.21.0) (2024-07-25)
+
+
+### Features
+
+* **extension-ai-copilot:** add 'spark' adapter to custom adapter options ([d1854c3](https://github.com/purocean/yank-note-extension/commit/d1854c35d4368759c9260e8e1e29cf76eb5d4e59))
+* **extension-ai-copilot:** optimize auto trigger behavior ([f29b4b6](https://github.com/purocean/yank-note-extension/commit/f29b4b6a9d0852e88a7e6c0fa876beba06533f57))
+* **extension-ai-copilot:** update default system message for AI completion adapters ([7863b50](https://github.com/purocean/yank-note-extension/commit/7863b50fa51f1167352c1f47d16bcd3d2f5f4c9d))
+* **extension-ai-copilot:** update default system message for AI edit adapters ([9f32aae](https://github.com/purocean/yank-note-extension/commit/9f32aaee41804272e3c79bb785df91a34a1655bb))
+
+
+
 ## [1.20.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.20.0...extension-ai-copilot-1.20.1) (2024-07-25)
 
 
