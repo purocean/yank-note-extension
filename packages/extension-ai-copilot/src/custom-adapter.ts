@@ -417,7 +417,7 @@ return { delta }`
       await fetchEventSource(url, {
         fetch: () => ctx.api.proxyFetch(url, { method, headers, body: body, proxy: this.state.proxy, signal: controller.signal }),
         async onopen (response) {
-          if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
+          if (response.ok && response.headers.get('content-type')?.includes(EventStreamContentType)) {
             return
           }
 
