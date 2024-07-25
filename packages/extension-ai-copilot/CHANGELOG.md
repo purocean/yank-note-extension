@@ -1,3 +1,15 @@
+# [1.20.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.19.1...extension-ai-copilot-1.20.0) (2024-07-25)
+
+
+### Features
+
+* **extension-ai-copilot:** add setting button to ai widget ([82a21e7](https://github.com/purocean/yank-note-extension/commit/82a21e72ff52708cebecbd4c501554da9deee91d))
+* **extension-ai-copilot:** optimize system message ([7307145](https://github.com/purocean/yank-note-extension/commit/7307145607678206580d5fe6271b0434567dcc5d))
+* **extension-ai-copilot:** support to set custom adapter preset params ([a262a55](https://github.com/purocean/yank-note-extension/commit/a262a554e1a43dec3eeefe76ff2315cde7246ec4))
+* **extension-ai-copilot:** supports 灵积 ([785c531](https://github.com/purocean/yank-note-extension/commit/785c5318746660c4afc2dc4bda608a685889f34d))
+
+
+
 ## [1.19.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.19.0...extension-ai-copilot-1.19.1) (2024-07-24)
 
 
