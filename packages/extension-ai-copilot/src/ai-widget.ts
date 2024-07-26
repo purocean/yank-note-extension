@@ -30,6 +30,8 @@ export function createWidget (type: 'edit' | 'generate' | 'text2image', runImmed
 
   editor.setScrollLeft(0)
 
+  editor.revealRangeNearTopIfOutsideViewport(selection.collapseToStart(), 1)
+
   editor.changeViewZones(accessor => {
     const domNode = document.createElement('div')
 

@@ -53,7 +53,7 @@ export interface EditAdapter extends Adapter {
     selectedText: string,
     instruction: string,
     cancelToken: Monaco.CancellationToken,
-    onProgress: (res: { text: string }) => void
+    onProgress: (res: { text: string, delta: string }) => void
   ): Promise<string | null | undefined>
 }
 

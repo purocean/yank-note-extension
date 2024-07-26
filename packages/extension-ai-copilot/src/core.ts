@@ -39,6 +39,8 @@ export const EDIT_DEFAULT_SYSTEM_MESSAGE = `## Task: Content Generation/Editing.
 {CONTEXT}
 --CONTEXT END--`
 
+export class FatalError extends Error { }
+
 export interface CustomAdapter {
   name: string,
   type: AdapterType,

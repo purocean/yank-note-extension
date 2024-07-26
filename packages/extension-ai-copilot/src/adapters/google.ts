@@ -7,7 +7,7 @@ import { reactive, watch } from 'vue'
 class BaseGoogleAIAdapter {
   description = 'Powered by <a target="_blank" href="https://ai.google.dev">GoogleAI</a>'
   supportProxy = true
-  private async _requestApi (model: string, token: string, body?: any, onProgress?: ((text: string) => void), cancelToken?: CancellationToken): Promise<string> {
+  private async _requestApi (model: string, token: string, body?: any, onProgress?: ((text: string, delta: string) => void), cancelToken?: CancellationToken): Promise<string> {
     const url = onProgress
       ? `https://generativelanguage.googleapis.com/v1/models/${model}:streamGenerateContent?alt=sse&key=${token}`
       : `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${token}`
@@ -47,7 +47,7 @@ class BaseGoogleAIAdapter {
             const val = res.candidates[0].content?.parts?.[0]?.text
             if (val) {
               text += val
-              onProgress(text)
+              onProgress(text, val)
             }
           } catch (err) {
             hasError = true
@@ -94,7 +94,7 @@ class BaseGoogleAIAdapter {
     content: string,
     system: string,
     params: Record<string, any>,
-    onProgress?: (text: string) => void,
+    onProgress?: (text: string, delta: string) => void,
     cancelToken?: CancellationToken
   ): Promise<string | null> {
     const contents: { role: 'user' | 'model', parts: [{ text: string }] }[] = []
@@ -235,7 +235,7 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
   defaultSystemMessage = EDIT_DEFAULT_SYSTEM_MESSAGE
 
   state = reactive({
-    withContext: true,
+    withContext: false,
     selection: '',
     context: '',
     instruction: this.defaultInstruction,
@@ -311,7 +311,7 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
     }
   }
 
-  async fetchEditResults (selectedText: string, instruction: string, token: CancellationToken, onProgress: (res: { text: string }) => void): Promise<string | null | undefined> {
+  async fetchEditResults (selectedText: string, instruction: string, token: CancellationToken, onProgress: (res: { text: string, delta: string }) => void): Promise<string | null | undefined> {
     if (!this.state.model) {
       return
     }
@@ -326,8 +326,8 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
     const system = this.buildSystem(this.state.systemMessageV2, this.state.context)
     const params = this._parseJson(this.state.paramsJson, {})
 
-    return this.request(this.state.model, this.state.apiToken, content, system, params, text => {
-      onProgress({ text })
+    return this.request(this.state.model, this.state.apiToken, content, system, params, (text, delta) => {
+      onProgress({ text, delta })
     }, token)
   }
 

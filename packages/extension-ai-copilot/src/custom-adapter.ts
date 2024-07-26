@@ -2,7 +2,7 @@ import { reactive } from 'vue'
 import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
 import { CompletionAdapter, EditAdapter, FormItem, Panel, TextToImageAdapter } from '@/adapter'
-import { COMPLETION_DEFAULT_SYSTEM_MESSAGE, CustomAdapter, EDIT_DEFAULT_SYSTEM_MESSAGE, i18n } from '@/core'
+import { COMPLETION_DEFAULT_SYSTEM_MESSAGE, CustomAdapter, EDIT_DEFAULT_SYSTEM_MESSAGE, FatalError, i18n } from '@/core'
 import type { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -319,7 +319,7 @@ return { delta }`
     apiToken: '',
     model: 'gpt-3.5-turbo',
     context: '',
-    withContext: true,
+    withContext: false,
     selection: '',
     instruction: '',
     proxy: '',
@@ -371,7 +371,7 @@ return { delta }`
     }
   }
 
-  async fetchEditResults (selectedText: string, instruction: string, cancelToken: CancellationToken, onProgress: (res: { text: string }) => void): Promise<string | null | undefined> {
+  async fetchEditResults (selectedText: string, instruction: string, cancelToken: CancellationToken, onProgress: (res: { text: string, delta: string }) => void): Promise<string | null | undefined> {
     if (!instruction) {
       return
     }
@@ -412,7 +412,6 @@ return { delta }`
       return text
     } else {
       let text = ''
-      class FatalError extends Error { }
 
       await fetchEventSource(url, {
         fetch: () => ctx.api.proxyFetch(url, { method, headers, body: body, proxy: this.state.proxy, signal: controller.signal }),
@@ -438,7 +437,7 @@ return { delta }`
 
           if (delta) {
             text += delta
-            onProgress({ text })
+            onProgress({ text, delta })
           }
         },
         onclose: () => {

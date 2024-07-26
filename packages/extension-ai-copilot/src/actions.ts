@@ -40,14 +40,19 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
     state.instructionHistory.edit.unshift(instruction)
     state.instructionHistory.edit = ctx.lib.lodash.uniq(state.instructionHistory.edit.slice(0, 16))
 
+    const monaco = ctx.editor.getMonaco()
     const editor = ctx.editor.getEditor()
     const model = editor.getModel()
 
-    const selectedText = model?.getValueInRange(ctx.editor.getEditor().getSelection()!) || ''
+    if (!model) {
+      throw new Error('No editor model')
+    }
+
+    const selectedText = model.getValueInRange(ctx.editor.getEditor().getSelection()!) || ''
 
     const initSelectedRange = ctx.editor.getEditor().getSelection()!
 
-    const getEditRange = () => {
+    const getSelection = () => {
       const selection = ctx.editor.getEditor().getSelection()!
 
       if (initSelectedRange.isEmpty() && selection.isEmpty()) {
@@ -62,22 +67,55 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
       return selection
     }
 
-    const res = adapter.fetchEditResults(selectedText, instruction, token, res => {
-      let text = res.text
+    const getLineCount = (text: string, start: number, end: number) => {
+      let lineCount = 0
+      let endLineLength = 0
 
-      const textLines = text.split('\n')
-      const selectedTextLines = selectedText.split('\n')
+      for (let i = start; i < end; i++) {
+        endLineLength++
 
-      if (textLines.length < selectedTextLines.length) {
-        text = textLines.join('\n') + '🚧\n' + selectedTextLines.slice(textLines.length).join('\n')
-      } else {
-        text += '🚧'
+        if (text[i] === '\n') {
+          lineCount++
+          endLineLength = 0
+        }
       }
 
+      return { lineCount, endLineLength }
+    }
+
+    const res = adapter.fetchEditResults(selectedText, instruction, token, res => {
+      if (model !== editor.getModel()) {
+        throw new Error('Model changed, cancel editing.')
+      }
+
+      const prevContentCount = getLineCount(res.text, 0, res.text.length - res.delta.length)
+      const deltaContentCount = getLineCount(res.delta, 0, res.delta.length)
+
+      const selection = getSelection()
+
+      const startLineNumber = selection.startLineNumber + prevContentCount.lineCount
+      const startColumn = prevContentCount.endLineLength + (prevContentCount.lineCount > 0 ? 1 : selection.startColumn)
+
+      let endLineNumber: number = startLineNumber + deltaContentCount.lineCount
+      let endColumn: number
+
+      // edit in the selection
+      if (endLineNumber >= selection.endLineNumber) {
+        endLineNumber = selection.endLineNumber
+        endColumn = selection.endColumn
+      } else {
+        // edit the whole line
+        endColumn = model.getLineMaxColumn(endLineNumber)
+      }
+
+      const editRange = new monaco.Range(startLineNumber, startColumn, endLineNumber, endColumn)
+
       editor.executeEdits('ai-copilot', [{
-        range: getEditRange(),
-        text,
+        range: editRange,
+        text: res.delta + '🚧',
       }])
+
+      editor.revealRangeNearTopIfOutsideViewport(editRange)
     })
 
     const result = await Promise.race([res, cancelPromise])
@@ -87,9 +125,10 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
     }
 
     editor.executeEdits('ai-copilot', [{
-      range: getEditRange(),
+      range: getSelection(),
       text: result,
     }])
+
     editor.focus()
     return true
   } catch (error: any) {
@@ -97,6 +136,11 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
     throw error
   } finally {
     loading.value = false
+    const editor = ctx.editor.getEditor()
+    const selection = editor.getSelection()
+    if (selection) {
+      editor.revealRangeNearTopIfOutsideViewport(selection.collapseToStart())
+    }
   }
 }
 

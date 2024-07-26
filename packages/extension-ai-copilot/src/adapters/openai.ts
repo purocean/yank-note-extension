@@ -1,5 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { i18n, proxyFetch, COMPLETION_DEFAULT_SYSTEM_MESSAGE, EDIT_DEFAULT_SYSTEM_MESSAGE } from '@/core'
+import { i18n, proxyFetch, COMPLETION_DEFAULT_SYSTEM_MESSAGE, EDIT_DEFAULT_SYSTEM_MESSAGE, FatalError } from '@/core'
 import { fetchEventSource, EventStreamContentType } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
 import { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
@@ -189,7 +189,7 @@ export class OpenAIEditAdapter implements EditAdapter {
   defaultSystemMessage = EDIT_DEFAULT_SYSTEM_MESSAGE
 
   state = reactive({
-    withContext: true,
+    withContext: false,
     context: '',
     api_url: defaultApiUrl,
     selection: '',
@@ -242,7 +242,7 @@ export class OpenAIEditAdapter implements EditAdapter {
     }
   }
 
-  private async _requestApi (url: string, body: any, cancelToken: CancellationToken, onProgress: (text: string) => void): Promise<string> {
+  private async _requestApi (url: string, body: any, cancelToken: CancellationToken, onProgress: (text: string, delta: string) => void): Promise<string> {
     const token = this.state.api_token
 
     const headers = { Authorization: `Bearer ${token}` }
@@ -260,8 +260,6 @@ export class OpenAIEditAdapter implements EditAdapter {
     })
 
     let text = ''
-
-    class FatalError extends Error { }
 
     await fetchEventSource(url, {
       fetch: () => proxyFetch(url, { sse: true, headers, body: body, method: 'post' }, signal),
@@ -291,7 +289,7 @@ export class OpenAIEditAdapter implements EditAdapter {
           const val = res.choices[0].delta.content
           if (val) {
             text += val
-            onProgress(text)
+            onProgress(text, val)
           }
         }
       },
@@ -361,7 +359,7 @@ export class OpenAIEditAdapter implements EditAdapter {
     }
   }
 
-  async fetchEditResults (selectedText: string, instruction: string, token: CancellationToken, onProgress: (res: { text: string }) => void): Promise<string | null | undefined> {
+  async fetchEditResults (selectedText: string, instruction: string, token: CancellationToken, onProgress: (res: { text: string, delta: string }) => void): Promise<string | null | undefined> {
     if (!this.state.model) {
       return
     }
@@ -393,8 +391,8 @@ export class OpenAIEditAdapter implements EditAdapter {
     const body = { messages, ...params, stream: true }
 
     this.logger.debug('fetchEditResults', 'request', body)
-    const text = await this._requestApi(url, body, token, text => {
-      onProgress({ text })
+    const text = await this._requestApi(url, body, token, (text, delta) => {
+      onProgress({ text, delta })
     })
 
     this.logger.debug('fetchEditResults', 'result', text)
