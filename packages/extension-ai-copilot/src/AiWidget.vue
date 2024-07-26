@@ -245,8 +245,12 @@ function layout () {
 }
 
 function toggleSetting () {
-  state.type = props.adapterType
-  state.aiPanelPined = !state.aiPanelPined
+  if (state.type === props.adapterType) {
+    state.aiPanelPined = !state.aiPanelPined
+  } else {
+    state.type = props.adapterType
+    state.aiPanelPined = true
+  }
 }
 
 watch(() => adapter.value?.state?.instruction, async () => {
