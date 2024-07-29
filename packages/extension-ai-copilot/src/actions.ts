@@ -12,7 +12,9 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
   globalCancelTokenSource.value = new (ctx.editor.getMonaco().CancellationTokenSource)(token)
   token = globalCancelTokenSource.value.token
 
-  if (token.isCancellationRequested) {
+  const initSelectedRange = ctx.editor.getEditor().getSelection()
+
+  if (token.isCancellationRequested || !initSelectedRange) {
     return false
   }
 
@@ -49,8 +51,6 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
     }
 
     const selectedText = model.getValueInRange(ctx.editor.getEditor().getSelection()!) || ''
-
-    const initSelectedRange = ctx.editor.getEditor().getSelection()!
 
     const getSelection = () => {
       const selection = ctx.editor.getEditor().getSelection()!
@@ -137,9 +137,8 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
   } finally {
     loading.value = false
     const editor = ctx.editor.getEditor()
-    const selection = editor.getSelection()
-    if (selection) {
-      editor.revealRangeNearTopIfOutsideViewport(selection.collapseToStart())
+    if (initSelectedRange) {
+      editor.revealRangeNearTopIfOutsideViewport(initSelectedRange.collapseToStart())
     }
   }
 }
