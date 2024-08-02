@@ -346,9 +346,8 @@ const onMouseUp = () => {
 
 <style lang="scss" scoped>
 .panel {
-  background: rgba(var(--g-color-85-rgb), 0.8);
-  backdrop-filter: var(--g-backdrop-filter);
   color: var(--g-color-10);
+  background: var(--g-color-90);
   font-size: 14px;
   overflow: hidden;
   transition: .1s ease-in-out;
@@ -388,12 +387,16 @@ const onMouseUp = () => {
       z-index: 1;
       flex: none;
       margin-left: 6px;
-      background: var(--g-color-86);
 
       ::v-deep(.tab) {
         font-weight: normal;
         line-height: 1.5;
         font-size: 12px;
+
+        &.selected {
+          color: var(--g-color-0);
+          background: rgba(var(--g-color-40-rgb), 0.3);
+        }
       }
     }
 
@@ -418,7 +421,6 @@ const onMouseUp = () => {
         padding: 1px;
         width: 120px;
         height: 20px;
-        background: var(--g-color-80);
       }
     }
 
@@ -454,8 +456,6 @@ const onMouseUp = () => {
     height: 36px;
     position: sticky;
     bottom: 0;
-    background: var(--g-color-85);
-    border-top: 1px solid var(--g-color-70);
     margin: 0;
     padding: 0 14px;
   }
@@ -470,7 +470,7 @@ const onMouseUp = () => {
     width: 530px;
 
     .head {
-      border-bottom: 1px solid var(--g-color-70);
+      border-bottom: 1px solid rgba(var(--g-color-70-rgb), 0.5);
       padding: 4px;
       justify-content: space-between;
       flex-direction: row;
@@ -544,7 +544,7 @@ const onMouseUp = () => {
     border-radius: var(--g-border-radius);
 
     &::after {
-      border-radius: var(--g-border-radius);
+      border-radius: 3px;
     }
   }
 
@@ -558,7 +558,6 @@ const onMouseUp = () => {
       font-size: 13px;
       padding: 4px;
       width: 100%;
-      background: var(--g-color-80);
       height: 24px;
       margin-left: 3px;
     }
@@ -577,9 +576,24 @@ const onMouseUp = () => {
     top: 2px;
     width: calc(100% - 4px);
     height: calc(100% - 4px);
-    background: rgba(var(--g-color-85-rgb), 1);
+    background: var(--g-color-90);
+    background-size: 600%;
     border-radius: 16px;
     z-index: 1;
+  }
+
+  &.loading::after {
+    background-image: linear-gradient(
+      45deg,
+      color-mix(in srgb, #ffca3a 7%, var(--g-color-90)),
+      color-mix(in srgb, #8ac926 7%, var(--g-color-90)),
+      color-mix(in srgb, #ff595e 10%, var(--g-color-90)),
+      color-mix(in srgb, #1982c4 7%, var(--g-color-90)),
+      color-mix(in srgb, #6a4c93 10%, var(--g-color-90)),
+      color-mix(in srgb, #ff6700 7%, var(--g-color-90)),
+    );
+
+    animation: glow 5s linear infinite;
   }
 
   &.loading::before {
@@ -596,6 +610,20 @@ const onMouseUp = () => {
   @keyframes rotate {
     100% {
       transform: rotate(1turn);
+    }
+  }
+
+  @keyframes glow {
+    0% {
+      background-position: 0 100%;
+    }
+
+    50% {
+      background-position: 100% 0;
+    }
+
+    100% {
+      background-position: 0 100%;
     }
   }
 }

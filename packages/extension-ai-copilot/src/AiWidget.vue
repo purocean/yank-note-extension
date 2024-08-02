@@ -321,16 +321,32 @@ onBeforeUnmount(() => {
   .content {
     position: relative;
     z-index: 3;
-    background: var(--g-color-88);
+    background: var(--g-color-90);
     color: var(--g-color-10);
     font-size: 14px;
     overflow: hidden;
     padding: 6px;
+    background-size: 400%;
+    border-radius: 3px;
 
     h4 {
       margin: 0;
       margin-bottom: 10px;
     }
+  }
+
+  &.loading .content {
+    background-image: linear-gradient(
+      45deg,
+      color-mix(in srgb, #ffca3a 7%, var(--g-color-90)),
+      color-mix(in srgb, #8ac926 7%, var(--g-color-90)),
+      color-mix(in srgb, #ff595e 10%, var(--g-color-90)),
+      color-mix(in srgb, #1982c4 7%, var(--g-color-90)),
+      color-mix(in srgb, #6a4c93 10%, var(--g-color-90)),
+      color-mix(in srgb, #ff6700 7%, var(--g-color-90)),
+    );
+
+    animation: glow 5s linear infinite;
   }
 
   .img-result {
@@ -402,6 +418,20 @@ onBeforeUnmount(() => {
   @keyframes rotate {
     100% {
       transform: rotate(1turn);
+    }
+  }
+
+  @keyframes glow {
+    0% {
+      background-position: 0 100%;
+    }
+
+    50% {
+      background-position: 100% 0;
+    }
+
+    100% {
+      background-position: 0 100%;
     }
   }
 }

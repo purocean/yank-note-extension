@@ -204,7 +204,6 @@ watchEffect(() => {
   align-items: center;
   justify-content: space-between;
   padding: 0 14px;
-  border-top: 1px var(--g-color-80) solid;
   padding-top: 4px;
 
   &.has-icon-btn {
