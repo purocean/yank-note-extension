@@ -69,7 +69,7 @@
 
 <script lang="ts" setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, watch, watchEffect, ref, triggerRef, h } from 'vue'
-import { ctx } from '@yank-note/runtime-api'
+import { ctx, runtimeVersionSatisfies } from '@yank-note/runtime-api'
 import { i18n, state, loading, COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, globalCancelTokenSource, addCustomAdapters, removeCustomAdapter, TEXT_TO_IMAGE_ACTION_NAME } from './core'
 import { getAdapter, getAllAdapters } from './adapter'
 import AISettingPanel from './AISettingPanel.vue'
@@ -139,7 +139,7 @@ function resetPanelContainer () {
 
 async function createCustomAdapter () {
   if (!ctx.api.proxyFetch) {
-    ctx.ui.useToast().show('warning', 'Please use the latest version of Yank Note to use this feature')
+    ctx.ui.useToast().show('warning', i18n.t('runtime-version-not-satisfies'))
     return
   }
 
@@ -213,8 +213,23 @@ async function createCustomAdapter () {
 
   if (!name) return
 
+  const resetAdapterType = () => {
+    const oldType = state.adapter[state.type]
+    state.adapter[state.type] = ''
+    nextTick(() => {
+      state.adapter[state.type] = oldType
+    })
+  }
+
+  if (adapterPreset.value === 'gradio' && runtimeVersionSatisfies('<3.75.1')) {
+    ctx.ui.useToast().show('warning', i18n.t('runtime-version-not-satisfies'))
+    resetAdapterType()
+    return
+  }
+
   if (adapters.value.some(x => x.id === name || x.displayname === name)) {
     ctx.ui.useToast().show('warning', i18n.t('adapter-name-exists'))
+    resetAdapterType()
     return
   }
 

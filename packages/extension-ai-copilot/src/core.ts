@@ -93,6 +93,7 @@ export const i18n = ctx.i18n.createI18n({
     'reset-to-default-value-confirm': 'Are you sure you want to reset to default value?',
     'width': 'Width',
     'height': 'Height',
+    'runtime-version-not-satisfies': 'Current version Yank Note is not compatible with this feature, please use the latest version of Yank Note',
   },
   'zh-CN': {
     'ai-complete': '使用 AI Copilot 自动补全',
@@ -139,6 +140,7 @@ export const i18n = ctx.i18n.createI18n({
     'reset-to-default-value-confirm': '确定要重置为默认值吗？',
     'width': '宽度',
     'height': '高度',
+    'runtime-version-not-satisfies': '当前版本 Yank Note 不兼容此功能，请使用最新版本 Yank Note',
   }
 })
 
