@@ -15,6 +15,9 @@ mkdir -p ../packages/api/src/types/third-party
 mkdir -p ../packages/api/src/types/third-party/vue;
 cp node_modules/@vue/*/dist/*-*.d.ts ../packages/api/src/types/third-party/vue;
 cp node_modules/@vue/reactivity/dist/reactivity.d.ts ../packages/api/src/types/third-party/vue;
+# cp node_modules/@vue/runtime-dom/dist/runtime-dom.d.ts ../packages/api/src/types/third-party/vue;
+echo 'export * from "@vue/runtime-core";' > ../packages/api/src/types/third-party/vue/runtime-dom.d.ts;
+cp node_modules/@vue/runtime-core/dist/runtime-core.d.ts ../packages/api/src/types/third-party/vue;
 cp node_modules/@vue/shared/dist/shared.d.ts ../packages/api/src/types/third-party/vue;
 cp node_modules/vue/dist/vue.d.ts ../packages/api/src/types/third-party/vue/index.d.ts;
 cp -r node_modules/@types/lodash ../packages/api/src/types/third-party/lodash;
