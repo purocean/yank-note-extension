@@ -544,7 +544,7 @@ if (res.headers.get('Content-Type').startsWith('image')) {
     this.description = 'Custom Text to Image Adapter'
     this.logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CustomTextToImageAdapter.' + this.id)
 
-    const defaultEndpoint = adapter.preset === 'gradio' ? 'https://black-forest-labs/FLUX.1-schnell' : 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID'
+    const defaultEndpoint = adapter.preset === 'gradio' ? 'https://black-forest-labs-flux-1-schnell.hf.space' : 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID'
 
     this.panel = {
       type: 'form',
