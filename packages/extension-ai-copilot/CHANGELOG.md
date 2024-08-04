@@ -1,3 +1,12 @@
+# [1.23.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.22.3...extension-ai-copilot-1.23.0) (2024-08-04)
+
+
+### Features
+
+* **extension-ai-copilot:** add support for Gradio adapter ([b36c223](https://github.com/purocean/yank-note-extension/commit/b36c223fc447824861d9f7b6998b487bb7933db4))
+
+
+
 ## [1.22.3](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.22.2...extension-ai-copilot-1.22.3) (2024-08-02)
 
 
