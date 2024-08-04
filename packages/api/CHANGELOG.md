@@ -1,3 +1,12 @@
+## [3.75.1](https://github.com/purocean/yank-note-extension/compare/api-3.75.0...api-3.75.1) (2024-08-04)
+
+
+### Features
+
+* **api:** add runtimeVersionSatisfies function for version comparison ([1a647dd](https://github.com/purocean/yank-note-extension/commit/1a647dd7f5eeb016d05e7846a03c9f9fb436298c))
+
+
+
 # [3.75.0](https://github.com/purocean/yank-note-extension/compare/api-3.73.1...api-3.75.0) (2024-08-04)
 
 
