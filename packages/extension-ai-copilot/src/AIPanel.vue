@@ -213,23 +213,13 @@ async function createCustomAdapter () {
 
   if (!name) return
 
-  const resetAdapterType = () => {
-    const oldType = state.adapter[state.type]
-    state.adapter[state.type] = ''
-    nextTick(() => {
-      state.adapter[state.type] = oldType
-    })
-  }
-
   if (adapterPreset.value === 'gradio' && runtimeVersionSatisfies('<3.75.1')) {
     ctx.ui.useToast().show('warning', i18n.t('runtime-version-not-satisfies'))
-    resetAdapterType()
     return
   }
 
   if (adapters.value.some(x => x.id === name || x.displayname === name)) {
     ctx.ui.useToast().show('warning', i18n.t('adapter-name-exists'))
-    resetAdapterType()
     return
   }
 
@@ -357,7 +347,10 @@ watch(editAdapter, () => {
 
 watch(() => state.adapter[state.type], (val, oldVal) => {
   if (val === '--new-adapter--') {
-    state.adapter[state.type] = oldVal
+    state.adapter[state.type] = ''
+    nextTick(() => {
+      state.adapter[state.type] = oldVal
+    })
     createCustomAdapter()
   }
 })
@@ -444,7 +437,7 @@ const onMouseUp = () => {
       select {
         font-size: 12px;
         padding: 1px;
-        width: 120px;
+        width: 130px;
         height: 20px;
       }
     }

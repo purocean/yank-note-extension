@@ -143,7 +143,7 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
   }
 }
 
-export async function executeTextToImage (token: Monaco.CancellationToken): Promise<false | Blob> {
+export async function executeTextToImage (token: Monaco.CancellationToken, updateStatus: (status: string) => void): Promise<false | Blob> {
   if (!state.enable) {
     return false
   }
@@ -185,7 +185,8 @@ export async function executeTextToImage (token: Monaco.CancellationToken): Prom
       return ctx.api.proxyFetch(url as string, { ...options, proxy: adapter.state.proxy, signal: controller.signal })
     }
 
-    const res = adapter.fetchTextToImageResults(instruction, token)
+    updateStatus('')
+    const res = adapter.fetchTextToImageResults(instruction, token, updateStatus)
 
     const result = await Promise.race([res, cancelPromise])
 
@@ -199,6 +200,7 @@ export async function executeTextToImage (token: Monaco.CancellationToken): Prom
     throw error
   } finally {
     loading.value = false
+    updateStatus('')
     delete window.__PLUGIN_AI_COPILOT_FETCH
   }
 }

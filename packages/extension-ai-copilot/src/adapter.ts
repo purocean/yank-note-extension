@@ -63,6 +63,7 @@ export interface TextToImageAdapter extends Adapter {
   fetchTextToImageResults(
     instruction: string,
     cancelToken: Monaco.CancellationToken,
+    updateStatus: (status: string) => void
   ): Promise<Blob | null | undefined>
 }
 

@@ -58,6 +58,7 @@
         </select>
       </div>
       <div v-else>{{ $t('no-adapters') }}</div>
+      <div v-if="status" class="status">{{ status }}</div>
     </div>
   </div>
 </template>
@@ -83,6 +84,7 @@ const props = defineProps<{
 }>()
 
 const image = shallowRef<{ src: string, blob: Blob }>()
+const status = ref('')
 
 const adapter = computed(() => getAdapter(props.adapterType, state.adapter[props.adapterType]))
 const finished = ref(false)
@@ -161,6 +163,10 @@ function setImage (img: typeof image.value) {
   }, 50)
 }
 
+function updateStatus (_status: string) {
+  status.value = _status
+}
+
 async function process () {
   if (!adapter.value) {
     return
@@ -172,7 +178,7 @@ async function process () {
   const doAction = props.adapterType === 'edit' ? executeEdit : executeTextToImage
 
   image.value = undefined
-  const res = await doAction(cts.token)
+  const res = await doAction(cts.token, updateStatus)
 
   if (res) {
     finished.value = true
@@ -394,7 +400,7 @@ onBeforeUnmount(() => {
     select, input {
       font-size: 13px;
       padding: 1px;
-      width: 120px;
+      width: 130px;
       height: 22px;
     }
 
@@ -423,6 +429,14 @@ onBeforeUnmount(() => {
     height: 800%;
     background: conic-gradient(transparent, #2196f3, transparent 30%);
     animation: rotate 2s linear infinite;
+  }
+
+  .status {
+    font-size: 12px;
+    color: var(--g-color-35);
+    margin-top: 8px;
+    white-space: pre-line;
+    overflow-wrap: break-word;
   }
 
   @keyframes rotate {

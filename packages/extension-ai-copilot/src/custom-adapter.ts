@@ -504,16 +504,32 @@ if (res.headers.get('Content-Type').startsWith('image')) {
 
   defaultGradioBuildRequestCode = `const { width, height, apiToken, instruction, endpoint } = data
 
-const client = await env.gradio.Client.connect(endpoint, { hf_token: apiToken });
+const client = await env.gradio.Client.connect(endpoint, { hf_token: apiToken })
 
-const result = await client.predict("/infer", {
+const submission = await client.submit('/infer', {
     prompt: instruction,
     seed: 0,
     width,
     height,
     randomize_seed: true,
     num_inference_steps: 4,
-});
+}, undefined, undefined, true)
+
+let result
+for await (const msg of submission) {
+  if (msg.type === 'data') {
+    result = msg
+    break
+  }
+
+  if (msg.type === 'status' && msg.stage !== 'error') {
+    const status = msg.progress_data?.map(
+      item => \`\${item.desc || item.unit}: \${item.index}/\${item.length}\`
+    ).join('\\n') || msg.stage || ''
+
+    env.updateStatus(status)
+  }
+}
 
 const url = result?.data?.[0]?.url
 
@@ -583,7 +599,7 @@ if (res.headers.get('Content-Type').startsWith('image')) {
     }
   }
 
-  async fetchTextToImageResults (instruction: string, cancelToken: CancellationToken): Promise<Blob | null | undefined> {
+  async fetchTextToImageResults (instruction: string, cancelToken: CancellationToken, updateStatus: (status: string) => void): Promise<Blob | null | undefined> {
     if (!instruction) {
       return
     }
@@ -602,7 +618,7 @@ if (res.headers.get('Content-Type').startsWith('image')) {
     const handleResultFn = new AsyncFunction('data', this.state.handleResponseCode)
 
     const data = { ...this.state }
-    const env = { gradio, signal: controller.signal }
+    const env = { gradio, signal: controller.signal, updateStatus }
 
     const request = await buildRequestFn.apply(this, [data, env])
     if (!request) {
