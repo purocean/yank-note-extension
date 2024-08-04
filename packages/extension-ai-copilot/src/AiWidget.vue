@@ -397,7 +397,7 @@ onBeforeUnmount(() => {
       }
     }
 
-    select, input {
+    select, input[type=number] {
       font-size: 13px;
       padding: 1px;
       width: 130px;
@@ -416,6 +416,11 @@ onBeforeUnmount(() => {
       align-items: center;
       input {
         margin-right: 4px;
+      }
+
+      label {
+        display: flex;
+        align-items: center;
       }
     }
   }

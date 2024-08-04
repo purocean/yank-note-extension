@@ -164,7 +164,7 @@ async function createCustomAdapter () {
     },
     openai: {
       displayName: 'OpenAI',
-      params: { model: 'gpt-3.5-turbo', endpoint: 'https://api.openai.com/v1/chat/completions' },
+      params: { model: 'gpt-4o-mini', endpoint: 'https://api.openai.com/v1/chat/completions' },
     },
     spark: {
       displayName: 'Spark',
@@ -229,7 +229,7 @@ async function createCustomAdapter () {
       ? adapterOpenAIPresets[adapterParamsName.value || 'custom'].params
       : adapterPreset.value === 'gradio'
         ? { endpoint: 'https://black-forest-labs-flux-1-schnell.hf.space', model: '' }
-        : {},
+        : { endpoint: 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID', model: state.type === 'text2image' ? '@cf/lykon/dreamshaper-8-lcm' : '@cf/meta/llama-3-8b-instruct' },
   )
   triggerRef(pined)
   setTimeout(() => {

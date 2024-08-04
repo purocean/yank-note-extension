@@ -22,13 +22,7 @@ export class CustomCompletionAdapter implements CompletionAdapter {
 
   defaultSystemMessage = COMPLETION_DEFAULT_SYSTEM_MESSAGE
 
-  defaultBuildRequestCode = `// https://developers.cloudflare.com/workers-ai/models/llama-3-8b-instruct/
-
-const API_ACCOUNT_ID = 'YOUR_ACCOUNT_ID_HERE'
-const API_TOKEN = 'YOUR_API_TOKEN_HERE'
-
-// data is the input object
-const { context, system } = data
+  defaultBuildRequestCode = `const { context, system, state } = data
 
 const messages = [
   {
@@ -41,10 +35,10 @@ const messages = [
   },
 ]
 
-const url = \`https://api.cloudflare.com/client/v4/accounts/\${API_ACCOUNT_ID}/ai/run/@cf/meta/llama-3-8b-instruct\`
+const url = \`\${state.endpoint}/ai/run/\${state.model}\`
 
 const headers = {
-  'Authorization': \`Bearer \${API_TOKEN}\`,
+  'Authorization': \`Bearer \${state.apiToken}\`,
   'Content-Type': 'application/json',
 }
 
@@ -52,9 +46,7 @@ const body = JSON.stringify({ messages })
 
 return { url, headers, body, method: 'POST' }`
 
-  defaultHandleResponseCode = `// https://developers.cloudflare.com/workers-ai/models/llama-3-8b-instruct/#using-streaming
-
-const { res } = data
+  defaultHandleResponseCode = `const { res } = data
 
 const obj = await res.json()
 const text = obj.result.response
@@ -96,7 +88,7 @@ return [text]`
   state = reactive({
     endpoint: '',
     apiToken: '',
-    model: 'gpt-3.5-turbo',
+    model: '',
     context: '',
     proxy: '',
     systemMessage: this.defaultSystemMessage,
@@ -111,7 +103,8 @@ return [text]`
     this.description = 'Custom Completion Adapter'
     this.logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CustomCompletionAdapter.' + this.id)
 
-    const defaultApiPoint = 'https://api.openai.com/v1/chat/completions'
+    const defaultApiPoint = adapter.preset === 'openai' ? 'https://api.openai.com/v1/chat/completions' : 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID'
+    const defaultModel = adapter.preset === 'openai' ? 'gpt-4o-mini' : '@cf/meta/llama-3-8b-instruct'
 
     this.panel = {
       type: 'form',
@@ -119,13 +112,9 @@ return [text]`
         { type: 'context', key: 'context', label: i18n.t('context') },
         { type: 'checkbox', key: 'autoTrigger', label: i18n.t('auto-trigger'), description: i18n.t('auto-trigger-completion-desc'), defaultValue: false },
         { type: 'textarea', key: 'systemMessage', label: i18n.t('system-message'), defaultValue: this.defaultSystemMessage },
-        ...(adapter.preset === 'openai'
-          ? [
-            { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultApiPoint }, defaultValue: defaultApiPoint, hasError: v => !v },
-            { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' } },
-            { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
-          ] as FormItem[]
-          : []),
+        { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultApiPoint }, defaultValue: defaultApiPoint, hasError: v => !v },
+        { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' } },
+        { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: defaultModel, props: { placeholder: 'e.g. gpt-4o-mini' }, hasError: v => !v },
         { type: 'textarea', key: 'buildRequestCode', label: 'Build Request Code', defaultValue: adapter.preset === 'openai' ? this.defaultOpenAIBuildRequestCode : this.defaultBuildRequestCode, hasError: v => !v },
         { type: 'textarea', key: 'handleResponseCode', label: 'Handle Response Code', defaultValue: adapter.preset === 'openai' ? this.defaultOpenAIHandleResponseCode : this.defaultHandleResponseCode, hasError: v => !v },
         { type: 'input', key: 'proxy', label: i18n.t('proxy'), props: { placeholder: 'eg: http://127.0.0.1:8000' } },
@@ -214,12 +203,7 @@ export class CustomEditAdapter implements EditAdapter {
 
   defaultSystemMessage = EDIT_DEFAULT_SYSTEM_MESSAGE
 
-  defaultBuildRequestCode = `// https://developers.cloudflare.com/workers-ai/models/llama-3-8b-instruct/
-
-const API_ACCOUNT_ID = 'YOUR_ACCOUNT_ID_HERE'
-const API_TOKEN = 'YOUR_API_TOKEN_HERE'
-
-const { selectedText, instruction, context, system } = data
+  defaultBuildRequestCode = `const { selectedText, instruction, context, system, state } = data
 
 // if context is not provided, system message will be empty
 const systemMessage = context ? system.replace('{CONTEXT}', context) : ''
@@ -239,10 +223,10 @@ messages.unshift({
   content: systemMessage || 'ATTENTION: OUTPUT THE CONTENT DIRECTLY, NO SURROUNDING OR OTHER CONTENT.'
 })
 
-const url = \`https://api.cloudflare.com/client/v4/accounts/\${API_ACCOUNT_ID}/ai/run/@cf/meta/llama-3-8b-instruct\`
+const url = \`\${state.endpoint}/ai/run/\${state.model}\`
 
 const headers = {
-  'Authorization': \`Bearer \${API_TOKEN}\`,
+  'Authorization': \`Bearer \${state.apiToken}\`,
   'Content-Type': 'application/json',
 }
 
@@ -251,9 +235,7 @@ const sse = true // use server-sent events to stream the response
 
 return { url, headers, body, method: 'POST', sse }`
 
-  defaultHandleResponseCode = `// https://developers.cloudflare.com/workers-ai/models/llama-3-8b-instruct/#using-streaming
-
-const { res, sse } = data
+  defaultHandleResponseCode = `const { res, sse } = data
 
 if (sse) { // SSE message, res is a string
   if (res === '[DONE]') {
@@ -270,8 +252,7 @@ if (sse) { // SSE message, res is a string
   return { text }
 }`
 
-defaultOpenAIBuildRequestCode = `// data is the input object
-const { selectedText, instruction, context, system, state } = data
+defaultOpenAIBuildRequestCode = `const { selectedText, instruction, context, system, state } = data
 
 // if context is not provided, system message will be empty
 const systemMessage = context ? system.replace('{CONTEXT}', context) : ''
@@ -303,8 +284,7 @@ const sse = true // use server-sent events to stream the response
 
 return { url, headers, body, method: 'POST', sse }`
 
-defaultOpenAIHandleResponseCode = `// data is the input object
-const { res } = data
+defaultOpenAIHandleResponseCode = `const { res } = data
 
 if (res === '[DONE]') {
   return { done: true }
@@ -318,7 +298,7 @@ return { delta }`
   state = reactive({
     endpoint: '',
     apiToken: '',
-    model: 'gpt-3.5-turbo',
+    model: '',
     context: '',
     withContext: false,
     selection: '',
@@ -337,7 +317,8 @@ return { delta }`
     this.description = 'Custom Edit Adapter'
     this.logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CustomEditAdapter.' + this.id)
 
-    const defaultApiPoint = 'https://api.openai.com/v1/chat/completions'
+    const defaultApiPoint = adapter.preset === 'openai' ? 'https://api.openai.com/v1/chat/completions' : 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID'
+    const defaultModel = adapter.preset === 'openai' ? 'gpt-4o-mini' : '@cf/meta/llama-3-8b-instruct'
 
     this.panel = {
       type: 'form',
@@ -346,13 +327,9 @@ return { delta }`
         { type: 'context', key: 'context', label: i18n.t('context') },
         { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
         { type: 'textarea', key: 'systemMessage', label: i18n.t('system-message'), defaultValue: this.defaultSystemMessage },
-        ...(adapter.preset === 'openai'
-          ? [
-            { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultApiPoint }, defaultValue: defaultApiPoint, hasError: v => !v },
-            { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' } },
-            { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: 'gpt-3.5-turbo', props: { placeholder: 'e.g. gpt-4 or gpt-3.5-turbo' }, hasError: v => !v },
-          ] as FormItem[]
-          : []),
+        { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultApiPoint }, defaultValue: defaultApiPoint, hasError: v => !v },
+        { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' } },
+        { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: defaultModel, props: { placeholder: 'e.g. gpt-4o-mini' }, hasError: v => !v },
         { type: 'textarea', key: 'buildRequestCode', label: 'Build Request Code', defaultValue: adapter.preset === 'openai' ? this.defaultOpenAIBuildRequestCode : this.defaultBuildRequestCode, hasError: v => !v },
         { type: 'textarea', key: 'handleResponseCode', label: 'Handle Response Code', defaultValue: adapter.preset === 'openai' ? this.defaultOpenAIHandleResponseCode : this.defaultHandleResponseCode, hasError: v => !v },
         { type: 'input', key: 'proxy', label: i18n.t('proxy'), props: { placeholder: 'eg: http://127.0.0.1:8000' } },
@@ -481,7 +458,7 @@ export class CustomTextToImageAdapter implements TextToImageAdapter {
   logger: ReturnType<typeof ctx.utils.getLogger>
   monaco = ctx.editor.getMonaco()
 
-  defaultBuildRequestCode = `const { width, height, endpoint, apiToken, instruction, model } = data
+  defaultBuildRequestCode = `const { state: { width, height, endpoint, apiToken, instruction, model } } = data
 
 const url = \`\${endpoint}/ai/run/\${model}\`
 
@@ -502,7 +479,7 @@ if (res.headers.get('Content-Type').startsWith('image')) {
   throw new Error(await res.text())
 }`
 
-  defaultGradioBuildRequestCode = `const { width, height, apiToken, instruction, endpoint } = data
+  defaultGradioBuildRequestCode = `const { state: { width, height, apiToken, instruction, endpoint } } = data
 
 const client = await env.gradio.Client.connect(endpoint, { hf_token: apiToken })
 
@@ -551,8 +528,8 @@ if (res.headers.get('Content-Type').startsWith('image')) {
     instruction: '',
     proxy: '',
     apiToken: '',
-    endpoint: 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID',
-    model: '@cf/lykon/dreamshaper-8-lcm',
+    endpoint: '',
+    model: '',
     width: 512,
     height: 512,
     buildRequestCode: this.defaultBuildRequestCode,
@@ -567,16 +544,18 @@ if (res.headers.get('Content-Type').startsWith('image')) {
     this.description = 'Custom Text to Image Adapter'
     this.logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CustomTextToImageAdapter.' + this.id)
 
+    const defaultEndpoint = adapter.preset === 'gradio' ? 'https://black-forest-labs/FLUX.1-schnell' : 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID'
+
     this.panel = {
       type: 'form',
       items: [
         { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
-        { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: adapter.preset === 'gradio' ? 'eg. black-forest-labs/FLUX.1-schnell' : 'eg. https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID' }, hasError: v => !v },
+        { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultEndpoint }, defaultValue: defaultEndpoint, hasError: v => !v },
         { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: '', type: 'password' } },
         ...(adapter.preset === 'gradio'
           ? []
           : [
-            { type: 'input', key: 'model', label: i18n.t('model'), hasError: v => !v },
+            { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: '@cf/lykon/dreamshaper-8-lcm', hasError: v => !v },
           ] as FormItem[]),
         { type: 'range', key: 'width', label: i18n.t('width'), defaultValue: 512, min: 1, max: 1920, step: 1 },
         { type: 'range', key: 'height', label: i18n.t('height'), defaultValue: 512, min: 1, max: 1920, step: 1 },
@@ -617,7 +596,7 @@ if (res.headers.get('Content-Type').startsWith('image')) {
     const buildRequestFn = new AsyncFunction('data', 'env', this.state.buildRequestCode)
     const handleResultFn = new AsyncFunction('data', this.state.handleResponseCode)
 
-    const data = { ...this.state }
+    const data = { state: this.state }
     const env = { gradio, signal: controller.signal, updateStatus }
 
     const request = await buildRequestFn.apply(this, [data, env])

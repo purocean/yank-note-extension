@@ -9,7 +9,7 @@
           'has-icon-btn': !!(item as any).defaultValue || item.key === 'instruction',
           'has-error': !!item.hasError?.(adapterState[item.key])
         }">
-          <div class="label"> {{ item.label }} </div>
+          <div class="label" :title="item.key"> {{ item.label }} </div>
             <div v-if="item.type === 'context'">
               <template v-if="type !== 'edit' || adapterState.withContext">
                 <textarea v-model="adapterState.context" v-bind="item.props" :placeholder="i18n.$t.value('no-context-available')" />
