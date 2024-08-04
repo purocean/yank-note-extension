@@ -26,6 +26,10 @@ export function getExtensionBasePath (id: string): string {
   return '/extensions/' + id.replace(/\//g, '$')
 }
 
+export function runtimeVersionSatisfies (version: string): boolean {
+  return ctx.lib.semver.satisfies(ctx.version, version)
+}
+
 export const YN_LIBS = {
   vue: 'ctx.lib.vue',
   semver: 'ctx.lib.semver',
