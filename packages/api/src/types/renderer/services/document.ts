@@ -1,5 +1,5 @@
 import { Optional } from 'utility-types';
-import { DocType, type Doc, type DocCategory, type PathItem, type SwitchDocOpts } from '@fe/types';
+import type { DocType, Doc, DocCategory, PathItem, SwitchDocOpts } from '@fe/types';
 /**
  * Get absolutePath of document
  * @param doc

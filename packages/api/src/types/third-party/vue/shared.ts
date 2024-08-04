@@ -5,6 +5,7 @@
  * \/\*#\_\_PURE\_\_\*\/
  * So that rollup can tree-shake them if necessary.
  */
+/*! #__NO_SIDE_EFFECTS__ */
 export declare function makeMap(str: string, expectsLowerCase?: boolean): (key: string) => boolean;
 
 export declare const EMPTY_OBJ: {
@@ -60,8 +61,8 @@ export declare const capitalize: <T extends string>(str: T) => Capitalize<T>;
  */
 export declare const toHandlerKey: <T extends string>(str: T) => T extends "" ? "" : `on${Capitalize<T>}`;
 export declare const hasChanged: (value: any, oldValue: any) => boolean;
-export declare const invokeArrayFns: (fns: Function[], arg?: any) => void;
-export declare const def: (obj: object, key: string | symbol, value: any) => void;
+export declare const invokeArrayFns: (fns: Function[], ...arg: any[]) => void;
+export declare const def: (obj: object, key: string | symbol, value: any, writable?: boolean) => void;
 /**
  * "123-foo" will be parsed to 123
  * This is used for the .number modifier in v-model
@@ -93,7 +94,7 @@ export declare function genPropsAccessExp(name: string): string;
  * Check the `patchElement` function in '../../runtime-core/src/renderer.ts' to see how the
  * flags are handled during diff.
  */
-export declare const enum PatchFlags {
+export declare enum PatchFlags {
     /**
      * Indicates an element with dynamic textContent (children fast path)
      */
@@ -191,7 +192,7 @@ export declare const enum PatchFlags {
  */
 export declare const PatchFlagNames: Record<PatchFlags, string>;
 
-export declare const enum ShapeFlags {
+export declare enum ShapeFlags {
     ELEMENT = 1,
     FUNCTIONAL_COMPONENT = 2,
     STATEFUL_COMPONENT = 4,
@@ -205,7 +206,7 @@ export declare const enum ShapeFlags {
     COMPONENT = 6
 }
 
-export declare const enum SlotFlags {
+export declare enum SlotFlags {
     /**
      * Stable slots that only reference slot props or context state. The slot
      * can fully capture its own dependencies so when passed down the parent won't
@@ -262,6 +263,11 @@ export declare const isSVGTag: (key: string) => boolean;
  * Compiler only.
  * Do NOT use in runtime code paths unless behind `__DEV__` flag.
  */
+export declare const isMathMLTag: (key: string) => boolean;
+/**
+ * Compiler only.
+ * Do NOT use in runtime code paths unless behind `__DEV__` flag.
+ */
 export declare const isVoidTag: (key: string) => boolean;
 
 export declare const isSpecialBooleanAttr: (key: string) => boolean;
@@ -287,6 +293,10 @@ export declare const isKnownHtmlAttr: (key: string) => boolean;
  * Generated from https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute
  */
 export declare const isKnownSvgAttr: (key: string) => boolean;
+/**
+ * Shared between server-renderer and runtime-core hydration logic
+ */
+export declare function isRenderableAttrValue(value: unknown): boolean;
 
 export declare function escapeHtml(string: unknown): string;
 export declare function escapeHtmlComment(src: string): string;

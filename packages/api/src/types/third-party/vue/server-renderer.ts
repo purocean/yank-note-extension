@@ -1,7 +1,6 @@
 /// <reference types="node" />
-import { VNode, ComponentInternalInstance, App, Slots, Component } from 'vue';
-import { Readable, Writable } from 'stream';
-import { ComponentPublicInstance, Directive } from '@vue/runtime-core';
+import { VNode, ComponentInternalInstance, App, Slots, Component, ComponentPublicInstance, Directive } from 'vue';
+import { Readable, Writable } from 'node:stream';
 export { includeBooleanAttr as ssrIncludeBooleanAttr } from '@vue/shared';
 
 type SSRBuffer = SSRBufferItem[] & {

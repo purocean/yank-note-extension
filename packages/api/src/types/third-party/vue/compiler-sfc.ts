@@ -1,15 +1,13 @@
 import * as _babel_types from '@babel/types';
-import { Statement, Expression, TSType, Program, CallExpression, Node, ObjectPattern, TSModuleDeclaration, TSPropertySignature, TSMethodSignature, TSCallSignatureDeclaration, TSFunctionType } from '@babel/types';
-import { CompilerOptions, CodegenResult, ParserOptions, RootNode, CompilerError, SourceLocation, ElementNode, BindingMetadata as BindingMetadata$1 } from '@vue/compiler-core';
+import { Statement, Expression, TSType, Node, Program, CallExpression, ObjectPattern, TSModuleDeclaration, TSPropertySignature, TSMethodSignature, TSCallSignatureDeclaration, TSFunctionType } from '@babel/types';
+import { RootNode, CompilerOptions, CodegenResult, ParserOptions, CompilerError, RawSourceMap, SourceLocation, BindingMetadata as BindingMetadata$1 } from '@vue/compiler-core';
 export { BindingMetadata, CompilerError, CompilerOptions, extractIdentifiers, generateCodeFrame, isInDestructureAssignment, isStaticProperty, walkIdentifiers } from '@vue/compiler-core';
-import { RawSourceMap } from 'source-map-js';
 import { ParserPlugin } from '@babel/parser';
 export { parse as babelParse } from '@babel/parser';
 import { Result, LazyResult } from 'postcss';
 import MagicString from 'magic-string';
 export { default as MagicString } from 'magic-string';
 import TS from 'typescript';
-export { shouldTransform as shouldTransformRef, transform as transformRef, transformAST as transformRefAST } from '@vue/reactivity-transform';
 
 export interface AssetURLTagConfig {
     [name: string]: string[];
@@ -28,7 +26,7 @@ export interface AssetURLOptions {
 }
 
 export interface TemplateCompiler {
-    compile(template: string, options: CompilerOptions): CodegenResult;
+    compile(source: string | RootNode, options: CompilerOptions): CodegenResult;
     parse(template: string, options: ParserOptions): RootNode;
 }
 export interface SFCTemplateCompileResults {
@@ -42,6 +40,7 @@ export interface SFCTemplateCompileResults {
 }
 export interface SFCTemplateCompileOptions {
     source: string;
+    ast?: RootNode;
     filename: string;
     id: string;
     scoped?: boolean;
@@ -118,11 +117,6 @@ export interface SFCScriptCompileOptions {
      */
     hoistStatic?: boolean;
     /**
-     * (**Experimental**) Enable macro `defineModel`
-     * @default false
-     */
-    defineModel?: boolean;
-    /**
      * (**Experimental**) Enable reactive destructure for `defineProps`
      * @default false
      */
@@ -135,15 +129,8 @@ export interface SFCScriptCompileOptions {
     fs?: {
         fileExists(file: string): boolean;
         readFile(file: string): string | undefined;
+        realpath?(file: string): string;
     };
-    /**
-     * (Experimental) Enable syntax transform for using refs without `.value` and
-     * using destructured props with reactivity
-     * @deprecated the Reactivity Transform proposal has been dropped. This
-     * feature will be removed from Vue core in 3.4. If you intend to continue
-     * using it, disable this and switch to the [Vue Macros implementation](https://vue-macros.sxzz.moe/features/reactivity-transform.html).
-     */
-    reactivityTransform?: boolean;
     /**
      * Transform Vue SFCs into custom elements.
      */
@@ -171,6 +158,12 @@ export interface SFCParseOptions {
     pad?: boolean | 'line' | 'space';
     ignoreEmpty?: boolean;
     compiler?: TemplateCompiler;
+    templateParseOptions?: ParserOptions;
+    /**
+     * TODO remove in 3.5
+     * @deprecated use `templateParseOptions: { prefixIdentifiers: false }` instead
+     */
+    parseExpressions?: boolean;
 }
 export interface SFCBlock {
     type: string;
@@ -183,7 +176,7 @@ export interface SFCBlock {
 }
 export interface SFCTemplateBlock extends SFCBlock {
     type: 'template';
-    ast: ElementNode;
+    ast?: RootNode;
 }
 export interface SFCScriptBlock extends SFCBlock {
     type: 'script';
@@ -233,7 +226,7 @@ export interface SFCParseResult {
     descriptor: SFCDescriptor;
     errors: (CompilerError | SyntaxError)[];
 }
-export declare function parse(source: string, { sourceMap, filename, sourceRoot, pad, ignoreEmpty, compiler }?: SFCParseOptions): SFCParseResult;
+export declare function parse(source: string, options?: SFCParseOptions): SFCParseResult;
 
 type PreprocessLang = 'less' | 'sass' | 'scss' | 'styl' | 'stylus';
 
@@ -295,14 +288,16 @@ type PropsDestructureBindings = Record<string, // public prop key
     local: string;
     default?: Expression;
 }>;
+export declare function extractRuntimeProps(ctx: TypeResolveContext): string | undefined;
 
 interface ModelDecl {
     type: TSType | undefined;
     options: string | undefined;
     identifier: string | undefined;
+    runtimeOptionNodes: Node[];
 }
 
-declare const enum BindingTypes {
+declare enum BindingTypes {
     /**
      * returned from data()
      */
@@ -407,6 +402,7 @@ export declare class ScriptCompileContext {
     error(msg: string, node: Node, scope?: TypeScope): never;
 }
 
+export type SimpleTypeResolveOptions = Partial<Pick<SFCScriptCompileOptions, 'globalTypeFiles' | 'fs' | 'babelParserPlugins' | 'isProd'>>;
 /**
  * TypeResolveContext is compatible with ScriptCompileContext
  * but also allows a simpler version of it with minimal required properties
@@ -422,8 +418,9 @@ export declare class ScriptCompileContext {
  * }
  * ```
  */
-export type SimpleTypeResolveContext = Pick<ScriptCompileContext, 'source' | 'filename' | 'error' | 'options'> & Partial<Pick<ScriptCompileContext, 'scope' | 'globalScopes' | 'deps' | 'fs'>> & {
+export type SimpleTypeResolveContext = Pick<ScriptCompileContext, 'source' | 'filename' | 'error' | 'helper' | 'getString' | 'propsTypeDecl' | 'propsRuntimeDefaults' | 'propsDestructuredBindings' | 'emitsTypeDecl' | 'isCE'> & Partial<Pick<ScriptCompileContext, 'scope' | 'globalScopes' | 'deps' | 'fs'>> & {
     ast: Statement[];
+    options: SimpleTypeResolveOptions;
 };
 export type TypeResolveContext = ScriptCompileContext | SimpleTypeResolveContext;
 type Import = Pick<ImportBinding, 'source' | 'imported'>;
@@ -441,6 +438,7 @@ declare class TypeScope {
     types: Record<string, ScopeTypeNode>;
     declares: Record<string, ScopeTypeNode>;
     constructor(filename: string, source: string, offset?: number, imports?: Record<string, Import>, types?: Record<string, ScopeTypeNode>, declares?: Record<string, ScopeTypeNode>);
+    isGenericScope: boolean;
     resolvedImportSources: Record<string, string>;
     exportedTypes: Record<string, ScopeTypeNode>;
     exportedDeclares: Record<string, ScopeTypeNode>;
@@ -469,11 +467,76 @@ export declare function registerTS(_loadTS: () => typeof TS): void;
  * @private
  */
 export declare function invalidateTypeCache(filename: string): void;
-export declare function inferRuntimeType(ctx: TypeResolveContext, node: Node & MaybeWithScope, scope?: TypeScope): string[];
+export declare function inferRuntimeType(ctx: TypeResolveContext, node: Node & MaybeWithScope, scope?: TypeScope, isKeyOf?: boolean): string[];
+
+export declare function extractRuntimeEmits(ctx: TypeResolveContext): Set<string>;
 
 export declare const version: string;
 
 export declare const parseCache: Map<string, SFCParseResult>;
+export declare const errorMessages: {
+    0: string;
+    1: string;
+    2: string;
+    3: string;
+    4: string;
+    5: string;
+    6: string;
+    7: string;
+    8: string;
+    9: string;
+    10: string;
+    11: string;
+    12: string;
+    13: string;
+    14: string;
+    15: string;
+    16: string;
+    17: string;
+    18: string;
+    19: string;
+    20: string;
+    21: string;
+    22: string;
+    23: string;
+    24: string;
+    25: string;
+    26: string;
+    27: string;
+    28: string;
+    29: string;
+    30: string;
+    31: string;
+    32: string;
+    33: string;
+    34: string;
+    35: string;
+    36: string;
+    37: string;
+    38: string;
+    39: string;
+    40: string;
+    41: string;
+    42: string;
+    43: string;
+    44: string;
+    45: string;
+    46: string;
+    47: string;
+    48: string;
+    49: string;
+    50: string;
+    51: string;
+    52: string;
+    53: string;
+};
 
 export declare const walk: any;
+
+/**
+ * @deprecated this is preserved to avoid breaking vite-plugin-vue < 5.0
+ * with reactivityTransform: true. The desired behavior should be silently
+ * ignoring the option instead of breaking.
+ */
+export declare const shouldTransformRef: () => boolean;
 

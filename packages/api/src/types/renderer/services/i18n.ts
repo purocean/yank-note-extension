@@ -40,7 +40,7 @@ export declare function mergeLanguage(lang: Language, nls: Record<string, any>):
  */
 export declare function useI18n(): {
     t: typeof t;
-    $t: import("vue").Ref<typeof t>;
+    $t: import("vue").Ref<typeof t, typeof t>;
     setLanguage: typeof setLanguage;
     getLanguage: typeof getLanguage;
 };
@@ -53,8 +53,8 @@ export declare function useI18n(): {
 export declare function createI18n<T extends Record<string, any>>(data: {
     [lang in Language]?: T;
 }, defaultLanguage?: Language): {
-    t: (path: keyof Flat<T, "">, ...args: string[]) => string | keyof Flat<T, "">;
-    $t: import("vue").Ref<(path: keyof Flat<T, "">, ...args: string[]) => string | keyof Flat<T, "">>;
+    t: (path: keyof Flat<T, "">, ...args: string[]) => string;
+    $t: import("vue").Ref<(path: keyof Flat<T, "">, ...args: string[]) => string, (path: keyof Flat<T, "">, ...args: string[]) => string>;
     $$t: (path: keyof Flat<T, "">, ...args: string[]) => string;
 };
 declare module '@vue/runtime-core' {

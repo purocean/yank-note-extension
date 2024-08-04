@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import type { ConvertOpts, PrintOpts } from '@fe/types';
 /**
  * Toggle export panel visible.

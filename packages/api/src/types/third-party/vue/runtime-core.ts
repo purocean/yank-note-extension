@@ -1,5 +1,5 @@
-import { computed as computed$1, ShallowUnwrapRef, UnwrapNestedRefs, DebuggerEvent, ComputedGetter, WritableComputedOptions, Ref, ReactiveEffect, ComputedRef, DebuggerOptions, reactive } from '@vue/reactivity';
-export { ComputedGetter, ComputedRef, ComputedSetter, CustomRefFactory, DebuggerEvent, DebuggerEventExtraInfo, DebuggerOptions, DeepReadonly, EffectScheduler, EffectScope, MaybeRef, MaybeRefOrGetter, Raw, ReactiveEffect, ReactiveEffectOptions, ReactiveEffectRunner, ReactiveFlags, Ref, ShallowReactive, ShallowRef, ShallowUnwrapRef, ToRef, ToRefs, TrackOpTypes, TriggerOpTypes, UnwrapNestedRefs, UnwrapRef, WritableComputedOptions, WritableComputedRef, customRef, effect, effectScope, getCurrentScope, isProxy, isReactive, isReadonly, isRef, isShallow, markRaw, onScopeDispose, proxyRefs, reactive, readonly, ref, shallowReactive, shallowReadonly, shallowRef, stop, toRaw, toRef, toRefs, toValue, triggerRef, unref } from '@vue/reactivity';
+import { computed as computed$1, ShallowUnwrapRef, UnwrapNestedRefs, DebuggerEvent, ComputedGetter, WritableComputedOptions, Ref, ReactiveEffect, ComputedRef, DebuggerOptions, ReactiveMarker, reactive } from '@vue/reactivity';
+export { ComputedGetter, ComputedRef, ComputedSetter, CustomRefFactory, DebuggerEvent, DebuggerEventExtraInfo, DebuggerOptions, DeepReadonly, EffectScheduler, EffectScope, MaybeRef, MaybeRefOrGetter, Raw, Reactive, ReactiveEffect, ReactiveEffectOptions, ReactiveEffectRunner, ReactiveFlags, Ref, ShallowReactive, ShallowRef, ShallowUnwrapRef, ToRef, ToRefs, TrackOpTypes, TriggerOpTypes, UnwrapNestedRefs, UnwrapRef, WritableComputedOptions, WritableComputedRef, customRef, effect, effectScope, getCurrentScope, isProxy, isReactive, isReadonly, isRef, isShallow, markRaw, onScopeDispose, proxyRefs, reactive, readonly, ref, shallowReactive, shallowReadonly, shallowRef, stop, toRaw, toRef, toRefs, toValue, triggerRef, unref } from '@vue/reactivity';
 import { IfAny, Prettify, Awaited, UnionToIntersection, LooseRequired } from '@vue/shared';
 export { camelize, capitalize, normalizeClass, normalizeProps, normalizeStyle, toDisplayString, toHandlerKey } from '@vue/shared';
 
@@ -47,9 +47,8 @@ interface SchedulerJob extends Function {
     /**
      * Attached by renderer.ts when setting up a component's render effect
      * Used to obtain component information when reporting max recursive updates.
-     * dev only.
      */
-    ownerInstance?: ComponentInternalInstance;
+    i?: ComponentInternalInstance;
 }
 type SchedulerJobs = SchedulerJob | SchedulerJob[];
 export declare function nextTick<T = void, R = void>(this: T, fn?: (this: T) => R): Promise<Awaited<R>>;
@@ -62,8 +61,11 @@ type EmitsToProps<T extends EmitsOptions> = T extends string[] ? {
 } : T extends ObjectEmitsOptions ? {
     [K in `on${Capitalize<string & keyof T>}`]?: K extends `on${infer C}` ? (...args: T[Uncapitalize<C>] extends (...args: infer P) => any ? P : T[Uncapitalize<C>] extends null ? any[] : never) => any : never;
 } : {};
+type ShortEmitsToObject<E> = E extends Record<string, any[]> ? {
+    [K in keyof E]: (...args: E[K]) => any;
+} : E;
 type EmitFn<Options = ObjectEmitsOptions, Event extends keyof Options = keyof Options> = Options extends Array<infer V> ? (event: V, ...args: any[]) => void : {} extends Options ? (event: string, ...args: any[]) => void : UnionToIntersection<{
-    [key in Event]: Options[key] extends (...args: infer Args) => any ? (event: key, ...args: Args) => void : (event: key, ...args: any[]) => void;
+    [key in Event]: Options[key] extends (...args: infer Args) => any ? (event: key, ...args: Args) => void : Options[key] extends any[] ? (event: key, ...args: Options[key]) => void : (event: key, ...args: any[]) => void;
 }[Event]>;
 
 /**
@@ -125,10 +127,10 @@ C extends ComputedOptions = {}, M extends MethodOptions = {}, E extends EmitsOpt
     $options: Options & MergedComponentOptionsOverride;
     $forceUpdate: () => void;
     $nextTick: typeof nextTick;
-    $watch<T extends string | ((...args: any) => any)>(source: T, cb: T extends (...args: any) => infer R ? (...args: [R, R]) => any : (...args: any) => any, options?: WatchOptions): WatchStopHandle;
+    $watch<T extends string | ((...args: any) => any)>(source: T, cb: T extends (...args: any) => infer R ? (...args: [R, R, OnCleanup]) => any : (...args: [any, any, OnCleanup]) => any, options?: WatchOptions): WatchStopHandle;
 } & IfAny<P, P, Omit<P, keyof ShallowUnwrapRef<B>>> & ShallowUnwrapRef<B> & UnwrapNestedRefs<D> & ExtractComputedReturns<C> & M & ComponentCustomProperties & InjectToObject<I>;
 
-declare const enum LifecycleHooks {
+declare enum LifecycleHooks {
     BEFORE_CREATE = "bc",
     CREATED = "c",
     BEFORE_MOUNT = "bm",
@@ -160,9 +162,8 @@ export interface SuspenseProps {
 declare const SuspenseImpl: {
     name: string;
     __isSuspense: boolean;
-    process(n1: VNode | null, n2: VNode, container: RendererElement, anchor: RendererNode | null, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, isSVG: boolean, slotScopeIds: string[] | null, optimized: boolean, rendererInternals: RendererInternals): void;
+    process(n1: VNode | null, n2: VNode, container: RendererElement, anchor: RendererNode | null, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, namespace: ElementNamespace, slotScopeIds: string[] | null, optimized: boolean, rendererInternals: RendererInternals): void;
     hydrate: typeof hydrateSuspense;
-    create: typeof createSuspenseBoundary;
     normalize: typeof normalizeSuspenseChildren;
 };
 export declare const Suspense: {
@@ -179,10 +180,9 @@ export interface SuspenseBoundary {
     vnode: VNode<RendererNode, RendererElement, SuspenseProps>;
     parent: SuspenseBoundary | null;
     parentComponent: ComponentInternalInstance | null;
-    isSVG: boolean;
+    namespace: ElementNamespace;
     container: RendererElement;
     hiddenContainer: RendererElement;
-    anchor: RendererNode | null;
     activeBranch: VNode | null;
     pendingBranch: VNode | null;
     deps: number;
@@ -196,11 +196,10 @@ export interface SuspenseBoundary {
     fallback(fallbackVNode: VNode): void;
     move(container: RendererElement, anchor: RendererNode | null, type: MoveType): void;
     next(): RendererNode | null;
-    registerDep(instance: ComponentInternalInstance, setupRenderEffect: SetupRenderEffectFn): void;
+    registerDep(instance: ComponentInternalInstance, setupRenderEffect: SetupRenderEffectFn, optimized: boolean): void;
     unmount(parentSuspense: SuspenseBoundary | null, doRemove?: boolean): void;
 }
-declare function createSuspenseBoundary(vnode: VNode, parentSuspense: SuspenseBoundary | null, parentComponent: ComponentInternalInstance | null, container: RendererElement, hiddenContainer: RendererElement, anchor: RendererNode | null, isSVG: boolean, slotScopeIds: string[] | null, optimized: boolean, rendererInternals: RendererInternals, isHydrating?: boolean): SuspenseBoundary;
-declare function hydrateSuspense(node: Node, vnode: VNode, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, isSVG: boolean, slotScopeIds: string[] | null, optimized: boolean, rendererInternals: RendererInternals, hydrateNode: (node: Node, vnode: VNode, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, slotScopeIds: string[] | null, optimized: boolean) => Node | null): Node | null;
+declare function hydrateSuspense(node: Node, vnode: VNode, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, namespace: ElementNamespace, slotScopeIds: string[] | null, optimized: boolean, rendererInternals: RendererInternals, hydrateNode: (node: Node, vnode: VNode, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, slotScopeIds: string[] | null, optimized: boolean) => Node | null): Node | null;
 declare function normalizeSuspenseChildren(vnode: VNode): void;
 
 export type RootHydrateFunction = (vnode: VNode<Node, Element>, container: (Element | ShadowRoot) & {
@@ -266,7 +265,7 @@ export declare const BaseTransition: new () => {
         default(): VNode[];
     };
 };
-export declare function resolveTransitionHooks(vnode: VNode, props: BaseTransitionProps<any>, state: TransitionState, instance: ComponentInternalInstance): TransitionHooks;
+export declare function resolveTransitionHooks(vnode: VNode, props: BaseTransitionProps<any>, state: TransitionState, instance: ComponentInternalInstance, postClone?: (hooks: TransitionHooks) => void): TransitionHooks;
 export declare function setTransitionHooks(vnode: VNode, hooks: TransitionHooks): void;
 export declare function getTransitionRawChildren(children: VNode[], keepComment?: boolean, parentKey?: VNode['key']): VNode[];
 
@@ -277,12 +276,13 @@ export interface Renderer<HostElement = RendererElement> {
 export interface HydrationRenderer extends Renderer<Element | ShadowRoot> {
     hydrate: RootHydrateFunction;
 }
-export type RootRenderFunction<HostElement = RendererElement> = (vnode: VNode | null, container: HostElement, isSVG?: boolean) => void;
+export type ElementNamespace = 'svg' | 'mathml' | undefined;
+export type RootRenderFunction<HostElement = RendererElement> = (vnode: VNode | null, container: HostElement, namespace?: ElementNamespace) => void;
 export interface RendererOptions<HostNode = RendererNode, HostElement = RendererElement> {
-    patchProp(el: HostElement, key: string, prevValue: any, nextValue: any, isSVG?: boolean, prevChildren?: VNode<HostNode, HostElement>[], parentComponent?: ComponentInternalInstance | null, parentSuspense?: SuspenseBoundary | null, unmountChildren?: UnmountChildrenFn): void;
+    patchProp(el: HostElement, key: string, prevValue: any, nextValue: any, namespace?: ElementNamespace, parentComponent?: ComponentInternalInstance | null): void;
     insert(el: HostNode, parent: HostElement, anchor?: HostNode | null): void;
     remove(el: HostNode): void;
-    createElement(type: string, isSVG?: boolean, isCustomizedBuiltIn?: string, vnodeProps?: (VNodeProps & {
+    createElement(type: string, namespace?: ElementNamespace, isCustomizedBuiltIn?: string, vnodeProps?: (VNodeProps & {
         [key: string]: any;
     }) | null): HostElement;
     createText(text: string): HostNode;
@@ -294,10 +294,10 @@ export interface RendererOptions<HostNode = RendererNode, HostElement = Renderer
     querySelector?(selector: string): HostElement | null;
     setScopeId?(el: HostElement, id: string): void;
     cloneNode?(node: HostNode): HostNode;
-    insertStaticContent?(content: string, parent: HostElement, anchor: HostNode | null, isSVG: boolean, start?: HostNode | null, end?: HostNode | null): [HostNode, HostNode];
+    insertStaticContent?(content: string, parent: HostElement, anchor: HostNode | null, namespace: ElementNamespace, start?: HostNode | null, end?: HostNode | null): [HostNode, HostNode];
 }
 export interface RendererNode {
-    [key: string]: any;
+    [key: string | symbol]: any;
 }
 export interface RendererElement extends RendererNode {
 }
@@ -314,18 +314,17 @@ interface RendererInternals<HostNode = RendererNode, HostElement = RendererEleme
     o: RendererOptions<HostNode, HostElement>;
 }
 type PatchFn = (n1: VNode | null, // null means this is a mount
-n2: VNode, container: RendererElement, anchor?: RendererNode | null, parentComponent?: ComponentInternalInstance | null, parentSuspense?: SuspenseBoundary | null, isSVG?: boolean, slotScopeIds?: string[] | null, optimized?: boolean) => void;
-type MountChildrenFn = (children: VNodeArrayChildren, container: RendererElement, anchor: RendererNode | null, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, isSVG: boolean, slotScopeIds: string[] | null, optimized: boolean, start?: number) => void;
-type PatchChildrenFn = (n1: VNode | null, n2: VNode, container: RendererElement, anchor: RendererNode | null, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, isSVG: boolean, slotScopeIds: string[] | null, optimized: boolean) => void;
-type PatchBlockChildrenFn = (oldChildren: VNode[], newChildren: VNode[], fallbackContainer: RendererElement, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, isSVG: boolean, slotScopeIds: string[] | null) => void;
+n2: VNode, container: RendererElement, anchor?: RendererNode | null, parentComponent?: ComponentInternalInstance | null, parentSuspense?: SuspenseBoundary | null, namespace?: ElementNamespace, slotScopeIds?: string[] | null, optimized?: boolean) => void;
+type MountChildrenFn = (children: VNodeArrayChildren, container: RendererElement, anchor: RendererNode | null, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, namespace: ElementNamespace, slotScopeIds: string[] | null, optimized: boolean, start?: number) => void;
+type PatchChildrenFn = (n1: VNode | null, n2: VNode, container: RendererElement, anchor: RendererNode | null, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, namespace: ElementNamespace, slotScopeIds: string[] | null, optimized: boolean) => void;
+type PatchBlockChildrenFn = (oldChildren: VNode[], newChildren: VNode[], fallbackContainer: RendererElement, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, namespace: ElementNamespace, slotScopeIds: string[] | null) => void;
 type MoveFn = (vnode: VNode, container: RendererElement, anchor: RendererNode | null, type: MoveType, parentSuspense?: SuspenseBoundary | null) => void;
 type NextFn = (vnode: VNode) => RendererNode | null;
 type UnmountFn = (vnode: VNode, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, doRemove?: boolean, optimized?: boolean) => void;
 type RemoveFn = (vnode: VNode) => void;
-type UnmountChildrenFn = (children: VNode[], parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, doRemove?: boolean, optimized?: boolean, start?: number) => void;
-type MountComponentFn = (initialVNode: VNode, container: RendererElement, anchor: RendererNode | null, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, isSVG: boolean, optimized: boolean) => void;
-type SetupRenderEffectFn = (instance: ComponentInternalInstance, initialVNode: VNode, container: RendererElement, anchor: RendererNode | null, parentSuspense: SuspenseBoundary | null, isSVG: boolean, optimized: boolean) => void;
-declare const enum MoveType {
+type MountComponentFn = (initialVNode: VNode, container: RendererElement, anchor: RendererNode | null, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, namespace: ElementNamespace, optimized: boolean) => void;
+type SetupRenderEffectFn = (instance: ComponentInternalInstance, initialVNode: VNode, container: RendererElement, anchor: RendererNode | null, parentSuspense: SuspenseBoundary | null, namespace: ElementNamespace, optimized: boolean) => void;
+declare enum MoveType {
     ENTER = 0,
     LEAVE = 1,
     REORDER = 2
@@ -366,16 +365,16 @@ export declare const KeepAlive: {
 export declare function onActivated(hook: Function, target?: ComponentInternalInstance | null): void;
 export declare function onDeactivated(hook: Function, target?: ComponentInternalInstance | null): void;
 
-export declare const onBeforeMount: (hook: () => any, target?: ComponentInternalInstance | null) => false | Function | undefined;
-export declare const onMounted: (hook: () => any, target?: ComponentInternalInstance | null) => false | Function | undefined;
-export declare const onBeforeUpdate: (hook: () => any, target?: ComponentInternalInstance | null) => false | Function | undefined;
-export declare const onUpdated: (hook: () => any, target?: ComponentInternalInstance | null) => false | Function | undefined;
-export declare const onBeforeUnmount: (hook: () => any, target?: ComponentInternalInstance | null) => false | Function | undefined;
-export declare const onUnmounted: (hook: () => any, target?: ComponentInternalInstance | null) => false | Function | undefined;
-export declare const onServerPrefetch: (hook: () => any, target?: ComponentInternalInstance | null) => false | Function | undefined;
+export declare const onBeforeMount: (hook: () => any, target?: ComponentInternalInstance | null) => void;
+export declare const onMounted: (hook: () => any, target?: ComponentInternalInstance | null) => void;
+export declare const onBeforeUpdate: (hook: () => any, target?: ComponentInternalInstance | null) => void;
+export declare const onUpdated: (hook: () => any, target?: ComponentInternalInstance | null) => void;
+export declare const onBeforeUnmount: (hook: () => any, target?: ComponentInternalInstance | null) => void;
+export declare const onUnmounted: (hook: () => any, target?: ComponentInternalInstance | null) => void;
+export declare const onServerPrefetch: (hook: () => any, target?: ComponentInternalInstance | null) => void;
 type DebuggerHook = (e: DebuggerEvent) => void;
-export declare const onRenderTriggered: (hook: DebuggerHook, target?: ComponentInternalInstance | null) => false | Function | undefined;
-export declare const onRenderTracked: (hook: DebuggerHook, target?: ComponentInternalInstance | null) => false | Function | undefined;
+export declare const onRenderTriggered: (hook: DebuggerHook, target?: ComponentInternalInstance | null) => void;
+export declare const onRenderTracked: (hook: DebuggerHook, target?: ComponentInternalInstance | null) => void;
 type ErrorCapturedHook<TError = unknown> = (err: TError, instance: ComponentPublicInstance | null, info: string) => boolean | void;
 export declare function onErrorCaptured<TError = Error>(hook: ErrorCapturedHook<TError>, target?: ComponentInternalInstance | null): void;
 
@@ -389,7 +388,7 @@ interface PropOptions<T = any, D = T> {
     type?: PropType<T> | true | null;
     required?: boolean;
     default?: D | DefaultFactory<D> | null | undefined | object;
-    validator?(value: unknown): boolean;
+    validator?(value: unknown, props: Data): boolean;
 }
 export type PropType<T> = PropConstructor<T> | PropConstructor<T>[];
 type PropConstructor<T = any> = {
@@ -485,7 +484,7 @@ return withDirectives(h(comp), [
 */
 
 export interface DirectiveBinding<V = any> {
-    instance: ComponentPublicInstance | null;
+    instance: ComponentPublicInstance | Record<string, any> | null;
     value: V;
     oldValue: V | null;
     arg?: string;
@@ -493,7 +492,7 @@ export interface DirectiveBinding<V = any> {
     dir: ObjectDirective<any, V>;
 }
 export type DirectiveHook<T = any, Prev = VNode<any, T> | null, V = any> = (el: T, binding: DirectiveBinding<V>, vnode: VNode<any, T>, prevVNode: Prev) => void;
-type SSRDirectiveHook = (binding: DirectiveBinding, vnode: VNode) => Data | undefined;
+type SSRDirectiveHook<V> = (binding: DirectiveBinding<V>, vnode: VNode) => Data | undefined;
 export interface ObjectDirective<T = any, V = any> {
     created?: DirectiveHook<T, null, V>;
     beforeMount?: DirectiveHook<T, null, V>;
@@ -502,7 +501,7 @@ export interface ObjectDirective<T = any, V = any> {
     updated?: DirectiveHook<T, VNode<any, T>, V>;
     beforeUnmount?: DirectiveHook<T, null, V>;
     unmounted?: DirectiveHook<T, null, V>;
-    getSSRProps?: SSRDirectiveHook;
+    getSSRProps?: SSRDirectiveHook<V>;
     deep?: boolean;
 }
 export type FunctionDirective<T = any, V = any> = DirectiveHook<T, any, V>;
@@ -514,7 +513,7 @@ export type DirectiveArguments = Array<[Directive | undefined] | [Directive | un
  */
 export declare function withDirectives<T extends VNode>(vnode: T, directives: DirectiveArguments): T;
 
-export declare const enum DeprecationTypes {
+declare enum DeprecationTypes$1 {
     GLOBAL_MOUNT = "GLOBAL_MOUNT",
     GLOBAL_MOUNT_CONTAINER = "GLOBAL_MOUNT_CONTAINER",
     GLOBAL_EXTEND = "GLOBAL_EXTEND",
@@ -558,7 +557,7 @@ export declare const enum DeprecationTypes {
     FILTERS = "FILTERS",
     PRIVATE_APIS = "PRIVATE_APIS"
 }
-type CompatConfig = Partial<Record<DeprecationTypes, boolean | 'suppress-warning'>> & {
+type CompatConfig = Partial<Record<DeprecationTypes$1, boolean | 'suppress-warning'>> & {
     MODE?: 2 | 3 | ((comp: Component | null) => 2 | 3);
 };
 declare function configureCompat(config: CompatConfig): void;
@@ -737,19 +736,20 @@ export declare function inject<T>(key: InjectionKey<T> | string, defaultValue: T
  */
 export declare function hasInjectionContext(): boolean;
 
-type PublicProps = VNodeProps & AllowedComponentProps & ComponentCustomProps;
+export type PublicProps = VNodeProps & AllowedComponentProps & ComponentCustomProps;
 type ResolveProps<PropsOrPropOptions, E extends EmitsOptions> = Readonly<PropsOrPropOptions extends ComponentPropsOptions ? ExtractPropTypes<PropsOrPropOptions> : PropsOrPropOptions> & ({} extends E ? {} : EmitsToProps<E>);
 export type DefineComponent<PropsOrPropOptions = {}, RawBindings = {}, D = {}, C extends ComputedOptions = ComputedOptions, M extends MethodOptions = MethodOptions, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = {}, EE extends string = string, PP = PublicProps, Props = ResolveProps<PropsOrPropOptions, E>, Defaults = ExtractDefaultPropTypes<PropsOrPropOptions>, S extends SlotsType = {}> = ComponentPublicInstanceConstructor<CreateComponentPublicInstance<Props, RawBindings, D, C, M, Mixin, Extends, E, PP & Props, Defaults, true, {}, S>> & ComponentOptionsBase<Props, RawBindings, D, C, M, Mixin, Extends, E, EE, Defaults, {}, string, S> & PP;
+export type DefineSetupFnComponent<P extends Record<string, any>, E extends EmitsOptions = {}, S extends SlotsType = SlotsType, Props = P & EmitsToProps<E>, PP = PublicProps> = new (props: Props & PP) => CreateComponentPublicInstance<Props, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, E, PP, {}, false, {}, S>;
 export declare function defineComponent<Props extends Record<string, any>, E extends EmitsOptions = {}, EE extends string = string, S extends SlotsType = {}>(setup: (props: Props, ctx: SetupContext<E, S>) => RenderFunction | Promise<RenderFunction>, options?: Pick<ComponentOptions, 'name' | 'inheritAttrs'> & {
     props?: (keyof Props)[];
     emits?: E | EE[];
     slots?: S;
-}): (props: Props & EmitsToProps<E>) => any;
+}): DefineSetupFnComponent<Props, E, S>;
 export declare function defineComponent<Props extends Record<string, any>, E extends EmitsOptions = {}, EE extends string = string, S extends SlotsType = {}>(setup: (props: Props, ctx: SetupContext<E, S>) => RenderFunction | Promise<RenderFunction>, options?: Pick<ComponentOptions, 'name' | 'inheritAttrs'> & {
     props?: ComponentObjectPropsOptions<Props>;
     emits?: E | EE[];
     slots?: S;
-}): (props: Props & EmitsToProps<E>) => any;
+}): DefineSetupFnComponent<Props, E, S>;
 export declare function defineComponent<Props = {}, RawBindings = {}, D = {}, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = {}, EE extends string = string, S extends SlotsType = {}, I extends ComponentInjectOptions = {}, II extends string = string>(options: ComponentOptionsWithoutProps<Props, RawBindings, D, C, M, Mixin, Extends, E, EE, I, II, S>): DefineComponent<Props, RawBindings, D, C, M, Mixin, Extends, E, EE, PublicProps, ResolveProps<Props, E>, ExtractDefaultPropTypes<Props>, S>;
 export declare function defineComponent<PropNames extends string, RawBindings, D, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = {}, EE extends string = string, S extends SlotsType = {}, I extends ComponentInjectOptions = {}, II extends string = string, Props = Readonly<{
     [key in PropNames]?: any;
@@ -764,11 +764,11 @@ export interface App<HostElement = any> {
     mixin(mixin: ComponentOptions): this;
     component(name: string): Component | undefined;
     component(name: string, component: Component | DefineComponent): this;
-    directive(name: string): Directive | undefined;
-    directive(name: string, directive: Directive): this;
-    mount(rootContainer: HostElement | string, isHydrate?: boolean, isSVG?: boolean): ComponentPublicInstance;
+    directive<T = any, V = any>(name: string): Directive<T, V> | undefined;
+    directive<T = any, V = any>(name: string, directive: Directive<T, V>): this;
+    mount(rootContainer: HostElement | string, isHydrate?: boolean, namespace?: boolean | ElementNamespace): ComponentPublicInstance;
     unmount(): void;
-    provide<T>(key: InjectionKey<T> | string, value: T): this;
+    provide<T, K = InjectionKey<T> | string | number>(key: K, value: K extends InjectionKey<infer V> ? V : T): this;
     /**
      * Runs a function with the app as active instance. This allows using of `inject()` within the function to get access
      * to variables provided via `app.provide()`.
@@ -790,7 +790,7 @@ export interface App<HostElement = any> {
 }
 export type OptionMergeFunction = (to: unknown, from: unknown) => any;
 export interface AppConfig {
-    readonly isNativeTag?: (tag: string) => boolean;
+    readonly isNativeTag: (tag: string) => boolean;
     performance: boolean;
     optionMergeStrategies: Record<string, OptionMergeFunction>;
     globalProperties: ComponentCustomProperties & Record<string, any>;
@@ -806,10 +806,10 @@ export interface AppConfig {
      */
     isCustomElement?: (tag: string) => boolean;
     /**
-     * Temporary config for opt-in to unwrap injected refs.
-     * @deprecated this no longer has effect. 3.3 always unwraps injected refs.
+     * TODO document for 3.5
+     * Enable warnings for computed getters that recursively trigger itself.
      */
-    unwrapInjectedRef?: boolean;
+    warnRecursiveComputed?: boolean;
 }
 export interface AppContext {
     app: App;
@@ -819,12 +819,12 @@ export interface AppContext {
     directives: Record<string, Directive>;
     provides: Record<string | symbol, any>;
 }
-type PluginInstallFunction<Options> = Options extends unknown[] ? (app: App, ...options: Options) => any : (app: App, options: Options) => any;
-export type Plugin<Options = any[]> = (PluginInstallFunction<Options> & {
-    install?: PluginInstallFunction<Options>;
-}) | {
+type PluginInstallFunction<Options = any[]> = Options extends unknown[] ? (app: App, ...options: Options) => any : (app: App, options: Options) => any;
+export type ObjectPlugin<Options = any[]> = {
     install: PluginInstallFunction<Options>;
 };
+export type FunctionPlugin<Options = any[]> = PluginInstallFunction<Options> & Partial<ObjectPlugin<Options>>;
+export type Plugin<Options = any[]> = FunctionPlugin<Options> | ObjectPlugin<Options>;
 export type CreateAppFunction<HostElement> = (rootComponent: Component, rootProps?: Data | null) => App<HostElement>;
 
 type TeleportVNode = VNode<RendererNode, RendererElement, TeleportProps>;
@@ -835,18 +835,18 @@ export interface TeleportProps {
 declare const TeleportImpl: {
     name: string;
     __isTeleport: boolean;
-    process(n1: TeleportVNode | null, n2: TeleportVNode, container: RendererElement, anchor: RendererNode | null, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, isSVG: boolean, slotScopeIds: string[] | null, optimized: boolean, internals: RendererInternals): void;
-    remove(vnode: VNode, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, optimized: boolean, { um: unmount, o: { remove: hostRemove } }: RendererInternals, doRemove: boolean): void;
+    process(n1: TeleportVNode | null, n2: TeleportVNode, container: RendererElement, anchor: RendererNode | null, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, namespace: ElementNamespace, slotScopeIds: string[] | null, optimized: boolean, internals: RendererInternals): void;
+    remove(vnode: VNode, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, { um: unmount, o: { remove: hostRemove } }: RendererInternals, doRemove: boolean): void;
     move: typeof moveTeleport;
     hydrate: typeof hydrateTeleport;
 };
-declare const enum TeleportMoveTypes {
+declare enum TeleportMoveTypes {
     TARGET_CHANGE = 0,
-    TOGGLE = 1,
+    TOGGLE = 1,// enable / disable
     REORDER = 2
 }
 declare function moveTeleport(vnode: VNode, container: RendererElement, parentAnchor: RendererNode | null, { o: { insert }, m: move }: RendererInternals, moveType?: TeleportMoveTypes): void;
-declare function hydrateTeleport(node: Node, vnode: TeleportVNode, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, slotScopeIds: string[] | null, optimized: boolean, { o: { nextSibling, parentNode, querySelector } }: RendererInternals<Node, Element>, hydrateChildren: (node: Node | null, vnode: VNode, container: Element, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, slotScopeIds: string[] | null, optimized: boolean) => Node | null): Node | null;
+declare function hydrateTeleport(node: Node, vnode: TeleportVNode, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, slotScopeIds: string[] | null, optimized: boolean, { o: { nextSibling, parentNode, querySelector, insert, createText }, }: RendererInternals<Node, Element>, hydrateChildren: (node: Node | null, vnode: VNode, container: Element, parentComponent: ComponentInternalInstance | null, parentSuspense: SuspenseBoundary | null, slotScopeIds: string[] | null, optimized: boolean) => Node | null): Node | null;
 export declare const Teleport: {
     new (): {
         $props: VNodeProps & TeleportProps;
@@ -883,16 +883,28 @@ export declare const Static: unique symbol;
 export type VNodeTypes = string | VNode | Component | typeof Text | typeof Static | typeof Comment | typeof Fragment | typeof Teleport | typeof TeleportImpl | typeof Suspense | typeof SuspenseImpl;
 export type VNodeRef = string | Ref | ((ref: Element | ComponentPublicInstance | null, refs: Record<string, any>) => void);
 type VNodeNormalizedRefAtom = {
+    /**
+     * component instance
+     */
     i: ComponentInternalInstance;
+    /**
+     * Actual ref
+     */
     r: VNodeRef;
+    /**
+     * setup ref key
+     */
     k?: string;
+    /**
+     * refInFor marker
+     */
     f?: boolean;
 };
 type VNodeNormalizedRef = VNodeNormalizedRefAtom | VNodeNormalizedRefAtom[];
 type VNodeMountHook = (vnode: VNode) => void;
 type VNodeUpdateHook = (vnode: VNode, oldVNode: VNode) => void;
 export type VNodeProps = {
-    key?: string | number | symbol;
+    key?: PropertyKey;
     ref?: VNodeRef;
     ref_for?: boolean;
     ref_key?: string;
@@ -912,7 +924,7 @@ export interface VNode<HostNode = RendererNode, HostElement = RendererElement, E
 }> {
     type: VNodeTypes;
     props: (VNodeProps & ExtraProps) | null;
-    key: string | number | symbol | null;
+    key: PropertyKey | null;
     ref: VNodeNormalizedRef | null;
     /**
      * SFC only. This is assigned on vnode creation using currentScopeId
@@ -926,6 +938,7 @@ export interface VNode<HostNode = RendererNode, HostElement = RendererElement, E
     el: HostNode | null;
     anchor: HostNode | null;
     target: HostElement | null;
+    targetStart: HostNode | null;
     targetAnchor: HostNode | null;
     suspense: SuspenseBoundary | null;
     shapeFlag: number;
@@ -996,7 +1009,7 @@ export declare function createBaseVNode(type: VNodeTypes | ClassComponent | type
 export declare const createVNode: typeof _createVNode;
 declare function _createVNode(type: VNodeTypes | ClassComponent | typeof NULL_DYNAMIC_COMPONENT, props?: (Data & VNodeProps) | null, children?: unknown, patchFlag?: number, dynamicProps?: string[] | null, isBlockNode?: boolean): VNode;
 export declare function guardReactiveProps(props: (Data & VNodeProps) | null): (Data & VNodeProps) | null;
-export declare function cloneVNode<T, U>(vnode: VNode<T, U>, extraProps?: (Data & VNodeProps) | null, mergeRef?: boolean): VNode<T, U>;
+export declare function cloneVNode<T, U>(vnode: VNode<T, U>, extraProps?: (Data & VNodeProps) | null, mergeRef?: boolean, cloneTransition?: boolean): VNode<T, U>;
 /**
  * @private
  */
@@ -1012,6 +1025,21 @@ export declare function createCommentVNode(text?: string, asBlock?: boolean): VN
 export declare function mergeProps(...args: (Data & VNodeProps)[]): Data;
 
 type Data = Record<string, unknown>;
+/**
+ * Public utility type for extracting the instance type of a component.
+ * Works with all valid component definition types. This is intended to replace
+ * the usage of `InstanceType<typeof Comp>` which only works for
+ * constructor-based component definition types.
+ *
+ * @example
+ * ```ts
+ * const MyComp = { ... }
+ * declare const instance: ComponentInstance<typeof MyComp>
+ * ```
+ */
+export type ComponentInstance<T> = T extends {
+    new (): ComponentPublicInstance;
+} ? InstanceType<T> : T extends FunctionalComponent<infer Props, infer Emits> ? ComponentPublicInstance<Props, {}, {}, {}, {}, ShortEmitsToObject<Emits>> : T extends Component<infer Props, infer RawBindings, infer D, infer C, infer M> ? ComponentPublicInstance<unknown extends Props ? {} : Props, unknown extends RawBindings ? {} : RawBindings, unknown extends D ? {} : D, C, M> : never;
 /**
  * For extending allowed non-declared props on components in TSX
  */
@@ -1038,10 +1066,10 @@ interface ComponentInternalOptions {
      */
     __name?: string;
 }
-export interface FunctionalComponent<P = {}, E extends EmitsOptions = {}, S extends Record<string, any> = any> extends ComponentInternalOptions {
-    (props: P & EmitsToProps<E>, ctx: Omit<SetupContext<E, IfAny<S, {}, SlotsType<S>>>, 'expose'>): any;
+export interface FunctionalComponent<P = {}, E extends EmitsOptions | Record<string, any[]> = {}, S extends Record<string, any> = any, EE extends EmitsOptions = ShortEmitsToObject<E>> extends ComponentInternalOptions {
+    (props: P & EmitsToProps<EE>, ctx: Omit<SetupContext<EE, IfAny<S, {}, SlotsType<S>>>, 'expose'>): any;
     props?: ComponentPropsOptions<P>;
-    emits?: E | (keyof E)[];
+    emits?: EE | (keyof EE)[];
     slots?: IfAny<S, Slots, SlotsType<S>>;
     inheritAttrs?: boolean;
     displayName?: string;
@@ -1057,18 +1085,18 @@ interface ClassComponent {
  * values, e.g. checking if its a function or not. This is mostly for internal
  * implementation code.
  */
-export type ConcreteComponent<Props = {}, RawBindings = any, D = any, C extends ComputedOptions = ComputedOptions, M extends MethodOptions = MethodOptions> = ComponentOptions<Props, RawBindings, D, C, M> | FunctionalComponent<Props, any>;
+export type ConcreteComponent<Props = {}, RawBindings = any, D = any, C extends ComputedOptions = ComputedOptions, M extends MethodOptions = MethodOptions, E extends EmitsOptions | Record<string, any[]> = {}, S extends Record<string, any> = any> = ComponentOptions<Props, RawBindings, D, C, M> | FunctionalComponent<Props, E, S>;
 /**
  * A type used in public APIs where a component type is expected.
  * The constructor type is an artificial type returned by defineComponent().
  */
-export type Component<Props = any, RawBindings = any, D = any, C extends ComputedOptions = ComputedOptions, M extends MethodOptions = MethodOptions> = ConcreteComponent<Props, RawBindings, D, C, M> | ComponentPublicInstanceConstructor<Props>;
+export type Component<Props = any, RawBindings = any, D = any, C extends ComputedOptions = ComputedOptions, M extends MethodOptions = MethodOptions, E extends EmitsOptions | Record<string, any[]> = {}, S extends Record<string, any> = any> = ConcreteComponent<Props, RawBindings, D, C, M, E, S> | ComponentPublicInstanceConstructor<Props>;
 
 export type SetupContext<E = EmitsOptions, S extends SlotsType = {}> = E extends any ? {
     attrs: Data;
     slots: UnwrapSlotsType<S>;
     emit: EmitFn<E>;
-    expose: (exposed?: Record<string, any>) => void;
+    expose: <Exposed extends Record<string, any> = Record<string, any>>(exposed?: Exposed) => void;
 } : never;
 /**
  * We expose a subset of properties on the internal instance as they are
@@ -1105,8 +1133,6 @@ export interface ComponentInternalInstance {
     slots: InternalSlots;
     refs: Data;
     emit: EmitFn;
-    attrsProxy: Data | null;
-    slotsProxy: Slots | null;
     isMounted: boolean;
     isUnmounted: boolean;
     isDeactivated: boolean;
@@ -1120,10 +1146,11 @@ export declare function registerRuntimeCompiler(_compile: any): void;
 export declare const isRuntimeOnly: () => boolean;
 
 export type WatchEffect = (onCleanup: OnCleanup) => void;
-export type WatchSource<T = any> = Ref<T> | ComputedRef<T> | (() => T);
+export type WatchSource<T = any> = Ref<T, any> | ComputedRef<T> | (() => T);
 export type WatchCallback<V = any, OV = any> = (value: V, oldValue: OV, onCleanup: OnCleanup) => any;
+type MaybeUndefined<T, I> = I extends true ? T | undefined : T;
 type MapSources<T, Immediate> = {
-    [K in keyof T]: T[K] extends WatchSource<infer V> ? Immediate extends true ? V | undefined : V : T[K] extends object ? Immediate extends true ? T[K] | undefined : T[K] : never;
+    [K in keyof T]: T[K] extends WatchSource<infer V> ? MaybeUndefined<V, Immediate> : T[K] extends object ? MaybeUndefined<T[K], Immediate> : never;
 };
 type OnCleanup = (cleanupFn: () => void) => void;
 export interface WatchOptionsBase extends DebuggerOptions {
@@ -1132,16 +1159,17 @@ export interface WatchOptionsBase extends DebuggerOptions {
 export interface WatchOptions<Immediate = boolean> extends WatchOptionsBase {
     immediate?: Immediate;
     deep?: boolean;
+    once?: boolean;
 }
 export type WatchStopHandle = () => void;
 export declare function watchEffect(effect: WatchEffect, options?: WatchOptionsBase): WatchStopHandle;
 export declare function watchPostEffect(effect: WatchEffect, options?: DebuggerOptions): WatchStopHandle;
 export declare function watchSyncEffect(effect: WatchEffect, options?: DebuggerOptions): WatchStopHandle;
 type MultiWatchSources = (WatchSource<unknown> | object)[];
+export declare function watch<T, Immediate extends Readonly<boolean> = false>(source: WatchSource<T>, cb: WatchCallback<T, MaybeUndefined<T, Immediate>>, options?: WatchOptions<Immediate>): WatchStopHandle;
+export declare function watch<T extends Readonly<MultiWatchSources>, Immediate extends Readonly<boolean> = false>(sources: readonly [...T] | T, cb: [T] extends [ReactiveMarker] ? WatchCallback<T, MaybeUndefined<T, Immediate>> : WatchCallback<MapSources<T, false>, MapSources<T, Immediate>>, options?: WatchOptions<Immediate>): WatchStopHandle;
 export declare function watch<T extends MultiWatchSources, Immediate extends Readonly<boolean> = false>(sources: [...T], cb: WatchCallback<MapSources<T, false>, MapSources<T, Immediate>>, options?: WatchOptions<Immediate>): WatchStopHandle;
-export declare function watch<T extends Readonly<MultiWatchSources>, Immediate extends Readonly<boolean> = false>(source: T, cb: WatchCallback<MapSources<T, false>, MapSources<T, Immediate>>, options?: WatchOptions<Immediate>): WatchStopHandle;
-export declare function watch<T, Immediate extends Readonly<boolean> = false>(source: WatchSource<T>, cb: WatchCallback<T, Immediate extends true ? T | undefined : T>, options?: WatchOptions<Immediate>): WatchStopHandle;
-export declare function watch<T extends object, Immediate extends Readonly<boolean> = false>(source: T, cb: WatchCallback<T, Immediate extends true ? T | undefined : T>, options?: WatchOptions<Immediate>): WatchStopHandle;
+export declare function watch<T extends object, Immediate extends Readonly<boolean> = false>(source: T, cb: WatchCallback<T, MaybeUndefined<T, Immediate>>, options?: WatchOptions<Immediate>): WatchStopHandle;
 
 type AsyncComponentResolveResult<T = Component> = T | {
     default: T;
@@ -1198,7 +1226,7 @@ export declare function defineProps<PropNames extends string = string>(props: Pr
 }>>;
 export declare function defineProps<PP extends ComponentObjectPropsOptions = ComponentObjectPropsOptions>(props: PP): Prettify<Readonly<ExtractPropTypes<PP>>>;
 export declare function defineProps<TypeProps>(): DefineProps<LooseRequired<TypeProps>, BooleanKey<TypeProps>>;
-type DefineProps<T, BKeys extends keyof T> = Readonly<T> & {
+export type DefineProps<T, BKeys extends keyof T> = Readonly<T> & {
     readonly [K in BKeys]-?: boolean;
 };
 type BooleanKey<T, K extends keyof T = keyof T> = K extends any ? [T[K]] extends [boolean | undefined] ? K : never : never;
@@ -1216,7 +1244,7 @@ type BooleanKey<T, K extends keyof T = keyof T> = K extends any ? [T[K]] extends
  * const emit = defineEmits<{
  *   // <eventName>: <expected arguments>
  *   change: []
- *   update: [value: string] // named tuple syntax
+ *   update: [value: number] // named tuple syntax
  * }>()
  *
  * emit('change')
@@ -1263,8 +1291,16 @@ export declare function defineOptions<RawBindings = {}, D = {}, C extends Comput
     slots?: undefined;
 }): void;
 export declare function defineSlots<S extends Record<string, any> = Record<string, any>>(): StrictUnwrapSlotsType<SlotsType<S>>;
+export type ModelRef<T, M extends PropertyKey = string> = Ref<T> & [
+    ModelRef<T, M>,
+    Record<M, true | undefined>
+];
+type DefineModelOptions<T = any> = {
+    get?: (v: T) => any;
+    set?: (v: T) => any;
+};
 /**
- * (**Experimental**) Vue `<script setup>` compiler macro for declaring a
+ * Vue `<script setup>` compiler macro for declaring a
  * two-way binding prop that can be consumed via `v-model` from the parent
  * component. This will declare a prop with the same name and a corresponding
  * `update:propName` event.
@@ -1273,9 +1309,11 @@ export declare function defineSlots<S extends Record<string, any> = Record<strin
  * Otherwise the prop name will default to "modelValue". In both cases, you
  * can also pass an additional object which will be used as the prop's options.
  *
- * The options object can also specify an additional option, `local`. When set
- * to `true`, the ref can be locally mutated even if the parent did not pass
- * the matching `v-model`.
+ * The returned ref behaves differently depending on whether the parent
+ * provided the corresponding v-model props or not:
+ * - If yes, the returned ref's value will always be in sync with the parent
+ *   prop.
+ * - If not, the returned ref will behave like a normal local ref.
  *
  * @example
  * ```ts
@@ -1292,36 +1330,32 @@ export declare function defineSlots<S extends Record<string, any> = Record<strin
  *
  * // with specified name and default value
  * const count = defineModel<number>('count', { default: 0 })
- *
- * // local mutable model, can be mutated locally
- * // even if the parent did not pass the matching `v-model`.
- * const count = defineModel<number>('count', { local: true, default: 0 })
  * ```
  */
-export declare function defineModel<T>(options: {
+export declare function defineModel<T, M extends PropertyKey = string>(options: {
     required: true;
-} & PropOptions<T> & DefineModelOptions): Ref<T>;
-export declare function defineModel<T>(options: {
+} & PropOptions<T> & DefineModelOptions<T>): ModelRef<T, M>;
+export declare function defineModel<T, M extends PropertyKey = string>(options: {
     default: any;
-} & PropOptions<T> & DefineModelOptions): Ref<T>;
-export declare function defineModel<T>(options?: PropOptions<T> & DefineModelOptions): Ref<T | undefined>;
-export declare function defineModel<T>(name: string, options: {
+} & PropOptions<T> & DefineModelOptions<T>): ModelRef<T, M>;
+export declare function defineModel<T, M extends PropertyKey = string>(options?: PropOptions<T> & DefineModelOptions<T>): ModelRef<T | undefined, M>;
+export declare function defineModel<T, M extends PropertyKey = string>(name: string, options: {
     required: true;
-} & PropOptions<T> & DefineModelOptions): Ref<T>;
-export declare function defineModel<T>(name: string, options: {
+} & PropOptions<T> & DefineModelOptions<T>): ModelRef<T, M>;
+export declare function defineModel<T, M extends PropertyKey = string>(name: string, options: {
     default: any;
-} & PropOptions<T> & DefineModelOptions): Ref<T>;
-export declare function defineModel<T>(name: string, options?: PropOptions<T> & DefineModelOptions): Ref<T | undefined>;
-interface DefineModelOptions {
-    local?: boolean;
-}
+} & PropOptions<T> & DefineModelOptions<T>): ModelRef<T, M>;
+export declare function defineModel<T, M extends PropertyKey = string>(name: string, options?: PropOptions<T> & DefineModelOptions<T>): ModelRef<T | undefined, M>;
 type NotUndefined<T> = T extends undefined ? never : T;
+type MappedOmit<T, K extends keyof any> = {
+    [P in keyof T as P extends K ? never : P]: T[P];
+};
 type InferDefaults<T> = {
     [K in keyof T]?: InferDefault<T, T[K]>;
 };
 type NativeType = null | number | string | boolean | symbol | Function;
 type InferDefault<P, T> = ((props: P) => T & {}) | (T extends NativeType ? T : never);
-type PropsWithDefaults<T, Defaults extends InferDefaults<T>, BKeys extends keyof T> = Readonly<Omit<T, keyof Defaults>> & {
+type PropsWithDefaults<T, Defaults extends InferDefaults<T>, BKeys extends keyof T> = Readonly<MappedOmit<T, keyof Defaults>> & {
     readonly [K in keyof Defaults]-?: K extends keyof T ? Defaults[K] extends undefined ? T[K] : NotUndefined<T[K]> : never;
 } & {
     readonly [K in BKeys]-?: K extends keyof Defaults ? Defaults[K] extends undefined ? boolean | undefined : boolean : boolean;
@@ -1349,9 +1383,8 @@ type PropsWithDefaults<T, Defaults extends InferDefaults<T>, BKeys extends keyof
 export declare function withDefaults<T, BKeys extends keyof T, Defaults extends InferDefaults<T>>(props: DefineProps<T, BKeys>, defaults: Defaults): PropsWithDefaults<T, Defaults, BKeys>;
 export declare function useSlots(): SetupContext['slots'];
 export declare function useAttrs(): SetupContext['attrs'];
-export declare function useModel<T extends Record<string, any>, K extends keyof T>(props: T, name: K, options?: {
-    local?: boolean;
-}): Ref<T[K]>;
+
+export declare function useModel<M extends PropertyKey, T extends Record<string, any>, K extends keyof T>(props: T, name: K, options?: DefineModelOptions<T[K]>): ModelRef<T[K], M>;
 
 type RawProps = VNodeProps & {
     __v_isVNode?: never;
@@ -1366,6 +1399,11 @@ interface Constructor<P = any> {
         $props: P;
     };
 }
+type HTMLElementEventHandler = {
+    [K in keyof HTMLElementEventMap as `on${Capitalize<K>}`]?: (ev: HTMLElementEventMap[K]) => any;
+};
+export declare function h<K extends keyof HTMLElementTagNameMap>(type: K, children?: RawChildren): VNode;
+export declare function h<K extends keyof HTMLElementTagNameMap>(type: K, props?: (RawProps & HTMLElementEventHandler) | null, children?: RawChildren | RawSlots): VNode;
 export declare function h(type: string, children?: RawChildren): VNode;
 export declare function h(type: string, props?: RawProps | null, children?: RawChildren | RawSlots): VNode;
 export declare function h(type: typeof Text | typeof Comment, children?: string | number | boolean): VNode;
@@ -1375,7 +1413,7 @@ export declare function h(type: typeof Fragment, props?: RawProps | null, childr
 export declare function h(type: typeof Teleport, props: RawProps & TeleportProps, children: RawChildren | RawSlots): VNode;
 export declare function h(type: typeof Suspense, children?: RawChildren): VNode;
 export declare function h(type: typeof Suspense, props?: (RawProps & SuspenseProps) | null, children?: RawChildren | RawSlots): VNode;
-export declare function h<P, E extends EmitsOptions = {}, S extends Record<string, any> = {}>(type: FunctionalComponent<P, E, S>, props?: (RawProps & P) | ({} extends P ? null : never), children?: RawChildren | RawSlots): VNode;
+export declare function h<P, E extends EmitsOptions = {}, S extends Record<string, any> = any>(type: FunctionalComponent<P, any, S, any>, props?: (RawProps & P) | ({} extends P ? null : never), children?: RawChildren | IfAny<S, RawSlots, S>): VNode;
 export declare function h(type: Component, children?: RawChildren): VNode;
 export declare function h<P>(type: ConcreteComponent | string, children?: RawChildren): VNode;
 export declare function h<P>(type: ConcreteComponent<P> | string, props?: (RawProps & P) | ({} extends P ? null : never), children?: RawChildren): VNode;
@@ -1391,9 +1429,9 @@ export declare function h<P>(type: string | Component<P>, props?: (RawProps & P)
 export declare const ssrContextKey: unique symbol;
 export declare const useSSRContext: <T = Record<string, any>>() => T | undefined;
 
-export declare function warn(msg: string, ...args: any[]): void;
+declare function warn$1(msg: string, ...args: any[]): void;
 
-export declare const enum ErrorCodes {
+export declare enum ErrorCodes {
     SETUP_FUNCTION = 0,
     RENDER_FUNCTION = 1,
     WATCH_GETTER = 2,
@@ -1408,12 +1446,13 @@ export declare const enum ErrorCodes {
     APP_WARN_HANDLER = 11,
     FUNCTION_REF = 12,
     ASYNC_COMPONENT_LOADER = 13,
-    SCHEDULER = 14
+    SCHEDULER = 14,
+    COMPONENT_UPDATE = 15
 }
 type ErrorTypes = LifecycleHooks | ErrorCodes;
-export declare function callWithErrorHandling(fn: Function, instance: ComponentInternalInstance | null, type: ErrorTypes, args?: unknown[]): any;
-export declare function callWithAsyncErrorHandling(fn: Function | Function[], instance: ComponentInternalInstance | null, type: ErrorTypes, args?: unknown[]): any[];
-export declare function handleError(err: unknown, instance: ComponentInternalInstance | null, type: ErrorTypes, throwInDev?: boolean): void;
+export declare function callWithErrorHandling(fn: Function, instance: ComponentInternalInstance | null | undefined, type: ErrorTypes, args?: unknown[]): any;
+export declare function callWithAsyncErrorHandling(fn: Function | Function[], instance: ComponentInternalInstance | null, type: ErrorTypes, args?: unknown[]): any;
+export declare function handleError(err: unknown, instance: ComponentInternalInstance | null | undefined, type: ErrorTypes, throwInDev?: boolean): void;
 
 export declare function initCustomFormatter(): void;
 
@@ -1436,8 +1475,7 @@ interface DevtoolsHook {
      */
     cleanupBuffer?: (matchArg: unknown) => boolean;
 }
-export declare let devtools: DevtoolsHook;
-export declare function setDevtoolsHook(hook: DevtoolsHook, target: any): void;
+declare function setDevtoolsHook$1(hook: DevtoolsHook, target: any): void;
 
 type HMRComponent = ComponentOptions | ClassComponent;
 export interface HMRRuntime {
@@ -1491,7 +1529,7 @@ export declare function renderList<T>(source: Iterable<T>, renderItem: (value: T
 /**
  * v-for object
  */
-export declare function renderList<T>(source: T, renderItem: <K extends keyof T>(value: T[K], key: K, index: number) => VNodeChild): VNodeChild[];
+export declare function renderList<T>(source: T, renderItem: <K extends keyof T>(value: T[K], key: string, index: number) => VNodeChild): VNodeChild[];
 
 /**
  * For prefixing keys in v-on="obj" with "on"
@@ -1551,8 +1589,8 @@ export type LegacyConfig = {
 
 type LegacyPublicInstance = ComponentPublicInstance & LegacyPublicProperties;
 interface LegacyPublicProperties {
-    $set(target: object, key: string, value: any): void;
-    $delete(target: object, key: string): void;
+    $set<T extends Record<keyof any, any>, K extends keyof T>(target: T, key: K, value: T[K]): void;
+    $delete<T extends Record<keyof any, any>, K extends keyof T>(target: T, key: K): void;
     $mount(el?: string | Element): this;
     $destroy(): void;
     $scopedSlots: Slots;
@@ -1574,12 +1612,13 @@ export type CompatVue = Pick<App, 'version' | 'component' | 'directive'> & {
     version: string;
     config: AppConfig & LegacyConfig;
     nextTick: typeof nextTick;
-    use(plugin: Plugin, ...options: any[]): CompatVue;
+    use<Options extends unknown[]>(plugin: Plugin<Options>, ...options: Options): CompatVue;
+    use<Options>(plugin: Plugin<Options>, options: Options): CompatVue;
     mixin(mixin: ComponentOptions): CompatVue;
     component(name: string): Component | undefined;
     component(name: string, component: Component): CompatVue;
-    directive(name: string): Directive | undefined;
-    directive(name: string, directive: Directive): CompatVue;
+    directive<T = any, V = any>(name: string): Directive<T, V> | undefined;
+    directive<T = any, V = any>(name: string, directive: Directive<T, V>): CompatVue;
     compile(template: string): RenderFunction;
     /**
      * @deprecated Vue 3 no longer supports extending constructors.
@@ -1588,11 +1627,11 @@ export type CompatVue = Pick<App, 'version' | 'component' | 'directive'> & {
     /**
      * @deprecated Vue 3 no longer needs set() for adding new properties.
      */
-    set(target: any, key: string | number | symbol, value: any): void;
+    set(target: any, key: PropertyKey, value: any): void;
     /**
      * @deprecated Vue 3 no longer needs delete() for property deletions.
      */
-    delete(target: any, key: string | number | symbol): void;
+    delete(target: any, key: PropertyKey): void;
     /**
      * @deprecated use `reactive` instead.
      */
@@ -1605,6 +1644,11 @@ export type CompatVue = Pick<App, 'version' | 'component' | 'directive'> & {
 
 export declare const version: string;
 
+export declare const warn: typeof warn$1;
+
+export declare const devtools: DevtoolsHook;
+export declare const setDevtoolsHook: typeof setDevtoolsHook$1;
+
 declare module '@vue/reactivity' {
     interface RefUnwrapBailTypes {
         runtimeCoreBailTypes: VNode | {
@@ -1612,6 +1656,8 @@ declare module '@vue/reactivity' {
         };
     }
 }
+
+export declare const DeprecationTypes: typeof DeprecationTypes$1;
 
 export { createBaseVNode as createElementVNode,  };
 // Note: this file is auto concatenated to the end of the bundled d.ts during

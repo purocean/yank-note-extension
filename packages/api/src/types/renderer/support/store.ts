@@ -38,11 +38,11 @@ declare const _default: {
             name: string;
             repo: string;
             path: string;
-            type: "dir" | "file";
+            type: "file" | "dir";
         }[] | null;
         treeSort: {
-            by: "name" | "mtime" | "birthtime" | "serial";
-            order: "desc" | "asc";
+            by: "mtime" | "birthtime" | "name" | "serial";
+            order: "asc" | "desc";
         };
         wordWrap: "on" | "off";
         typewriterMode: boolean;
@@ -65,7 +65,7 @@ declare const _default: {
             path: string;
         } | undefined;
         currentFile: {
-            type: "dir" | "file";
+            type: "file" | "dir";
             name: string;
             content?: string | undefined;
             title?: string | undefined;
@@ -76,7 +76,8 @@ declare const _default: {
                 birthtime: number;
                 size: number;
             } | undefined;
-            status?: "unsaved" | "saved" | "save-failed" | "loaded" | undefined;
+            writeable?: boolean | undefined;
+            status?: ("loaded" | "save-failed" | "saved" | "unsaved") | undefined;
             absolutePath?: string | undefined;
             plain?: boolean | undefined;
             repo: string;
@@ -86,7 +87,7 @@ declare const _default: {
         tabs: {
             payload: {
                 file: {
-                    type: "dir" | "file";
+                    type: "file" | "dir";
                     name: string;
                     content?: string | undefined;
                     title?: string | undefined;
@@ -97,7 +98,8 @@ declare const _default: {
                         birthtime: number;
                         size: number;
                     } | undefined;
-                    status?: "unsaved" | "saved" | "save-failed" | "loaded" | undefined;
+                    writeable?: boolean | undefined;
+                    status?: ("loaded" | "save-failed" | "saved" | "unsaved") | undefined;
                     absolutePath?: string | undefined;
                     plain?: boolean | undefined;
                     repo: string;

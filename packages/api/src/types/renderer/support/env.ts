@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import type Remote from '@electron/remote/index';
 export declare const nodeProcess: NodeJS.Process;
 export declare const nodeModule: NodeModule;

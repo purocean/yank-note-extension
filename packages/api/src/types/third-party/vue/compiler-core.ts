@@ -1,111 +1,7 @@
-import { ParserPlugin } from '@babel/parser';
-import { RawSourceMap, SourceMapGenerator } from 'source-map-js';
-import { Node as Node$1, Identifier, Function, BlockStatement as BlockStatement$1, Program, ObjectProperty } from '@babel/types';
+import { PatchFlags } from '@vue/shared';
 export { generateCodeFrame } from '@vue/shared';
-
-type OptionalOptions = 'whitespace' | 'isNativeTag' | 'isBuiltInComponent' | keyof CompilerCompatOptions;
-type MergedParserOptions = Omit<Required<ParserOptions>, OptionalOptions> & Pick<ParserOptions, OptionalOptions>;
-export declare const enum TextModes {
-    DATA = 0,
-    RCDATA = 1,
-    RAWTEXT = 2,
-    CDATA = 3,
-    ATTRIBUTE_VALUE = 4
-}
-interface ParserContext {
-    options: MergedParserOptions;
-    readonly originalSource: string;
-    source: string;
-    offset: number;
-    line: number;
-    column: number;
-    inPre: boolean;
-    inVPre: boolean;
-    onWarn: NonNullable<ErrorHandlingOptions['onWarn']>;
-}
-export declare function baseParse(content: string, options?: ParserOptions): RootNode;
-
-type CompilerCompatConfig = Partial<Record<CompilerDeprecationTypes, boolean | 'suppress-warning'>> & {
-    MODE?: 2 | 3;
-};
-interface CompilerCompatOptions {
-    compatConfig?: CompilerCompatConfig;
-}
-export declare const enum CompilerDeprecationTypes {
-    COMPILER_IS_ON_ELEMENT = "COMPILER_IS_ON_ELEMENT",
-    COMPILER_V_BIND_SYNC = "COMPILER_V_BIND_SYNC",
-    COMPILER_V_BIND_PROP = "COMPILER_V_BIND_PROP",
-    COMPILER_V_BIND_OBJECT_ORDER = "COMPILER_V_BIND_OBJECT_ORDER",
-    COMPILER_V_ON_NATIVE = "COMPILER_V_ON_NATIVE",
-    COMPILER_V_IF_V_FOR_PRECEDENCE = "COMPILER_V_IF_V_FOR_PRECEDENCE",
-    COMPILER_NATIVE_TEMPLATE = "COMPILER_NATIVE_TEMPLATE",
-    COMPILER_INLINE_TEMPLATE = "COMPILER_INLINE_TEMPLATE",
-    COMPILER_FILTERS = "COMPILER_FILTER"
-}
-export declare function checkCompatEnabled(key: CompilerDeprecationTypes, context: ParserContext | TransformContext, loc: SourceLocation | null, ...args: any[]): boolean;
-export declare function warnDeprecation(key: CompilerDeprecationTypes, context: ParserContext | TransformContext, loc: SourceLocation | null, ...args: any[]): void;
-
-export type NodeTransform = (node: RootNode | TemplateChildNode, context: TransformContext) => void | (() => void) | (() => void)[];
-export type DirectiveTransform = (dir: DirectiveNode, node: ElementNode, context: TransformContext, augmentor?: (ret: DirectiveTransformResult) => DirectiveTransformResult) => DirectiveTransformResult;
-interface DirectiveTransformResult {
-    props: Property[];
-    needRuntime?: boolean | symbol;
-    ssrTagParts?: TemplateLiteral['elements'];
-}
-export type StructuralDirectiveTransform = (node: ElementNode, dir: DirectiveNode, context: TransformContext) => void | (() => void);
-interface ImportItem {
-    exp: string | ExpressionNode;
-    path: string;
-}
-export interface TransformContext extends Required<Omit<TransformOptions, 'filename' | keyof CompilerCompatOptions>>, CompilerCompatOptions {
-    selfName: string | null;
-    root: RootNode;
-    helpers: Map<symbol, number>;
-    components: Set<string>;
-    directives: Set<string>;
-    hoists: (JSChildNode | null)[];
-    imports: ImportItem[];
-    temps: number;
-    cached: number;
-    identifiers: {
-        [name: string]: number | undefined;
-    };
-    scopes: {
-        vFor: number;
-        vSlot: number;
-        vPre: number;
-        vOnce: number;
-    };
-    parent: ParentNode | null;
-    childIndex: number;
-    currentNode: RootNode | TemplateChildNode | null;
-    inVOnce: boolean;
-    helper<T extends symbol>(name: T): T;
-    removeHelper<T extends symbol>(name: T): void;
-    helperString(name: symbol): string;
-    replaceNode(node: TemplateChildNode): void;
-    removeNode(node?: TemplateChildNode): void;
-    onNodeRemoved(): void;
-    addIdentifiers(exp: ExpressionNode | string): void;
-    removeIdentifiers(exp: ExpressionNode | string): void;
-    hoist(exp: string | JSChildNode | ArrayExpression): SimpleExpressionNode;
-    cache<T extends JSChildNode>(exp: T, isVNode?: boolean): CacheExpression | T;
-    constantCache: WeakMap<TemplateChildNode, ConstantTypes>;
-    filters?: Set<string>;
-}
-export declare function createTransformContext(root: RootNode, { filename, prefixIdentifiers, hoistStatic, hmr, cacheHandlers, nodeTransforms, directiveTransforms, transformHoist, isBuiltInComponent, isCustomElement, expressionPlugins, scopeId, slotted, ssr, inSSR, ssrCssVars, bindingMetadata, inline, isTS, onError, onWarn, compatConfig }: TransformOptions): TransformContext;
-export declare function transform(root: RootNode, options: TransformOptions): void;
-export declare function traverseNode(node: RootNode | TemplateChildNode, context: TransformContext): void;
-export declare function createStructuralDirectiveTransform(name: string | RegExp, fn: StructuralDirectiveTransform): NodeTransform;
-
-export declare function processFor(node: ElementNode, dir: DirectiveNode, context: TransformContext, processCodegen?: (forNode: ForNode) => (() => void) | undefined): (() => void) | undefined;
-interface ForParseResult {
-    source: ExpressionNode;
-    value: ExpressionNode | undefined;
-    key: ExpressionNode | undefined;
-    index: ExpressionNode | undefined;
-}
-export declare function createForLoopParams({ value, key, index }: ForParseResult, memoArgs?: ExpressionNode[]): ExpressionNode[];
+import { Node as Node$1, Identifier, Function, BlockStatement as BlockStatement$1, Program, ObjectProperty } from '@babel/types';
+import { ParserPlugin } from '@babel/parser';
 
 export declare const FRAGMENT: unique symbol;
 export declare const TELEPORT: unique symbol;
@@ -149,6 +45,83 @@ export declare const IS_MEMO_SAME: unique symbol;
 export declare const helperNameMap: Record<symbol, string>;
 export declare function registerRuntimeHelpers(helpers: Record<symbol, string>): void;
 
+type OptionalOptions = 'decodeEntities' | 'whitespace' | 'isNativeTag' | 'isBuiltInComponent' | 'expressionPlugins' | keyof CompilerCompatOptions;
+type MergedParserOptions = Omit<Required<ParserOptions>, OptionalOptions> & Pick<ParserOptions, OptionalOptions>;
+export declare function baseParse(input: string, options?: ParserOptions): RootNode;
+
+type CompilerCompatConfig = Partial<Record<CompilerDeprecationTypes, boolean | 'suppress-warning'>> & {
+    MODE?: 2 | 3;
+};
+interface CompilerCompatOptions {
+    compatConfig?: CompilerCompatConfig;
+}
+export declare enum CompilerDeprecationTypes {
+    COMPILER_IS_ON_ELEMENT = "COMPILER_IS_ON_ELEMENT",
+    COMPILER_V_BIND_SYNC = "COMPILER_V_BIND_SYNC",
+    COMPILER_V_BIND_OBJECT_ORDER = "COMPILER_V_BIND_OBJECT_ORDER",
+    COMPILER_V_ON_NATIVE = "COMPILER_V_ON_NATIVE",
+    COMPILER_V_IF_V_FOR_PRECEDENCE = "COMPILER_V_IF_V_FOR_PRECEDENCE",
+    COMPILER_NATIVE_TEMPLATE = "COMPILER_NATIVE_TEMPLATE",
+    COMPILER_INLINE_TEMPLATE = "COMPILER_INLINE_TEMPLATE",
+    COMPILER_FILTERS = "COMPILER_FILTERS"
+}
+export declare function checkCompatEnabled(key: CompilerDeprecationTypes, context: MergedParserOptions | TransformContext, loc: SourceLocation | null, ...args: any[]): boolean;
+export declare function warnDeprecation(key: CompilerDeprecationTypes, context: MergedParserOptions | TransformContext, loc: SourceLocation | null, ...args: any[]): void;
+
+export type NodeTransform = (node: RootNode | TemplateChildNode, context: TransformContext) => void | (() => void) | (() => void)[];
+export type DirectiveTransform = (dir: DirectiveNode, node: ElementNode, context: TransformContext, augmentor?: (ret: DirectiveTransformResult) => DirectiveTransformResult) => DirectiveTransformResult;
+interface DirectiveTransformResult {
+    props: Property[];
+    needRuntime?: boolean | symbol;
+    ssrTagParts?: TemplateLiteral['elements'];
+}
+export type StructuralDirectiveTransform = (node: ElementNode, dir: DirectiveNode, context: TransformContext) => void | (() => void);
+interface ImportItem {
+    exp: string | ExpressionNode;
+    path: string;
+}
+export interface TransformContext extends Required<Omit<TransformOptions, keyof CompilerCompatOptions>>, CompilerCompatOptions {
+    selfName: string | null;
+    root: RootNode;
+    helpers: Map<symbol, number>;
+    components: Set<string>;
+    directives: Set<string>;
+    hoists: (JSChildNode | null)[];
+    imports: ImportItem[];
+    temps: number;
+    cached: number;
+    identifiers: {
+        [name: string]: number | undefined;
+    };
+    scopes: {
+        vFor: number;
+        vSlot: number;
+        vPre: number;
+        vOnce: number;
+    };
+    parent: ParentNode | null;
+    grandParent: ParentNode | null;
+    childIndex: number;
+    currentNode: RootNode | TemplateChildNode | null;
+    inVOnce: boolean;
+    helper<T extends symbol>(name: T): T;
+    removeHelper<T extends symbol>(name: T): void;
+    helperString(name: symbol): string;
+    replaceNode(node: TemplateChildNode): void;
+    removeNode(node?: TemplateChildNode): void;
+    onNodeRemoved(): void;
+    addIdentifiers(exp: ExpressionNode | string): void;
+    removeIdentifiers(exp: ExpressionNode | string): void;
+    hoist(exp: string | JSChildNode | ArrayExpression): SimpleExpressionNode;
+    cache<T extends JSChildNode>(exp: T, isVNode?: boolean): CacheExpression | T;
+    constantCache: WeakMap<TemplateChildNode, ConstantTypes>;
+    filters?: Set<string>;
+}
+export declare function createTransformContext(root: RootNode, { filename, prefixIdentifiers, hoistStatic, hmr, cacheHandlers, nodeTransforms, directiveTransforms, transformHoist, isBuiltInComponent, isCustomElement, expressionPlugins, scopeId, slotted, ssr, inSSR, ssrCssVars, bindingMetadata, inline, isTS, onError, onWarn, compatConfig, }: TransformOptions): TransformContext;
+export declare function transform(root: RootNode, options: TransformOptions): void;
+export declare function traverseNode(node: RootNode | TemplateChildNode, context: TransformContext): void;
+export declare function createStructuralDirectiveTransform(name: string | RegExp, fn: StructuralDirectiveTransform): NodeTransform;
+
 export declare const transformElement: NodeTransform;
 export declare function resolveComponentType(node: ComponentNode, context: TransformContext, ssr?: boolean): string | symbol | CallExpression;
 export type PropsExpression = ObjectExpression | CallExpression | ExpressionNode;
@@ -162,10 +135,12 @@ export declare function buildProps(node: ElementNode, context: TransformContext,
 export declare function buildDirectiveArgs(dir: DirectiveNode, context: TransformContext): ArrayExpression;
 
 export type Namespace = number;
-export declare const enum Namespaces {
-    HTML = 0
+export declare enum Namespaces {
+    HTML = 0,
+    SVG = 1,
+    MATH_ML = 2
 }
-export declare const enum NodeTypes {
+export declare enum NodeTypes {
     ROOT = 0,
     ELEMENT = 1,
     TEXT = 2,
@@ -194,7 +169,7 @@ export declare const enum NodeTypes {
     JS_SEQUENCE_EXPRESSION = 25,
     JS_RETURN_STATEMENT = 26
 }
-export declare const enum ElementTypes {
+export declare enum ElementTypes {
     ELEMENT = 0,
     COMPONENT = 1,
     SLOT = 2,
@@ -219,6 +194,7 @@ export type ExpressionNode = SimpleExpressionNode | CompoundExpressionNode;
 export type TemplateChildNode = ElementNode | InterpolationNode | CompoundExpressionNode | TextNode | CommentNode | IfNode | IfBranchNode | ForNode | TextCallNode;
 export interface RootNode extends Node {
     type: NodeTypes.ROOT;
+    source: string;
     children: TemplateChildNode[];
     helpers: Set<symbol>;
     components: string[];
@@ -229,6 +205,7 @@ export interface RootNode extends Node {
     temps: number;
     ssrHelpers?: symbol[];
     codegenNode?: TemplateChildNode | JSChildNode | BlockStatement;
+    transformed?: boolean;
     filters?: string[];
 }
 export type ElementNode = PlainElementNode | ComponentNode | SlotOutletNode | TemplateNode;
@@ -237,9 +214,10 @@ export interface BaseElementNode extends Node {
     ns: Namespace;
     tag: string;
     tagType: ElementTypes;
-    isSelfClosing: boolean;
     props: Array<AttributeNode | DirectiveNode>;
     children: TemplateChildNode[];
+    isSelfClosing?: boolean;
+    innerLoc?: SourceLocation;
 }
 export interface PlainElementNode extends BaseElementNode {
     tagType: ElementTypes.ELEMENT;
@@ -271,25 +249,34 @@ export interface CommentNode extends Node {
 export interface AttributeNode extends Node {
     type: NodeTypes.ATTRIBUTE;
     name: string;
+    nameLoc: SourceLocation;
     value: TextNode | undefined;
 }
 export interface DirectiveNode extends Node {
     type: NodeTypes.DIRECTIVE;
+    /**
+     * the normalized name without prefix or shorthands, e.g. "bind", "on"
+     */
     name: string;
+    /**
+     * the raw attribute name, preserving shorthand, and including arg & modifiers
+     * this is only used during parse.
+     */
+    rawName?: string;
     exp: ExpressionNode | undefined;
     arg: ExpressionNode | undefined;
     modifiers: string[];
     /**
      * optional property to cache the expression parse result for v-for
      */
-    parseResult?: ForParseResult;
+    forParseResult?: ForParseResult;
 }
 /**
  * Static types have several levels.
  * Higher levels implies lower levels. e.g. a node that can be stringified
  * can always be hoisted and skipped for patch.
  */
-export declare const enum ConstantTypes {
+export declare enum ConstantTypes {
     NOT_CONSTANT = 0,
     CAN_SKIP_PATCH = 1,
     CAN_HOIST = 2,
@@ -300,6 +287,12 @@ export interface SimpleExpressionNode extends Node {
     content: string;
     isStatic: boolean;
     constType: ConstantTypes;
+    /**
+     * - `null` means the expression is a simple identifier that doesn't need
+     *    parsing
+     * - `false` means there was a parsing error
+     */
+    ast?: Node$1 | null | false;
     /**
      * Indicates this is an identifier for a hoist vnode call and points to the
      * hoisted node.
@@ -318,6 +311,12 @@ export interface InterpolationNode extends Node {
 }
 export interface CompoundExpressionNode extends Node {
     type: NodeTypes.COMPOUND_EXPRESSION;
+    /**
+     * - `null` means the expression is a simple identifier that doesn't need
+     *    parsing
+     * - `false` means there was a parsing error
+     */
+    ast?: Node$1 | null | false;
     children: (SimpleExpressionNode | CompoundExpressionNode | InterpolationNode | TextNode | string | symbol)[];
     /**
      * an expression parsed as the params of a function will track
@@ -348,6 +347,13 @@ export interface ForNode extends Node {
     children: TemplateChildNode[];
     codegenNode?: ForCodegenNode;
 }
+export interface ForParseResult {
+    source: ExpressionNode;
+    value: ExpressionNode | undefined;
+    key: ExpressionNode | undefined;
+    index: ExpressionNode | undefined;
+    finalized: boolean;
+}
 export interface TextCallNode extends Node {
     type: NodeTypes.TEXT_CALL;
     content: TextNode | InterpolationNode | CompoundExpressionNode;
@@ -359,7 +365,7 @@ export interface VNodeCall extends Node {
     tag: string | symbol | CallExpression;
     props: PropsExpression | undefined;
     children: TemplateChildNode[] | TemplateTextChildNode | SlotsExpression | ForRenderListExpression | SimpleExpressionNode | undefined;
-    patchFlag: string | undefined;
+    patchFlag: PatchFlags | undefined;
     dynamicProps: string | SimpleExpressionNode | undefined;
     directives: DirectiveArguments | undefined;
     isBlock: boolean;
@@ -413,7 +419,7 @@ export interface CacheExpression extends Node {
     type: NodeTypes.JS_CACHE_EXPRESSION;
     index: number;
     value: JSChildNode;
-    isVNode: boolean;
+    isVOnce: boolean;
 }
 export interface MemoExpression extends CallExpression {
     callee: typeof WITH_MEMO;
@@ -509,7 +515,7 @@ export interface ForCodegenNode extends VNodeCall {
     tag: typeof FRAGMENT;
     props: undefined;
     children: ForRenderListExpression;
-    patchFlag: string;
+    patchFlag: PatchFlags;
     disableTracking: boolean;
 }
 export interface ForRenderListExpression extends CallExpression {
@@ -517,10 +523,10 @@ export interface ForRenderListExpression extends CallExpression {
     arguments: [ExpressionNode, ForIteratorExpression];
 }
 export interface ForIteratorExpression extends FunctionExpression {
-    returns: BlockCodegenNode;
+    returns?: BlockCodegenNode;
 }
 export declare const locStub: SourceLocation;
-export declare function createRoot(children: TemplateChildNode[], loc?: SourceLocation): RootNode;
+export declare function createRoot(children: TemplateChildNode[], source?: string): RootNode;
 export declare function createVNodeCall(context: TransformContext | null, tag: VNodeCall['tag'], props?: VNodeCall['props'], children?: VNodeCall['children'], patchFlag?: VNodeCall['patchFlag'], dynamicProps?: VNodeCall['dynamicProps'], directives?: VNodeCall['directives'], isBlock?: VNodeCall['isBlock'], disableTracking?: VNodeCall['disableTracking'], isComponent?: VNodeCall['isComponent'], loc?: SourceLocation): VNodeCall;
 export declare function createArrayExpression(elements: ArrayExpression['elements'], loc?: SourceLocation): ArrayExpression;
 export declare function createObjectExpression(properties: ObjectExpression['properties'], loc?: SourceLocation): ObjectExpression;
@@ -532,7 +538,7 @@ type InferCodegenNodeType<T> = T extends typeof RENDER_SLOT ? RenderSlotCall : C
 export declare function createCallExpression<T extends CallExpression['callee']>(callee: T, args?: CallExpression['arguments'], loc?: SourceLocation): InferCodegenNodeType<T>;
 export declare function createFunctionExpression(params: FunctionExpression['params'], returns?: FunctionExpression['returns'], newline?: boolean, isSlot?: boolean, loc?: SourceLocation): FunctionExpression;
 export declare function createConditionalExpression(test: ConditionalExpression['test'], consequent: ConditionalExpression['consequent'], alternate: ConditionalExpression['alternate'], newline?: boolean): ConditionalExpression;
-export declare function createCacheExpression(index: number, value: JSChildNode, isVNode?: boolean): CacheExpression;
+export declare function createCacheExpression(index: number, value: JSChildNode, isVOnce?: boolean): CacheExpression;
 export declare function createBlockStatement(body: BlockStatement['body']): BlockStatement;
 export declare function createTemplateLiteral(elements: TemplateLiteral['elements']): TemplateLiteral;
 export declare function createIfStatement(test: IfStatement['test'], consequent: IfStatement['consequent'], alternate?: IfStatement['alternate']): IfStatement;
@@ -554,7 +560,7 @@ type InferCompilerError<T> = T extends ErrorCodes ? CoreCompilerError : Compiler
 export declare function createCompilerError<T extends number>(code: T, loc?: SourceLocation, messages?: {
     [code: number]: string;
 }, additionalMessage?: string): InferCompilerError<T>;
-export declare const enum ErrorCodes {
+export declare enum ErrorCodes {
     ABRUPT_CLOSING_OF_EMPTY_COMMENT = 0,
     CDATA_IN_HTML_CONTENT = 1,
     DUPLICATE_ATTRIBUTE = 2,
@@ -606,16 +612,35 @@ export declare const enum ErrorCodes {
     X_MODULE_MODE_NOT_SUPPORTED = 48,
     X_CACHE_HANDLER_NOT_SUPPORTED = 49,
     X_SCOPE_ID_NOT_SUPPORTED = 50,
-    DEPRECATION_VNODE_HOOKS = 51,
-    DEPRECATION_V_IS = 52,
+    X_VNODE_HOOKS = 51,
+    X_V_BIND_INVALID_SAME_NAME_ARGUMENT = 52,
     __EXTEND_POINT__ = 53
 }
+export declare const errorMessages: Record<ErrorCodes, string>;
 
 interface ErrorHandlingOptions {
     onWarn?: (warning: CompilerError) => void;
     onError?: (error: CompilerError) => void;
 }
 export interface ParserOptions extends ErrorHandlingOptions, CompilerCompatOptions {
+    /**
+     * Base mode is platform agnostic and only parses HTML-like template syntax,
+     * treating all tags the same way. Specific tag parsing behavior can be
+     * configured by higher-level compilers.
+     *
+     * HTML mode adds additional logic for handling special parsing behavior in
+     * `<script>`, `<style>`,`<title>` and `<textarea>`.
+     * The logic is handled inside compiler-core for efficiency.
+     *
+     * SFC mode treats content of all root-level tags except `<template>` as plain
+     * text.
+     */
+    parseMode?: 'base' | 'html' | 'sfc';
+    /**
+     * Specify the root namespace to use when parsing a template.
+     * Defaults to `Namespaces.HTML` (0).
+     */
+    ns?: Namespaces;
     /**
      * e.g. platform native elements, e.g. `<div>` for browsers
      */
@@ -639,21 +664,19 @@ export interface ParserOptions extends ErrorHandlingOptions, CompilerCompatOptio
     /**
      * Get tag namespace
      */
-    getNamespace?: (tag: string, parent: ElementNode | undefined) => Namespace;
-    /**
-     * Get text parsing mode for this element
-     */
-    getTextMode?: (node: ElementNode, parent: ElementNode | undefined) => TextModes;
+    getNamespace?: (tag: string, parent: ElementNode | undefined, rootNamespace: Namespace) => Namespace;
     /**
      * @default ['{{', '}}']
      */
     delimiters?: [string, string];
     /**
      * Whitespace handling strategy
+     * @default 'condense'
      */
     whitespace?: 'preserve' | 'condense';
     /**
-     * Only needed for DOM compilers
+     * Only used for DOM compilers that runs in the browser.
+     * In non-browser builds, this option is ignored.
      */
     decodeEntities?: (rawText: string, asAttr: boolean) => string;
     /**
@@ -661,9 +684,20 @@ export interface ParserOptions extends ErrorHandlingOptions, CompilerCompatOptio
      * This defaults to `true` in development and `false` in production builds.
      */
     comments?: boolean;
+    /**
+     * Parse JavaScript expressions with Babel.
+     * @default false
+     */
+    prefixIdentifiers?: boolean;
+    /**
+     * A list of parser plugins to enable for `@babel/parser`, which is used to
+     * parse expressions in bindings and interpolations.
+     * https://babeljs.io/docs/en/next/babel-parser#plugins
+     */
+    expressionPlugins?: ParserPlugin[];
 }
 export type HoistTransform = (children: TemplateChildNode[], context: TransformContext, parent: ParentNode) => void;
-export declare const enum BindingTypes {
+export declare enum BindingTypes {
     /**
      * returned from data()
      */
@@ -892,6 +926,41 @@ export interface CodegenOptions extends SharedTransformCodegenOptions {
 }
 export type CompilerOptions = ParserOptions & TransformOptions & CodegenOptions;
 
+/**
+ * The `SourceMapGenerator` type from `source-map-js` is a bit incomplete as it
+ * misses `toJSON()`. We also need to add types for internal properties which we
+ * need to access for better performance.
+ *
+ * Since TS 5.3, dts generation starts to strangely include broken triple slash
+ * references for source-map-js, so we are inlining all source map related types
+ * here to to workaround that.
+ */
+export interface CodegenSourceMapGenerator {
+    setSourceContent(sourceFile: string, sourceContent: string): void;
+    toJSON(): RawSourceMap;
+    _sources: Set<string>;
+    _names: Set<string>;
+    _mappings: {
+        add(mapping: MappingItem): void;
+    };
+}
+export interface RawSourceMap {
+    file?: string;
+    sourceRoot?: string;
+    version: string;
+    sources: string[];
+    names: string[];
+    sourcesContent?: string[];
+    mappings: string;
+}
+interface MappingItem {
+    source: string;
+    generatedLine: number;
+    generatedColumn: number;
+    originalLine: number;
+    originalColumn: number;
+    name: string | null;
+}
 type CodegenNode = TemplateChildNode | JSChildNode | SSRCodegenNode;
 export interface CodegenResult {
     code: string;
@@ -907,9 +976,9 @@ export interface CodegenContext extends Omit<Required<CodegenOptions>, 'bindingM
     offset: number;
     indentLevel: number;
     pure: boolean;
-    map?: SourceMapGenerator;
+    map?: CodegenSourceMapGenerator;
     helper(key: symbol): string;
-    push(code: string, node?: CodegenNode): void;
+    push(code: string, newlineIndex?: number, node?: CodegenNode): void;
     indent(): void;
     deindent(withoutNewLine?: boolean): void;
     newline(): void;
@@ -923,10 +992,9 @@ export type TransformPreset = [
     Record<string, DirectiveTransform>
 ];
 export declare function getBaseTransformPreset(prefixIdentifiers?: boolean): TransformPreset;
-export declare function baseCompile(template: string | RootNode, options?: CompilerOptions): CodegenResult;
+export declare function baseCompile(source: string | RootNode, options?: CompilerOptions): CodegenResult;
 
 export declare const isStaticExp: (p: JSChildNode) => p is SimpleExpressionNode;
-export declare const isBuiltInType: (tag: string, expected: string) => boolean;
 export declare function isCoreComponent(tag: string): symbol | void;
 export declare const isSimpleIdentifier: (name: string) => boolean;
 /**
@@ -938,7 +1006,6 @@ export declare const isSimpleIdentifier: (name: string) => boolean;
 export declare const isMemberExpressionBrowser: (path: string) => boolean;
 export declare const isMemberExpressionNode: (path: string, context: TransformContext) => boolean;
 export declare const isMemberExpression: (path: string, context: TransformContext) => boolean;
-export declare function getInnerRange(loc: SourceLocation, offset: number, length: number): SourceLocation;
 export declare function advancePositionWithClone(pos: Position, source: string, numberOfCharacters?: number): Position;
 export declare function advancePositionWithMutation(pos: Position, source: string, numberOfCharacters?: number): Position;
 export declare function assert(condition: boolean, msg?: string): void;
@@ -956,9 +1023,13 @@ export declare function hasScopeRef(node: TemplateChildNode | IfBranchNode | Exp
 export declare function getMemoedVNodeCall(node: BlockCodegenNode | MemoExpression): VNodeCall | RenderSlotCall;
 export declare const forAliasRE: RegExp;
 
-export declare function walkIdentifiers(root: Node$1, onIdentifier: (node: Identifier, parent: Node$1, parentStack: Node$1[], isReference: boolean, isLocal: boolean) => void, includeAll?: boolean, parentStack?: Node$1[], knownIds?: Record<string, number>): void;
+/**
+ * Return value indicates whether the AST walked can be a constant
+ */
+export declare function walkIdentifiers(root: Node$1, onIdentifier: (node: Identifier, parent: Node$1 | null, parentStack: Node$1[], isReference: boolean, isLocal: boolean) => void, includeAll?: boolean, parentStack?: Node$1[], knownIds?: Record<string, number>): void;
 export declare function isReferencedIdentifier(id: Identifier, parent: Node$1 | null, parentStack: Node$1[]): boolean;
 export declare function isInDestructureAssignment(parent: Node$1, parentStack: Node$1[]): boolean;
+export declare function isInNewExpression(parentStack: Node$1[]): boolean;
 export declare function walkFunctionParams(node: Function, onIdent: (id: Identifier) => void): void;
 export declare function walkBlockDeclarations(block: BlockStatement$1 | Program, onIdent: (node: Identifier) => void): void;
 export declare function extractIdentifiers(param: Node$1, nodes?: Identifier[]): Identifier[];
@@ -966,6 +1037,7 @@ export declare const isFunctionType: (node: Node$1) => node is Function;
 export declare const isStaticProperty: (node: Node$1) => node is ObjectProperty;
 export declare const isStaticPropertyKey: (node: Node$1, parent: Node$1) => boolean;
 export declare const TS_NODE_TYPES: string[];
+export declare function unwrapTSNode(node: Node$1): Node$1;
 
 export declare const transformModel: DirectiveTransform;
 
@@ -977,13 +1049,16 @@ export declare const noopDirectiveTransform: DirectiveTransform;
 
 export declare function processIf(node: ElementNode, dir: DirectiveNode, context: TransformContext, processCodegen?: (node: IfNode, branch: IfBranchNode, isRoot: boolean) => (() => void) | undefined): (() => void) | undefined;
 
+export declare function processFor(node: ElementNode, dir: DirectiveNode, context: TransformContext, processCodegen?: (forNode: ForNode) => (() => void) | undefined): (() => void) | undefined;
+export declare function createForLoopParams({ value, key, index }: ForParseResult, memoArgs?: ExpressionNode[]): ExpressionNode[];
+
 export declare const transformExpression: NodeTransform;
 export declare function processExpression(node: SimpleExpressionNode, context: TransformContext, asParams?: boolean, asRawStatements?: boolean, localVars?: Record<string, number>): ExpressionNode;
 export declare function stringifyExpression(exp: ExpressionNode | string): string;
 
 export declare const trackSlotScopes: NodeTransform;
 export declare const trackVForSlotScopes: NodeTransform;
-export type SlotFnBuilder = (slotProps: ExpressionNode | undefined, vForExp: ExpressionNode | undefined, slotChildren: TemplateChildNode[], loc: SourceLocation) => FunctionExpression;
+export type SlotFnBuilder = (slotProps: ExpressionNode | undefined, vFor: DirectiveNode | undefined, slotChildren: TemplateChildNode[], loc: SourceLocation) => FunctionExpression;
 export declare function buildSlots(node: ElementNode, context: TransformContext, buildSlotFn?: SlotFnBuilder): {
     slots: SlotsExpression;
     hasDynamicSlots: boolean;

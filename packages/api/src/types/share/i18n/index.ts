@@ -11,6 +11,7 @@ declare const languages: {
         'demo-tips': string;
         more: string;
         copied: string;
+        others: string;
         'insert-different-repo-doc': string;
         'need-clipboard-permission': string;
         'click-to-copy': string;
@@ -38,6 +39,12 @@ declare const languages: {
         print: string;
         'markdown-file': string;
         'encrypted-markdown-file': string;
+        'switch-repo-n': string;
+        'switch-the-last-repo': string;
+        'edit-or-generate-text-using-ai': string;
+        'file-readonly-desc': string;
+        'can-not-edit-this-file-type': string;
+        'read-only-mode-desc': string;
         premium: {
             confetti: string;
             'need-purchase': string;
@@ -185,6 +192,7 @@ declare const languages: {
             'password-open': string;
             'wrong-password': string;
             'file-transform-error': string;
+            'custom-extension': string;
             'create-dialog': {
                 title: string;
                 hint: string;
@@ -408,6 +416,10 @@ declare const languages: {
                     'multimd-headerless': string;
                     'multimd-multibody': string;
                 };
+                view: {
+                    'default-previewer-max-width': string;
+                    'default-previewer-max-width-desc': string;
+                };
                 theme: string;
                 language: string;
                 'custom-css': string;
@@ -477,6 +489,10 @@ declare const languages: {
             };
             'switch-editor': string;
             'default-editor': string;
+            'action-label': {
+                'reveal-current-file-in-os': string;
+                'refresh-current-document': string;
+            };
         };
         previewer: {
             'default-previewer': string;
@@ -762,6 +778,7 @@ declare const languages: {
         'demo-tips': string;
         more: string;
         copied: string;
+        others: string;
         'insert-different-repo-doc': string;
         'need-clipboard-permission': string;
         'click-to-copy': string;
@@ -789,6 +806,12 @@ declare const languages: {
         print: string;
         'markdown-file': string;
         'encrypted-markdown-file': string;
+        'switch-repo-n': string;
+        'switch-the-last-repo': string;
+        'edit-or-generate-text-using-ai': string;
+        'file-readonly-desc': string;
+        'can-not-edit-this-file-type': string;
+        'read-only-mode-desc': string;
         premium: {
             confetti: string;
             'need-purchase': string;
@@ -936,6 +959,7 @@ declare const languages: {
             'password-open': string;
             'wrong-password': string;
             'file-transform-error': string;
+            'custom-extension': string;
             'create-dialog': {
                 title: string;
                 hint: string;
@@ -1159,6 +1183,10 @@ declare const languages: {
                     'multimd-headerless': string;
                     'multimd-multibody': string;
                 };
+                view: {
+                    'default-previewer-max-width': string;
+                    'default-previewer-max-width-desc': string;
+                };
                 theme: string;
                 language: string;
                 'custom-css': string;
@@ -1228,6 +1256,10 @@ declare const languages: {
             };
             'switch-editor': string;
             'default-editor': string;
+            'action-label': {
+                'reveal-current-file-in-os': string;
+                'refresh-current-document': string;
+            };
         };
         previewer: {
             'default-previewer': string;
@@ -1513,6 +1545,7 @@ declare const languages: {
         'demo-tips': string;
         more: string;
         copied: string;
+        others: string;
         'insert-different-repo-doc': string;
         'need-clipboard-permission': string;
         'click-to-copy': string;
@@ -1540,6 +1573,12 @@ declare const languages: {
         print: string;
         'markdown-file': string;
         'encrypted-markdown-file': string;
+        'switch-repo-n': string;
+        'switch-the-last-repo': string;
+        'edit-or-generate-text-using-ai': string;
+        'file-readonly-desc': string;
+        'can-not-edit-this-file-type': string;
+        'read-only-mode-desc': string;
         premium: {
             confetti: string;
             'need-purchase': string;
@@ -1687,6 +1726,7 @@ declare const languages: {
             'password-open': string;
             'wrong-password': string;
             'file-transform-error': string;
+            'custom-extension': string;
             'create-dialog': {
                 title: string;
                 hint: string;
@@ -1910,6 +1950,10 @@ declare const languages: {
                     'multimd-headerless': string;
                     'multimd-multibody': string;
                 };
+                view: {
+                    'default-previewer-max-width': string;
+                    'default-previewer-max-width-desc': string;
+                };
                 theme: string;
                 language: string;
                 'custom-css': string;
@@ -1979,6 +2023,10 @@ declare const languages: {
             };
             'switch-editor': string;
             'default-editor': string;
+            'action-label': {
+                'reveal-current-file-in-os': string;
+                'refresh-current-document': string;
+            };
         };
         previewer: {
             'default-previewer': string;

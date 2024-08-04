@@ -1,11 +1,16 @@
-import { SetupContext, RenderFunction, ComputedOptions, MethodOptions, ComponentOptionsMixin, EmitsOptions, ComponentInjectOptions, SlotsType, ComponentOptionsWithoutProps, ComponentOptionsWithArrayProps, ComponentPropsOptions, ComponentOptionsWithObjectProps, ExtractPropTypes, DefineComponent, RootHydrateFunction, ConcreteComponent, BaseTransitionProps, FunctionalComponent, ObjectDirective, VNodeRef, RootRenderFunction, CreateAppFunction } from '@vue/runtime-core';
+import { SetupContext, RenderFunction, ComponentOptions, ComponentObjectPropsOptions, ComputedOptions, MethodOptions, ComponentOptionsMixin, EmitsOptions, ComponentInjectOptions, SlotsType, ComponentOptionsWithoutProps, ComponentOptionsWithArrayProps, ComponentPropsOptions, ComponentOptionsWithObjectProps, ExtractPropTypes, DefineComponent, RootHydrateFunction, ConcreteComponent, BaseTransitionProps, FunctionalComponent, ObjectDirective, VNodeRef, RootRenderFunction, CreateAppFunction } from '@vue/runtime-core';
 export * from '@vue/runtime-core';
 import * as CSS from 'csstype';
 
 export type VueElementConstructor<P = {}> = {
     new (initialProps?: Record<string, any>): VueElement & P;
 };
-export declare function defineCustomElement<Props, RawBindings = object>(setup: (props: Readonly<Props>, ctx: SetupContext) => RawBindings | RenderFunction): VueElementConstructor<Props>;
+export declare function defineCustomElement<Props, RawBindings = object>(setup: (props: Props, ctx: SetupContext) => RawBindings | RenderFunction, options?: Pick<ComponentOptions, 'name' | 'inheritAttrs' | 'emits'> & {
+    props?: (keyof Props)[];
+}): VueElementConstructor<Props>;
+export declare function defineCustomElement<Props, RawBindings = object>(setup: (props: Props, ctx: SetupContext) => RawBindings | RenderFunction, options?: Pick<ComponentOptions, 'name' | 'inheritAttrs' | 'emits'> & {
+    props?: ComponentObjectPropsOptions<Props>;
+}): VueElementConstructor<Props>;
 export declare function defineCustomElement<Props = {}, RawBindings = {}, D = {}, C extends ComputedOptions = {}, M extends MethodOptions = {}, Mixin extends ComponentOptionsMixin = ComponentOptionsMixin, Extends extends ComponentOptionsMixin = ComponentOptionsMixin, E extends EmitsOptions = EmitsOptions, EE extends string = string, I extends ComponentInjectOptions = {}, II extends string = string, S extends SlotsType = {}>(options: ComponentOptionsWithoutProps<Props, RawBindings, D, C, M, Mixin, Extends, E, EE, I, II, S> & {
     styles?: string[];
 }): VueElementConstructor<Props>;
@@ -92,6 +97,7 @@ type AssignerFn = (value: any) => void;
 declare const assignKey: unique symbol;
 type ModelDirective<T> = ObjectDirective<T & {
     [assignKey]: AssignerFn;
+    _assigning?: boolean;
 }>;
 export declare const vModelText: ModelDirective<HTMLInputElement | HTMLTextAreaElement>;
 export declare const vModelCheckbox: ModelDirective<HTMLInputElement>;
@@ -99,28 +105,33 @@ export declare const vModelRadio: ModelDirective<HTMLInputElement>;
 export declare const vModelSelect: ModelDirective<HTMLSelectElement>;
 export declare const vModelDynamic: ObjectDirective<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>;
 
+type ModifierGuardsKeys = 'stop' | 'prevent' | 'self' | 'ctrl' | 'shift' | 'alt' | 'meta' | 'left' | 'middle' | 'right' | 'exact';
 /**
  * @private
  */
 export declare const withModifiers: <T extends (event: Event, ...args: unknown[]) => any>(fn: T & {
     _withMods?: {
         [key: string]: T;
-    } | undefined;
-}, modifiers: string[]) => T;
+    };
+}, modifiers: ModifierGuardsKeys[]) => T;
 /**
  * @private
  */
 export declare const withKeys: <T extends (event: KeyboardEvent) => any>(fn: T & {
     _withKeys?: {
         [k: string]: T;
-    } | undefined;
+    };
 }, modifiers: string[]) => T;
 
-declare const vShowOldKey: unique symbol;
+declare const vShowOriginalDisplay: unique symbol;
+declare const vShowHidden: unique symbol;
 interface VShowElement extends HTMLElement {
-    [vShowOldKey]: string;
+    [vShowOriginalDisplay]: string;
+    [vShowHidden]: boolean;
 }
-export declare const vShow: ObjectDirective<VShowElement>;
+export declare const vShow: ObjectDirective<VShowElement> & {
+    name?: 'show';
+};
 
 export interface CSSProperties extends CSS.Properties<string | number>, CSS.PropertiesHyphen<string | number> {
     /**
@@ -135,7 +146,7 @@ export interface CSSProperties extends CSS.Properties<string | number>, CSS.Prop
 }
 type Booleanish = boolean | 'true' | 'false';
 type Numberish = number | string;
-interface AriaAttributes {
+export interface AriaAttributes {
     /** Identifies the currently active element when DOM focus is on a composite widget, textbox, group, or application. */
     'aria-activedescendant'?: string;
     /** Indicates whether assistive technologies will present all, or only parts of, the changed region based on the change notifications defined by the aria-relevant attribute. */
@@ -435,7 +446,7 @@ export interface DataHTMLAttributes extends HTMLAttributes {
 }
 export interface DetailsHTMLAttributes extends HTMLAttributes {
     open?: Booleanish;
-    onToggle?: Event;
+    onToggle?: (payload: ToggleEvent) => void;
 }
 export interface DelHTMLAttributes extends HTMLAttributes {
     cite?: string;
@@ -704,7 +715,7 @@ export interface TextareaHTMLAttributes extends HTMLAttributes {
     readonly?: Booleanish;
     required?: Booleanish;
     rows?: Numberish;
-    value?: string | ReadonlyArray<string> | number;
+    value?: string | ReadonlyArray<string> | number | null;
     wrap?: string;
 }
 export interface TdHTMLAttributes extends HTMLAttributes {
@@ -1262,7 +1273,8 @@ export interface Events {
     onVolumechange: Event;
     onWaiting: Event;
     onSelect: Event;
-    onScroll: UIEvent;
+    onScroll: Event;
+    onScrollend: Event;
     onTouchcancel: TouchEvent;
     onTouchend: TouchEvent;
     onTouchmove: TouchEvent;
@@ -1287,7 +1299,7 @@ type EventHandlers<E> = {
 };
 
 export type ReservedProps = {
-    key?: string | number | symbol;
+    key?: PropertyKey;
     ref?: VNodeRef;
     ref_for?: boolean;
     ref_key?: string;

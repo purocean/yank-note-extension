@@ -1,4 +1,3 @@
-/// <reference types="node" />
 export * as path from './path';
 export * as storage from './storage';
 export * as crypto from './crypto';

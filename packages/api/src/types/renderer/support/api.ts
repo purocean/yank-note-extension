@@ -1,8 +1,7 @@
-/// <reference types="node" />
 import type { Stats } from 'fs';
 import type { WatchOptions } from 'chokidar';
 import type { IProgressMessage, ISerializedFileMatch, ISerializedSearchSuccess, ITextQuery } from 'ripgrep-wrapper';
-import type { Components, Doc, ExportType, FileItem, FileSort, FileStat, PathItem } from '@fe/types';
+import type { Components, Doc, ExportType, FileItem, FileReadResult, FileSort, FileStat, PathItem } from '@fe/types';
 export type ApiResult<T = any> = {
     status: 'ok' | 'error';
     message: string;
@@ -11,11 +10,11 @@ export type ApiResult<T = any> = {
 export declare function fetchHttp(input: RequestInfo, init?: RequestInit): Promise<any>;
 /**
  * Proxy fetch.
- * @param url string
+ * @param url RequestInfo | URL
  * @param init RequestInit
  * @returns
  */
-export declare function proxyFetch(url: string, init?: Omit<RequestInit, 'body'> & {
+export declare function proxyFetch(url: RequestInfo | URL, init?: Omit<RequestInit, 'body'> & {
     body?: any;
     timeout?: number;
     proxy?: string;
@@ -27,11 +26,7 @@ export declare function proxyFetch(url: string, init?: Omit<RequestInit, 'body'>
  * @param asBase64
  * @returns
  */
-export declare function readFile(file: PathItem, asBase64?: boolean): Promise<{
-    content: string;
-    hash: string;
-    stat: FileStat;
-}>;
+export declare function readFile(file: PathItem, asBase64?: boolean): Promise<FileReadResult>;
 /**
  * Write content to a file.
  * @param file

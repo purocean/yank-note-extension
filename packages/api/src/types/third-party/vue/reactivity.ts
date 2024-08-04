@@ -1,16 +1,28 @@
 import { IfAny } from '@vue/shared';
 
-export declare const enum TrackOpTypes {
+export declare enum TrackOpTypes {
     GET = "get",
     HAS = "has",
     ITERATE = "iterate"
 }
-export declare const enum TriggerOpTypes {
+export declare enum TriggerOpTypes {
     SET = "set",
     ADD = "add",
     DELETE = "delete",
     CLEAR = "clear"
 }
+export declare enum ReactiveFlags {
+    SKIP = "__v_skip",
+    IS_REACTIVE = "__v_isReactive",
+    IS_READONLY = "__v_isReadonly",
+    IS_SHALLOW = "__v_isShallow",
+    RAW = "__v_raw"
+}
+
+type Dep = Map<ReactiveEffect, number> & {
+    cleanup: () => void;
+    computed?: ComputedRefImpl<any>;
+};
 
 export declare class EffectScope {
     detached: boolean;
@@ -44,23 +56,6 @@ export declare function getCurrentScope(): EffectScope | undefined;
  */
 export declare function onScopeDispose(fn: () => void): void;
 
-type Dep = Set<ReactiveEffect> & TrackedMarkers;
-/**
- * wasTracked and newTracked maintain the status for several levels of effect
- * tracking recursion. One bit per level is used to define whether the dependency
- * was/is tracked.
- */
-type TrackedMarkers = {
-    /**
-     * wasTracked
-     */
-    w: number;
-    /**
-     * newTracked
-     */
-    n: number;
-};
-
 export type EffectScheduler = (...args: any[]) => any;
 export type DebuggerEvent = {
     effect: ReactiveEffect;
@@ -73,18 +68,19 @@ export type DebuggerEventExtraInfo = {
     oldValue?: any;
     oldTarget?: Map<any, any> | Set<any>;
 };
-export declare const ITERATE_KEY: unique symbol;
 export declare class ReactiveEffect<T = any> {
     fn: () => T;
-    scheduler: EffectScheduler | null;
+    trigger: () => void;
+    scheduler?: EffectScheduler | undefined;
     active: boolean;
     deps: Dep[];
-    parent: ReactiveEffect | undefined;
     onStop?: () => void;
     onTrack?: (event: DebuggerEvent) => void;
     onTrigger?: (event: DebuggerEvent) => void;
-    constructor(fn: () => T, scheduler?: EffectScheduler | null, scope?: EffectScope);
-    run(): T | undefined;
+    constructor(fn: () => T, trigger: () => void, scheduler?: EffectScheduler | undefined, scope?: EffectScope);
+    get dirty(): boolean;
+    set dirty(v: boolean);
+    run(): T;
     stop(): void;
 }
 export interface DebuggerOptions {
@@ -131,35 +127,84 @@ export declare function enableTracking(): void;
  * Resets the previous global effect tracking state.
  */
 export declare function resetTracking(): void;
-/**
- * Tracks access to a reactive property.
- *
- * This will check which effect is running at the moment and record it as dep
- * which records all effects that depend on the reactive property.
- *
- * @param target - Object holding the reactive property.
- * @param type - Defines the type of access to the reactive property.
- * @param key - Identifier of the reactive property to track.
- */
-export declare function track(target: object, type: TrackOpTypes, key: unknown): void;
-/**
- * Finds all deps associated with the target (or a specific property) and
- * triggers the effects stored within.
- *
- * @param target - The reactive object.
- * @param type - Defines the type of the operation that needs to trigger effects.
- * @param key - Can be used to target a specific reactive property in the target object.
- */
-export declare function trigger(target: object, type: TriggerOpTypes, key?: unknown, newValue?: unknown, oldValue?: unknown, oldTarget?: Map<unknown, unknown> | Set<unknown>): void;
+export declare function pauseScheduling(): void;
+export declare function resetScheduling(): void;
 
-export declare const enum ReactiveFlags {
-    SKIP = "__v_skip",
-    IS_REACTIVE = "__v_isReactive",
-    IS_READONLY = "__v_isReadonly",
-    IS_SHALLOW = "__v_isShallow",
-    RAW = "__v_raw"
+declare const ComputedRefSymbol: unique symbol;
+export interface ComputedRef<T = any> extends WritableComputedRef<T> {
+    readonly value: T;
+    [ComputedRefSymbol]: true;
 }
+export interface WritableComputedRef<T> extends Ref<T> {
+    readonly effect: ReactiveEffect<T>;
+}
+export type ComputedGetter<T> = (oldValue?: T) => T;
+export type ComputedSetter<T> = (newValue: T) => void;
+export interface WritableComputedOptions<T> {
+    get: ComputedGetter<T>;
+    set: ComputedSetter<T>;
+}
+export declare class ComputedRefImpl<T> {
+    private getter;
+    private readonly _setter;
+    dep?: Dep;
+    private _value;
+    readonly effect: ReactiveEffect<T>;
+    readonly __v_isRef = true;
+    readonly [ReactiveFlags.IS_READONLY]: boolean;
+    _cacheable: boolean;
+    /**
+     * Dev only
+     */
+    _warnRecursive?: boolean;
+    constructor(getter: ComputedGetter<T>, _setter: ComputedSetter<T>, isReadonly: boolean, isSSR: boolean);
+    get value(): T;
+    set value(newValue: T);
+    get _dirty(): boolean;
+    set _dirty(v: boolean);
+}
+/**
+ * Takes a getter function and returns a readonly reactive ref object for the
+ * returned value from the getter. It can also take an object with get and set
+ * functions to create a writable ref object.
+ *
+ * @example
+ * ```js
+ * // Creating a readonly computed ref:
+ * const count = ref(1)
+ * const plusOne = computed(() => count.value + 1)
+ *
+ * console.log(plusOne.value) // 2
+ * plusOne.value++ // error
+ * ```
+ *
+ * ```js
+ * // Creating a writable computed ref:
+ * const count = ref(1)
+ * const plusOne = computed({
+ *   get: () => count.value + 1,
+ *   set: (val) => {
+ *     count.value = val - 1
+ *   }
+ * })
+ *
+ * plusOne.value = 1
+ * console.log(count.value) // 0
+ * ```
+ *
+ * @param getter - Function that produces the next value.
+ * @param debugOptions - For debugging. See {@link https://vuejs.org/guide/extras/reactivity-in-depth.html#computed-debugging}.
+ * @see {@link https://vuejs.org/api/reactivity-core.html#computed}
+ */
+export declare function computed<T>(getter: ComputedGetter<T>, debugOptions?: DebuggerOptions): ComputedRef<T>;
+export declare function computed<T>(options: WritableComputedOptions<T>, debugOptions?: DebuggerOptions): WritableComputedRef<T>;
+
 export type UnwrapNestedRefs<T> = T extends Ref ? T : UnwrapRefSimple<T>;
+declare const ReactiveMarkerSymbol: unique symbol;
+export declare class ReactiveMarker {
+    private [ReactiveMarkerSymbol]?;
+}
+export type Reactive<T> = UnwrapNestedRefs<T> & (T extends readonly any[] ? ReactiveMarker : {});
 /**
  * Returns a reactive proxy of the object.
  *
@@ -175,7 +220,7 @@ export type UnwrapNestedRefs<T> = T extends Ref ? T : UnwrapRefSimple<T>;
  * @param target - The source object.
  * @see {@link https://vuejs.org/api/reactivity-core.html#reactive}
  */
-export declare function reactive<T extends object>(target: T): UnwrapNestedRefs<T>;
+export declare function reactive<T extends object>(target: T): Reactive<T>;
 declare const ShallowReactiveMarker: unique symbol;
 export type ShallowReactive<T> = T & {
     [ShallowReactiveMarker]?: true;
@@ -316,7 +361,7 @@ export declare function isShallow(value: unknown): boolean;
  * @param value - The value to check.
  * @see {@link https://vuejs.org/api/reactivity-utilities.html#isproxy}
  */
-export declare function isProxy(value: unknown): boolean;
+export declare function isProxy(value: any): boolean;
 /**
  * Returns the raw, original object of a Vue-created proxy.
  *
@@ -368,60 +413,11 @@ export type Raw<T> = T & {
  */
 export declare function markRaw<T extends object>(value: T): Raw<T>;
 
-declare const ComputedRefSymbol: unique symbol;
-export interface ComputedRef<T = any> extends WritableComputedRef<T> {
-    readonly value: T;
-    [ComputedRefSymbol]: true;
-}
-export interface WritableComputedRef<T> extends Ref<T> {
-    readonly effect: ReactiveEffect<T>;
-}
-export type ComputedGetter<T> = (...args: any[]) => T;
-export type ComputedSetter<T> = (v: T) => void;
-export interface WritableComputedOptions<T> {
-    get: ComputedGetter<T>;
-    set: ComputedSetter<T>;
-}
-/**
- * Takes a getter function and returns a readonly reactive ref object for the
- * returned value from the getter. It can also take an object with get and set
- * functions to create a writable ref object.
- *
- * @example
- * ```js
- * // Creating a readonly computed ref:
- * const count = ref(1)
- * const plusOne = computed(() => count.value + 1)
- *
- * console.log(plusOne.value) // 2
- * plusOne.value++ // error
- * ```
- *
- * ```js
- * // Creating a writable computed ref:
- * const count = ref(1)
- * const plusOne = computed({
- *   get: () => count.value + 1,
- *   set: (val) => {
- *     count.value = val - 1
- *   }
- * })
- *
- * plusOne.value = 1
- * console.log(count.value) // 0
- * ```
- *
- * @param getter - Function that produces the next value.
- * @param debugOptions - For debugging. See {@link https://vuejs.org/guide/extras/reactivity-in-depth.html#computed-debugging}.
- * @see {@link https://vuejs.org/api/reactivity-core.html#computed}
- */
-export declare function computed<T>(getter: ComputedGetter<T>, debugOptions?: DebuggerOptions): ComputedRef<T>;
-export declare function computed<T>(options: WritableComputedOptions<T>, debugOptions?: DebuggerOptions): WritableComputedRef<T>;
-
 declare const RefSymbol: unique symbol;
 declare const RawSymbol: unique symbol;
-export interface Ref<T = any> {
-    value: T;
+export interface Ref<T = any, S = T> {
+    get value(): T;
+    set value(_: S);
     /**
      * Type differentiator only.
      * We need this to be in public d.ts but don't want it to show up in IDE
@@ -443,7 +439,7 @@ export declare function isRef<T>(r: Ref<T> | unknown): r is Ref<T>;
  * @param value - The object to wrap in the ref.
  * @see {@link https://vuejs.org/api/reactivity-core.html#ref}
  */
-export declare function ref<T>(value: T): Ref<UnwrapRef<T>>;
+export declare function ref<T>(value: T): Ref<UnwrapRef<T>, UnwrapRef<T> | T>;
 export declare function ref<T = any>(): Ref<T | undefined>;
 declare const ShallowRefMarker: unique symbol;
 export type ShallowRef<T = any> = Ref<T> & {
@@ -512,7 +508,7 @@ export type MaybeRefOrGetter<T = any> = MaybeRef<T> | (() => T);
  * @param ref - Ref or plain value to be converted into the plain value.
  * @see {@link https://vuejs.org/api/reactivity-utilities.html#unref}
  */
-export declare function unref<T>(ref: MaybeRef<T> | ComputedRef<T>): T;
+export declare function unref<T>(ref: MaybeRef<T> | ComputedRef<T> | ShallowRef<T>): T;
 /**
  * Normalizes values / refs / getters to values.
  * This is similar to {@link unref()}, except that it also normalizes getters.
@@ -529,7 +525,7 @@ export declare function unref<T>(ref: MaybeRef<T> | ComputedRef<T>): T;
  * @param source - A getter, an existing ref, or a non-function value.
  * @see {@link https://vuejs.org/api/reactivity-utilities.html#tovalue}
  */
-export declare function toValue<T>(source: MaybeRefOrGetter<T> | ComputedRef<T>): T;
+export declare function toValue<T>(source: MaybeRefOrGetter<T> | ComputedRef<T> | ShallowRef<T>): T;
 /**
  * Returns a reactive proxy for the given object.
  *
@@ -612,7 +608,6 @@ export type ToRef<T> = IfAny<T, Ref<T>, [T] extends [Ref] ? T : Ref<T>>;
 export declare function toRef<T>(value: T): T extends () => infer R ? Readonly<Ref<R>> : T extends Ref ? T : Ref<UnwrapRef<T>>;
 export declare function toRef<T extends object, K extends keyof T>(object: T, key: K): ToRef<T[K]>;
 export declare function toRef<T extends object, K extends keyof T>(object: T, key: K, defaultValue: T[K]): ToRef<Exclude<T[K], undefined>>;
-type BaseTypes = string | number | boolean;
 /**
  * This is a special exported interface for other packages to declare
  * additional types that should bail out for ref unwrapping. For example
@@ -629,10 +624,11 @@ type BaseTypes = string | number | boolean;
 export interface RefUnwrapBailTypes {
 }
 export type ShallowUnwrapRef<T> = {
-    [K in keyof T]: T[K] extends Ref<infer V> ? V : T[K] extends Ref<infer V> | undefined ? unknown extends V ? undefined : V | undefined : T[K];
+    [K in keyof T]: DistributeRef<T[K]>;
 };
+type DistributeRef<T> = T extends Ref<infer V> ? V : T;
 export type UnwrapRef<T> = T extends ShallowRef<infer V> ? V : T extends Ref<infer V> ? UnwrapRefSimple<V> : UnwrapRefSimple<T>;
-type UnwrapRefSimple<T> = T extends Function | BaseTypes | Ref | RefUnwrapBailTypes[keyof RefUnwrapBailTypes] | {
+type UnwrapRefSimple<T> = T extends Builtin | Ref | RefUnwrapBailTypes[keyof RefUnwrapBailTypes] | {
     [RawSymbol]?: true;
 } ? T : T extends Map<infer K, infer V> ? Map<K, UnwrapRefSimple<V>> & UnwrapRef<Omit<T, keyof Map<any, any>>> : T extends WeakMap<infer K, infer V> ? WeakMap<K, UnwrapRefSimple<V>> & UnwrapRef<Omit<T, keyof WeakMap<any, any>>> : T extends Set<infer V> ? Set<UnwrapRefSimple<V>> & UnwrapRef<Omit<T, keyof Set<any>>> : T extends WeakSet<infer V> ? WeakSet<UnwrapRefSimple<V>> & UnwrapRef<Omit<T, keyof WeakSet<any>>> : T extends ReadonlyArray<any> ? {
     [K in keyof T]: UnwrapRefSimple<T[K]>;
@@ -642,5 +638,30 @@ type UnwrapRefSimple<T> = T extends Function | BaseTypes | Ref | RefUnwrapBailTy
     [P in keyof T]: P extends symbol ? T[P] : UnwrapRef<T[P]>;
 } : T;
 
-export declare function deferredComputed<T>(getter: () => T): ComputedRef<T>;
+/**
+ * @deprecated use `computed` instead. See #5912
+ */
+export declare const deferredComputed: typeof computed;
+
+export declare const ITERATE_KEY: unique symbol;
+/**
+ * Tracks access to a reactive property.
+ *
+ * This will check which effect is running at the moment and record it as dep
+ * which records all effects that depend on the reactive property.
+ *
+ * @param target - Object holding the reactive property.
+ * @param type - Defines the type of access to the reactive property.
+ * @param key - Identifier of the reactive property to track.
+ */
+export declare function track(target: object, type: TrackOpTypes, key: unknown): void;
+/**
+ * Finds all deps associated with the target (or a specific property) and
+ * triggers the effects stored within.
+ *
+ * @param target - The reactive object.
+ * @param type - Defines the type of the operation that needs to trigger effects.
+ * @param key - Can be used to target a specific reactive property in the target object.
+ */
+export declare function trigger(target: object, type: TriggerOpTypes, key?: unknown, newValue?: unknown, oldValue?: unknown, oldTarget?: Map<unknown, unknown> | Set<unknown>): void;
 
