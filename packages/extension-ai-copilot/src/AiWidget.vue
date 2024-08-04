@@ -42,12 +42,16 @@
           <button class="small tr" @click="reload"><svg-icon name="sync-alt-solid" width="11px" height="13px" /></button>
         </template>
 
-        <label>
-          <template v-if="adapter && adapter.state && adapterType === 'edit'">
+        <div class="options">
+          <label v-if="adapter && adapter.state && adapterType === 'edit'">
             <input type="checkbox" v-model="adapter.state.withContext" />
             {{ $t('with-context') }}
-          </template>
-        </label>
+          </label>
+          <div v-if="adapter && adapter.state && adapterType === 'text2image'" class="image-size">
+            <span>W:</span><input type="number" v-model="adapter.state.width" style="width: 60px" />
+            <span>H:</span><input type="number" v-model="adapter.state.height" style="width: 60px" />
+          </div>
+        </div>
 
         <select v-model="state.adapter[adapterType]" @change="textareaRef?.focus()">
           <option v-for="item in adapters" :key="item.id" :value="item.id">{{item.displayname}}</option>
@@ -229,7 +233,8 @@ function accept () {
     editor.focus()
 
     const clipboardData = new DataTransfer()
-    const file = new File([image.value.blob], 'image.png', { type: image.value.blob.type })
+    const ext = ctx.lib.mime.getExtension(image.value.blob.type)
+    const file = new File([image.value.blob], 'image.' + ext, { type: image.value.blob.type })
     clipboardData.items.add(file)
     const pasteEvent = new ClipboardEvent('paste', { clipboardData, bubbles: true, cancelable: true })
     document.dispatchEvent(pasteEvent)
@@ -386,14 +391,19 @@ onBeforeUnmount(() => {
       }
     }
 
-    select {
+    select, input {
       font-size: 13px;
       padding: 1px;
       width: 120px;
       height: 22px;
     }
 
-    label {
+    .image-size {
+      display: flex;
+      align-items: center;
+    }
+
+    .options {
       margin-left: auto;
       margin-right: 4px;
       display: flex;

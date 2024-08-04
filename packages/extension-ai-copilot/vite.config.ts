@@ -26,6 +26,7 @@ export default defineConfig({
     rollupOptions: {
       external: Object.keys(YN_LIBS),
       output: {
+        intro: 'const fetch = function (url, options) { return (window.__PLUGIN_AI_COPILOT_FETCH || window.fetch)(url, options) };',
         globals: {
           window: 'window',
           ...YN_LIBS,

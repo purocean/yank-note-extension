@@ -1,4 +1,5 @@
 import { reactive } from 'vue'
+import * as gradio from '@gradio/client'
 import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
 import { CompletionAdapter, EditAdapter, FormItem, Panel, TextToImageAdapter } from '@/adapter'
@@ -480,29 +481,49 @@ export class CustomTextToImageAdapter implements TextToImageAdapter {
   logger: ReturnType<typeof ctx.utils.getLogger>
   monaco = ctx.editor.getMonaco()
 
-  defaultBuildRequestCode = `// https://developers.cloudflare.com/workers-ai/models/dreamshaper-8-lcm/
+  defaultBuildRequestCode = `const { width, height, endpoint, apiToken, instruction, model } = data
 
-const API_ACCOUNT_ID = 'YOUR_ACCOUNT_ID_HERE'
-const API_TOKEN = 'YOUR_API_TOKEN_HERE'
-
-// data is the input object
-const { instruction } = data
-
-const url = \`https://api.cloudflare.com/client/v4/accounts/\${API_ACCOUNT_ID}/ai/run/@cf/lykon/dreamshaper-8-lcm\`
+const url = \`\${endpoint}/ai/run/\${model}\`
 
 const headers = {
-  'Authorization': \`Bearer \${API_TOKEN}\`,
+  'Authorization': \`Bearer \${apiToken}\`,
   'Content-Type': 'application/json',
 }
 
-const body = JSON.stringify({ prompt: instruction })
+const body = JSON.stringify({ prompt: instruction, width, height })
 
 return { url, headers, body, method: 'POST' }`
 
-  defaultHandleResponseCode = `// https://developers.cloudflare.com/workers-ai/models/dreamshaper-8-lcm/
+  defaultHandleResponseCode = `const { res } = data
 
-// data is the input object
-const { res } = data
+if (res.headers.get('Content-Type').startsWith('image')) {
+  return { blob: await res.blob() }
+} else {
+  throw new Error(await res.text())
+}`
+
+  defaultGradioBuildRequestCode = `const { width, height, apiToken, instruction, endpoint } = data
+
+const client = await env.gradio.Client.connect(endpoint, { hf_token: apiToken });
+
+const result = await client.predict("/infer", {
+    prompt: instruction,
+    seed: 0,
+    width,
+    height,
+    randomize_seed: true,
+    num_inference_steps: 4,
+});
+
+const url = result?.data?.[0]?.url
+
+if (!url) {
+  throw new Error(JSON.stringify(result))
+}
+
+return { url, method: 'GET' }`
+
+  defaultGradioHandleResponseCode = `const { res } = data
 
 if (res.headers.get('Content-Type').startsWith('image')) {
   return { blob: await res.blob() }
@@ -513,25 +534,46 @@ if (res.headers.get('Content-Type').startsWith('image')) {
   state = reactive({
     instruction: '',
     proxy: '',
+    apiToken: '',
+    endpoint: 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID',
+    model: '@cf/lykon/dreamshaper-8-lcm',
+    width: 512,
+    height: 512,
     buildRequestCode: this.defaultBuildRequestCode,
     handleResponseCode: this.defaultHandleResponseCode,
   })
 
-  panel: Panel = {
-    type: 'form',
-    items: [
-      { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
-      { type: 'textarea', key: 'buildRequestCode', label: 'Build Request Code', defaultValue: this.defaultBuildRequestCode, hasError: v => !v, props: { style: { height: '10em' } } },
-      { type: 'textarea', key: 'handleResponseCode', label: 'Handle Response Code', defaultValue: this.defaultHandleResponseCode, hasError: v => !v, props: { style: { height: '10em' } } },
-      { type: 'input', key: 'proxy', label: i18n.t('proxy'), props: { placeholder: 'eg: http://127.0.0.1:8000' } },
-    ],
-  }
+  panel: Panel
 
   constructor (adapter: CustomAdapter) {
     this.id = adapter.name
     this.displayname = adapter.name
     this.description = 'Custom Text to Image Adapter'
     this.logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CustomTextToImageAdapter.' + this.id)
+
+    this.panel = {
+      type: 'form',
+      items: [
+        { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
+        { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: adapter.preset === 'gradio' ? 'eg. black-forest-labs/FLUX.1-schnell' : 'eg. https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID' }, hasError: v => !v },
+        { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: '', type: 'password' } },
+        ...(adapter.preset === 'gradio'
+          ? []
+          : [
+            { type: 'input', key: 'model', label: i18n.t('model'), hasError: v => !v },
+          ] as FormItem[]),
+        { type: 'range', key: 'width', label: i18n.t('width'), defaultValue: 512, min: 1, max: 1920, step: 1 },
+        { type: 'range', key: 'height', label: i18n.t('height'), defaultValue: 512, min: 1, max: 1920, step: 1 },
+        { type: 'textarea', key: 'buildRequestCode', label: 'Build Request Code', defaultValue: adapter.preset === 'gradio' ? this.defaultGradioBuildRequestCode : this.defaultBuildRequestCode, hasError: v => !v, props: { style: { height: '10em' } } },
+        { type: 'textarea', key: 'handleResponseCode', label: 'Handle Response Code', defaultValue: adapter.preset === 'gradio' ? this.defaultGradioHandleResponseCode : this.defaultHandleResponseCode, hasError: v => !v, props: { style: { height: '10em' } } },
+        { type: 'input', key: 'proxy', label: i18n.t('proxy'), props: { placeholder: 'eg: http://127.0.0.1:8000' } },
+      ],
+    }
+
+    if (adapter.preset === 'gradio') {
+      this.state.buildRequestCode = this.defaultGradioBuildRequestCode
+      this.state.handleResponseCode = this.defaultGradioHandleResponseCode
+    }
   }
 
   activate () {
@@ -553,22 +595,29 @@ if (res.headers.get('Content-Type').startsWith('image')) {
       return
     }
 
-    const buildRequestFn = new AsyncFunction('data', this.state.buildRequestCode)
+    const controller = new AbortController()
+    cancelToken.onCancellationRequested(() => controller.abort())
+
+    const buildRequestFn = new AsyncFunction('data', 'env', this.state.buildRequestCode)
     const handleResultFn = new AsyncFunction('data', this.state.handleResponseCode)
 
-    const data = { instruction }
+    const data = { ...this.state }
+    const env = { gradio, signal: controller.signal }
 
-    const request = await buildRequestFn.apply(this, [data])
+    const request = await buildRequestFn.apply(this, [data, env])
     if (!request) {
       return null
     }
 
-    const { method, url, headers, body } = request
-    this.logger.debug('Request:', url, headers, body)
+    let response: any
+    if (typeof request === 'function') {
+      response = await request()
+    } else {
+      const { method, url, headers, body } = request
+      this.logger.debug('Request:', url, headers, body)
+      response = await ctx.api.proxyFetch(url, { method, headers, body, signal: controller.signal, proxy: this.state.proxy })
+    }
 
-    const controller = new AbortController()
-    cancelToken.onCancellationRequested(() => controller.abort())
-    const response = await ctx.api.proxyFetch(url, { method, headers, body, signal: controller.signal })
     this.logger.debug('Response:', response)
     const { blob } = await handleResultFn.apply(this, [{ res: response }])
     return blob

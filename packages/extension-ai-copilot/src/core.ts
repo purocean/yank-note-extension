@@ -44,7 +44,7 @@ export class FatalError extends Error { }
 export interface CustomAdapter {
   name: string,
   type: AdapterType,
-  preset: 'openai' | 'custom'
+  preset: 'openai' | 'gradio' | 'custom'
 }
 
 export const i18n = ctx.i18n.createI18n({
@@ -91,6 +91,8 @@ export const i18n = ctx.i18n.createI18n({
     'auto-trigger-completion-desc': 'Auto trigger completion when typing',
     'reset-to-default': 'Reset to default',
     'reset-to-default-value-confirm': 'Are you sure you want to reset to default value?',
+    'width': 'Width',
+    'height': 'Height',
   },
   'zh-CN': {
     'ai-complete': '使用 AI Copilot 自动补全',
@@ -135,6 +137,8 @@ export const i18n = ctx.i18n.createI18n({
     'auto-trigger-completion-desc': '输入时自动触发补全',
     'reset-to-default': '重置为默认值',
     'reset-to-default-value-confirm': '确定要重置为默认值吗？',
+    'width': '宽度',
+    'height': '高度',
   }
 })
 
@@ -267,6 +271,11 @@ export async function readReader (
 
 export function showInstructionHistoryMenu (type: AdapterType, setFn: (val: string, clear?: boolean) => void) {
   const list = state.instructionHistory[type]
+
+  if (list.length === 0) {
+    return
+  }
+
   const items: Components.ContextMenu.Item[] = list.map(x => ({
     id: x,
     label: h('span', { class: 'ai-copilot-history-instruction-item', title: x }, [

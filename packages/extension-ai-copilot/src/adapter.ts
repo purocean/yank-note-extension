@@ -59,7 +59,7 @@ export interface EditAdapter extends Adapter {
 
 export interface TextToImageAdapter extends Adapter {
   type: 'text2image'
-  state: Record<string, any> & { instruction: string },
+  state: Record<string, any> & { instruction: string, proxy: string, width: number, height: number },
   fetchTextToImageResults(
     instruction: string,
     cancelToken: Monaco.CancellationToken,

@@ -179,6 +179,12 @@ export async function executeTextToImage (token: Monaco.CancellationToken): Prom
     state.instructionHistory.text2image.unshift(instruction)
     state.instructionHistory.text2image = ctx.lib.lodash.uniq(state.instructionHistory.text2image.slice(0, 16))
 
+    const controller = new AbortController()
+    token.onCancellationRequested(() => controller.abort())
+    window.__PLUGIN_AI_COPILOT_FETCH = function (url: string | Request, options: RequestInit) {
+      return ctx.api.proxyFetch(url as string, { ...options, proxy: adapter.state.proxy, signal: controller.signal })
+    }
+
     const res = adapter.fetchTextToImageResults(instruction, token)
 
     const result = await Promise.race([res, cancelPromise])
@@ -193,6 +199,7 @@ export async function executeTextToImage (token: Monaco.CancellationToken): Prom
     throw error
   } finally {
     loading.value = false
+    delete window.__PLUGIN_AI_COPILOT_FETCH
   }
 }
 

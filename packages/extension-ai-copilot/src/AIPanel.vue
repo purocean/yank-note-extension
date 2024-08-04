@@ -143,7 +143,7 @@ async function createCustomAdapter () {
     return
   }
 
-  const adapterPreset = ref<'openai' | 'custom'>(state.type === 'text2image' ? 'custom' : 'openai')
+  const adapterPreset = ref<'openai' | 'gradio' | 'custom'>(state.type === 'text2image' ? 'gradio' : 'openai')
 
   type AdapterParamsName = 'ollama' | 'kimi' | 'dashscope' | 'openai' | 'spark' | 'custom'
 
@@ -179,13 +179,19 @@ async function createCustomAdapter () {
   const name = await ctx.ui.useModal().input({
     title: i18n.t('create-custom-adapter'),
     hint: i18n.t('adapter-name'),
-    value: state.type === 'text2image' ? 'Workers AI' : 'Custom Adapter',
+    value: 'Custom Adapter',
     modalWidth: '500px',
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     maxlength: 32,
     component: () => state.type === 'text2image'
-      ? undefined
+      ? h('div', { style: 'margin-top: 16px' }, [
+        h('div', { style: 'margin: 8px 0' }, [
+          i18n.t('custom-adapter-type'),
+          h('label', { style: 'margin-left: 8px' }, [h('input', { type: 'radio', name: 'type', value: 'gradio', checked: adapterPreset.value === 'gradio', onChange: () => { adapterPreset.value = 'gradio' } }), ' Gradio']),
+          h('label', { style: 'margin: 0 8px' }, [h('input', { type: 'radio', name: 'type', value: 'custom', checked: adapterPreset.value === 'custom', onChange: () => { adapterPreset.value = 'custom' } }), ' ' + i18n.t('custom') + '-Workers AI']),
+        ]),
+      ])
       : h('div', { style: 'margin-top: 16px' }, [
         h('div', { style: 'margin: 8px 0' }, [
           i18n.t('custom-adapter-type'),
@@ -214,7 +220,11 @@ async function createCustomAdapter () {
 
   addCustomAdapters(
     { name, type: state.type, preset: adapterPreset.value },
-    adapterPreset.value === 'openai' ? adapterOpenAIPresets[adapterParamsName.value || 'custom'].params : {},
+    adapterPreset.value === 'openai'
+      ? adapterOpenAIPresets[adapterParamsName.value || 'custom'].params
+      : adapterPreset.value === 'gradio'
+        ? { endpoint: 'https://black-forest-labs-flux-1-schnell.hf.space', model: '' }
+        : {},
   )
   triggerRef(pined)
   setTimeout(() => {

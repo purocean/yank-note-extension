@@ -60,5 +60,8 @@
     "vite": "^3.2.3",
     "vue": "^3.2.33",
     "vue-tsc": "^0.34.11"
+  },
+  "dependencies": {
+    "@gradio/client": "^1.4.0"
   }
 }

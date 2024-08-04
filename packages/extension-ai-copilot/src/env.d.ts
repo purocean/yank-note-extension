@@ -9,3 +9,7 @@ declare module '*.vue' {
 
 declare const __EXTENSION_ID__: string
 declare const __EXTENSION_VERSION__: string
+
+declare interface Window {
+  __PLUGIN_AI_COPILOT_FETCH?: typeof fetch
+}
