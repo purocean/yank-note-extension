@@ -9,6 +9,12 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
     return false
   }
 
+  if (!ctx.getPremium()) {
+    ctx.ui.useToast().show('warning', i18n.t('ai-premium-required'), 2000)
+    ctx.showPremium()
+    return false
+  }
+
   globalCancelTokenSource.value = new (ctx.editor.getMonaco().CancellationTokenSource)(token)
   token = globalCancelTokenSource.value.token
 
@@ -145,6 +151,12 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
 
 export async function executeTextToImage (token: Monaco.CancellationToken, updateStatus: (status: string) => void): Promise<false | Blob> {
   if (!state.enable) {
+    return false
+  }
+
+  if (!ctx.getPremium()) {
+    ctx.ui.useToast().show('warning', i18n.t('ai-premium-required'), 2000)
+    ctx.showPremium()
     return false
   }
 

@@ -94,6 +94,7 @@ export const i18n = ctx.i18n.createI18n({
     'width': 'Width',
     'height': 'Height',
     'runtime-version-not-satisfies': 'Current version Yank Note is not compatible with this feature, please use the latest version of Yank Note',
+    'ai-premium-required': 'AI Copilot is a premium feature, please upgrade to premium to use this feature',
   },
   'zh-CN': {
     'ai-complete': '使用 AI Copilot 自动补全',
@@ -141,6 +142,7 @@ export const i18n = ctx.i18n.createI18n({
     'width': '宽度',
     'height': '高度',
     'runtime-version-not-satisfies': '当前版本 Yank Note 不兼容此功能，请使用最新版本 Yank Note',
+    'ai-premium-required': 'AI Copilot 是高级功能，请升级到高级版以使用此功能',
   }
 })
 
