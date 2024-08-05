@@ -1,3 +1,12 @@
+# [1.24.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.23.4...extension-ai-copilot-1.24.0) (2024-08-05)
+
+
+### Features
+
+* **extension-ai-copilot:** add advanced settings toggle to AI Copilot panel ([930477a](https://github.com/purocean/yank-note-extension/commit/930477a256e8c28f53f60252b8960e7284435e3f))
+
+
+
 ## [1.23.4](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.23.3...extension-ai-copilot-1.23.4) (2024-08-05)
 
 
