@@ -399,6 +399,7 @@ declare const data: {
                 'suggest-on-trigger-characters': string;
                 'sticky-scroll-enabled': string;
                 'quick-suggestions': string;
+                'enable-ai-copilot-action': string;
             };
             render: {
                 'md-html': string;
