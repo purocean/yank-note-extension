@@ -183,10 +183,15 @@ if (!Array.isArray(instructionHistory.text2image)) {
 export const state = reactive({
   ...defaultState,
   ...storageData,
+  enable: ctx.setting.getSetting('editor.enable-ai-copilot-action', true),
   instructionHistory: { ...instructionHistory },
 })
 
 const saveState = ctx.lib.lodash.debounce(() => {
+  if (state.enable !== ctx.setting.getSetting('editor.enable-ai-copilot-action')) {
+    ctx.setting.setSetting('editor.enable-ai-copilot-action', state.enable)
+  }
+
   ctx.utils.storage.set(storageStateKey, state)
 }, 1000, { leading: true })
 

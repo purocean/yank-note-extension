@@ -261,6 +261,8 @@ export class CodeActionProvider implements Monaco.languages.CodeActionProvider {
 
   async resolveCodeAction (codeAction: languages.CodeAction): Promise<Monaco.languages.CodeAction | undefined> {
     if (codeAction.command?.id) {
+      state.enable = true
+
       ctx.action.getActionHandler(codeAction.command.id)?.()
     }
 
