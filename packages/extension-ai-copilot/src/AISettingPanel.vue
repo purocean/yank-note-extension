@@ -7,7 +7,9 @@
         <div v-else-if="adapterState" :class="{
           row : true,
           'has-icon-btn': !!(item as any).defaultValue || item.key === 'instruction',
-          'has-error': !!item.hasError?.(adapterState[item.key])
+          'has-error': !!item.hasError?.(adapterState[item.key]),
+          'hidden': item.advanced && !showAdvanced,
+          'marked': !!item.marked?.(adapterState[item.key]),
         }">
           <div class="label" :title="item.key"> {{ item.label }} </div>
             <div v-if="item.type === 'context'">
@@ -67,14 +69,20 @@
       </template>
     </template>
   </template>
-  <div v-else class="adapter-info">
+  <div v-if="hasAdvancedFormItem" class="advanced-toggle">
+    <label>
+      <input type="checkbox" v-model="showAdvanced" />
+      {{ i18n.$t.value('show-advanced-settings') }}
+    </label>
+  </div>
+  <div v-if="!panel" class="adapter-info">
     {{ adapter.displayname }}
     <div class="desc">{{ adapter.description }}</div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, unref, defineProps, watchEffect, onBeforeUnmount, watch, onMounted } from 'vue'
+import { computed, ref, unref, defineProps, watchEffect, onBeforeUnmount, watch, onMounted } from 'vue'
 import { CURSOR_PLACEHOLDER, buildAdapterStateKey, i18n, showInstructionHistoryMenu, state } from './core'
 import { ctx } from '@yank-note/runtime-api'
 import { Adapter, AdapterType, FormItem } from './adapter'
@@ -89,10 +97,16 @@ const props = defineProps<{
   type: AdapterType
 }>()
 
+const showAdvanced = ref(false)
+
 const adapterKey = computed(() => buildAdapterStateKey(props.type, state.adapter[props.type]))
 
 const adapter = computed(() => props.adapter)
 const panel = computed(() => unref(adapter.value.panel))
+
+const hasAdvancedFormItem = computed(() => {
+  return panel.value?.type === 'form' ? unref(panel.value.items).some((item: FormItem) => item.advanced) : false
+})
 
 const adapterRes = adapter.value.activate()
 const adapterState = adapterRes.state
@@ -206,6 +220,10 @@ watchEffect(() => {
   padding: 0 14px;
   padding-top: 4px;
 
+  &.hidden {
+    display: none;
+  }
+
   &.has-icon-btn {
     input[type=text], input[type=password], textarea {
       padding-right: 26px;
@@ -215,6 +233,13 @@ watchEffect(() => {
   &.has-error{
     input, textarea {
       outline: 1px solid red;
+      outline-offset: -2px;
+    }
+  }
+
+  &.marked {
+    input, textarea {
+      outline: 1px dashed var(--g-color-30);
       outline-offset: -2px;
     }
   }
@@ -284,6 +309,27 @@ watchEffect(() => {
     top: 7px;
     z-index: 1111;
     cursor: pointer;
+  }
+}
+
+.advanced-toggle {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 0 14px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  label {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 13px;
+    cursor: pointer;
+
+    input {
+      margin-right: 3px;
+    }
   }
 }
 

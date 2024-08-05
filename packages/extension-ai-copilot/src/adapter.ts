@@ -5,7 +5,7 @@ export type AdapterType = 'completion' | 'edit' | 'text2image'
 
 export type CustomVueComponent = { type: 'custom', component: any }
 
-export type FormItem = CustomVueComponent
+type _FormItem = CustomVueComponent
   | { type: 'context', key: 'context', label: string, hasError?: (val: string) => boolean, props?: any }
   | { type: 'selection', key: 'selection', label: string, hasError?: (val: string) => boolean, props?: any }
   | { type: 'instruction', key: 'instruction', label: string, hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
@@ -13,6 +13,8 @@ export type FormItem = CustomVueComponent
   | { type: 'select', key: string, label: string, options: {label: string, value: string}[], description?: string, hasError?: (val: string) => boolean, defaultValue?: string, props?: any }
   | { type: 'range', key: string, label: string, max: number, min: number, step: number, description?: string, hasError?: (val: string) => boolean, defaultValue?: number, props?: any }
   | { type: 'checkbox', key: string, label: string, description: string, hasError?: (val: boolean) => boolean, defaultValue?: boolean, props?: any }
+
+export type FormItem = _FormItem & { advanced?: boolean, marked?: (val: string) => boolean }
 
 export type Panel = CustomVueComponent | {
   type: 'form',

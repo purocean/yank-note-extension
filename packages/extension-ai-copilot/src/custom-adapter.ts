@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { nextTick, reactive, watch } from 'vue'
 import * as gradio from '@gradio/client'
 import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
@@ -16,6 +16,8 @@ export class CustomCompletionAdapter implements CompletionAdapter {
   description: string
   supportProxy = false
   removable = true
+
+  adapter: CustomAdapter
 
   logger: ReturnType<typeof ctx.utils.getLogger>
   monaco = ctx.editor.getMonaco()
@@ -50,8 +52,7 @@ return { url, headers, body, method: 'POST' }`
 
 const obj = await res.json()
 const text = obj.result.response
-return [text]
-`
+return [text]`
 
  defaultOpenAIBuildRequestCode = `const { context, system, state } = data
 
@@ -86,18 +87,21 @@ return [text]`
   panel: Panel
 
   state = reactive({
+    __buildRequestCodeChanged: false,
+    __handleResponseCodeChanged: false,
     endpoint: '',
     apiToken: '',
     model: '',
     context: '',
     proxy: '',
     systemMessage: this.defaultSystemMessage,
-    buildRequestCode: this.defaultBuildRequestCode,
-    handleResponseCode: this.defaultHandleResponseCode,
+    buildRequestCode: '',
+    handleResponseCode: '',
     autoTrigger: false,
   })
 
   constructor (adapter: CustomAdapter) {
+    this.adapter = adapter
     this.id = adapter.name
     this.displayname = adapter.name
     this.description = 'Custom Completion Adapter'
@@ -105,6 +109,8 @@ return [text]`
 
     const defaultApiPoint = adapter.preset === 'openai' ? 'https://api.openai.com/v1/chat/completions' : 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID'
     const defaultModel = adapter.preset === 'openai' ? 'gpt-4o-mini' : '@cf/meta/llama-3-8b-instruct'
+
+    const { buildRequestCode, handleResponseCode } = this.getDefaultCode()
 
     this.panel = {
       type: 'form',
@@ -115,23 +121,49 @@ return [text]`
         { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultApiPoint }, defaultValue: defaultApiPoint, hasError: v => !v },
         { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' } },
         { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: defaultModel, props: { placeholder: 'e.g. gpt-4o-mini' }, hasError: v => !v },
-        { type: 'textarea', key: 'buildRequestCode', label: 'Build Request Code', defaultValue: adapter.preset === 'openai' ? this.defaultOpenAIBuildRequestCode : this.defaultBuildRequestCode, hasError: v => !v },
-        { type: 'textarea', key: 'handleResponseCode', label: 'Handle Response Code', defaultValue: adapter.preset === 'openai' ? this.defaultOpenAIHandleResponseCode : this.defaultHandleResponseCode, hasError: v => !v },
+        { type: 'textarea', key: 'buildRequestCode', label: 'Build Request Code', advanced: true, defaultValue: buildRequestCode, marked: v => v !== buildRequestCode, hasError: v => !v, props: { style: { height: '10em' } } },
+        { type: 'textarea', key: 'handleResponseCode', label: 'Handle Response Code', advanced: true, defaultValue: handleResponseCode, marked: v => v !== handleResponseCode, hasError: v => !v, props: { style: { height: '10em' } } },
         { type: 'input', key: 'proxy', label: i18n.t('proxy'), props: { placeholder: 'eg: http://127.0.0.1:8000' } },
       ],
     }
 
-    if (adapter.preset === 'openai') {
-      this.state.buildRequestCode = this.defaultOpenAIBuildRequestCode
-      this.state.handleResponseCode = this.defaultOpenAIHandleResponseCode
-    }
+    this.state.buildRequestCode = buildRequestCode
+    this.state.handleResponseCode = handleResponseCode
   }
 
   activate () {
+    const { buildRequestCode, handleResponseCode } = this.getDefaultCode()
+
+    let stopWatch: () => void
+
+    nextTick(() => {
+      if (!this.state.__buildRequestCodeChanged) {
+        this.state.buildRequestCode = buildRequestCode
+      }
+
+      if (!this.state.__handleResponseCodeChanged) {
+        this.state.handleResponseCode = handleResponseCode
+      }
+
+      stopWatch = watch(() => [this.state.buildRequestCode, this.state.handleResponseCode], () => {
+        this.state.__buildRequestCodeChanged = this.state.buildRequestCode.trim() !== buildRequestCode
+        this.state.__handleResponseCodeChanged = this.state.handleResponseCode.trim() !== handleResponseCode
+      })
+    })
+
     return {
-      dispose: () => 0,
+      dispose: () => {
+        stopWatch()
+      },
       state: this.state
     }
+  }
+
+  getDefaultCode () {
+    const buildRequestCode = (this.adapter.preset === 'openai' ? this.defaultOpenAIBuildRequestCode : this.defaultBuildRequestCode).trim()
+    const handleResponseCode = (this.adapter.preset === 'openai' ? this.defaultOpenAIHandleResponseCode : this.defaultHandleResponseCode).trim()
+
+    return { buildRequestCode, handleResponseCode }
   }
 
   async fetchCompletionResults (_model: editor.ITextModel, position: Position, editorContext: languages.InlineCompletionContext, cancelToken: CancellationToken) {
@@ -197,6 +229,8 @@ export class CustomEditAdapter implements EditAdapter {
   description: string
   supportProxy = false
   removable = true
+
+  adapter: CustomAdapter
 
   logger: ReturnType<typeof ctx.utils.getLogger>
   monaco = ctx.editor.getMonaco()
@@ -296,6 +330,8 @@ const delta = payload?.choices[0]?.delta?.content
 return { delta }`
 
   state = reactive({
+    __buildRequestCodeChanged: false,
+    __handleResponseCodeChanged: false,
     endpoint: '',
     apiToken: '',
     model: '',
@@ -305,13 +341,14 @@ return { delta }`
     instruction: '',
     proxy: '',
     systemMessage: this.defaultSystemMessage,
-    buildRequestCode: this.defaultBuildRequestCode,
-    handleResponseCode: this.defaultHandleResponseCode,
+    buildRequestCode: '',
+    handleResponseCode: '',
   })
 
   panel: Panel
 
   constructor (adapter: CustomAdapter) {
+    this.adapter = adapter
     this.id = adapter.name
     this.displayname = adapter.name
     this.description = 'Custom Edit Adapter'
@@ -320,33 +357,61 @@ return { delta }`
     const defaultApiPoint = adapter.preset === 'openai' ? 'https://api.openai.com/v1/chat/completions' : 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID'
     const defaultModel = adapter.preset === 'openai' ? 'gpt-4o-mini' : '@cf/meta/llama-3-8b-instruct'
 
+    const { buildRequestCode, handleResponseCode } = this.getDefaultCode()
+
     this.panel = {
       type: 'form',
       items: [
-        { type: 'selection', key: 'selection', label: i18n.t('selected-text'), props: { readonly: true } },
+        { type: 'selection', key: 'selection', advanced: true, label: i18n.t('selected-text'), props: { readonly: true } },
         { type: 'context', key: 'context', label: i18n.t('context') },
         { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
         { type: 'textarea', key: 'systemMessage', label: i18n.t('system-message'), defaultValue: this.defaultSystemMessage },
         { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultApiPoint }, defaultValue: defaultApiPoint, hasError: v => !v },
         { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' } },
         { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: defaultModel, props: { placeholder: 'e.g. gpt-4o-mini' }, hasError: v => !v },
-        { type: 'textarea', key: 'buildRequestCode', label: 'Build Request Code', defaultValue: adapter.preset === 'openai' ? this.defaultOpenAIBuildRequestCode : this.defaultBuildRequestCode, hasError: v => !v },
-        { type: 'textarea', key: 'handleResponseCode', label: 'Handle Response Code', defaultValue: adapter.preset === 'openai' ? this.defaultOpenAIHandleResponseCode : this.defaultHandleResponseCode, hasError: v => !v },
+        { type: 'textarea', key: 'buildRequestCode', advanced: true, label: 'Build Request Code', defaultValue: buildRequestCode, marked: v => v !== buildRequestCode, hasError: v => !v, props: { style: { height: '10em' } } },
+        { type: 'textarea', key: 'handleResponseCode', advanced: true, label: 'Handle Response Code', defaultValue: handleResponseCode, marked: v => v !== handleResponseCode, hasError: v => !v, props: { style: { height: '10em' } } },
         { type: 'input', key: 'proxy', label: i18n.t('proxy'), props: { placeholder: 'eg: http://127.0.0.1:8000' } },
       ],
     }
 
-    if (adapter.preset === 'openai') {
-      this.state.buildRequestCode = this.defaultOpenAIBuildRequestCode
-      this.state.handleResponseCode = this.defaultOpenAIHandleResponseCode
-    }
+    this.state.buildRequestCode = buildRequestCode
+    this.state.handleResponseCode = handleResponseCode
   }
 
   activate () {
+    const { buildRequestCode, handleResponseCode } = this.getDefaultCode()
+
+    let stopWatch: () => void
+
+    nextTick(() => {
+      if (!this.state.__buildRequestCodeChanged) {
+        this.state.buildRequestCode = buildRequestCode
+      }
+
+      if (!this.state.__handleResponseCodeChanged) {
+        this.state.handleResponseCode = handleResponseCode
+      }
+
+      stopWatch = watch(() => [this.state.buildRequestCode, this.state.handleResponseCode], () => {
+        this.state.__buildRequestCodeChanged = this.state.buildRequestCode.trim() !== buildRequestCode
+        this.state.__handleResponseCodeChanged = this.state.handleResponseCode.trim() !== handleResponseCode
+      })
+    })
+
     return {
-      dispose: () => 0,
+      dispose: () => {
+        stopWatch()
+      },
       state: this.state
     }
+  }
+
+  getDefaultCode () {
+    const buildRequestCode = (this.adapter.preset === 'openai' ? this.defaultOpenAIBuildRequestCode : this.defaultBuildRequestCode).trim()
+    const handleResponseCode = (this.adapter.preset === 'openai' ? this.defaultOpenAIHandleResponseCode : this.defaultHandleResponseCode).trim()
+
+    return { buildRequestCode, handleResponseCode }
   }
 
   async fetchEditResults (selectedText: string, instruction: string, cancelToken: CancellationToken, onProgress: (res: { text: string, delta: string }) => void): Promise<string | null | undefined> {
@@ -455,6 +520,8 @@ export class CustomTextToImageAdapter implements TextToImageAdapter {
   supportProxy = false
   removable = true
 
+  adapter: CustomAdapter
+
   logger: ReturnType<typeof ctx.utils.getLogger>
   monaco = ctx.editor.getMonaco()
 
@@ -525,6 +592,8 @@ if (res.headers.get('Content-Type').startsWith('image')) {
 }`
 
   state = reactive({
+    __buildRequestCodeChanged: false,
+    __handleResponseCodeChanged: false,
     instruction: '',
     proxy: '',
     apiToken: '',
@@ -532,19 +601,22 @@ if (res.headers.get('Content-Type').startsWith('image')) {
     model: '',
     width: 512,
     height: 512,
-    buildRequestCode: this.defaultBuildRequestCode,
-    handleResponseCode: this.defaultHandleResponseCode,
+    buildRequestCode: '',
+    handleResponseCode: '',
   })
 
   panel: Panel
 
   constructor (adapter: CustomAdapter) {
+    this.adapter = adapter
     this.id = adapter.name
     this.displayname = adapter.name
     this.description = 'Custom Text to Image Adapter'
     this.logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CustomTextToImageAdapter.' + this.id)
 
     const defaultEndpoint = adapter.preset === 'gradio' ? 'https://black-forest-labs-flux-1-schnell.hf.space' : 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID'
+
+    const { buildRequestCode, handleResponseCode } = this.getDefaultCode()
 
     this.panel = {
       type: 'form',
@@ -559,23 +631,49 @@ if (res.headers.get('Content-Type').startsWith('image')) {
           ] as FormItem[]),
         { type: 'range', key: 'width', label: i18n.t('width'), defaultValue: 512, min: 1, max: 1920, step: 1 },
         { type: 'range', key: 'height', label: i18n.t('height'), defaultValue: 512, min: 1, max: 1920, step: 1 },
-        { type: 'textarea', key: 'buildRequestCode', label: 'Build Request Code', defaultValue: adapter.preset === 'gradio' ? this.defaultGradioBuildRequestCode : this.defaultBuildRequestCode, hasError: v => !v, props: { style: { height: '10em' } } },
-        { type: 'textarea', key: 'handleResponseCode', label: 'Handle Response Code', defaultValue: adapter.preset === 'gradio' ? this.defaultGradioHandleResponseCode : this.defaultHandleResponseCode, hasError: v => !v, props: { style: { height: '10em' } } },
+        { type: 'textarea', key: 'buildRequestCode', advanced: true, label: 'Build Request Code', defaultValue: buildRequestCode, marked: v => v !== buildRequestCode, hasError: v => !v, props: { style: { height: '10em' } } },
+        { type: 'textarea', key: 'handleResponseCode', advanced: true, label: 'Handle Response Code', defaultValue: handleResponseCode, marked: v => v !== handleResponseCode, hasError: v => !v, props: { style: { height: '10em' } } },
         { type: 'input', key: 'proxy', label: i18n.t('proxy'), props: { placeholder: 'eg: http://127.0.0.1:8000' } },
       ],
     }
 
-    if (adapter.preset === 'gradio') {
-      this.state.buildRequestCode = this.defaultGradioBuildRequestCode
-      this.state.handleResponseCode = this.defaultGradioHandleResponseCode
-    }
+    this.state.buildRequestCode = buildRequestCode
+    this.state.handleResponseCode = handleResponseCode
   }
 
   activate () {
+    const { buildRequestCode, handleResponseCode } = this.getDefaultCode()
+
+    let stopWatch: () => void
+
+    nextTick(() => {
+      if (!this.state.__buildRequestCodeChanged) {
+        this.state.buildRequestCode = buildRequestCode
+      }
+
+      if (!this.state.__handleResponseCodeChanged) {
+        this.state.handleResponseCode = handleResponseCode
+      }
+
+      stopWatch = watch(() => [this.state.buildRequestCode, this.state.handleResponseCode], () => {
+        this.state.__buildRequestCodeChanged = this.state.buildRequestCode.trim() !== buildRequestCode
+        this.state.__handleResponseCodeChanged = this.state.handleResponseCode.trim() !== handleResponseCode
+      })
+    })
+
     return {
-      dispose: () => 0,
+      dispose: () => {
+        stopWatch()
+      },
       state: this.state
     }
+  }
+
+  getDefaultCode () {
+    const buildRequestCode = (this.adapter.preset === 'gradio' ? this.defaultGradioBuildRequestCode : this.defaultBuildRequestCode).trim()
+    const handleResponseCode = (this.adapter.preset === 'gradio' ? this.defaultGradioHandleResponseCode : this.defaultHandleResponseCode).trim()
+
+    return { buildRequestCode, handleResponseCode }
   }
 
   async fetchTextToImageResults (instruction: string, cancelToken: CancellationToken, updateStatus: (status: string) => void): Promise<Blob | null | undefined> {
