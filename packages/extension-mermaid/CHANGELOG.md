@@ -1,3 +1,12 @@
+# [1.8.0](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.7.1...extension-mermaid-1.8.0) (2024-08-14)
+
+
+### Features
+
+* **extension-mermaid:** add support for .mmd and .mermaid file types ([fef12d8](https://github.com/purocean/yank-note-extension/commit/fef12d8c1804ac251db8530d3e6d95acf03d9a87))
+
+
+
 ## [1.7.1](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.7.0...extension-mermaid-1.7.1) (2024-07-03)
 
 
