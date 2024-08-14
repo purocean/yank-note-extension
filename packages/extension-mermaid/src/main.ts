@@ -12,6 +12,9 @@ registerPlugin({
   register: ctx => {
     ctx.markdown.registerPlugin(MarkdownItPlugin)
 
+    type FileType = '.mmd' | '.mermaid'
+    const supportedFileTypes: FileType[] = ['.mmd', '.mermaid']
+
     ctx.registerHook('THEME_CHANGE', () => initMermaidTheme())
 
     ctx.registerHook('VIEW_ON_GET_HTML_FILTER_NODE', async ({ node, options }) => {
@@ -39,5 +42,48 @@ registerPlugin({
     ctx.editor.whenEditorReady().then(({ monaco }) => {
       monacoMermaid(monaco)
     })
+
+    if ('registerDocCategory' in ctx.doc) {
+      const mermaidContent = `graph LR
+A[Hard] -->|Text| B(Round)
+B --> C{Decision}
+C -->|One| D[Result 1]
+C -->|Two| E[Result 2]
+`
+
+      ctx.doc.registerDocCategory({
+        category: 'mermaid',
+        displayName: 'Mermaid',
+        types: [
+          {
+            id: 'mermaid-mmd',
+            displayName: 'Mermaid File',
+            extension: ['.mmd' as FileType],
+            plain: true,
+            buildNewContent: () => mermaidContent,
+          },
+          {
+            id: 'mermaid-mermaid',
+            displayName: 'Mermaid File',
+            extension: ['.mermaid' as FileType],
+            plain: true,
+            buildNewContent: () => mermaidContent
+          },
+        ]
+      })
+    }
+
+    if (ctx.renderer && 'registerRenderer' in ctx.renderer) {
+      ctx.renderer.registerRenderer({
+        name: 'mermaid',
+        when (env) {
+          const ext = env.file && ctx.utils.path.extname(env.file.path)
+          return !!(ext && supportedFileTypes.includes(ext as FileType))
+        },
+        render (src, env) {
+          return src ? ctx.markdown.markdown.render(`~~~mermaid\n${src}\n~~~`, env) : ctx.lib.vue.h('i', 'Empty content')
+        },
+      })
+    }
   }
 })

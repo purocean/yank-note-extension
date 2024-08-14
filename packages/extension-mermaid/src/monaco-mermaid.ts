@@ -1,7 +1,12 @@
 // https://unpkg.com/monaco-mermaid/browser.js
 
 export default function (monacoEditor: any) {
-  monacoEditor.languages.register({ id: 'mermaid' })
+  monacoEditor.languages.register({
+    id: 'mermaid',
+    extensions: ['.mmd', '.mermaid'],
+    aliases: ['Mermaid', 'mermaid'],
+    mimetypes: ['text/vnd.mermaid'],
+  })
 
   const requirementDiagrams = [
     'requirement',
