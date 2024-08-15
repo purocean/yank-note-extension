@@ -26,6 +26,7 @@ import type { Markmap } from 'markmap-view'
 import type { ITransformHooks, Transformer } from 'markmap-lib'
 import { buildHTML, linkApi, wikiLinksApi } from './helper'
 
+const RULE_NAME = 'wiki-links'
 const logger = ctx.utils.getLogger('markmap-previewer')
 const Fragment = ctx.lib.vue.defineComponent({
   setup (_, { slots }) {
@@ -71,6 +72,14 @@ function render (win?: Window) {
   const content = props.source || ''
   const _win = win || iframe.value?.contentWindow
   if (_win) {
+    const enableWikiLinks = ctx.setting.getSetting('render.md-wiki-links', true)
+
+    if (enableWikiLinks) {
+      (_win as any).markdown.enable([RULE_NAME], true)
+    } else {
+      (_win as any).markdown.disable([RULE_NAME], true)
+    }
+
     const transformer: Transformer = (_win as any).transformer
     const { root } = transformer.transform(content)
 
@@ -194,7 +203,7 @@ async function onLoad (win?: Window) {
         name: 'convert-link',
         transform (hooks: ITransformHooks) {
           hooks.parser.tap((md: MarkdownIt) => {
-            console.log('xxx', md)
+            ((_win as any).markdown) = md
             md.core.ruler.push('convert-relative-path', (state) => {
               state.env = {
                 ...state.env,
@@ -206,7 +215,7 @@ async function onLoad (win?: Window) {
               }
               linkApi.mdRuleConvertLink(state)
             })
-            md.inline.ruler.after('link', 'wiki-links', wikiLinksApi.mdRuleWikiLinks)
+            md.inline.ruler.after('link', RULE_NAME, wikiLinksApi.mdRuleWikiLinks)
             md.validateLink = () => true
           })
         }
@@ -243,6 +252,12 @@ async function onLoad (win?: Window) {
   }
 }
 
+function changedSetting (payload: { changedKeys: string[] }) {
+  if (payload.changedKeys.includes('render.md-wiki-links')) {
+    render()
+  }
+}
+
 const onIframeLoad = () => onLoad()
 
 ctx.lib.vue.watch(() => props.source, () => {
@@ -253,11 +268,13 @@ ctx.lib.vue.onMounted(() => {
   init()
   ctx.registerHook('EXPORT_BEFORE_PREPARE', beforeExport)
   ctx.registerHook('EXPORT_AFTER_PREPARE', afterExport)
+  ctx.registerHook('SETTING_CHANGED', changedSetting)
 })
 
 ctx.lib.vue.onBeforeUnmount(() => {
   ctx.removeHook('EXPORT_BEFORE_PREPARE', beforeExport)
   ctx.removeHook('EXPORT_AFTER_PREPARE', afterExport)
+  ctx.removeHook('SETTING_CHANGED', changedSetting)
 })
 </script>
 
