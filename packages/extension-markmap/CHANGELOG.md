@@ -1,3 +1,12 @@
+# [1.7.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.6.0...extension-markmap-1.7.0) (2024-08-15)
+
+
+### Features
+
+* **extension-markmap:** enable/disable wiki links based on user settings ([582f017](https://github.com/purocean/yank-note-extension/commit/582f01768184914bf877d16a53a93de45647939e))
+
+
+
 # [1.6.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.5.4...extension-markmap-1.6.0) (2024-07-04)
 
 
