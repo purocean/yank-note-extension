@@ -320,7 +320,7 @@ export const MarkdownItPlugin = (md: Markdown) => {
       return linkTemp(tokens, idx, options, env, slf)
     }
 
-    const url = token.attrGet(ctx.args.DOM_ATTR_NAME.ORIGIN_HREF)
+    const url = token.attrGet(ctx.args.DOM_ATTR_NAME.ORIGIN_HREF) || token.attrGet('href')
     if (!url || url.includes(':')) {
       return linkTemp(tokens, idx, options, env, slf)
     }
