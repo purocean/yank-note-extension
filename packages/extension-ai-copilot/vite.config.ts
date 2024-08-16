@@ -24,7 +24,9 @@ export default defineConfig({
       fileName: () => 'index.js',
     },
     rollupOptions: {
-      external: Object.keys(YN_LIBS),
+      external: id => {
+        return Object.keys(YN_LIBS).includes(id) || id.includes('@gradio/client/dist/wrapper-')
+      },
       output: {
         intro: 'const fetch = function (url, options) { return (window.__PLUGIN_AI_COPILOT_FETCH || window.fetch)(url, options) };',
         globals: {
