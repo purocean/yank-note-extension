@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-ai-copilot",
-  "version": "1.24.0",
+  "version": "1.24.1",
   "displayName": "AI Copilot",
   "description": "Your AI writing assistant",
   "displayName_ZH-CN": "AI Copilot",
