@@ -1,7 +1,8 @@
 import { registerPlugin } from '@yank-note/runtime-api'
-import { initMermaidTheme } from './lib'
+import { FileType, i18n, initMermaidTheme, supported } from './lib'
 import { MarkdownItPlugin } from './mermaid'
 import monacoMermaid from './monaco-mermaid'
+import type { Doc } from '@yank-note/runtime-api/types/types/renderer/types'
 
 import './style.css'
 
@@ -11,9 +12,6 @@ registerPlugin({
   name: extensionId,
   register: ctx => {
     ctx.markdown.registerPlugin(MarkdownItPlugin)
-
-    type FileType = '.mmd' | '.mermaid'
-    const supportedFileTypes: FileType[] = ['.mmd', '.mermaid']
 
     ctx.registerHook('THEME_CHANGE', () => initMermaidTheme())
 
@@ -77,13 +75,43 @@ C -->|Two| E[Result 2]
       ctx.renderer.registerRenderer({
         name: 'mermaid',
         when (env) {
-          const ext = env.file && ctx.utils.path.extname(env.file.path)
-          return !!(ext && supportedFileTypes.includes(ext as FileType))
+          return supported(env.file?.path || '')
         },
         render (src, env) {
           return src ? ctx.markdown.markdown.render(`~~~mermaid\n${src}\n~~~`, env) : ctx.lib.vue.h('i', 'Empty content')
         },
       })
     }
+
+    ctx.editor.tapSimpleCompletionItems(items => {
+      /* eslint-disable no-template-curly-in-string */
+
+      items.push(
+        { label: '/ []() Mermaid Link', insertText: '[${2:Mermaid}]($1){link-type="mermaid"}', block: true },
+      )
+    })
+
+    ctx.view.tapContextMenus((items, e) => {
+      const el = e.target as HTMLElement
+      const { repo, path } = el.dataset
+
+      if (el.tagName === 'IMG' && repo && path && supported(path)) {
+        const name = ctx.utils.path.basename(path)
+
+        const file: Doc = { type: 'file', repo, path, name }
+
+        items.push(
+          {
+            id: __EXTENSION_ID__ + '-edit-mermaid-diagram',
+            type: 'normal',
+            ellipsis: false,
+            label: i18n.t('edit-mermaid-diagram'),
+            onClick: async () => {
+              ctx.doc.switchDoc(file)
+            }
+          },
+        )
+      }
+    })
   }
 })

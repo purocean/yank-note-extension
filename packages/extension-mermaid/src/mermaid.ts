@@ -1,6 +1,7 @@
 import type Markdown from '@yank-note/runtime-api/types/types/third-party/markdown-it'
 import { ctx } from '@yank-note/runtime-api'
-import { getMermaidLib, initMermaidTheme } from './lib'
+import { getMermaidLib, i18n, initMermaidTheme, supported } from './lib'
+import type { PathItem } from '@yank-note/runtime-api/types/types/share/types'
 
 const { registerHook, removeHook } = ctx
 const { debounce } = ctx.lib.lodash
@@ -22,7 +23,8 @@ const Mermaid = defineComponent({
     code: {
       type: String,
       default: ''
-    }
+    },
+    file: Object as () => PathItem,
   },
   setup (props) {
     const container = ref<HTMLElement>()
@@ -44,10 +46,22 @@ const Mermaid = defineComponent({
     }
 
     async function render () {
-      logger.debug('render', props.code)
-      const mermaid = await getMermaidLib()
       try {
-        let { svg } = await mermaid.render(`mermaid-${mid++}`, props.code, container.value)
+        let code = props.code
+
+        if (!code && props.file) {
+          if (!supported(props.file.path)) {
+            throw new Error(i18n.t('file-support-error'))
+          }
+
+          const res = await ctx.api.readFile(props.file)
+          code = res.content
+        }
+
+        logger.debug('render', code)
+
+        const mermaid = await getMermaidLib()
+        let { svg } = await mermaid.render(`mermaid-${mid++}`, code, container.value)
         // get max width
         const width = svg.match(/style="max-width: ([\d.]+px);"/)?.[1]
         if (width) {
@@ -100,7 +114,7 @@ const Mermaid = defineComponent({
 
     const renderDebounce = debounce(render, 100)
 
-    watch(() => props.code, renderDebounce)
+    watch(() => [props.code, props.file], renderDebounce)
 
     onMounted(render)
 
@@ -121,12 +135,14 @@ const Mermaid = defineComponent({
         ]),
         h('div', {
           ref: container,
-          key: props.code,
+          key: props.code || props.file?.path,
           class: 'mermaid-container skip-export',
         }),
         h('img', {
           src: img.value,
           ref: imgRef,
+          'data-repo': props.file?.repo,
+          'data-path': props.file?.path,
           alt: 'mermaid',
           class: 'mermaid-image',
         }),
@@ -151,5 +167,28 @@ export const MarkdownItPlugin = (md: Markdown) => {
     }
 
     return temp(tokens, idx, options, env, slf)
+  }
+
+  const linkTemp = md.renderer.rules.link_open!.bind(md.renderer.rules)
+  md.renderer.rules.link_open = (tokens, idx, options, env, slf) => {
+    const token = tokens[idx]
+
+    if (token.attrGet('link-type') !== 'mermaid') {
+      return linkTemp(tokens, idx, options, env, slf)
+    }
+
+    const path = token.attrGet('target-path')
+    const repo = token.attrGet('target-repo')
+
+    if (!path || !repo) {
+      return linkTemp(tokens, idx, options, env, slf)
+    }
+
+    const nextToken = tokens[idx + 1]
+    if (nextToken && nextToken.type === 'text') {
+      nextToken.content = ''
+    }
+
+    return h(Mermaid, { file: { repo, path } })
   }
 }
