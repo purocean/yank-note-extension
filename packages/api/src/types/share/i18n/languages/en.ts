@@ -269,6 +269,7 @@ declare const data: {
             readme: string;
             features: string;
             shortcuts: string;
+            guide: string;
             plugin: string;
         };
         terminal: string;

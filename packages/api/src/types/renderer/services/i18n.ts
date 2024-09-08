@@ -22,7 +22,7 @@ export declare function $$t(path: MsgPath, ...args: string[]): string;
  * Get language
  * @returns
  */
-export declare function getLanguage(): "system" | "en" | "zh-CN" | "zh-TW";
+export declare function getLanguage(): "system" | "en" | "zh-CN" | "zh-TW" | "ru";
 /**
  * Set language
  * @param language
