@@ -1,3 +1,7 @@
+# [1.9.0](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.8.0...extension-mermaid-1.9.0) (2024-09-08)
+
+
+
 # [1.8.0](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.7.1...extension-mermaid-1.8.0) (2024-08-14)
 
 
