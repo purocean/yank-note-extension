@@ -3,6 +3,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { YN_LIBS } from '@yank-note/runtime-api'
 import copy from 'rollup-plugin-copy'
+import replace from '@rollup/plugin-replace'
 
 // https://vitejs.dev/config/
 export default ({ mode }) => defineConfig({
@@ -15,13 +16,14 @@ export default ({ mode }) => defineConfig({
       },
     ],
     hook: 'writeBundle',
+  }), replace({
+    'sandbox:{allowSameOrigin:': 'sandbox:{allowSameOrigin:true,_x:', // force allowSameOrigin
   })],
   define: {
     __EXTENSION_VERSION__: JSON.stringify(process.env.npm_package_version),
     __EXTENSION_ID__: JSON.stringify(process.env.npm_package_name),
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     'process.env.IS_PREACT': process.env.IS_PREACT,
-    'ALLOW_SAME_ORIGIN.has': 'true;', // Allow same origin for iframe
   },
   resolve: {
     alias: [
