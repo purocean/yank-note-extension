@@ -63,7 +63,7 @@
     "vue-tsc": "^0.34.11"
   },
   "dependencies": {
-    "@excalidraw/excalidraw": "^0.17.0",
+    "@excalidraw/excalidraw": "^0.17.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }
