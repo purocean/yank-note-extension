@@ -21,6 +21,7 @@ export default ({ mode }) => defineConfig({
     __EXTENSION_ID__: JSON.stringify(process.env.npm_package_name),
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     'process.env.IS_PREACT': process.env.IS_PREACT,
+    'ALLOW_SAME_ORIGIN.has': 'true;', // Allow same origin for iframe
   },
   resolve: {
     alias: [
