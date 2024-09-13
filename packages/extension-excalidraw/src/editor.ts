@@ -255,6 +255,7 @@ class EditorContent extends BaseCustomEditorContent {
             langCode,
             onLibraryChange,
             libraryReturnUrl: LIBRARY_RETURN_URL,
+            validateEmbeddable: true,
             UIOptions: {
               canvasActions: {
                 loadScene: false,
