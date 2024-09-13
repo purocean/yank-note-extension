@@ -1,3 +1,7 @@
+## [1.7.1](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.7.0...extension-excalidraw-1.7.1) (2024-09-13)
+
+
+
 # [1.7.0](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.6.0...extension-excalidraw-1.7.0) (2024-09-13)
 
 
