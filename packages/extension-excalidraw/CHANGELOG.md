@@ -1,3 +1,12 @@
+## [1.7.4](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.7.3...extension-excalidraw-1.7.4) (2024-09-14)
+
+
+### Features
+
+* **extension-excalidraw:** implement centralized URL validation for embeddable links ([0fde3f0](https://github.com/purocean/yank-note-extension/commit/0fde3f045f0501394174022488b85af0d539237f))
+
+
+
 ## [1.7.3](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.7.2...extension-excalidraw-1.7.3) (2024-09-14)
 
 
