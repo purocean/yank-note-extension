@@ -15,6 +15,8 @@ class EditorContent extends BaseCustomEditorContent {
   currentSceneVersion = -1
   save = () => Promise.resolve(undefined)
 
+  inElectron = navigator.userAgent.includes('Electron/')
+
   async readFile () {
     const isPng = this.io.file.path.toLowerCase().endsWith('.png')
 
@@ -255,7 +257,23 @@ class EditorContent extends BaseCustomEditorContent {
             langCode,
             onLibraryChange,
             libraryReturnUrl: LIBRARY_RETURN_URL,
-            validateEmbeddable: true,
+            validateEmbeddable: (link: string) => {
+              if (!/^https?:\/\//.test(link)) {
+                return false
+              }
+
+              try {
+                const url = new URL(link)
+                if (url.origin === window.location.origin) {
+                  return false
+                }
+              } catch (error) {
+                console.error(error)
+                return false
+              }
+
+              return true
+            },
             UIOptions: {
               canvasActions: {
                 loadScene: false,
@@ -277,6 +295,37 @@ class EditorContent extends BaseCustomEditorContent {
   }
 
   init () {
+    if (this.inElectron) {
+      const _open = (url: string) => this.ctx.base.openExternal(url)
+      ;(window as any)._open = window.open
+      ;(window as any).open = (url: string) => {
+        if (url) {
+          return _open(url)
+        } else {
+          const newWindow = {}
+          Object.defineProperty(newWindow, 'location', {
+            get () {
+              return {
+                href: '',
+              }
+            },
+            set (val) {
+              if (val) {
+                _open(val)
+              }
+            },
+          })
+
+          return newWindow
+        }
+      }
+    } else {
+      const _open = window.open.bind(window)
+      ;(window as any).open = (url: string) => {
+        return _open(url, '_blank') // force open in new tab
+      }
+    }
+
     const excalidrawWrapper = document.getElementById('app')
     const root = ReactDOM.createRoot(excalidrawWrapper)
     root.render(React.createElement(this.App))
