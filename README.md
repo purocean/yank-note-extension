@@ -1,6 +1,6 @@
 # Yank Note Extension
 
-English | [Simplified Chinese](./README_ZH-CN.md)
+English | [简体中文](./README_ZH-CN.md)
 
 Yank Note supports "**JavaScript plugins**" and "**custom CSS styles**". If you want to share your own plugins and styles with others, you can package them into an **extension** for distribution.
 
