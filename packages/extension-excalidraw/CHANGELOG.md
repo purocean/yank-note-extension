@@ -1,3 +1,12 @@
+## [1.7.3](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.7.2...extension-excalidraw-1.7.3) (2024-09-14)
+
+
+### Features
+
+* **extension-excalidraw:** enhance URL validation and window.open behavior ([d9b7088](https://github.com/purocean/yank-note-extension/commit/d9b70880c43bd743f4bcaac8402acf2458b7dd2e))
+
+
+
 ## [1.7.2](https://github.com/purocean/yank-note-extension/compare/extension-excalidraw-1.7.1...extension-excalidraw-1.7.2) (2024-09-13)
 
 
