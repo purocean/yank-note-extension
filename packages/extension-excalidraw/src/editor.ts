@@ -7,6 +7,28 @@ import { BaseCustomEditorContent } from '@yank-note/runtime-api'
 import { LIBRARY_FILE, LIBRARY_RETURN_URL, SETTING_KEY_FONT_HANDWRITING } from './lib'
 import i18n from './i18n'
 
+function validateEmbeddable (link: string) {
+  if (!link) {
+    return false
+  }
+
+  if (!/^https?:\/\//.test(link)) {
+    return false
+  }
+
+  try {
+    const url = new URL(link)
+    if (url.origin === window.location.origin) {
+      return false
+    }
+  } catch (error) {
+    console.error(error)
+    return false
+  }
+
+  return true
+}
+
 class EditorContent extends BaseCustomEditorContent {
   logger = this.ctx.utils.getLogger('excalidraw-editor')
 
@@ -257,23 +279,7 @@ class EditorContent extends BaseCustomEditorContent {
             langCode,
             onLibraryChange,
             libraryReturnUrl: LIBRARY_RETURN_URL,
-            validateEmbeddable: (link: string) => {
-              if (!/^https?:\/\//.test(link)) {
-                return false
-              }
-
-              try {
-                const url = new URL(link)
-                if (url.origin === window.location.origin) {
-                  return false
-                }
-              } catch (error) {
-                console.error(error)
-                return false
-              }
-
-              return true
-            },
+            validateEmbeddable,
             UIOptions: {
               canvasActions: {
                 loadScene: false,
@@ -296,7 +302,15 @@ class EditorContent extends BaseCustomEditorContent {
 
   init () {
     if (this.inElectron) {
-      const _open = (url: string) => this.ctx.base.openExternal(url)
+      const _open = (url: string) => {
+        if (!validateEmbeddable(url)) {
+          this.ctx.ui.useToast().show('warning', 'Invalid URL')
+          throw new Error('Invalid URL')
+        }
+
+        this.ctx.base.openExternal(url)
+      }
+
       ;(window as any)._open = window.open
       ;(window as any).open = (url: string) => {
         if (url) {
