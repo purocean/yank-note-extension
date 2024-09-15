@@ -325,7 +325,6 @@ watchEffect(() => {
     justify-content: flex-end;
     align-items: center;
     font-size: 13px;
-    cursor: pointer;
 
     input {
       margin-right: 3px;
