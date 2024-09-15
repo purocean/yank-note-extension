@@ -4,6 +4,18 @@ import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event
 import { ctx } from '@yank-note/runtime-api'
 import { CompletionAdapter, EditAdapter, FormItem, Panel, TextToImageAdapter } from '@/adapter'
 import { COMPLETION_DEFAULT_SYSTEM_MESSAGE, CustomAdapter, EDIT_DEFAULT_SYSTEM_MESSAGE, FatalError, i18n } from '@/core'
+import completionEditDefaultRequest from '@/custom-adapter-code/completion-default-request.js?raw'
+import completionEditDefaultResponse from '@/custom-adapter-code/completion-default-response.js?raw'
+import completionEditOpenAIRequest from '@/custom-adapter-code/completion-openai-request.js?raw'
+import completionEditOpenAIResponse from '@/custom-adapter-code/completion-openai-response.js?raw'
+import codeEditDefaultRequest from '@/custom-adapter-code/edit-default-request.js?raw'
+import codeEditDefaultResponse from '@/custom-adapter-code/edit-default-response.js?raw'
+import codeEditOpenAIRequest from '@/custom-adapter-code/edit-openai-request.js?raw'
+import codeEditOpenAIResponse from '@/custom-adapter-code/edit-openai-response.js?raw'
+import text2imageEditDefaultRequest from '@/custom-adapter-code/text2image-default-request.js?raw'
+import text2imageEditDefaultResponse from '@/custom-adapter-code/text2image-default-response.js?raw'
+import text2imageEditGradioRequest from '@/custom-adapter-code/text2image-gradio-request.js?raw'
+import text2imageEditGradioResponse from '@/custom-adapter-code/text2image-gradio-response.js?raw'
 import type { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -23,66 +35,10 @@ export class CustomCompletionAdapter implements CompletionAdapter {
   monaco = ctx.editor.getMonaco()
 
   defaultSystemMessage = COMPLETION_DEFAULT_SYSTEM_MESSAGE
-
-  defaultBuildRequestCode = `const { context, system, state } = data
-
-const messages = [
-  {
-    role: "system",
-    content: system.replace('{CONTEXT}', context)
-  },
-  {
-    role: "user",
-    content: context
-  },
-]
-
-const url = \`\${state.endpoint}/ai/run/\${state.model}\`
-
-const headers = {
-  'Authorization': \`Bearer \${state.apiToken}\`,
-  'Content-Type': 'application/json',
-}
-
-const body = JSON.stringify({ messages })
-
-return { url, headers, body, method: 'POST' }`
-
-  defaultHandleResponseCode = `const { res } = data
-
-const obj = await res.json()
-const text = obj.result.response
-return [text]`
-
- defaultOpenAIBuildRequestCode = `const { context, system, state } = data
-
-const messages = [
-  {
-    role: "system",
-    content: system.replace('{CONTEXT}', context)
-  },
-  {
-    role: "user",
-    content: context
-  },
-]
-
-const url = state.endpoint
-
-const headers = {
-  'Authorization': \`Bearer \${state.apiToken}\`,
-  'Content-Type': 'application/json',
-}
-
-const body = JSON.stringify({ messages, model: state.model })
-
-return { url, headers, body, method: 'POST' }`
-
-  defaultOpenAIHandleResponseCode = `const { res } = data
-
-const obj = await res.json()
-const text = obj.choices[0].message.content
-return [text]`
+  defaultBuildRequestCode = completionEditDefaultRequest.trim()
+  defaultHandleResponseCode = completionEditDefaultResponse.trim()
+  defaultOpenAIBuildRequestCode = completionEditOpenAIRequest.trim()
+  defaultOpenAIHandleResponseCode = completionEditOpenAIResponse.trim()
 
   panel: Panel
 
@@ -237,97 +193,10 @@ export class CustomEditAdapter implements EditAdapter {
 
   defaultSystemMessage = EDIT_DEFAULT_SYSTEM_MESSAGE
 
-  defaultBuildRequestCode = `const { selectedText, instruction, context, system, state } = data
-
-// if context is not provided, system message will be empty
-const systemMessage = context ? system.replace('{CONTEXT}', context) : ''
-const userMessage = \`
-Instruction: \${instruction}
-
-\${selectedText}
-\`.trim()
-
-const messages = [{
-  role: "user",
-  content: userMessage
-}]
-
-messages.unshift({
-  role: "system",
-  content: systemMessage || 'ATTENTION: OUTPUT THE CONTENT DIRECTLY, NO SURROUNDING OR OTHER CONTENT.'
-})
-
-const url = \`\${state.endpoint}/ai/run/\${state.model}\`
-
-const headers = {
-  'Authorization': \`Bearer \${state.apiToken}\`,
-  'Content-Type': 'application/json',
-}
-
-const body = JSON.stringify({ messages, stream: true })
-const sse = true // use server-sent events to stream the response
-
-return { url, headers, body, method: 'POST', sse }`
-
-  defaultHandleResponseCode = `const { res, sse } = data
-
-if (sse) { // SSE message, res is a string
-  if (res === '[DONE]') {
-    return { done: true }
-  }
-
-  const payload = JSON.parse(res)
-  const delta = payload.response
-
-  return { delta }
-} else { // normal response, res is a Response object
-  const obj = await res.json()
-  const text = obj.result.response
-  return { text }
-}`
-
-defaultOpenAIBuildRequestCode = `const { selectedText, instruction, context, system, state } = data
-
-// if context is not provided, system message will be empty
-const systemMessage = context ? system.replace('{CONTEXT}', context) : ''
-const userMessage = \`
-Instruction: \${instruction}
-
-\${selectedText}
-\`.trim()
-
-const messages = [{
-  role: "user",
-  content: userMessage
-}]
-
-messages.unshift({
-  role: "system",
-  content: systemMessage || 'ATTENTION: OUTPUT THE CONTENT DIRECTLY, NO SURROUNDING OR OTHER CONTENT.'
-})
-
-const url = state.endpoint
-
-const headers = {
-  'Authorization': \`Bearer \${state.apiToken}\`,
-  'Content-Type': 'application/json',
-}
-
-const body = JSON.stringify({ messages, model: state.model, stream: true })
-const sse = true // use server-sent events to stream the response
-
-return { url, headers, body, method: 'POST', sse }`
-
-defaultOpenAIHandleResponseCode = `const { res } = data
-
-if (res === '[DONE]') {
-  return { done: true }
-}
-
-const payload = JSON.parse(res)
-const delta = payload?.choices[0]?.delta?.content
-
-return { delta }`
+  defaultBuildRequestCode = codeEditDefaultRequest.trim()
+  defaultHandleResponseCode = codeEditDefaultResponse.trim()
+  defaultOpenAIBuildRequestCode = codeEditOpenAIRequest.trim()
+  defaultOpenAIHandleResponseCode = codeEditOpenAIResponse.trim()
 
   state = reactive({
     __buildRequestCodeChanged: false,
@@ -525,71 +394,10 @@ export class CustomTextToImageAdapter implements TextToImageAdapter {
   logger: ReturnType<typeof ctx.utils.getLogger>
   monaco = ctx.editor.getMonaco()
 
-  defaultBuildRequestCode = `const { state: { width, height, endpoint, apiToken, instruction, model } } = data
-
-const url = \`\${endpoint}/ai/run/\${model}\`
-
-const headers = {
-  'Authorization': \`Bearer \${apiToken}\`,
-  'Content-Type': 'application/json',
-}
-
-const body = JSON.stringify({ prompt: instruction, width, height })
-
-return { url, headers, body, method: 'POST' }`
-
-  defaultHandleResponseCode = `const { res } = data
-
-if (res.headers.get('Content-Type').startsWith('image')) {
-  return { blob: await res.blob() }
-} else {
-  throw new Error(await res.text())
-}`
-
-  defaultGradioBuildRequestCode = `const { state: { width, height, apiToken, instruction, endpoint } } = data
-
-const client = await env.gradio.Client.connect(endpoint, { hf_token: apiToken })
-
-const submission = await client.submit('/infer', {
-    prompt: instruction,
-    seed: 0,
-    width,
-    height,
-    randomize_seed: true,
-    num_inference_steps: 4,
-}, undefined, undefined, true)
-
-let result
-for await (const msg of submission) {
-  if (msg.type === 'data') {
-    result = msg
-    break
-  }
-
-  if (msg.type === 'status' && msg.stage !== 'error') {
-    const status = msg.progress_data?.map(
-      item => \`\${item.desc || item.unit}: \${item.index}/\${item.length}\`
-    ).join('\\n') || msg.stage || ''
-
-    env.updateStatus(status)
-  }
-}
-
-const url = result?.data?.[0]?.url
-
-if (!url) {
-  throw new Error(JSON.stringify(result))
-}
-
-return { url, method: 'GET' }`
-
-  defaultGradioHandleResponseCode = `const { res } = data
-
-if (res.headers.get('Content-Type').startsWith('image')) {
-  return { blob: await res.blob() }
-} else {
-  throw new Error(await res.text())
-}`
+  defaultBuildRequestCode = text2imageEditDefaultRequest.trim()
+  defaultHandleResponseCode = text2imageEditDefaultResponse.trim()
+  defaultGradioBuildRequestCode = text2imageEditGradioRequest.trim()
+  defaultGradioHandleResponseCode = text2imageEditGradioResponse.trim()
 
   state = reactive({
     __buildRequestCodeChanged: false,
