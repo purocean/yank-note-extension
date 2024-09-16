@@ -44,7 +44,7 @@ export class FatalError extends Error { }
 export interface CustomAdapter {
   name: string,
   type: AdapterType,
-  preset: 'openai' | 'gradio' | 'custom'
+  preset: 'openai' | 'gradio' | 'dify-workflow' | 'custom'
 }
 
 export const i18n = ctx.i18n.createI18n({
