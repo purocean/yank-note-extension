@@ -1,10 +1,10 @@
 /* eslint-disable quote-props */
 import { ctx } from '@yank-note/runtime-api'
-import { Components } from '@yank-note/runtime-api/types/types/renderer/types'
-import type { CancellationTokenSource } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { h, reactive, ref, shallowRef, watch } from 'vue'
+import type { Components } from '@yank-note/runtime-api/types/types/renderer/types'
+import type { CancellationTokenSource } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
+import { CustomCompletionAdapter, CustomEditAdapter, CustomTextToImageAdapter } from '@/adapters/custom'
 import { registerAdapter, removeAdapter, type AdapterType } from './adapter'
-import { CustomCompletionAdapter, CustomEditAdapter, CustomTextToImageAdapter } from './custom-adapter'
 
 export const COMPLETION_ACTION_NAME = __EXTENSION_ID__ + '.inlineSuggest.trigger'
 export const EDIT_ACTION_NAME = __EXTENSION_ID__ + '.edit.trigger'

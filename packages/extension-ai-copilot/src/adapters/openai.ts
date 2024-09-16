@@ -1,5 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { i18n, proxyFetch, COMPLETION_DEFAULT_SYSTEM_MESSAGE, EDIT_DEFAULT_SYSTEM_MESSAGE, FatalError } from '@/core'
+import { i18n, proxyFetch, COMPLETION_DEFAULT_SYSTEM_MESSAGE, EDIT_DEFAULT_SYSTEM_MESSAGE, FatalError } from '@/lib/core'
 import { fetchEventSource, EventStreamContentType } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
 import { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'

@@ -83,9 +83,9 @@
 
 <script lang="ts" setup>
 import { computed, ref, unref, defineProps, watchEffect, onBeforeUnmount, watch, onMounted } from 'vue'
-import { CURSOR_PLACEHOLDER, buildAdapterStateKey, i18n, showInstructionHistoryMenu, state } from './core'
 import { ctx } from '@yank-note/runtime-api'
-import { Adapter, AdapterType, FormItem } from './adapter'
+import { CURSOR_PLACEHOLDER, buildAdapterStateKey, i18n, showInstructionHistoryMenu, state } from '@/lib/core'
+import { Adapter, AdapterType, FormItem } from '@/lib/adapter'
 
 const SvgIcon = ctx.components.SvgIcon
 

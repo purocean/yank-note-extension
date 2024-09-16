@@ -1,8 +1,8 @@
 import { ctx } from '@yank-note/runtime-api'
 import type { editor } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { createApp, type App, h, defineComponent } from 'vue'
-import AIWidget from './AIWidget.vue'
-import directives from './directives'
+import directives from '@/directives'
+import AIWidget from '@/components/AIWidget.vue'
 import { state } from './core'
 
 let widget: App | null = null

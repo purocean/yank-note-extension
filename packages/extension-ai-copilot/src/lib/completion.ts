@@ -2,7 +2,7 @@ import { ctx } from '@yank-note/runtime-api'
 import type Monaco from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { globalCancelTokenSource, loading, state } from './core'
 import { getAdapter } from './adapter'
-import { widgetIsVisible } from './ai-widget'
+import { widgetIsVisible } from './widget'
 
 export class CompletionProvider implements Monaco.languages.InlineCompletionsProvider {
   private logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CompletionProvider')

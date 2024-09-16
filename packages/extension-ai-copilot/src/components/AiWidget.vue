@@ -66,9 +66,9 @@
 <script lang="ts" setup>
 import { ctx } from '@yank-note/runtime-api'
 import { computed, defineEmits, defineProps, ref, watch, onBeforeUnmount, onMounted, shallowRef } from 'vue'
-import { i18n, showInstructionHistoryMenu, state, loading, globalCancelTokenSource } from './core'
-import { getAdapter, getAllAdapters } from './adapter'
-import { executeEdit, executeTextToImage } from './actions'
+import { i18n, showInstructionHistoryMenu, state, loading, globalCancelTokenSource } from '@/lib/core'
+import { getAdapter, getAllAdapters } from '@/lib/adapter'
+import { executeEdit, executeTextToImage } from '@/lib/actions'
 
 const SvgIcon = ctx.components.SvgIcon
 
