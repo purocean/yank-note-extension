@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, watch, watchEffect, ref, triggerRef, h } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, watch, watchEffect, ref, triggerRef } from 'vue'
 import { ctx } from '@yank-note/runtime-api'
 import { i18n, state, loading, COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, globalCancelTokenSource, removeCustomAdapter, TEXT_TO_IMAGE_ACTION_NAME } from '@/lib/core'
 import { getAdapter, getAllAdapters } from '@/lib/adapter'
