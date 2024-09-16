@@ -304,7 +304,7 @@ export class CustomEditAdapter implements EditAdapter {
     return { buildRequestCode, handleResponseCode }
   }
 
-  async fetchEditResults (selectedText: string, instruction: string, cancelToken: CancellationToken, onProgress: (res: { text: string, delta: string }) => void): Promise<string | null | undefined> {
+  async fetchEditResults (selectedText: string, instruction: string, cancelToken: CancellationToken, onProgress: (res: { text: string, delta: string }) => void, updateStatus: (status: string) => void): Promise<string | null | undefined> {
     if (!instruction) {
       return
     }
@@ -316,8 +316,13 @@ export class CustomEditAdapter implements EditAdapter {
       return
     }
 
-    const buildRequestFn = new AsyncFunction('data', this.state.buildRequestCode)
-    const handleResultFn = new AsyncFunction('data', this.state.handleResponseCode)
+    const buildRequestFn = new AsyncFunction('data', 'env', this.state.buildRequestCode)
+    const handleResultFn = new AsyncFunction('data', 'env', this.state.handleResponseCode)
+
+    const controller = new AbortController()
+    cancelToken.onCancellationRequested(() => controller.abort())
+
+    const env = { signal: controller.signal, updateStatus }
 
     const data = {
       selectedText,
@@ -327,7 +332,7 @@ export class CustomEditAdapter implements EditAdapter {
       state: this.state,
     }
 
-    const request = await buildRequestFn.apply(this, [data])
+    const request = await buildRequestFn.apply(this, [data, env])
     if (!request) {
       return null
     }
@@ -335,13 +340,10 @@ export class CustomEditAdapter implements EditAdapter {
     const { method, url, headers, body, sse } = request
     this.logger.debug('Request:', url, headers, body, sse)
 
-    const controller = new AbortController()
-    cancelToken.onCancellationRequested(() => controller.abort())
-
     if (!sse) {
       const response = await ctx.api.proxyFetch(url, { method, headers, body, signal: controller.signal })
       this.logger.debug('Response:', response)
-      const { text } = await handleResultFn.apply(this, [{ res: response, sse: false }])
+      const { text } = await handleResultFn.apply(this, [{ res: response, sse: false }, env])
       return text
     } else {
       let text = ''
@@ -362,10 +364,14 @@ export class CustomEditAdapter implements EditAdapter {
         },
         onmessage: async (e) => {
           const data = e.data
-          const { delta, done } = await handleResultFn.apply(this, [{ res: data, sse: true }])
+          const { delta, done, text: _text } = await handleResultFn.apply(this, [{ res: data, sse: true }, env])
 
           if (done) {
             throw new FatalError('DONE')
+          }
+
+          if (_text) {
+            text = _text
           }
 
           if (delta) {
@@ -518,7 +524,7 @@ export class CustomTextToImageAdapter implements TextToImageAdapter {
     cancelToken.onCancellationRequested(() => controller.abort())
 
     const buildRequestFn = new AsyncFunction('data', 'env', this.state.buildRequestCode)
-    const handleResultFn = new AsyncFunction('data', this.state.handleResponseCode)
+    const handleResultFn = new AsyncFunction('data', 'env', this.state.handleResponseCode)
 
     const data = { state: this.state }
     const env = { gradio, signal: controller.signal, updateStatus }
@@ -538,7 +544,7 @@ export class CustomTextToImageAdapter implements TextToImageAdapter {
     }
 
     this.logger.debug('Response:', response)
-    const { blob } = await handleResultFn.apply(this, [{ res: response }])
+    const { blob } = await handleResultFn.apply(this, [{ res: response }, env])
     return blob
   }
 }

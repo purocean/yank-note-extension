@@ -4,7 +4,7 @@ import { EDIT_ACTION_NAME, TEXT_TO_IMAGE_ACTION_NAME, globalCancelTokenSource, i
 import { getAdapter } from './adapter'
 import { languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 
-export async function executeEdit (token: Monaco.CancellationToken): Promise<boolean> {
+export async function executeEdit (token: Monaco.CancellationToken, updateStatus: (status: string) => void): Promise<boolean> {
   if (!state.enable) {
     return false
   }
@@ -122,7 +122,7 @@ export async function executeEdit (token: Monaco.CancellationToken): Promise<boo
       }])
 
       editor.revealRangeNearTopIfOutsideViewport(editRange)
-    })
+    }, updateStatus)
 
     const result = await Promise.race([res, cancelPromise])
 
