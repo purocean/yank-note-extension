@@ -266,6 +266,8 @@ export class CodeActionProvider implements Monaco.languages.CodeActionProvider {
       ctx.action.getActionHandler(codeAction.command.id)?.()
     }
 
-    return undefined
+    codeAction.command = undefined
+
+    return codeAction
   }
 }
