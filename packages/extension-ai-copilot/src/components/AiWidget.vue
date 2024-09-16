@@ -163,8 +163,11 @@ function setImage (img: typeof image.value) {
   }, 50)
 }
 
+const layoutThrottle = ctx.lib.lodash.throttle(layout, 200)
+
 function updateStatus (_status: string) {
   status.value = _status
+  layoutThrottle()
 }
 
 async function process () {
