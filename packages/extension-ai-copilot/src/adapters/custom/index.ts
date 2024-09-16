@@ -1,25 +1,45 @@
-import { nextTick, reactive, watch } from 'vue'
+import { computed, defineComponent, h, nextTick, reactive, ref, watch } from 'vue'
 import * as gradio from '@gradio/client'
 import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
-import { ctx } from '@yank-note/runtime-api'
-import { CompletionAdapter, EditAdapter, FormItem, Panel, TextToImageAdapter } from '@/adapter'
-import { COMPLETION_DEFAULT_SYSTEM_MESSAGE, CustomAdapter, EDIT_DEFAULT_SYSTEM_MESSAGE, FatalError, i18n } from '@/lib/core'
-import completionEditDefaultRequest from './completion-default-request.js?raw'
-import completionEditDefaultResponse from './completion-default-response.js?raw'
-import completionEditOpenAIRequest from './completion-openai-request.js?raw'
-import completionEditOpenAIResponse from './completion-openai-response.js?raw'
-import codeEditDefaultRequest from './edit-default-request.js?raw'
-import codeEditDefaultResponse from './edit-default-response.js?raw'
-import codeEditOpenAIRequest from './edit-openai-request.js?raw'
-import codeEditOpenAIResponse from './edit-openai-response.js?raw'
-import text2imageEditDefaultRequest from './text2image-default-request.js?raw'
-import text2imageEditDefaultResponse from './text2image-default-response.js?raw'
-import text2imageEditGradioRequest from './text2image-gradio-request.js?raw'
-import text2imageEditGradioResponse from './text2image-gradio-response.js?raw'
+import { ctx, runtimeVersionSatisfies } from '@yank-note/runtime-api'
+import { Adapter, AdapterType, CompletionAdapter, EditAdapter, getAllAdapters, Panel, TextToImageAdapter } from '@/lib/adapter'
+import { addCustomAdapters, COMPLETION_DEFAULT_SYSTEM_MESSAGE, CustomAdapter, EDIT_DEFAULT_SYSTEM_MESSAGE, FatalError, i18n } from '@/lib/core'
+import { CompletionDefaultPreset } from './completion/default/index'
 import type { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
+import { CompletionOpenAIPreset } from './completion/openai'
+import { EditDefaultPreset } from './edit/default'
+import { EditOpenAIPreset } from './edit/openai'
+import { Text2ImageDefaultPreset } from './text2image/default'
+import { Text2ImageGradioPreset } from './text2image/gradio'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor
+
+type CustomAdapterPresetName = CustomAdapter['preset']
+
+export interface CustomAdapterPreset {
+  name: CustomAdapterPresetName,
+  displayName (): string,
+  requestCode: string,
+  responseCode: string,
+  params (): Record<string, { displayName: string, params: Record<string, any> }>
+  processAdapter? (adapter: Adapter): void
+}
+
+const customAdapterPresets: Record<AdapterType, Partial<Record<CustomAdapterPresetName, CustomAdapterPreset>>> = {
+  completion: {
+    openai: new CompletionOpenAIPreset(),
+    custom: new CompletionDefaultPreset(),
+  },
+  edit: {
+    openai: new EditOpenAIPreset(),
+    custom: new EditDefaultPreset(),
+  },
+  text2image: {
+    gradio: new Text2ImageGradioPreset(),
+    custom: new Text2ImageDefaultPreset(),
+  }
+}
 
 export class CustomCompletionAdapter implements CompletionAdapter {
   type: 'completion' = 'completion'
@@ -35,10 +55,6 @@ export class CustomCompletionAdapter implements CompletionAdapter {
   monaco = ctx.editor.getMonaco()
 
   defaultSystemMessage = COMPLETION_DEFAULT_SYSTEM_MESSAGE
-  defaultBuildRequestCode = completionEditDefaultRequest.trim()
-  defaultHandleResponseCode = completionEditDefaultResponse.trim()
-  defaultOpenAIBuildRequestCode = completionEditOpenAIRequest.trim()
-  defaultOpenAIHandleResponseCode = completionEditOpenAIResponse.trim()
 
   panel: Panel
 
@@ -63,9 +79,6 @@ export class CustomCompletionAdapter implements CompletionAdapter {
     this.description = 'Custom Completion Adapter'
     this.logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CustomCompletionAdapter.' + this.id)
 
-    const defaultApiPoint = adapter.preset === 'openai' ? 'https://api.openai.com/v1/chat/completions' : 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID'
-    const defaultModel = adapter.preset === 'openai' ? 'gpt-4o-mini' : '@cf/meta/llama-3-8b-instruct'
-
     const { buildRequestCode, handleResponseCode } = this.getDefaultCode()
 
     this.panel = {
@@ -74,9 +87,9 @@ export class CustomCompletionAdapter implements CompletionAdapter {
         { type: 'context', key: 'context', label: i18n.t('context') },
         { type: 'checkbox', key: 'autoTrigger', label: i18n.t('auto-trigger'), description: i18n.t('auto-trigger-completion-desc'), defaultValue: false },
         { type: 'textarea', key: 'systemMessage', label: i18n.t('system-message'), defaultValue: this.defaultSystemMessage },
-        { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultApiPoint }, defaultValue: defaultApiPoint, hasError: v => !v },
-        { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' } },
-        { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: defaultModel, props: { placeholder: 'e.g. gpt-4o-mini' }, hasError: v => !v },
+        { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: '' }, defaultValue: '', hasError: v => !v },
+        { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: '', type: 'password' } },
+        { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: '', props: { placeholder: '' }, hasError: v => !v },
         { type: 'textarea', key: 'buildRequestCode', label: 'Build Request Code', advanced: true, defaultValue: buildRequestCode, marked: v => v !== buildRequestCode, hasError: v => !v, props: { style: { height: '10em' } } },
         { type: 'textarea', key: 'handleResponseCode', label: 'Handle Response Code', advanced: true, defaultValue: handleResponseCode, marked: v => v !== handleResponseCode, hasError: v => !v, props: { style: { height: '10em' } } },
         { type: 'input', key: 'proxy', label: i18n.t('proxy'), props: { placeholder: 'eg: http://127.0.0.1:8000' } },
@@ -85,6 +98,12 @@ export class CustomCompletionAdapter implements CompletionAdapter {
 
     this.state.buildRequestCode = buildRequestCode
     this.state.handleResponseCode = handleResponseCode
+
+    const adapterPreset = customAdapterPresets[this.type][this.adapter.preset]
+
+    if (adapterPreset?.processAdapter) {
+      adapterPreset.processAdapter(this)
+    }
   }
 
   activate () {
@@ -116,8 +135,10 @@ export class CustomCompletionAdapter implements CompletionAdapter {
   }
 
   getDefaultCode () {
-    const buildRequestCode = (this.adapter.preset === 'openai' ? this.defaultOpenAIBuildRequestCode : this.defaultBuildRequestCode).trim()
-    const handleResponseCode = (this.adapter.preset === 'openai' ? this.defaultOpenAIHandleResponseCode : this.defaultHandleResponseCode).trim()
+    const adapterPreset = customAdapterPresets[this.type][this.adapter.preset]
+
+    const buildRequestCode = (adapterPreset?.requestCode || '').trim()
+    const handleResponseCode = (adapterPreset?.responseCode || '').trim()
 
     return { buildRequestCode, handleResponseCode }
   }
@@ -193,11 +214,6 @@ export class CustomEditAdapter implements EditAdapter {
 
   defaultSystemMessage = EDIT_DEFAULT_SYSTEM_MESSAGE
 
-  defaultBuildRequestCode = codeEditDefaultRequest.trim()
-  defaultHandleResponseCode = codeEditDefaultResponse.trim()
-  defaultOpenAIBuildRequestCode = codeEditOpenAIRequest.trim()
-  defaultOpenAIHandleResponseCode = codeEditOpenAIResponse.trim()
-
   state = reactive({
     __buildRequestCodeChanged: false,
     __handleResponseCodeChanged: false,
@@ -223,9 +239,6 @@ export class CustomEditAdapter implements EditAdapter {
     this.description = 'Custom Edit Adapter'
     this.logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CustomEditAdapter.' + this.id)
 
-    const defaultApiPoint = adapter.preset === 'openai' ? 'https://api.openai.com/v1/chat/completions' : 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID'
-    const defaultModel = adapter.preset === 'openai' ? 'gpt-4o-mini' : '@cf/meta/llama-3-8b-instruct'
-
     const { buildRequestCode, handleResponseCode } = this.getDefaultCode()
 
     this.panel = {
@@ -235,9 +248,9 @@ export class CustomEditAdapter implements EditAdapter {
         { type: 'context', key: 'context', label: i18n.t('context') },
         { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
         { type: 'textarea', key: 'systemMessage', label: i18n.t('system-message'), defaultValue: this.defaultSystemMessage },
-        { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultApiPoint }, defaultValue: defaultApiPoint, hasError: v => !v },
-        { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: 'sk-xxx', type: 'password' } },
-        { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: defaultModel, props: { placeholder: 'e.g. gpt-4o-mini' }, hasError: v => !v },
+        { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: '' }, defaultValue: '', hasError: v => !v },
+        { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: '', type: 'password' } },
+        { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: '', props: { placeholder: '' }, hasError: v => !v },
         { type: 'textarea', key: 'buildRequestCode', advanced: true, label: 'Build Request Code', defaultValue: buildRequestCode, marked: v => v !== buildRequestCode, hasError: v => !v, props: { style: { height: '10em' } } },
         { type: 'textarea', key: 'handleResponseCode', advanced: true, label: 'Handle Response Code', defaultValue: handleResponseCode, marked: v => v !== handleResponseCode, hasError: v => !v, props: { style: { height: '10em' } } },
         { type: 'input', key: 'proxy', label: i18n.t('proxy'), props: { placeholder: 'eg: http://127.0.0.1:8000' } },
@@ -246,6 +259,12 @@ export class CustomEditAdapter implements EditAdapter {
 
     this.state.buildRequestCode = buildRequestCode
     this.state.handleResponseCode = handleResponseCode
+
+    const adapterPreset = customAdapterPresets[this.type][this.adapter.preset]
+
+    if (adapterPreset?.processAdapter) {
+      adapterPreset.processAdapter(this)
+    }
   }
 
   activate () {
@@ -277,8 +296,10 @@ export class CustomEditAdapter implements EditAdapter {
   }
 
   getDefaultCode () {
-    const buildRequestCode = (this.adapter.preset === 'openai' ? this.defaultOpenAIBuildRequestCode : this.defaultBuildRequestCode).trim()
-    const handleResponseCode = (this.adapter.preset === 'openai' ? this.defaultOpenAIHandleResponseCode : this.defaultHandleResponseCode).trim()
+    const adapterPreset = customAdapterPresets[this.type][this.adapter.preset]
+
+    const buildRequestCode = (adapterPreset?.requestCode || '').trim()
+    const handleResponseCode = (adapterPreset?.responseCode || '').trim()
 
     return { buildRequestCode, handleResponseCode }
   }
@@ -394,11 +415,6 @@ export class CustomTextToImageAdapter implements TextToImageAdapter {
   logger: ReturnType<typeof ctx.utils.getLogger>
   monaco = ctx.editor.getMonaco()
 
-  defaultBuildRequestCode = text2imageEditDefaultRequest.trim()
-  defaultHandleResponseCode = text2imageEditDefaultResponse.trim()
-  defaultGradioBuildRequestCode = text2imageEditGradioRequest.trim()
-  defaultGradioHandleResponseCode = text2imageEditGradioResponse.trim()
-
   state = reactive({
     __buildRequestCodeChanged: false,
     __handleResponseCodeChanged: false,
@@ -422,21 +438,15 @@ export class CustomTextToImageAdapter implements TextToImageAdapter {
     this.description = 'Custom Text to Image Adapter'
     this.logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CustomTextToImageAdapter.' + this.id)
 
-    const defaultEndpoint = adapter.preset === 'gradio' ? 'https://black-forest-labs-flux-1-schnell.hf.space' : 'https://api.cloudflare.com/client/v4/accounts/API_ACCOUNT_ID'
-
     const { buildRequestCode, handleResponseCode } = this.getDefaultCode()
 
     this.panel = {
       type: 'form',
       items: [
         { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
-        { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: 'eg. ' + defaultEndpoint }, defaultValue: defaultEndpoint, hasError: v => !v },
+        { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: '' }, defaultValue: '', hasError: v => !v },
         { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: '', type: 'password' } },
-        ...(adapter.preset === 'gradio'
-          ? []
-          : [
-            { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: '@cf/lykon/dreamshaper-8-lcm', hasError: v => !v },
-          ] as FormItem[]),
+        { type: 'input', key: 'model', label: i18n.t('model'), props: { placeholder: '' }, defaultValue: '', hasError: v => !v },
         { type: 'range', key: 'width', label: i18n.t('width'), defaultValue: 512, min: 1, max: 1920, step: 1 },
         { type: 'range', key: 'height', label: i18n.t('height'), defaultValue: 512, min: 1, max: 1920, step: 1 },
         { type: 'textarea', key: 'buildRequestCode', advanced: true, label: 'Build Request Code', defaultValue: buildRequestCode, marked: v => v !== buildRequestCode, hasError: v => !v, props: { style: { height: '10em' } } },
@@ -447,6 +457,12 @@ export class CustomTextToImageAdapter implements TextToImageAdapter {
 
     this.state.buildRequestCode = buildRequestCode
     this.state.handleResponseCode = handleResponseCode
+
+    const adapterPreset = customAdapterPresets[this.type][this.adapter.preset]
+
+    if (adapterPreset?.processAdapter) {
+      adapterPreset.processAdapter(this)
+    }
   }
 
   activate () {
@@ -478,8 +494,10 @@ export class CustomTextToImageAdapter implements TextToImageAdapter {
   }
 
   getDefaultCode () {
-    const buildRequestCode = (this.adapter.preset === 'gradio' ? this.defaultGradioBuildRequestCode : this.defaultBuildRequestCode).trim()
-    const handleResponseCode = (this.adapter.preset === 'gradio' ? this.defaultGradioHandleResponseCode : this.defaultHandleResponseCode).trim()
+    const adapterPreset = customAdapterPresets[this.type][this.adapter.preset]
+
+    const buildRequestCode = (adapterPreset?.requestCode || '').trim()
+    const handleResponseCode = (adapterPreset?.responseCode || '').trim()
 
     return { buildRequestCode, handleResponseCode }
   }
@@ -523,4 +541,81 @@ export class CustomTextToImageAdapter implements TextToImageAdapter {
     const { blob } = await handleResultFn.apply(this, [{ res: response }])
     return blob
   }
+}
+
+export async function createCustomAdapter (type: AdapterType) : Promise<string> {
+  if (!ctx.api.proxyFetch) {
+    ctx.ui.useToast().show('warning', i18n.t('runtime-version-not-satisfies'))
+    throw new Error('Runtime version not satisfies')
+  }
+
+  const presets = customAdapterPresets[type]
+
+  const adapterPresetName = ref<CustomAdapterPresetName>(type === 'text2image' ? 'gradio' : 'openai')
+  const adapterParamsName = ref('')
+
+  const DialogComponent = defineComponent({
+    setup () {
+      const preset = computed(() => presets[adapterPresetName.value])
+      const params = computed(() => preset.value?.params() || {})
+
+      watch(params, () => {
+        // choose the first params by default
+        adapterParamsName.value = params.value ? Object.keys(params.value)[0] : ''
+      }, { immediate: true })
+
+      return () => h('div', { style: 'margin-top: 16px' }, [
+        h('div', { style: 'margin: 8px 0' }, [
+          i18n.t('custom-adapter-type'),
+          Object.entries(presets).map(([key, { displayName }]) =>
+            h('label', { style: 'margin-left: 8px' }, [
+              h('input', { type: 'radio', name: 'type', value: key, checked: adapterPresetName.value === key, onChange: () => { adapterPresetName.value = key as any } }),
+              ' ' + displayName()]
+            ),
+          ),
+        ]),
+        h('div', { style: { margin: '8px 0', display: Object.keys(params.value).length > 1 ? 'block' : 'none' } }, [
+          i18n.t('custom-adapter-params'),
+          h(
+            'select',
+            { style: 'margin-left: 8px', value: adapterParamsName.value, onChange: e => { adapterParamsName.value = e.target.value } },
+            Object.entries(params.value).map(([key, { displayName }]) => h('option', { value: key }, displayName))
+          ),
+        ]),
+      ])
+    }
+  })
+
+  const name = await ctx.ui.useModal().input({
+    title: i18n.t('create-custom-adapter'),
+    hint: i18n.t('adapter-name'),
+    value: 'Custom Adapter',
+    modalWidth: '500px',
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    maxlength: 32,
+    component: DialogComponent,
+    select: true,
+  })
+
+  if (!name) throw new Error('No name')
+
+  if (adapterPresetName.value === 'gradio' && runtimeVersionSatisfies('<3.75.1')) {
+    ctx.ui.useToast().show('warning', i18n.t('runtime-version-not-satisfies'))
+    throw new Error('Runtime version not satisfies')
+  }
+
+  const adapters = getAllAdapters(type)
+
+  if (adapters.some(x => x.id === name || x.displayname === name)) {
+    ctx.ui.useToast().show('warning', i18n.t('adapter-name-exists'))
+    throw new Error('Adapter name exists')
+  }
+
+  addCustomAdapters(
+    { name, type: type, preset: adapterPresetName.value },
+    presets[adapterPresetName.value]?.params()?.[adapterParamsName.value]?.params || {},
+  )
+
+  return name
 }

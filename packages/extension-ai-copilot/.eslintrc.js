@@ -20,7 +20,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['src/custom-adapter-code/*.js'],
+      files: ['src/adapters/custom/**/*.js'],
       rules: {
         quotes: 'off',
         'quote-props': 'off',
