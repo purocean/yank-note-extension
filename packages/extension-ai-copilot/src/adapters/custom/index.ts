@@ -324,7 +324,12 @@ export class CustomEditAdapter implements EditAdapter {
     const handleResultFn = new AsyncFunction('data', 'env', this.state.handleResponseCode)
 
     const controller = new AbortController()
-    cancelToken.onCancellationRequested(() => controller.abort())
+    cancelToken.onCancellationRequested(() => {
+      controller.abort()
+      Promise.resolve().then(() => {
+        updateStatus('') // clear status
+      })
+    })
 
     const env = { signal: controller.signal, updateStatus }
 
