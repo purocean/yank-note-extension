@@ -70,7 +70,7 @@
     </template>
   </template>
   <div v-if="hasAdvancedFormItem" class="advanced-toggle">
-    <label>
+    <label tabindex="-1">
       <input type="checkbox" v-model="showAdvanced" />
       {{ i18n.$t.value('show-advanced-settings') }}
     </label>
