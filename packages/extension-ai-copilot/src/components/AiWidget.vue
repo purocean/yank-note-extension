@@ -42,24 +42,26 @@
           <button class="small tr" @click="reload"><svg-icon name="sync-alt-solid" width="11px" height="13px" :title="$t('regenerate')" /></button>
         </template>
 
-        <div class="options">
-          <label v-if="adapter && adapter.state && adapterType === 'edit'">
-            <input type="checkbox" v-model="adapter.state.withContext" />
-            {{ $t('with-context-widget') }}
-          </label>
-          <label v-if="type === 'edit' && adapter && adapter.state && adapterType === 'edit'">
-            <input type="checkbox" v-model="adapter.state.appendMode" />
-            {{ $t('append-mode') }}
-          </label>
-          <div v-if="adapter && adapter.state && adapterType === 'text2image'" class="image-size">
-            <span>W:</span><input type="number" v-model="adapter.state.width" style="width: 60px" />
-            <span>H:</span><input type="number" v-model="adapter.state.height" style="width: 60px" />
+        <template v-if="!loading">
+          <div class="options">
+            <label v-if="adapter && adapter.state && adapterType === 'edit'">
+              <input type="checkbox" v-model="adapter.state.withContext" />
+              {{ $t('with-context-widget') }}
+            </label>
+            <label v-if="type === 'edit' && adapter && adapter.state && adapterType === 'edit'">
+              <input type="checkbox" v-model="adapter.state.appendMode" />
+              {{ $t('append-mode') }}
+            </label>
+            <div v-if="adapter && adapter.state && adapterType === 'text2image'" class="image-size">
+              <span>W:</span><input type="number" v-model="adapter.state.width" style="width: 60px" />
+              <span>H:</span><input type="number" v-model="adapter.state.height" style="width: 60px" />
+            </div>
           </div>
-        </div>
 
-        <select v-model="state.adapter[adapterType]" @change="textareaRef?.focus()">
-          <option v-for="item in adapters" :key="item.id" :value="item.id">{{item.displayname}}</option>
-        </select>
+          <select v-model="state.adapter[adapterType]" @change="textareaRef?.focus()">
+            <option v-for="item in adapters" :key="item.id" :value="item.id">{{item.displayname}}</option>
+          </select>
+        </template>
       </div>
       <div v-else>{{ $t('no-adapters') }}</div>
       <div v-if="status" class="status">{{ status }}</div>
