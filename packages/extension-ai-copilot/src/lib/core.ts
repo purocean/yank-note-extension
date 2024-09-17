@@ -70,6 +70,7 @@ export const i18n = ctx.i18n.createI18n({
     'proxy': 'Proxy',
     'no-context-available': 'No context available',
     'with-context': 'With context',
+    'with-context-widget': 'Context',
     'ask-ai-edit-or-gen': 'Ask Copilot to edit or generate text...',
     'ask-ai-text2image': 'Ask Copilot to generate image...',
     'create-custom-adapter': 'Create Custom adapter',
@@ -96,6 +97,9 @@ export const i18n = ctx.i18n.createI18n({
     'runtime-version-not-satisfies': 'Current version Yank Note is not compatible with this feature, please use the latest version of Yank Note',
     'ai-premium-required': 'AI Copilot is a premium feature, please upgrade to premium to use this feature',
     'show-advanced-settings': 'Advanced settings',
+    'append-mode': 'Append',
+    'copy-content': 'Copy Content',
+    'regenerate': 'Regenerate',
   },
   'zh-CN': {
     'ai-complete': '使用 AI Copilot 自动补全',
@@ -119,6 +123,7 @@ export const i18n = ctx.i18n.createI18n({
     'proxy': '代理',
     'no-context-available': '无上下文可用',
     'with-context': '包含上下文',
+    'with-context-widget': '包含上下文',
     'ask-ai-edit-or-gen': '让 Copilot 修改或生成文本...',
     'ask-ai-text2image': '让 Copilot 生成图片...',
     'create-custom-adapter': '创建自定义适配器',
@@ -145,6 +150,9 @@ export const i18n = ctx.i18n.createI18n({
     'runtime-version-not-satisfies': '当前版本 Yank Note 不兼容此功能，请使用最新版本 Yank Note',
     'ai-premium-required': 'AI Copilot 是高级功能，请升级到高级版以使用此功能',
     'show-advanced-settings': '高级设置',
+    'append-mode': '追加模式',
+    'copy-content': '复制内容',
+    'regenerate': '重新生成',
   }
 })
 

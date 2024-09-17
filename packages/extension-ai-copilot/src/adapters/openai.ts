@@ -190,6 +190,7 @@ export class OpenAIEditAdapter implements EditAdapter {
 
   state = reactive({
     withContext: false,
+    appendMode: false,
     context: '',
     api_url: defaultApiUrl,
     selection: '',

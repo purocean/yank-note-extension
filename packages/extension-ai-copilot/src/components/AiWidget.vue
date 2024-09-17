@@ -38,14 +38,18 @@
         <template v-else>
           <button class="small primary tr" @click="accept">{{ $t('accept') }}</button>
           <button class="small tr" @click="undo">{{ $t('discard') }}</button>
-          <button v-if="adapterType === 'edit'" class="small tr" @click="copy">{{ $t('copy') }}</button>
-          <button class="small tr" @click="reload"><svg-icon name="sync-alt-solid" width="11px" height="13px" /></button>
+          <button v-if="adapterType === 'edit'" class="small tr" @click="copy" :title="$t('copy-content')"><svg-icon name="clipboard" width="11px" height="13px" /></button>
+          <button class="small tr" @click="reload"><svg-icon name="sync-alt-solid" width="11px" height="13px" :title="$t('regenerate')" /></button>
         </template>
 
         <div class="options">
           <label v-if="adapter && adapter.state && adapterType === 'edit'">
             <input type="checkbox" v-model="adapter.state.withContext" />
-            {{ $t('with-context') }}
+            {{ $t('with-context-widget') }}
+          </label>
+          <label v-if="type === 'edit' && adapter && adapter.state && adapterType === 'edit'">
+            <input type="checkbox" v-model="adapter.state.appendMode" />
+            {{ $t('append-mode') }}
           </label>
           <div v-if="adapter && adapter.state && adapterType === 'text2image'" class="image-size">
             <span>W:</span><input type="number" v-model="adapter.state.width" style="width: 60px" />
@@ -403,7 +407,7 @@ onBeforeUnmount(() => {
     select, input[type=number] {
       font-size: 13px;
       padding: 1px;
-      width: 130px;
+      width: 126px;
       height: 22px;
     }
 
@@ -424,6 +428,8 @@ onBeforeUnmount(() => {
       label {
         display: flex;
         align-items: center;
+        margin-right: 4px;
+        font-size: 13px;
       }
     }
   }

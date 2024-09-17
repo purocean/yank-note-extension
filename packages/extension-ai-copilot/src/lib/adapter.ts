@@ -50,7 +50,7 @@ export interface CompletionAdapter extends Adapter {
 
 export interface EditAdapter extends Adapter {
   type: 'edit'
-  state: Record<string, any> & { instruction: string, selection: string, context: string, withContext: boolean},
+  state: Record<string, any> & { instruction: string, selection: string, context: string, withContext: boolean, appendMode: boolean },
   fetchEditResults(
     selectedText: string,
     instruction: string,

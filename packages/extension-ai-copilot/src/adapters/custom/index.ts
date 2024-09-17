@@ -226,6 +226,7 @@ export class CustomEditAdapter implements EditAdapter {
     model: '',
     context: '',
     withContext: false,
+    appendMode: false,
     selection: '',
     instruction: '',
     proxy: '',

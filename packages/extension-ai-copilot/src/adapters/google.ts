@@ -236,6 +236,7 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
 
   state = reactive({
     withContext: false,
+    appendMode: false,
     selection: '',
     context: '',
     instruction: this.defaultInstruction,

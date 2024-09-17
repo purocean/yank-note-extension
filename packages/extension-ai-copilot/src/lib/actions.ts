@@ -40,6 +40,7 @@ export async function executeEdit (token: Monaco.CancellationToken, updateStatus
     }
 
     const instruction = adapter.state.instruction
+    const appendMode = adapter.state.appendMode
 
     if (!instruction.trim()) {
       throw new Error('Instruction is required')
@@ -56,7 +57,8 @@ export async function executeEdit (token: Monaco.CancellationToken, updateStatus
       throw new Error('No editor model')
     }
 
-    const selectedText = model.getValueInRange(ctx.editor.getEditor().getSelection()!) || ''
+    const selection = editor.getSelection()
+    const selectedText = selection ? model.getValueInRange(selection) : ''
 
     const getSelection = () => {
       const selection = ctx.editor.getEditor().getSelection()!
@@ -89,13 +91,41 @@ export async function executeEdit (token: Monaco.CancellationToken, updateStatus
       return { lineCount, endLineLength }
     }
 
-    const res = adapter.fetchEditResults(selectedText, instruction, token, res => {
+    const getPreserveContent = () => {
+      if (!appendMode || !selectedText) {
+        return ''
+      }
+
+      let separator = ''
+
+      // select whole lines
+      if (selection!.startColumn === 1 && selection!.endColumn === model.getLineMaxColumn(selection!.endLineNumber)) {
+        const hasEmptyLine = selectedText.includes('\n\n')
+        separator = hasEmptyLine ? '\n\n' : '\n'
+      } else {
+        separator = ' '
+      }
+
+      return selectedText + separator
+    }
+
+    const preserveContent = getPreserveContent()
+
+    let executeEditCount = 0
+    const res = adapter.fetchEditResults(selectedText, instruction, token, ({ text, delta }) => {
       if (model !== editor.getModel()) {
         throw new Error('Model changed, cancel editing.')
       }
 
-      const prevContentCount = getLineCount(res.text, 0, res.text.length - res.delta.length)
-      const deltaContentCount = getLineCount(res.delta, 0, res.delta.length)
+      text = preserveContent + text
+      if (executeEditCount === 0) {
+        delta = preserveContent + delta
+      }
+
+      executeEditCount++
+
+      const prevContentCount = getLineCount(text, 0, text.length - delta.length)
+      const deltaContentCount = getLineCount(delta, 0, delta.length)
 
       const selection = getSelection()
 
@@ -118,7 +148,7 @@ export async function executeEdit (token: Monaco.CancellationToken, updateStatus
 
       editor.executeEdits('ai-copilot', [{
         range: editRange,
-        text: res.delta + '🚧',
+        text: delta + '🚧',
       }])
 
       editor.revealRangeNearTopIfOutsideViewport(editRange)
@@ -132,7 +162,7 @@ export async function executeEdit (token: Monaco.CancellationToken, updateStatus
 
     editor.executeEdits('ai-copilot', [{
       range: getSelection(),
-      text: result,
+      text: preserveContent + result,
     }])
 
     editor.focus()
