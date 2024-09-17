@@ -605,7 +605,7 @@ export async function createCustomAdapter (type: AdapterType) : Promise<string> 
     title: i18n.t('create-custom-adapter'),
     hint: i18n.t('adapter-name'),
     value: 'Custom Adapter',
-    modalWidth: '500px',
+    modalWidth: '600px',
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     maxlength: 32,

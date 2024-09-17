@@ -250,7 +250,6 @@ watchEffect(() => {
   }
 
   .label {
-    margin-bottom: 4px;
     margin-right: 8px;
     flex: none;
     width: 80px;
