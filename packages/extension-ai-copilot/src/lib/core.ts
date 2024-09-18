@@ -180,7 +180,7 @@ const storageData = ctx.utils.storage.get(storageStateKey, defaultState)
 
 const instructionHistory = Array.isArray(storageData.instructionHistory)
   ? { edit: storageData.instructionHistory as string[], text2image: [] }
-  : storageData.instructionHistory
+  : (storageData.instructionHistory || [])
 
 if (!Array.isArray(instructionHistory.edit)) {
   instructionHistory.edit = []
