@@ -1,6 +1,6 @@
 import { App, createApp } from 'vue'
 import { registerPlugin } from '@yank-note/runtime-api'
-import { COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, TEXT_TO_IMAGE_ACTION_NAME, i18n, loading, proxyFetch, state } from './lib/core'
+import { COMPLETION_ACTION_NAME, EDIT_ACTION_NAME, FatalError, TEXT_TO_IMAGE_ACTION_NAME, i18n, loading, proxyFetch, state } from './lib/core'
 import { registerAdapter } from './lib/adapter'
 import { createWidget, disposeWidget } from './lib/widget'
 import { CodeActionProvider } from './lib/actions'
@@ -107,6 +107,12 @@ registerPlugin({
         disposeWidget()
       }
     }, { immediate: true })
+
+    window.addEventListener('unhandledrejection', e => {
+      if (e.reason instanceof FatalError) {
+        e.preventDefault()
+      }
+    })
 
     return {
       registerAdapter,
