@@ -36,6 +36,10 @@ export class CompletionOpenAIPreset implements CustomAdapterPreset {
         displayName: 'Spark',
         params: { model: 'generalv3.5', endpoint: 'https://spark-api-open.xf-yun.com/v1/chat/completions' },
       },
+      'github-models': {
+        displayName: 'Github Models',
+        params: { model: 'gpt-4o-mini', endpoint: 'https://models.inference.ai.azure.com/chat/completions' },
+      },
       custom: {
         displayName: i18n.t('custom'),
         params: { model: '', endpoint: '' },
