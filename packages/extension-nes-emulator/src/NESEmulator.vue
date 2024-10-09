@@ -54,7 +54,9 @@ async function saveState () {
 
     const state = win.nes.toJSON()
     const content = ctx.utils.strToBase64(JSON.stringify(state))
-    await ctx.api.upload(currentFile.repo, content, filePath)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await ctx.api.upload(currentFile.repo, content, filePath, 'overwrite')
     ctx.tree.refreshTree()
     ctx.ui.useToast().show('info', 'State saved')
   } catch (error) {
