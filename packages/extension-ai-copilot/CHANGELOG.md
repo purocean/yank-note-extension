@@ -1,3 +1,7 @@
+## [1.27.3](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.27.2...extension-ai-copilot-1.27.3) (2024-10-16)
+
+
+
 ## [1.27.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.27.1...extension-ai-copilot-1.27.2) (2024-09-20)
 
 
