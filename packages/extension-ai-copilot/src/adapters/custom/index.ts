@@ -90,7 +90,7 @@ export class CustomCompletionAdapter implements CompletionAdapter {
       items: [
         { type: 'context', key: 'context', label: i18n.t('context') },
         { type: 'checkbox', key: 'autoTrigger', label: i18n.t('auto-trigger'), description: i18n.t('auto-trigger-completion-desc'), defaultValue: false },
-        { type: 'textarea', key: 'systemMessage', label: i18n.t('system-message'), defaultValue: this.defaultSystemMessage },
+        { type: 'textarea', key: 'systemMessage', label: i18n.t('system-message'), advanced: true, defaultValue: this.defaultSystemMessage },
         { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: '' }, defaultValue: '', hasError: v => !v },
         { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: '', type: 'password' } },
         { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: '', props: { placeholder: '' }, hasError: v => !v },
@@ -252,7 +252,7 @@ export class CustomEditAdapter implements EditAdapter {
         { type: 'selection', key: 'selection', advanced: true, label: i18n.t('selected-text'), props: { readonly: true } },
         { type: 'context', key: 'context', label: i18n.t('context') },
         { type: 'instruction', key: 'instruction', label: i18n.t('instruction'), hasError: v => !v },
-        { type: 'textarea', key: 'systemMessage', label: i18n.t('system-message'), defaultValue: this.defaultSystemMessage },
+        { type: 'textarea', key: 'systemMessage', advanced: true, label: i18n.t('system-message'), defaultValue: this.defaultSystemMessage },
         { type: 'input', key: 'endpoint', label: i18n.t('endpoint'), props: { placeholder: '' }, defaultValue: '', hasError: v => !v },
         { type: 'input', key: 'apiToken', label: i18n.t('api-token'), props: { placeholder: '', type: 'password' } },
         { type: 'input', key: 'model', label: i18n.t('model'), defaultValue: '', props: { placeholder: '' }, hasError: v => !v },
