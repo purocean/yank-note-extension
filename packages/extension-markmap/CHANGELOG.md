@@ -1,3 +1,7 @@
+## [1.7.1](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.7.0...extension-markmap-1.7.1) (2024-11-08)
+
+
+
 # [1.7.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.6.0...extension-markmap-1.7.0) (2024-08-15)
 
 
