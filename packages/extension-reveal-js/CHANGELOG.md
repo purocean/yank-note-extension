@@ -1,3 +1,12 @@
+# [1.9.0](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.8.0...extension-reveal-js-1.9.0) (2024-11-23)
+
+
+### Features
+
+* **extension-reveal-js:** upgrade reveal.js to version 5.1.0 ([cf2ab52](https://github.com/purocean/yank-note-extension/commit/cf2ab52c083ed48c0ab8d14ca300cc2058464605))
+
+
+
 # [1.8.0](https://github.com/purocean/yank-note-extension/compare/extension-reveal-js-1.7.0...extension-reveal-js-1.8.0) (2023-11-23)
 
 
