@@ -43,6 +43,7 @@ declare const data: {
     'file-readonly-desc': string;
     'can-not-edit-this-file-type': string;
     'read-only-mode-desc': string;
+    'trigger-suggestions': string;
     premium: {
         confetti: string;
         'need-purchase': string;
@@ -349,6 +350,7 @@ declare const data: {
             zoom: string;
             'use-browser': string;
             'include-bg': string;
+            'generate-document-outline': string;
         };
         'use-html': string;
         'use-markdown': string;
@@ -384,6 +386,7 @@ declare const data: {
                 'name-placeholder': string;
                 path: string;
                 'path-placeholder': string;
+                'enable-indexing': string;
             };
             editor: {
                 'mouse-wheel-zoom': string;
@@ -401,6 +404,7 @@ declare const data: {
                 'sticky-scroll-enabled': string;
                 'quick-suggestions': string;
                 'enable-ai-copilot-action': string;
+                'enable-trigger-suggest-bulb': string;
             };
             render: {
                 'md-html': string;
@@ -714,6 +718,7 @@ declare const data: {
         'plugin_document-history-stack_forward': string;
         'plugin_editor_focus-editor': string;
         'plugin_switch-todo_switch': string;
+        'plugin_view-links_view-document-links': string;
         'view_enter-presentation': string;
         'workbench_show-quick-open': string;
         'workbench_toggle-outline': string;
@@ -765,6 +770,20 @@ declare const data: {
         'copy-image': string;
         'delete-image': string;
         'open-in-new-tab': string;
+    };
+    'index-status': {
+        'switch-repository-html': string;
+        'enable-indexing-html': string;
+        indexing: string;
+        indexed: string;
+    };
+    'view-links': {
+        links: string;
+        'back-links': string;
+        'no-result': string;
+        'links-in': string;
+        'back-links-for': string;
+        're-index': string;
     };
 };
 export type BaseLanguage = typeof data;

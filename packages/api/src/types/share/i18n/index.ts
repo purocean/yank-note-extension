@@ -45,6 +45,7 @@ declare const languages: {
         'file-readonly-desc': string;
         'can-not-edit-this-file-type': string;
         'read-only-mode-desc': string;
+        'trigger-suggestions': string;
         premium: {
             confetti: string;
             'need-purchase': string;
@@ -351,6 +352,7 @@ declare const languages: {
                 zoom: string;
                 'use-browser': string;
                 'include-bg': string;
+                'generate-document-outline': string;
             };
             'use-html': string;
             'use-markdown': string;
@@ -386,6 +388,7 @@ declare const languages: {
                     'name-placeholder': string;
                     path: string;
                     'path-placeholder': string;
+                    'enable-indexing': string;
                 };
                 editor: {
                     'mouse-wheel-zoom': string;
@@ -403,6 +406,7 @@ declare const languages: {
                     'sticky-scroll-enabled': string;
                     'quick-suggestions': string;
                     'enable-ai-copilot-action': string;
+                    'enable-trigger-suggest-bulb': string;
                 };
                 render: {
                     'md-html': string;
@@ -716,6 +720,7 @@ declare const languages: {
             'plugin_document-history-stack_forward': string;
             'plugin_editor_focus-editor': string;
             'plugin_switch-todo_switch': string;
+            'plugin_view-links_view-document-links': string;
             'view_enter-presentation': string;
             'workbench_show-quick-open': string;
             'workbench_toggle-outline': string;
@@ -767,6 +772,20 @@ declare const languages: {
             'copy-image': string;
             'delete-image': string;
             'open-in-new-tab': string;
+        };
+        'index-status': {
+            'switch-repository-html': string;
+            'enable-indexing-html': string;
+            indexing: string;
+            indexed: string;
+        };
+        'view-links': {
+            links: string;
+            'back-links': string;
+            'no-result': string;
+            'links-in': string;
+            'back-links-for': string;
+            're-index': string;
         };
     };
     'zh-CN': {
@@ -814,6 +833,7 @@ declare const languages: {
         'file-readonly-desc': string;
         'can-not-edit-this-file-type': string;
         'read-only-mode-desc': string;
+        'trigger-suggestions': string;
         premium: {
             confetti: string;
             'need-purchase': string;
@@ -1120,6 +1140,7 @@ declare const languages: {
                 zoom: string;
                 'use-browser': string;
                 'include-bg': string;
+                'generate-document-outline': string;
             };
             'use-html': string;
             'use-markdown': string;
@@ -1155,6 +1176,7 @@ declare const languages: {
                     'name-placeholder': string;
                     path: string;
                     'path-placeholder': string;
+                    'enable-indexing': string;
                 };
                 editor: {
                     'mouse-wheel-zoom': string;
@@ -1172,6 +1194,7 @@ declare const languages: {
                     'sticky-scroll-enabled': string;
                     'quick-suggestions': string;
                     'enable-ai-copilot-action': string;
+                    'enable-trigger-suggest-bulb': string;
                 };
                 render: {
                     'md-html': string;
@@ -1485,6 +1508,7 @@ declare const languages: {
             'plugin_document-history-stack_forward': string;
             'plugin_editor_focus-editor': string;
             'plugin_switch-todo_switch': string;
+            'plugin_view-links_view-document-links': string;
             'view_enter-presentation': string;
             'workbench_show-quick-open': string;
             'workbench_toggle-outline': string;
@@ -1536,6 +1560,20 @@ declare const languages: {
             'copy-image': string;
             'delete-image': string;
             'open-in-new-tab': string;
+        };
+        'index-status': {
+            'switch-repository-html': string;
+            'enable-indexing-html': string;
+            indexing: string;
+            indexed: string;
+        };
+        'view-links': {
+            links: string;
+            'back-links': string;
+            'no-result': string;
+            'links-in': string;
+            'back-links-for': string;
+            're-index': string;
         };
     };
     'zh-TW': {
@@ -1583,6 +1621,7 @@ declare const languages: {
         'file-readonly-desc': string;
         'can-not-edit-this-file-type': string;
         'read-only-mode-desc': string;
+        'trigger-suggestions': string;
         premium: {
             confetti: string;
             'need-purchase': string;
@@ -1889,6 +1928,7 @@ declare const languages: {
                 zoom: string;
                 'use-browser': string;
                 'include-bg': string;
+                'generate-document-outline': string;
             };
             'use-html': string;
             'use-markdown': string;
@@ -1924,6 +1964,7 @@ declare const languages: {
                     'name-placeholder': string;
                     path: string;
                     'path-placeholder': string;
+                    'enable-indexing': string;
                 };
                 editor: {
                     'mouse-wheel-zoom': string;
@@ -1941,6 +1982,7 @@ declare const languages: {
                     'sticky-scroll-enabled': string;
                     'quick-suggestions': string;
                     'enable-ai-copilot-action': string;
+                    'enable-trigger-suggest-bulb': string;
                 };
                 render: {
                     'md-html': string;
@@ -2254,6 +2296,7 @@ declare const languages: {
             'plugin_document-history-stack_forward': string;
             'plugin_editor_focus-editor': string;
             'plugin_switch-todo_switch': string;
+            'plugin_view-links_view-document-links': string;
             'view_enter-presentation': string;
             'workbench_show-quick-open': string;
             'workbench_toggle-outline': string;
@@ -2305,6 +2348,20 @@ declare const languages: {
             'copy-image': string;
             'delete-image': string;
             'open-in-new-tab': string;
+        };
+        'index-status': {
+            'switch-repository-html': string;
+            'enable-indexing-html': string;
+            indexing: string;
+            indexed: string;
+        };
+        'view-links': {
+            links: string;
+            'back-links': string;
+            'no-result': string;
+            'links-in': string;
+            'back-links-for': string;
+            're-index': string;
         };
     };
     ru: {
@@ -2352,6 +2409,7 @@ declare const languages: {
         'file-readonly-desc': string;
         'can-not-edit-this-file-type': string;
         'read-only-mode-desc': string;
+        'trigger-suggestions': string;
         premium: {
             confetti: string;
             'need-purchase': string;
@@ -2658,6 +2716,7 @@ declare const languages: {
                 zoom: string;
                 'use-browser': string;
                 'include-bg': string;
+                'generate-document-outline': string;
             };
             'use-html': string;
             'use-markdown': string;
@@ -2693,6 +2752,7 @@ declare const languages: {
                     'name-placeholder': string;
                     path: string;
                     'path-placeholder': string;
+                    'enable-indexing': string;
                 };
                 editor: {
                     'mouse-wheel-zoom': string;
@@ -2710,6 +2770,7 @@ declare const languages: {
                     'sticky-scroll-enabled': string;
                     'quick-suggestions': string;
                     'enable-ai-copilot-action': string;
+                    'enable-trigger-suggest-bulb': string;
                 };
                 render: {
                     'md-html': string;
@@ -3023,6 +3084,7 @@ declare const languages: {
             'plugin_document-history-stack_forward': string;
             'plugin_editor_focus-editor': string;
             'plugin_switch-todo_switch': string;
+            'plugin_view-links_view-document-links': string;
             'view_enter-presentation': string;
             'workbench_show-quick-open': string;
             'workbench_toggle-outline': string;
@@ -3074,6 +3136,20 @@ declare const languages: {
             'copy-image': string;
             'delete-image': string;
             'open-in-new-tab': string;
+        };
+        'index-status': {
+            'switch-repository-html': string;
+            'enable-indexing-html': string;
+            indexing: string;
+            indexed: string;
+        };
+        'view-links': {
+            links: string;
+            'back-links': string;
+            'no-result': string;
+            'links-in': string;
+            'back-links-for': string;
+            're-index': string;
         };
     };
 };

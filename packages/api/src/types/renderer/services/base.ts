@@ -15,7 +15,7 @@ export declare function getAttachmentURL(doc: Doc, opts?: {
  * @param name filename
  * @returns
  */
-export declare function upload(file: File, belongDoc: Pick<Doc, 'repo' | 'path'>, name?: string): Promise<string>;
+export declare function upload(file: File, belongDoc: Pick<Doc, 'repo' | 'path'>, name?: string, ifExists?: 'rename' | 'overwrite' | 'skip' | 'error'): Promise<string>;
 /**
  * Input password.
  * @param title
@@ -49,17 +49,6 @@ export declare function trashItem(path: string): Promise<void>;
  */
 export declare function reloadMainWindow(): Promise<void>;
 /**
- * Get all repositories
- * @returns
- */
-export declare function getAllRepos(): import("@fe/types").Repo[];
-/**
- * get repo by name
- * @param name
- * @returns
- */
-export declare function getRepo(name: string): import("@fe/types").Repo | undefined;
-/**
  * Read content from clipboard
  * @param callback
  * @returns
@@ -73,11 +62,6 @@ export declare function readFromClipboard(callback: (type: string, getType: (typ
  * @returns
  */
 export declare function writeToClipboard(type: string, value: any): Promise<any>;
-/**
- * Get Server Timestamp
- * @returns timestamp in ms
- */
-export declare function getServerTimestamp(): Promise<number>;
 /**
  * Find in current repository.
  * @param query

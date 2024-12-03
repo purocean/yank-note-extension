@@ -71,9 +71,12 @@ export declare function commentHistoryVersion(file: PathItem, version: string, m
 /**
  * Fetch file tree from a repository.
  * @param repo
+ * @param sort
+ * @param include
+ * @param noEmptyDir
  * @returns
  */
-export declare function fetchTree(repo: string, sort: FileSort): Promise<Components.Tree.Node[]>;
+export declare function fetchTree(repo: string, sort: FileSort, include?: string, noEmptyDir?: boolean): Promise<Components.Tree.Node[]>;
 /**
  * Fetch custom styles.
  * @returns
@@ -99,7 +102,7 @@ export declare function choosePath(options: Record<string, any>): Promise<{
     canceled: boolean;
     filePaths: string[];
 }>;
-type SearchReturn = (onResult: (result: ISerializedFileMatch[]) => void, onMessage?: (message: IProgressMessage) => void) => Promise<ISerializedSearchSuccess | null>;
+type SearchReturn = (onResult: (result: ISerializedFileMatch[]) => void | Promise<void>, onMessage?: (message: IProgressMessage) => void | Promise<void>) => Promise<ISerializedSearchSuccess | null>;
 /**
  * Search files.
  * @param controller
@@ -113,10 +116,15 @@ export declare function search(controller: AbortController, query: ITextQuery): 
  * @param query
  * @returns
  */
-export declare function watchFs(repo: string, path: string, options: WatchOptions, onResult: (result: {
+export declare function watchFs(repo: string, path: string, options: WatchOptions & {
+    mdContent?: boolean;
+}, onResult: (result: {
     eventName: 'add' | 'change' | 'unlink' | 'addDir' | 'unlinkDir';
     path: string;
+    content?: string | null;
     stats?: Stats;
+} | {
+    eventName: 'ready';
 }) => void, onError: (error: Error) => void): Promise<{
     result: Promise<string | null>;
     abort: () => void;
@@ -126,8 +134,12 @@ export declare function watchFs(repo: string, path: string, options: WatchOption
  * @param repo
  * @param fileBase64Url
  * @param filePath
+ * @param ifExists
  */
-export declare function upload(repo: string, fileBase64Url: string, filePath: string): Promise<ApiResult<any>>;
+export declare function upload(repo: string, fileBase64Url: string, filePath: string, ifExists?: 'rename' | 'overwrite' | 'skip' | 'error'): Promise<ApiResult<{
+    path: string;
+    hash: string;
+}>>;
 /**
  * Write temporary file.
  * @param name

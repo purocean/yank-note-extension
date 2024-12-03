@@ -1,7 +1,8 @@
 import type Remote from '@electron/remote/index';
+export declare const inWebWorker: boolean;
 export declare const nodeProcess: NodeJS.Process;
-export declare const nodeModule: NodeModule;
-export declare const nodeRequire: NodeRequire;
+export declare const nodeModule: any;
+export declare const nodeRequire: any;
 export declare const isElectron: boolean;
 export declare const isMacOS: boolean;
 export declare const isWindows: boolean;

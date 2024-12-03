@@ -10,6 +10,7 @@ import * as keybinding from '@fe/core/keybinding';
 import { useToast } from '@fe/support/ui/toast';
 import { useModal } from '@fe/support/ui/modal';
 import { useQuickFilter } from '@fe/support/ui/quick-filter';
+import { useFixedFloat } from '@fe/support/ui/fixed-float';
 import { useContextMenu } from '@fe/support/ui/context-menu';
 import * as env from '@fe/support/env';
 import * as base from '@fe/services/base';
@@ -32,6 +33,8 @@ import * as renderer from '@fe/services/renderer';
 import * as exportDoc from '@fe/services/export';
 import * as routines from '@fe/services/routines';
 import * as directives from '@fe/directives/index';
+import * as indexer from '@fe/services/indexer';
+import * as repo from '@fe/services/repo';
 import * as lib from './lib';
 import * as components from './components';
 declare const ctx: Readonly<{
@@ -78,7 +81,18 @@ declare const ctx: Readonly<{
             currentRepo: {
                 name: string;
                 path: string;
+                enableIndexing: boolean;
             } | undefined;
+            currentRepoIndexStatus: {
+                repo: string;
+                status: {
+                    total: number;
+                    indexed: number;
+                    processing: string | null;
+                    cost: number;
+                    ready: boolean;
+                };
+            } | null;
             currentFile: {
                 type: "file" | "dir";
                 name: string;
@@ -157,11 +171,14 @@ declare const ctx: Readonly<{
     env: typeof env;
     utils: typeof utils;
     routines: typeof routines;
+    indexer: typeof indexer;
+    repo: typeof repo;
     export: typeof exportDoc;
     ui: {
         useToast: typeof useToast;
         useModal: typeof useModal;
         useQuickFilter: typeof useQuickFilter;
+        useFixedFloat: typeof useFixedFloat;
         useContextMenu: typeof useContextMenu;
     };
     registerHook: typeof hook.registerHook;
