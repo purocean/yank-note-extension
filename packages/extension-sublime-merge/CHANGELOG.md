@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/purocean/yank-note-extension/compare/extension-sublime-merge-1.5.0...extension-sublime-merge-1.6.0) (2024-12-04)
+
+### Features
+
+* **extension-sublime-merge**: support runtime 3.77.1 ([f51e0b2](https://github.com/purocean/yank-note-extension/commit/f51e0b2))
+
+
 # [1.5.0](https://github.com/purocean/yank-note-extension/compare/extension-sublime-merge-1.4.3...extension-sublime-merge-1.5.0) (2024-07-10)
 
 
