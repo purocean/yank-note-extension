@@ -40,7 +40,7 @@ registerPlugin({
     const actionName = extensionName + '.open'
 
     function openInSublimeMerge (node: { repo: string, type: string, path: string }) {
-      const currentRepo = ((ctx as any).repo.getRepo || ctx.base.getRepo)(node.repo)
+      const currentRepo = (ctx.repo.getRepo || (ctx.base as any).getRepo)(node.repo)
       const path = currentRepo ? ctx.utils.path.join(currentRepo.path, node.path) : ''
       if (path && currentRepo) {
         const smgPath = ctx.setting.getSetting(settingKeySmgPath, 'smerge')
