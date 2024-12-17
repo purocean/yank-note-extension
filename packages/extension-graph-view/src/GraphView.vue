@@ -110,16 +110,13 @@ async function refresh () {
   let hoverState: { node: string, neighbors: string[], edges: string[], nodeSelected: boolean, currentNode: string } | null = null
 
   await dm.getTable().where({ repo }).each(doc => {
-    let color = '#888'
-
     doc.links.forEach(link => {
       if (link.internal && doc.path !== link.internal) {
         edges.push({ source: doc.path, target: link.internal, zIndex: globalZIndex++, color: darkMode ? '#444' : '#ddd', size: 1, type: 'arrow', directed: true, position: link.position })
-        color = '#779'
       }
     })
 
-    nodes.push({ key: doc.path, label: doc.name, x: 0, y: 0, color, zIndex: globalZIndex++, size: 0, forceLabel: false })
+    nodes.push({ key: doc.path, label: doc.name, x: 0, y: 0, color: '#888', zIndex: globalZIndex++, size: 0, forceLabel: false })
   })
 
   nodes.forEach(node => {
