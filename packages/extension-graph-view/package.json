@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-graph-view",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "displayName": "Graph View",
   "description": "Display the repository relationship graph",
   "displayName_ZH-CN": "Graph View",
