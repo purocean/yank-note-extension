@@ -51,8 +51,10 @@ const status = ref('')
 
 let graph: Graph<Node, Edge> | null = null
 let instance: Sigma<Graph<Node, Edge>> | null = null
+let hoverState: { node: string, neighbors: string[], edges: string[], nodeSelected: boolean, currentNode: string } | null = null
 
 function clean () {
+  hoverState = null
   instance?.kill()
   instance = null
   graph = null
@@ -107,7 +109,6 @@ async function refresh () {
   const edges: Edge[] = []
   let edgeCount = 0
   let dragState: { node: string, nodeX: number, nodeY: number, x: number, y: number, moved: boolean } | null = null
-  let hoverState: { node: string, neighbors: string[], edges: string[], nodeSelected: boolean, currentNode: string } | null = null
 
   await dm.getTable().where({ repo }).each(doc => {
     doc.links.forEach(link => {
@@ -116,7 +117,9 @@ async function refresh () {
       }
     })
 
-    nodes.push({ key: doc.path, label: doc.name, x: 0, y: 0, color: '#888', zIndex: globalZIndex++, size: 0, forceLabel: false })
+    const label = /^(?:index|readme)\.md$/i.test(doc.name) ? doc.path : doc.name
+
+    nodes.push({ key: doc.path, label, x: 0, y: 0, color: '#888', zIndex: globalZIndex++, size: 0, forceLabel: false })
   })
 
   nodes.forEach(node => {
@@ -171,14 +174,6 @@ async function refresh () {
     }
   })
 
-  if (ctx.store.state.currentFile?.path && ctx.store.state.currentFile?.repo === ctx.store.state.currentRepo?.name) {
-    const node = ctx.store.state.currentFile.path
-    // graph.setNodeAttribute(node, 'x', 0)
-    // graph.setNodeAttribute(node, 'y', 0)
-    graph.setNodeAttribute(node, 'type', 'square')
-    hoverState = { node: node, neighbors: graph.neighbors(node), edges: graph.edges(node), nodeSelected: true, currentNode: node }
-  }
-
   instance = new Sigma<Graph<Node, Edge>>(graph as any, container.value!, {
     allowInvalidContainer: true,
     labelColor: { color: '#888' },
@@ -197,7 +192,7 @@ async function refresh () {
       if (hoverState) {
         if (hoverState.node === node) {
           attrs.zIndex = globalZIndex++
-          attrs.label = attrs.label + ` (${hoverState.neighbors.length})`
+          attrs.label = attrs.key + ` (${hoverState.neighbors.length})`
           attrs.forceLabel = true
         } else if (hoverState.neighbors.includes(node)) {
           attrs.zIndex = globalZIndex++
@@ -209,6 +204,8 @@ async function refresh () {
           if (attrs.type !== 'square') {
             attrs.color = darkMode ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.05)'
           }
+        } else {
+          attrs.label = attrs.key
         }
       } else {
         attrs.forceLabel = false
@@ -291,7 +288,7 @@ async function refresh () {
         type: 'file',
         repo: ctx.store.state.currentRepo!.name,
         path: node.key,
-        name: ctx.utils.path.basename(node.key),
+        name: node.label,
       }, { position })
     }
 
@@ -306,7 +303,7 @@ async function refresh () {
 
   instance.on('downNode', e => {
     const node = graph!.getNodeAttributes(e.node)
-    dragState = { node: e.node, nodeX: node.x, nodeY: node.y, x: e.event.x, y: e.event.y, moved: false }
+    dragState = { node: e.node, nodeX: node.x, nodeY: node.y, x: -1, y: -1, moved: false }
     e.preventSigmaDefault()
   })
 
@@ -318,38 +315,62 @@ async function refresh () {
     if (dragState) {
       e.preventSigmaDefault()
 
-      const scale = instance!.getCamera().ratio
-      const dx = e.event.x - dragState.x
-      const dy = e.event.y - dragState.y
+      const { x: eX, y: eY } = instance!.viewportToGraph({ x: e.event.x, y: e.event.y })
 
-      const x = dragState.nodeX + dx * scale
-      const y = dragState.nodeY - dy * scale
+      if (dragState.x === -1 && dragState.y === -1) {
+        dragState.x = eX
+        dragState.y = eY
+        return
+      }
 
-    graph!.setNodeAttribute(dragState.node, 'x', x)
-    graph!.setNodeAttribute(dragState.node, 'y', y)
+      const dx = eX - dragState.x
+      const dy = eY - dragState.y
 
-    instance?.refresh({ skipIndexation: true })
+      const x = dragState.nodeX + dx
+      const y = dragState.nodeY + dy
 
-    dragState.moved = Math.max(Math.abs(dx), Math.abs(dy)) > 5
+      graph!.setNodeAttribute(dragState.node, 'x', x)
+      graph!.setNodeAttribute(dragState.node, 'y', y)
+
+      dragState.x = eX
+      dragState.y = eY
+      dragState.nodeX = x
+      dragState.nodeY = y
+      dragState.moved = Math.max(Math.abs(dx), Math.abs(dy)) > 5
+
+      instance?.refresh({ skipIndexation: true })
     }
   })
 
   loading.value = false
 }
 
+async function selectCurrentNode () {
+  if (graph && instance && ctx.store.state.currentFile?.path && ctx.store.state.currentFile?.repo === ctx.store.state.currentRepo?.name) {
+    await ctx.utils.sleep(0)
+    const node = ctx.store.state.currentFile.path
+    // graph.setNodeAttribute(node, 'x', 0)
+    // graph.setNodeAttribute(node, 'y', 0)
+    graph.setNodeAttribute(node, 'type', 'square')
+    hoverState = { node: node, neighbors: graph.neighbors(node), edges: graph.edges(node), nodeSelected: true, currentNode: node }
+    instance.refresh({ skipIndexation: true })
+  }
+}
+
 async function onStatusChange (val: string) {
   status.value = val
   await nextTick()
-  refresh()
+  await refresh()
+  await selectCurrentNode()
 }
 
 ctx.registerHook('THEME_CHANGE', refresh)
 
-watch(() => ctx.store.state.currentFile?.path, refresh)
+watch(() => ctx.store.state.currentFile?.path, selectCurrentNode)
 
 onBeforeUnmount(() => {
   clean()
-  ctx.removeHook('THEME_CHANGE', refresh)
+  ctx.removeHook('THEME_CHANGE', selectCurrentNode)
 })
 </script>
 
