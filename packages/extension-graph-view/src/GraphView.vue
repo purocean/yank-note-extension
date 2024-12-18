@@ -197,12 +197,12 @@ async function refresh () {
           attrs.type = 'square'
         } else if (hoverState.neighbors.includes(node)) {
           attrs.zIndex = globalZIndex++
-          attrs.forceLabel = true
+          attrs.forceLabel = false
         } else if (hoverState.currentNode !== node) {
           attrs.label = ''
           attrs.forceLabel = false
 
-          attrs.color = darkMode ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.05)'
+          attrs.color = darkMode ? 'rgba(10, 10, 10, 0.05)' : 'rgba(0, 0, 0, 0.05)'
         } else {
           attrs.label = attrs.key
         }
