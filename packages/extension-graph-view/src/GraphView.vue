@@ -326,17 +326,22 @@ async function refresh () {
       const dx = eX - dragState.x
       const dy = eY - dragState.y
 
-      const x = dragState.nodeX + dx
-      const y = dragState.nodeY + dy
+      graph!.updateNodeAttributes(dragState.node, attrs => {
+        const x = attrs.x + dx
+        const y = attrs.y + dy
 
-      graph!.setNodeAttribute(dragState.node, 'x', x)
-      graph!.setNodeAttribute(dragState.node, 'y', y)
+        if (dragState) {
+          dragState.moved = Math.max(Math.abs(x - dragState.nodeX), Math.abs(y - dragState.nodeY)) > 5
+        }
+
+        attrs.x = x
+        attrs.y = y
+
+        return attrs
+      })
 
       dragState.x = eX
       dragState.y = eY
-      dragState.nodeX = x
-      dragState.nodeY = y
-      dragState.moved = Math.max(Math.abs(dx), Math.abs(dy)) > 5
 
       instance?.refresh({ skipIndexation: true })
     }
