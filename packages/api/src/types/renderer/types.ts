@@ -17,6 +17,15 @@ export type PositionState = {
 } | {
     anchor: string;
 } | PositionScrollState;
+export type ParseLinkResult = {
+    type: 'external';
+    href: string;
+} | {
+    type: 'internal';
+    path: string;
+    name: string;
+    position: PositionState | null;
+};
 export type SwitchDocOpts = {
     force?: boolean;
     source?: 'markdown-link' | 'history-stack' | 'view-links';
@@ -207,6 +216,7 @@ export declare namespace Components {
             right?: string | undefined;
             bottom?: string | undefined;
             left?: string | undefined;
+            closeBtn?: boolean;
         }
     }
     namespace QuickFilter {
@@ -279,6 +289,7 @@ export type ConvertOpts = {
         inlineStyle: boolean;
         includeStyle: boolean;
         highlightCode: boolean;
+        includeToc: number[];
     };
 };
 export type RenderEnv = {
@@ -514,6 +525,10 @@ export type BuildInHookTypes = {
         e: KeyboardEvent;
         view: HTMLElement;
     };
+    VIEW_DOM_ERROR: {
+        e: Event;
+        view: HTMLElement;
+    };
     VIEW_SCROLL: {
         e: Event;
     };
@@ -662,6 +677,15 @@ export type BuildInHookTypes = {
     WORKER_INDEXER_BEFORE_START_WATCH: {
         repo: Repo;
     };
+    AFTER_PARSE_LINK: {
+        params: {
+            currentFile: PathItem;
+            href: string;
+            isWikiLink: boolean;
+            tree?: Components.Tree.Node[];
+        };
+        result: ParseLinkResult | null;
+    };
 };
 export type Previewer = {
     name: string;
@@ -746,13 +770,13 @@ export interface IndexItemLink {
     href: string;
     internal: string | null;
     position: PositionState | null;
-    blockMap: number[];
+    blockMap?: number[] | null;
 }
 export interface IndexItemResource {
     src: string;
     internal: string | null;
     tag: ResourceTagName;
-    blockMap: number[];
+    blockMap?: number[] | null;
 }
 export interface IndexItem {
     repo: string;

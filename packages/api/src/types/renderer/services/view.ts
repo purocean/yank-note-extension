@@ -5,6 +5,7 @@ export type Heading = {
     tag: string;
     class: string;
     text: string;
+    id: string;
     level: number;
     sourceLine: number;
     activated?: boolean;

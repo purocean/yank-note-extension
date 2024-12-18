@@ -55,9 +55,10 @@ export declare function copyFile(file: FileItem, newPath: string): Promise<ApiRe
 /**
  * Delete a file or dir.
  * @param file
+ * @param trash Move to trash or not, default is true.
  * @returns
  */
-export declare function deleteFile(file: PathItem): Promise<ApiResult<any>>;
+export declare function deleteFile(file: PathItem, trash?: boolean): Promise<ApiResult<any>>;
 export declare function fetchHistoryList(file: PathItem): Promise<{
     size: number;
     list: {

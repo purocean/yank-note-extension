@@ -28,4 +28,4 @@ export declare function cleanUnusedRepo(): void;
 export declare function triggerWatchCurrentRepo(): void;
 export declare function rebuildCurrentRepo(): Promise<void>;
 export declare function updateIndexStatus(repo: Repo, status: IndexStatus): void;
-export declare function importScriptsToWorker(url: string | URL): Promise<void>;
+export declare function importScriptsToWorker(urlOrCode: string | URL, isCode?: boolean): Promise<void>;

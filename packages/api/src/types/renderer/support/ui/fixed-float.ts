@@ -3,7 +3,9 @@ import type { Components } from '@fe/types';
 interface Opts extends Components.FixedFloat.Props {
     component: Component;
     closeOnBlur?: boolean;
+    closeOnEsc?: boolean;
     onBlur?: (byClickSelf?: boolean) => void;
+    onEsc?: () => void;
 }
 export interface Instance {
     show: (opts: Opts) => void;

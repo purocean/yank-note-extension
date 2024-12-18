@@ -44,6 +44,7 @@ declare const data: {
     'can-not-edit-this-file-type': string;
     'read-only-mode-desc': string;
     'trigger-suggestions': string;
+    'table-of-contents': string;
     premium: {
         confetti: string;
         'need-purchase': string;
@@ -205,6 +206,10 @@ declare const data: {
             hint: string;
         };
         'delete-dialog': {
+            title: string;
+            content: string;
+        };
+        'force-delete-dialog': {
             title: string;
             content: string;
         };
@@ -620,6 +625,7 @@ declare const data: {
         type: string;
         'inline-style': string;
         'include-style': string;
+        'include-toc': string;
         'inline-image': string;
         'upload-image': string;
         'highlight-code': string;
@@ -778,12 +784,21 @@ declare const data: {
         indexed: string;
     };
     'view-links': {
+        'view-links': string;
         links: string;
+        resources: string;
         'back-links': string;
         'no-result': string;
         'links-in': string;
+        'resources-in': string;
         'back-links-for': string;
         're-index': string;
+        'disable-index': string;
+    };
+    'insert-table': {
+        'insert-table': string;
+        insert: string;
+        compact: string;
     };
 };
 export type BaseLanguage = typeof data;

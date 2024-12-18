@@ -42,6 +42,7 @@ export declare const DOM_ATTR_NAME: {
     TOKEN_IDX: string;
     DISPLAY_NONE: string;
     WIKI_LINK: string;
+    WIKI_RESOURCE: string;
     IS_ANCHOR: string;
 };
 export declare const DOM_CLASS_NAME: {

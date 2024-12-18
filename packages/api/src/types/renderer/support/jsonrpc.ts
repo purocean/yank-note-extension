@@ -1,1 +1,1 @@
-export declare function init(modules: Record<string, any>): void;
+export declare function init(modules: Record<string, any>, ready: Promise<any>): void;
