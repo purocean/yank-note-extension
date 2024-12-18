@@ -194,6 +194,7 @@ async function refresh () {
           attrs.zIndex = globalZIndex++
           attrs.label = attrs.key + ` (${hoverState.neighbors.length})`
           attrs.forceLabel = true
+          attrs.type = 'square'
         } else if (hoverState.neighbors.includes(node)) {
           attrs.zIndex = globalZIndex++
           attrs.forceLabel = true
@@ -201,9 +202,7 @@ async function refresh () {
           attrs.label = ''
           attrs.forceLabel = false
 
-          if (attrs.type !== 'square') {
-            attrs.color = darkMode ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.05)'
-          }
+          attrs.color = darkMode ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.05)'
         } else {
           attrs.label = attrs.key
         }
@@ -351,12 +350,9 @@ async function refresh () {
 }
 
 async function selectCurrentNode () {
+  await ctx.utils.sleep(0)
   if (graph && instance && ctx.store.state.currentFile?.path && ctx.store.state.currentFile?.repo === ctx.store.state.currentRepo?.name) {
-    await ctx.utils.sleep(0)
     const node = ctx.store.state.currentFile.path
-    // graph.setNodeAttribute(node, 'x', 0)
-    // graph.setNodeAttribute(node, 'y', 0)
-    graph.setNodeAttribute(node, 'type', 'square')
     hoverState = { node: node, neighbors: graph.neighbors(node), edges: graph.edges(node), nodeSelected: true, currentNode: node }
     instance.refresh({ skipIndexation: true })
   }
