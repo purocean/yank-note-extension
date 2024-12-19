@@ -10,7 +10,9 @@ registerPlugin({
     const openGraphViewActionName = extensionId + '.open-graph-view'
 
     function when () {
-      return !!ctx.store.state.currentRepo
+      return !ctx.args.FLAG_DEMO && // not in demo mode
+        ctx.args.MODE === 'normal' && // in normal mode
+        !!ctx.store.state.currentRepo
     }
 
     ctx.action.registerAction({
