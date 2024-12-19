@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.1.0...extension-graph-view-1.1.1) (2024-12-19)
+
+
+### Bug Fixes
+
+* **extension-graph-view:** update conditions to check for demo mode and action mode ([b1e0903](https://github.com/purocean/yank-note-extension/commit/b1e09037687d76db8bdf0050dfc6dd244bcfbea8))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.0.1...extension-graph-view-1.1.0) (2024-12-18)
 
 
