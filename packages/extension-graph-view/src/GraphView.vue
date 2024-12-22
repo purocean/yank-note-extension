@@ -30,7 +30,7 @@ import { NodeSquareProgram } from '@sigma/node-square'
 import forceAtlas2 from 'graphology-layout-forceatlas2'
 import circular from 'graphology-layout/circular'
 import { i18n } from './lib'
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 
 let _independentNodesVisible = true
 </script>
@@ -71,7 +71,7 @@ const loading = ref(false)
 const status = ref('')
 const expanded = ref(false)
 const independentNodesVisible = ref(_independentNodesVisible)
-const hoverState = ref<{ node: string, neighbors: string[], edges: string[], nodeSelected: boolean, currentNode: string } | null>(null)
+const hoverState = shallowRef<{ node: string, neighbors: Set<string>, edges: Set<string>, nodeSelected: boolean, currentNode: string } | null>(null)
 const graphTitle = computed(() => {
   return hoverState.value?.node || i18n.t('graph-view')
 })
@@ -198,7 +198,7 @@ async function refresh () {
     }
   })
 
-  circular.assign(graph)
+  circular.assign(graph, { scale: 1300 })
 
   const settings = forceAtlas2.inferSettings(graph)
 
@@ -213,9 +213,10 @@ async function refresh () {
   })
 
   instance = new Sigma<Graph<Node, Edge>>(graph as any, container.value!, {
+    autoRescale: true,
     allowInvalidContainer: true,
     labelColor: { color: '#888' },
-    zoomToSizeRatioFunction: (ratio: number) => ratio,
+    zoomToSizeRatioFunction: (ratio: number) => ratio * 0.8,
     itemSizesReference: 'positions',
     zIndex: true,
     edgeProgramClasses: {
@@ -230,10 +231,10 @@ async function refresh () {
       if (hoverState.value) {
         if (hoverState.value.node === node) {
           attrs.zIndex = globalZIndex++
-          attrs.label = attrs.key + ` (${hoverState.value.neighbors.length})`
+          attrs.label = attrs.key + ` (${hoverState.value.neighbors.size})`
           attrs.forceLabel = true
           attrs.type = 'square'
-        } else if (hoverState.value.neighbors.includes(node)) {
+        } else if (hoverState.value.neighbors.has(node)) {
           attrs.zIndex = globalZIndex++
           attrs.forceLabel = false
         } else if (hoverState.value.currentNode !== node) {
@@ -255,7 +256,7 @@ async function refresh () {
       const attrs = { ...data } as unknown as Edge
 
       if (hoverState.value) {
-        if (hoverState.value.edges.includes(edge)) {
+        if (hoverState.value.edges.has(edge)) {
           const source = graph!.getSourceAttributes(edge)
           attrs.zIndex = globalZIndex++
           attrs.size = 2
@@ -274,11 +275,11 @@ async function refresh () {
     const edges = graph!.edges(e.node)
 
     if (!hoverState.value?.nodeSelected) {
-      hoverState.value = { node: e.node, neighbors, edges, nodeSelected: false, currentNode: e.node }
+      hoverState.value = { node: e.node, neighbors: new Set(neighbors), edges: new Set(edges), nodeSelected: false, currentNode: e.node }
     }
 
     if (hoverState.value) {
-      hoverState.value.currentNode = e.node
+      hoverState.value = { ...hoverState.value, currentNode: e.node }
     }
 
     instance?.refresh({ skipIndexation: true })
@@ -287,7 +288,7 @@ async function refresh () {
 
   instance.on('leaveNode', () => {
     if (hoverState.value) {
-      hoverState.value.currentNode = ''
+      hoverState.value = { ...hoverState.value, currentNode: '' }
 
       if (!hoverState.value.nodeSelected) {
         hoverState.value = null
@@ -308,7 +309,7 @@ async function refresh () {
       const node = graph!.getNodeAttributes(e.node)
 
       let position: PositionState | undefined
-      if (hoverState.value?.nodeSelected && hoverState.value.neighbors.includes(e.node)) {
+      if (hoverState.value?.nodeSelected && hoverState.value.neighbors.has(e.node)) {
         for (const edge of hoverState.value.edges) {
           const edgeData = graph!.getEdgeAttributes(edge)
           if (edgeData.target === e.node) {
@@ -318,7 +319,7 @@ async function refresh () {
       }
 
       if (hoverState.value) {
-        hoverState.value = { node: e.node, neighbors: graph!.neighbors(e.node), edges: graph!.edges(e.node), nodeSelected: true, currentNode: e.node }
+        hoverState.value = { node: e.node, neighbors: new Set(graph!.neighbors(e.node)), edges: new Set(graph!.edges(e.node)), nodeSelected: true, currentNode: e.node }
         instance?.refresh({ skipIndexation: true, })
       }
 
@@ -392,7 +393,7 @@ async function selectCurrentNode () {
   await ctx.utils.sleep(0)
   if (graph && instance && ctx.store.state.currentFile?.path && ctx.store.state.currentFile?.repo === ctx.store.state.currentRepo?.name) {
     const node = ctx.store.state.currentFile.path
-    hoverState.value = { node: node, neighbors: graph.neighbors(node), edges: graph.edges(node), nodeSelected: true, currentNode: node }
+    hoverState.value = { node: node, neighbors: new Set(graph.neighbors(node)), edges: new Set(graph.edges(node)), nodeSelected: true, currentNode: node }
     instance.refresh({ skipIndexation: true })
   }
 }
@@ -408,8 +409,8 @@ function search () {
   ctx.action.getActionHandler('filter.choose-document')().then(doc => {
     hoverState.value = {
       node: doc.path,
-      neighbors: graph!.neighbors(doc.path),
-      edges: graph!.edges(doc.path),
+      neighbors: new Set(graph!.neighbors(doc.path)),
+      edges: new Set(graph!.edges(doc.path)),
       nodeSelected: true,
       currentNode: doc.path
     }
