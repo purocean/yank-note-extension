@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.1.1...extension-graph-view-1.2.0) (2024-12-22)
+
+
+### Features
+
+* **extension-graph-view:** add more actions ([1850699](https://github.com/purocean/yank-note-extension/commit/1850699248b3add33b9a43bae6e8b341b20f641c))
+
+
+
 ## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.1.0...extension-graph-view-1.1.1) (2024-12-19)
 
 
