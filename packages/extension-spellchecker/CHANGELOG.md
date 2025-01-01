@@ -1,3 +1,12 @@
+## [1.0.2](https://github.com/purocean/yank-note-extension/compare/extension-spellchecker-1.0.1...extension-spellchecker-1.0.2) (2025-01-01)
+
+
+### Bug Fixes
+
+* **extension-spellchecker:** correct user dictionary filename and improve regex for word matching ([95cd139](https://github.com/purocean/yank-note-extension/commit/95cd139f601afe49e7449deb657387f86aa26641))
+
+
+
 ## [1.0.1](https://github.com/purocean/yank-note-extension/compare/extension-spellchecker-1.0.0...extension-spellchecker-1.0.1) (2025-01-01)
 
 
