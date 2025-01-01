@@ -10,7 +10,7 @@ const DATA_DIRNAME = __EXTENSION_ID__.replace(/\//g, '$')
 const DATA_DIR = DATA_DIRNAME + '/'
 
 const IGNORE_FILE = 'ignore.txt'
-const USER_DICT_FILE = 'user-dict.txt'
+const USER_DICT_FILE = 'user-dic.txt'
 
 export const settingKeyDicName = 'plugin.spellchecker.dictionary'
 export const settingKeyWordRegex = 'plugin.spellchecker.alphabet'
@@ -81,7 +81,7 @@ async function loadWordsFile (file: string, buffer: boolean, throwError = false)
 
 async function handleWord (word: string, file: string) {
   let content = await loadWordsFile(file, false)
-  content = content.trim() + '\n' + word
+  content = (content.trim() + '\n' + word).trim()
   await ctx.api.writeUserFile(DATA_DIR + file, content)
   return content
 }

@@ -27,7 +27,7 @@ const exportMain = {
 
     // load user dictionary
     if (userDic) {
-      const reg = /^.*$/gm
+      const reg = /^.+$/gm
       let match: RegExpExecArray | null
       while ((match = reg.exec(userDic))) {
         const word = match[0].trim()
