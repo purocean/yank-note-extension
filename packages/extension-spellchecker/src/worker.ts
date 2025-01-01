@@ -19,13 +19,23 @@ class WorkerChannel implements JSONRPCServerChannel {
 let hunspell: Hunspell | null = null
 
 const exportMain = {
-  async initDictionary (affBuf: ArrayBuffer, dicBuf: ArrayBuffer, userBuf: ArrayBuffer) {
+  async initDictionary (affBuf: ArrayBuffer, dicBuf: ArrayBuffer, userDic: string) {
     const factory = await loadModule()
     const affPath = factory.mountBuffer(new Uint8Array(affBuf), 'main.aff')
     const dicPath = factory.mountBuffer(new Uint8Array(dicBuf), 'main.dic')
-    const userPath = factory.mountBuffer(new Uint8Array(userBuf), 'user.dic')
     hunspell = factory.create(affPath, dicPath)
-    hunspell.addDictionary(userPath)
+
+    // load user dictionary
+    if (userDic) {
+      const reg = /^.*$/gm
+      let match: RegExpExecArray | null
+      while ((match = reg.exec(userDic))) {
+        const word = match[0].trim()
+        if (word) {
+          hunspell.addWord(word)
+        }
+      }
+    }
   },
   check (word: string) {
     return hunspell ? hunspell.spell(word) : true

@@ -80,9 +80,9 @@ async function loadWordsFile (file: string, buffer: boolean, throwError = false)
 }
 
 async function handleWord (word: string, file: string) {
-  let content = await loadWordsFile(DATA_DIR + file, false)
-  content = (word + '\n' + content.trim()).trim()
-  await ctx.api.writeUserFile(file, content)
+  let content = await loadWordsFile(file, false)
+  content = content.trim() + '\n' + word
+  await ctx.api.writeUserFile(DATA_DIR + file, content)
   return content
 }
 
@@ -165,7 +165,7 @@ export function initSpellchecker (monaco: typeof Monaco, editor: Monaco.editor.I
   const dicName = ctx.setting.getSetting(settingKeyDicName, defaultDicName)
   const alphabet = ctx.setting.getSetting(settingKeyWordRegex, defaultWordRegex)
 
-  const initDictionary = async (additionalDic: ArrayBuffer) => {
+  const initDictionary = async (additionalDic: string) => {
     logger.debug('initDictionary', dictionary)
     if (dictionary) {
       spellService = new SpellService()
@@ -238,7 +238,7 @@ export function initSpellchecker (monaco: typeof Monaco, editor: Monaco.editor.I
 
   Promise.all([
     loadDictionary(dicName),
-    loadWordsFile(USER_DICT_FILE, true),
+    loadWordsFile(USER_DICT_FILE, false),
     loadWordsFile(IGNORE_FILE, false),
   ]).then(([dic, userDict, ignore]) => {
     dictionary = dic
