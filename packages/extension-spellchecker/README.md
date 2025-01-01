@@ -27,3 +27,14 @@ This extension uses the [hunspell-asm](https://github.com/kwonoj/hunspell-asm) a
 2. 将字典文件放到 `<home>/yank-note/data/@yank-note$extension-spellchecker` 目录下
 3. 在设置中设置语言
 4. 如有必要，请更改单词匹配正则表达式。
+
+## Files
+
+- All dictionary files are placed in the `<home>/yank-note/data/@yank-note$extension-spellchecker` directory.
+- `ignore.txt`: The words in this file will be ignored by the spellchecker.
+- `user-dic.txt`: The words in this file will be added to the dictionary, which can be used for word suggestions.
+---
+
+- 所有的字典文件都放置在 `<home>/yank-note/data/@yank-note$extension-spellchecker` 目录中。
+- `ignore.txt`: 此文件中的单词将被拼写检查器忽略。
+- `user-dic.txt`: 此文件中的单词将被添加到字典中，可用于单词建议。
