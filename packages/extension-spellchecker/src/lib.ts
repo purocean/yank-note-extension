@@ -109,7 +109,7 @@ export function buildAlphabetRegex (regex: string, fullback: boolean) {
   }
 
   try {
-    return new RegExp(`(?<=\\P{L})${regex}(?=\\P{L})`, 'gu')
+    return new RegExp(`(?<=\\P{L}|^)${regex}(?=\\P{L}|$)`, 'gu')
   } catch (error) {
     if (fullback) {
       return buildAlphabetRegex(defaultWordRegex, false)
