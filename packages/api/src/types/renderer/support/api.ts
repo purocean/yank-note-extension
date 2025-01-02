@@ -117,8 +117,9 @@ export declare function search(controller: AbortController, query: ITextQuery): 
  * @param query
  * @returns
  */
-export declare function watchFs(repo: string, path: string, options: WatchOptions & {
+export declare function watchFs(repo: string, path: string | string[], options: WatchOptions & {
     mdContent?: boolean;
+    mdFilesOnly?: boolean;
 }, onResult: (result: {
     eventName: 'add' | 'change' | 'unlink' | 'addDir' | 'unlinkDir';
     path: string;
@@ -163,6 +164,18 @@ export declare function readTmpFile(name: string): Promise<Response>;
  * @returns
  */
 export declare function deleteTmpFile(name: string): Promise<ApiResult<any>>;
+/**
+ * List user dir.
+ * @param name
+ * @returns
+ */
+export declare function listUserDir(name: string, recursive?: boolean): Promise<ApiResult<{
+    name: string;
+    path: string;
+    parent: string;
+    isFile: boolean;
+    isDir: boolean;
+}[]>>;
 /**
  * Write user file.
  * @param name

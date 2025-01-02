@@ -136,9 +136,10 @@ export declare function getRenderIframe(): Promise<HTMLIFrameElement>;
 /**
  * Add styles to default preview.
  * @param style
+ * @param skipExport
  * @return css dom
  */
-export declare function addStyles(style: string): Promise<HTMLStyleElement>;
+export declare function addStyles(style: string, skipExport?: boolean): Promise<HTMLStyleElement>;
 /**
  * Add style link to default preview.
  * @param href

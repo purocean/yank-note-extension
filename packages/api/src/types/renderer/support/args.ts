@@ -44,6 +44,7 @@ export declare const DOM_ATTR_NAME: {
     WIKI_LINK: string;
     WIKI_RESOURCE: string;
     IS_ANCHOR: string;
+    SKIP_EXPORT: string;
 };
 export declare const DOM_CLASS_NAME: {
     PREVIEW_HIGHLIGHT: string;

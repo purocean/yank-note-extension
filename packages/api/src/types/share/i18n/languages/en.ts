@@ -373,6 +373,9 @@ declare const data: {
         'delete-warning': string;
         'error-choose-repo-path': string;
         'change-keyboard-shortcuts': string;
+        'reset-title': string;
+        'reset-confirm-title': string;
+        'reset-confirm-desc': string;
         tabs: {
             repos: string;
             appearance: string;
@@ -461,7 +464,6 @@ declare const data: {
             proxy: {
                 enabled: string;
                 server: string;
-                'server-hint': string;
                 'bypass-list': string;
                 'pac-url': string;
             };

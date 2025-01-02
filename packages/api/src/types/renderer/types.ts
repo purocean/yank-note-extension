@@ -645,6 +645,7 @@ export type BuildInHookTypes = {
         currentLang: Language;
     };
     SETTING_PANEL_BEFORE_SHOW: {};
+    SETTING_PANEL_AFTER_SHOW: {};
     SETTING_CHANGED: {
         schema: SettingSchema;
         changedKeys: (keyof BuildInSettings)[];
@@ -675,6 +676,9 @@ export type BuildInHookTypes = {
     };
     PREMIUM_STATUS_CHANGED: never;
     WORKER_INDEXER_BEFORE_START_WATCH: {
+        repo: Repo;
+    };
+    INDEXER_FS_CHANGE: {
         repo: Repo;
     };
     AFTER_PARSE_LINK: {
