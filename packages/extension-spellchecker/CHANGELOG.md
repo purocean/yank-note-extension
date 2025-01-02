@@ -1,3 +1,12 @@
+## [1.0.4](https://github.com/purocean/yank-note-extension/compare/extension-spellchecker-1.0.3...extension-spellchecker-1.0.4) (2025-01-02)
+
+
+### Bug Fixes
+
+* **extension-spellchecker:** correct path format in dictionary setting description ([ecc055d](https://github.com/purocean/yank-note-extension/commit/ecc055d895d7aa9058a76799d799145c4113f8f3))
+
+
+
 ## [1.0.3](https://github.com/purocean/yank-note-extension/compare/extension-spellchecker-1.0.2...extension-spellchecker-1.0.3) (2025-01-02)
 
 
