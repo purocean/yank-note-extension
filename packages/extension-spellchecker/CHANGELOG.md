@@ -1,3 +1,12 @@
+## [1.0.3](https://github.com/purocean/yank-note-extension/compare/extension-spellchecker-1.0.2...extension-spellchecker-1.0.3) (2025-01-02)
+
+
+### Bug Fixes
+
+* **extension-spellchecker:** enhance regex to match words at string boundaries ([ae8c52e](https://github.com/purocean/yank-note-extension/commit/ae8c52e8f26449aa329d9c88be081125322ac15d))
+
+
+
 ## [1.0.2](https://github.com/purocean/yank-note-extension/compare/extension-spellchecker-1.0.1...extension-spellchecker-1.0.2) (2025-01-01)
 
 

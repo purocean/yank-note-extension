@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-spellchecker",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "displayName": "Spell Checker",
   "description": "Check spelling in the editor",
   "displayName_ZH-CN": "拼写检查",
