@@ -72,7 +72,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -117,7 +117,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.78.0
+      '@yank-note/runtime-api': workspace:3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -153,7 +153,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -191,7 +191,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.78.0
+      '@yank-note/runtime-api': workspace:3.79.0
       conventional-changelog-cli: ^2.2.2
       echarts: ^5.3.2
       eslint: ^7.32.0
@@ -229,7 +229,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -270,7 +270,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -313,7 +313,7 @@ importers:
       '@vitejs/plugin-vue': ^4.6.2
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -356,7 +356,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.78.0
+      '@yank-note/runtime-api': workspace:3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -395,7 +395,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.78.0
+      '@yank-note/runtime-api': workspace:3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -445,7 +445,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.78.0
+      '@yank-note/runtime-api': workspace:3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -481,7 +481,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.78.0
+      '@yank-note/runtime-api': workspace:3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -521,7 +521,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.78.0
+      '@yank-note/runtime-api': workspace:3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -561,7 +561,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       d3: '6'
       eslint: ^7.32.0
@@ -608,7 +608,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.78.0
+      '@yank-note/runtime-api': workspace:3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -671,7 +671,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -739,7 +739,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -775,7 +775,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -811,7 +811,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -849,7 +849,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.78.0
+      '@yank-note/runtime-api': workspace:3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -888,7 +888,7 @@ importers:
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
       '@vue/repl': ^3.3.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -936,7 +936,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -977,7 +977,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:3.78.0
+      '@yank-note/runtime-api': workspace:3.79.0
       conventional-changelog-cli: ^2.2.2
       dictionary-en: ^4.0.0
       eslint: ^7.32.0
@@ -1027,7 +1027,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -1068,7 +1068,7 @@ importers:
       '@vitejs/plugin-vue': ^3.2.0
       '@vue/eslint-config-standard': ^6.1.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@yank-note/runtime-api': workspace:^3.78.0
+      '@yank-note/runtime-api': workspace:^3.79.0
       conventional-changelog-cli: ^2.2.2
       eslint: ^7.32.0
       eslint-plugin-import: ^2.26.0
@@ -3689,7 +3689,7 @@ packages:
       vite: ^3.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 3.2.3
+      vite: 3.2.3_sass@1.56.1+terser@5.26.0
       vue: 3.2.33
     dev: true
 
@@ -3964,7 +3964,7 @@ packages:
     dependencies:
       '@vue/compiler-ssr': 3.4.10
       '@vue/shared': 3.4.10
-      vue: 3.4.10_typescript@5.7.2
+      vue: 3.4.10_typescript@4.6.4
     dev: true
 
   /@vue/shared/3.2.33:

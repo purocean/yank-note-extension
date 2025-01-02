@@ -256,8 +256,6 @@ export function initSpellchecker (monaco: typeof Monaco, editor: Monaco.editor.I
 }
 
 export async function fetchAvailableDictionaries () {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const items = await ctx.api.listUserDir(DATA_DIR, true).catch(() => [])
   const affs = items.filter(item => item.isFile && item.path.endsWith('.aff')).map(item => item.path.replace(/\.aff$/, ''))
   const dics = items.filter(item => item.isFile && item.path.endsWith('.dic')).map(item => item.path.replace(/\.dic$/, ''))
