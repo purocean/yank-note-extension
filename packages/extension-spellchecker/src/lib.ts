@@ -256,7 +256,7 @@ export function initSpellchecker (monaco: typeof Monaco, editor: Monaco.editor.I
 }
 
 export async function fetchAvailableDictionaries () {
-  const items = await ctx.api.listUserDir(DATA_DIR, true).catch(() => [])
+  const items = await ctx.api.listUserDir(DATA_DIR, true).catch(() => [] as Awaited<ReturnType<typeof ctx.api.listUserDir>>)
   const affs = items.filter(item => item.isFile && item.path.endsWith('.aff')).map(item => item.path.replace(/\.aff$/, ''))
   const dics = items.filter(item => item.isFile && item.path.endsWith('.dic')).map(item => item.path.replace(/\.dic$/, ''))
 
