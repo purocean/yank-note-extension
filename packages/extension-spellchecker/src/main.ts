@@ -106,7 +106,7 @@ registerPlugin({
 
         ctx.setting.changeSchema((schema) => {
           schema.properties[settingKeyDicName].enum = items
-          schema.properties[settingKeyDicName].description = i18n.t('setting-dictionary-desc', userDataDirPath)
+          schema.properties[settingKeyDicName].description = i18n.t('setting-dictionary-desc', userDataDirPath.replace(/\\/g, '/'))
         })
       })
 
