@@ -169,13 +169,13 @@ export declare function deleteTmpFile(name: string): Promise<ApiResult<any>>;
  * @param name
  * @returns
  */
-export declare function listUserDir(name: string, recursive?: boolean): Promise<ApiResult<{
+export declare function listUserDir(name: string, recursive?: boolean): Promise<{
     name: string;
     path: string;
     parent: string;
     isFile: boolean;
     isDir: boolean;
-}[]>>;
+}[]>;
 /**
  * Write user file.
  * @param name
