@@ -116,7 +116,31 @@ const Mermaid = defineComponent({
 
     watch(() => [props.code, props.file], renderDebounce)
 
-    onMounted(render)
+    let observer: ResizeObserver | null = null
+
+    onMounted(async () => {
+      await render()
+
+      let width = 0
+      observer = new ResizeObserver((entries) => {
+        const entry = entries[0]
+        if (!entry) return
+
+        if (!width) {
+          width = entry.contentRect.width
+          return
+        }
+
+        logger.error('container resize', entry.contentRect.width)
+
+        if (entry.contentRect.width !== width) {
+          width = entry.contentRect.width
+          renderDebounce()
+        }
+      })
+
+      observer.observe(container.value!)
+    })
 
     registerHook('THEME_CHANGE', renderDebounce)
     registerHook('EXPORT_BEFORE_PREPARE', beforeDocExport)
@@ -125,6 +149,8 @@ const Mermaid = defineComponent({
       removeHook('THEME_CHANGE', renderDebounce)
       removeHook('EXPORT_BEFORE_PREPARE', beforeDocExport)
       removeHook('EXPORT_AFTER_PREPARE', afterDocExport)
+
+      observer?.disconnect()
     })
 
     return () => {
