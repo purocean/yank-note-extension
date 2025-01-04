@@ -1,3 +1,15 @@
+# [1.10.0](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.9.0...extension-mermaid-1.10.0) (2025-01-04)
+
+
+### Features
+
+* **extension-mermaid:** add @mermaid-js/layout-elk as a dependency and register layout loaders ([b6a8fe2](https://github.com/purocean/yank-note-extension/commit/b6a8fe2415d12934c891b291459f6ce266e138ce))
+* **extension-mermaid:** add resize observer to trigger re-render on container size change ([008b515](https://github.com/purocean/yank-note-extension/commit/008b51544a183655a48a453f2c239d3a974cea47))
+* **extension-mermaid:** enhance code height for mermaid ([9093cc3](https://github.com/purocean/yank-note-extension/commit/9093cc3e64f7350f04ec9b89eb5fbb022df984ee))
+* **extension-mermaid:** update mermaid dependency to version 11.4.1 ([c80dcc6](https://github.com/purocean/yank-note-extension/commit/c80dcc60b968fd9f49f3b968da2b0e4094b84b88))
+
+
+
 # [1.9.0](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.8.0...extension-mermaid-1.9.0) (2024-09-08)
 
 
