@@ -37,6 +37,7 @@
     "prepublish": "npm run build"
   },
   "devDependencies": {
+    "@mermaid-js/layout-elk": "^0.1.7",
     "@rollup/plugin-node-resolve": "^13.2.1",
     "@rollup/plugin-replace": "^4.0.0",
     "@types/mermaid": "^8.2.9",

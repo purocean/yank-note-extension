@@ -1,5 +1,6 @@
 import { ctx, getExtensionBasePath } from '@yank-note/runtime-api'
 import type { Mermaid } from 'mermaid'
+import elkLayouts from '@mermaid-js/layout-elk'
 
 export type FileType = '.mmd' | '.mermaid'
 export const supportedFileTypes: FileType[] = ['.mmd', '.mermaid']
@@ -35,6 +36,9 @@ export async function getMermaidLib (): Promise<Mermaid> {
         })
       }
     })
+  }).then(lib => {
+    lib.registerLayoutLoaders(elkLayouts)
+    return lib
   })
 
   ;(iframe.contentWindow as any).mermaid = promise

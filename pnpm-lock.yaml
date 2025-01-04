@@ -602,6 +602,7 @@ importers:
 
   packages/extension-mermaid:
     specifiers:
+      '@mermaid-js/layout-elk': ^0.1.7
       '@rollup/plugin-node-resolve': ^13.2.1
       '@rollup/plugin-replace': ^4.0.0
       '@types/mermaid': ^8.2.9
@@ -622,6 +623,7 @@ importers:
       vue: ^3.2.33
       vue-tsc: ^0.34.11
     devDependencies:
+      '@mermaid-js/layout-elk': 0.1.7_mermaid@11.4.1
       '@rollup/plugin-node-resolve': 13.3.0
       '@rollup/plugin-replace': 4.0.0
       '@types/mermaid': 8.2.9
@@ -1741,6 +1743,16 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
+    dev: true
+
+  /@mermaid-js/layout-elk/0.1.7_mermaid@11.4.1:
+    resolution: {integrity: sha512-G3AJ2jMaCAqky2CT3z/sf3pK5UuS3tne98GsXDl3PkKByCmPmOYmJPf+6oX5PUlV3HNWWHuSgtZ9NU/CZDSuHQ==}
+    peerDependencies:
+      mermaid: ^11.0.0
+    dependencies:
+      d3: 7.9.0
+      elkjs: 0.9.3
+      mermaid: 11.4.1
     dev: true
 
   /@mermaid-js/parser/0.3.0:
@@ -3758,7 +3770,7 @@ packages:
       vite: ^3.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 3.2.3_sass@1.56.1+terser@5.26.0
+      vite: 3.2.3
       vue: 3.2.33
     dev: true
 
@@ -5812,6 +5824,10 @@ packages:
     dependencies:
       tslib: 2.3.0
       zrender: 5.3.1
+    dev: true
+
+  /elkjs/0.9.3:
+    resolution: {integrity: sha512-f/ZeWvW/BCXbhGEf1Ujp29EASo/lk1FDnETgNKwJrsVvGZhUWCZyg3xLJjAsxfOmt8KjswHmI5EwCQcPMpOYhQ==}
     dev: true
 
   /emoji-regex/10.2.1:
