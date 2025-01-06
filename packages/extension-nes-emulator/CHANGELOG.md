@@ -1,3 +1,7 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-nes-emulator-1.1.0...extension-nes-emulator-1.2.0) (2024-10-09)
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-nes-emulator-1.0.0...extension-nes-emulator-1.1.0) (2024-04-29)
 
 

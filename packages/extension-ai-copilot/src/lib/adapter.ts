@@ -50,12 +50,13 @@ export interface CompletionAdapter extends Adapter {
 
 export interface EditAdapter extends Adapter {
   type: 'edit'
-  state: Record<string, any> & { instruction: string, selection: string, context: string, withContext: boolean},
+  state: Record<string, any> & { instruction: string, selection: string, context: string, withContext: boolean, appendMode: boolean },
   fetchEditResults(
     selectedText: string,
     instruction: string,
     cancelToken: Monaco.CancellationToken,
-    onProgress: (res: { text: string, delta: string }) => void
+    onProgress: (res: { text: string, delta: string }) => void,
+    updateStatus: (status: string) => void
   ): Promise<string | null | undefined>
 }
 

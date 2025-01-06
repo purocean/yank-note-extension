@@ -18,4 +18,17 @@ module.exports = {
     __EXTENSION_VERSION__: true,
     __EXTENSION_ID__: true,
   },
+  overrides: [
+    {
+      files: ['src/adapters/custom/**/*.js'],
+      rules: {
+        quotes: 'off',
+        'quote-props': 'off',
+      },
+      globals: {
+        data: true,
+        env: true,
+      }
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapperRef" :class="{'ai-widget': true, loading}" @mousemove.capture.stop>
+  <div ref="wrapperRef" :class="{'ai-widget': true, loading}" @mousemove.capture.stop @contextmenu.stop>
     <div class="content">
       <h4 v-if="adapterType === 'edit' && type === 'edit'">{{ $t('ai-edit') }}</h4>
       <h4 v-if="adapterType === 'edit' && type === 'generate'">{{ $t('ai-generate') }}</h4>
@@ -16,7 +16,6 @@
           v-auto-resize="{minRows: 1, maxRows: 5}"
           v-textarea-on-enter
           @keydown.arrow-up="(e: any) => e.target.selectionStart === 0 && e.target.selectionEnd === 0 && showHistoryMenu()"
-          @mousedown.right="$event.preventDefault(); showHistoryMenu()"
           @keydown.escape="onEsc"
           @keydown.enter="onEnter"
           @keydown.stop
@@ -38,24 +37,30 @@
         <template v-else>
           <button class="small primary tr" @click="accept">{{ $t('accept') }}</button>
           <button class="small tr" @click="undo">{{ $t('discard') }}</button>
-          <button v-if="adapterType === 'edit'" class="small tr" @click="copy">{{ $t('copy') }}</button>
-          <button class="small tr" @click="reload"><svg-icon name="sync-alt-solid" width="11px" height="13px" /></button>
+          <button v-if="adapterType === 'edit'" class="small tr" @click="copy" :title="$t('copy-content')"><svg-icon name="clipboard" width="11px" height="13px" /></button>
+          <button class="small tr" @click="reload"><svg-icon name="sync-alt-solid" width="11px" height="13px" :title="$t('regenerate')" /></button>
         </template>
 
-        <div class="options">
-          <label v-if="adapter && adapter.state && adapterType === 'edit'">
-            <input type="checkbox" v-model="adapter.state.withContext" />
-            {{ $t('with-context') }}
-          </label>
-          <div v-if="adapter && adapter.state && adapterType === 'text2image'" class="image-size">
-            <span>W:</span><input type="number" v-model="adapter.state.width" style="width: 60px" />
-            <span>H:</span><input type="number" v-model="adapter.state.height" style="width: 60px" />
+        <template v-if="!loading">
+          <div class="options">
+            <label v-if="adapter && adapter.state && adapterType === 'edit'">
+              <input type="checkbox" v-model="adapter.state.withContext" />
+              {{ $t('with-context-widget') }}
+            </label>
+            <label v-if="type === 'edit' && adapter && adapter.state && adapterType === 'edit'">
+              <input type="checkbox" v-model="adapter.state.appendMode" />
+              {{ $t('append-mode') }}
+            </label>
+            <div v-if="adapter && adapter.state && adapterType === 'text2image'" class="image-size">
+              <span>W:</span><input type="number" v-model="adapter.state.width" style="width: 60px" />
+              <span>H:</span><input type="number" v-model="adapter.state.height" style="width: 60px" />
+            </div>
           </div>
-        </div>
 
-        <select v-model="state.adapter[adapterType]" @change="textareaRef?.focus()">
-          <option v-for="item in adapters" :key="item.id" :value="item.id">{{item.displayname}}</option>
-        </select>
+          <select v-model="state.adapter[adapterType]" @change="textareaRef?.focus()">
+            <option v-for="item in adapters" :key="item.id" :value="item.id">{{item.displayname}}</option>
+          </select>
+        </template>
       </div>
       <div v-else>{{ $t('no-adapters') }}</div>
       <div v-if="status" class="status">{{ status }}</div>
@@ -66,9 +71,9 @@
 <script lang="ts" setup>
 import { ctx } from '@yank-note/runtime-api'
 import { computed, defineEmits, defineProps, ref, watch, onBeforeUnmount, onMounted, shallowRef } from 'vue'
-import { i18n, showInstructionHistoryMenu, state, loading, globalCancelTokenSource } from './core'
-import { getAdapter, getAllAdapters } from './adapter'
-import { executeEdit, executeTextToImage } from './actions'
+import { i18n, showInstructionHistoryMenu, state, loading, globalCancelTokenSource } from '@/lib/core'
+import { getAdapter, getAllAdapters } from '@/lib/adapter'
+import { executeEdit, executeTextToImage } from '@/lib/actions'
 
 const SvgIcon = ctx.components.SvgIcon
 
@@ -163,8 +168,11 @@ function setImage (img: typeof image.value) {
   }, 50)
 }
 
+const layoutThrottle = ctx.lib.lodash.throttle(layout, 200)
+
 function updateStatus (_status: string) {
   status.value = _status
+  layoutThrottle()
 }
 
 async function process () {
@@ -343,6 +351,7 @@ onBeforeUnmount(() => {
     h4 {
       margin: 0;
       margin-bottom: 10px;
+      user-select: none;
     }
   }
 
@@ -400,7 +409,7 @@ onBeforeUnmount(() => {
     select, input[type=number] {
       font-size: 13px;
       padding: 1px;
-      width: 130px;
+      width: 126px;
       height: 22px;
     }
 
@@ -421,6 +430,8 @@ onBeforeUnmount(() => {
       label {
         display: flex;
         align-items: center;
+        margin-right: 4px;
+        font-size: 13px;
       }
     }
   }

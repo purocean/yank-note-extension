@@ -1,3 +1,4 @@
+import type { ResourceTagName } from '@fe/types';
 /**
  * Get all params from url.
  * @returns params
@@ -26,6 +27,7 @@ export declare const MONACO_EDITOR_NLS: {
     'zh-cn': string;
     'zh-tw': string;
 };
+export declare const RESOURCE_TAG_NAMES: ResourceTagName[];
 export declare const CSS_VAR_NAME: {
     PREVIEWER_HEIGHT: string;
 };
@@ -33,7 +35,6 @@ export declare const DOM_ATTR_NAME: {
     SOURCE_LINE_START: string;
     SOURCE_LINE_END: string;
     ORIGIN_SRC: string;
-    ORIGIN_HREF: string;
     TARGET_REPO: string;
     TARGET_PATH: string;
     LOCAL_IMAGE: string;
@@ -41,7 +42,9 @@ export declare const DOM_ATTR_NAME: {
     TOKEN_IDX: string;
     DISPLAY_NONE: string;
     WIKI_LINK: string;
+    WIKI_RESOURCE: string;
     IS_ANCHOR: string;
+    SKIP_EXPORT: string;
 };
 export declare const DOM_CLASS_NAME: {
     PREVIEW_HIGHLIGHT: string;

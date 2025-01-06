@@ -1,5 +1,20 @@
 import { ctx, getExtensionBasePath } from '@yank-note/runtime-api'
 import type { Mermaid } from 'mermaid'
+import elkLayouts from '@mermaid-js/layout-elk'
+
+export type FileType = '.mmd' | '.mermaid'
+export const supportedFileTypes: FileType[] = ['.mmd', '.mermaid']
+
+export const i18n = ctx.i18n.createI18n({
+  en: {
+    'edit-mermaid-diagram': 'Edit Mermaid Diagram',
+    'file-support-error': 'Only support .mmd or .mermaid file',
+  },
+  'zh-CN': {
+    'edit-mermaid-diagram': '编辑 Mermaid 图形',
+    'file-support-error': '仅支持 .mmd 或 .mermaid 文件',
+  },
+})
 
 export async function getMermaidLib (): Promise<Mermaid> {
   const iframe = await ctx.view.getRenderIframe()
@@ -21,6 +36,9 @@ export async function getMermaidLib (): Promise<Mermaid> {
         })
       }
     })
+  }).then(lib => {
+    lib.registerLayoutLoaders(elkLayouts)
+    return lib
   })
 
   ;(iframe.contentWindow as any).mermaid = promise
@@ -42,4 +60,9 @@ export async function initMermaidTheme (colorScheme?: 'light' | 'dark') {
   }
 
   mermaid.mermaidAPI.initialize({ theme })
+}
+
+export function supported (path: string) {
+  const ext = path && ctx.utils.path.extname(path)
+  return !!(ext && supportedFileTypes.includes(ext as FileType))
 }

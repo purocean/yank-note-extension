@@ -1,10 +1,12 @@
 import type { VNode } from 'vue';
+import type { OpenDialogOptions, PrintToPDFOptions } from 'electron';
 import type { Language, MsgPath } from '@share/i18n';
 import type { Doc, FileItem, PathItem, Repo } from '@share/types';
 import type MarkdownIt from 'markdown-it';
 import type Token from 'markdown-it/lib/token';
 import type * as Monaco from 'monaco-editor';
 export * from '@share/types';
+export type ResourceTagName = 'audio' | 'img' | 'source' | 'video' | 'track' | 'iframe' | 'embed';
 export type PositionScrollState = {
     editorScrollTop?: number;
     viewScrollTop?: number;
@@ -15,9 +17,18 @@ export type PositionState = {
 } | {
     anchor: string;
 } | PositionScrollState;
+export type ParseLinkResult = {
+    type: 'external';
+    href: string;
+} | {
+    type: 'internal';
+    path: string;
+    name: string;
+    position: PositionState | null;
+};
 export type SwitchDocOpts = {
     force?: boolean;
-    source?: 'markdown-link' | 'history-stack';
+    source?: 'markdown-link' | 'history-stack' | 'view-links';
     position?: PositionState | null;
 };
 export type TTitle = keyof {
@@ -35,6 +46,7 @@ export type SettingSchema = {
             defaultValue: BuildInSettings[K] extends any ? BuildInSettings[K] : any;
             enum?: string[] | number[];
             group: SettingGroup;
+            openDialogOptions?: OpenDialogOptions;
             needReloadWindowWhenChanged?: boolean;
             validator?: (schema: SettingSchema['properties'][K], value: BuildInSettings[K], path: string) => {
                 path: string;
@@ -46,14 +58,15 @@ export type SettingSchema = {
                 title: TTitle;
                 properties: {
                     [K in string]: {
-                        type: string;
+                        type: string | boolean;
                         title: TTitle;
                         description?: TTitle;
-                        options: {
+                        options?: {
                             inputAttributes: {
                                 placeholder: TTitle;
                             };
                         };
+                        openDialogOptions?: OpenDialogOptions;
                     };
                 };
             };
@@ -196,6 +209,16 @@ export declare namespace Components {
             onClick: (e: MouseEvent) => void;
         };
     }
+    namespace FixedFloat {
+        interface Props {
+            disableAutoFocus?: boolean;
+            top?: string | undefined;
+            right?: string | undefined;
+            bottom?: string | undefined;
+            left?: string | undefined;
+            closeBtn?: boolean;
+        }
+    }
     namespace QuickFilter {
         interface Item {
             label: string;
@@ -256,15 +279,7 @@ export type Keybinding = {
     keys: string | null;
     command: string;
 };
-export type PrintOpts = {
-    landscape?: boolean;
-    pageSize?: 'A0' | 'A1' | 'A2' | 'A3' | 'A4' | 'A5' | 'A6' | 'Legal' | 'Letter' | 'Tabloid' | 'Ledger' | {
-        height: number;
-        width: number;
-    };
-    scaleFactor?: number;
-    printBackground?: boolean;
-};
+export type PrintOpts = PrintToPDFOptions;
 export type ConvertOpts = {
     fromType: 'markdown' | 'html';
     toType: 'docx' | 'html' | 'rst' | 'adoc';
@@ -274,6 +289,7 @@ export type ConvertOpts = {
         inlineStyle: boolean;
         includeStyle: boolean;
         highlightCode: boolean;
+        includeToc: number[];
     };
 };
 export type RenderEnv = {
@@ -367,6 +383,7 @@ export interface BuildInSettings {
     'editor.suggest-on-trigger-characters': boolean;
     'editor.quick-suggestions': boolean;
     'editor.sticky-scroll-enabled': boolean;
+    'editor.enable-trigger-suggest-bulb': boolean;
     'render.md-html': boolean;
     'render.md-breaks': boolean;
     'render.md-linkify': boolean;
@@ -455,6 +472,7 @@ export type BuildInActions = {
     'plugin.electron-zoom.zoom-in': () => void;
     'plugin.electron-zoom.zoom-out': () => void;
     'plugin.electron-zoom.zoom-reset': () => void;
+    'plugin.view-links.view-document-links': () => void;
     'premium.show': (tab?: PremiumTab) => void;
     'base.find-in-repository': (query?: FindInRepositoryQuery) => void;
     'base.switch-repository-1': () => void;
@@ -507,8 +525,15 @@ export type BuildInHookTypes = {
         e: KeyboardEvent;
         view: HTMLElement;
     };
+    VIEW_DOM_ERROR: {
+        e: Event;
+        view: HTMLElement;
+    };
     VIEW_SCROLL: {
         e: Event;
+    };
+    VIEW_BEFORE_RENDER: {
+        env: RenderEnv;
     };
     VIEW_RENDER: never;
     VIEW_RENDERED: never;
@@ -620,6 +645,7 @@ export type BuildInHookTypes = {
         currentLang: Language;
     };
     SETTING_PANEL_BEFORE_SHOW: {};
+    SETTING_PANEL_AFTER_SHOW: {};
     SETTING_CHANGED: {
         schema: SettingSchema;
         changedKeys: (keyof BuildInSettings)[];
@@ -649,6 +675,21 @@ export type BuildInHookTypes = {
         };
     };
     PREMIUM_STATUS_CHANGED: never;
+    WORKER_INDEXER_BEFORE_START_WATCH: {
+        repo: Repo;
+    };
+    INDEXER_FS_CHANGE: {
+        repo: Repo;
+    };
+    AFTER_PARSE_LINK: {
+        params: {
+            currentFile: PathItem;
+            href: string;
+            isWikiLink: boolean;
+            tree?: Components.Tree.Node[];
+        };
+        result: ParseLinkResult | null;
+    };
 };
 export type Previewer = {
     name: string;
@@ -729,3 +770,33 @@ export type FrontMatterAttrs = {
     mdOptions?: Record<string, boolean>;
     defaultPreviewer?: string;
 };
+export interface IndexItemLink {
+    href: string;
+    internal: string | null;
+    position: PositionState | null;
+    blockMap?: number[] | null;
+}
+export interface IndexItemResource {
+    src: string;
+    internal: string | null;
+    tag: ResourceTagName;
+    blockMap?: number[] | null;
+}
+export interface IndexItem {
+    repo: string;
+    path: string;
+    name: string;
+    links: IndexItemLink[];
+    resources: IndexItemResource[];
+    frontmatter: {};
+    ctimeMs: number;
+    mtimeMs: number;
+    size: number;
+}
+export interface IndexStatus {
+    total: number;
+    indexed: number;
+    processing: string | null;
+    cost: number;
+    ready: boolean;
+}

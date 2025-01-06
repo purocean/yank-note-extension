@@ -27,13 +27,20 @@ const DrawioComponent = defineComponent({
     name: String,
     content: String,
     page: Number,
+    sourceMap: Array as any as () => [number, number],
   },
   setup (props) {
     const { t: _t, $t: _$t } = ctx.i18n.useI18n()
 
     const srcdoc = ref('')
-    const xml = ref('')
+    const drawioContent = ref('')
     const refIFrame = ref<any>()
+    const { Mask } = ctx.components
+    const refFullIFrame = ref<any>()
+
+    const fullScreenEditorContent = ref('')
+
+    const topOffset = ctx.env.isElectron ? '30px' : '0px'
 
     const init = async () => {
       const { html, content } = await buildSrcdoc({
@@ -43,7 +50,7 @@ const DrawioComponent = defineComponent({
         page: props.page || 1,
       })
       srcdoc.value = html
-      xml.value = content
+      drawioContent.value = content
     }
 
     watch(props, init, { immediate: true })
@@ -97,7 +104,9 @@ const DrawioComponent = defineComponent({
         drawioFile = { name: props.name || 'diagram.drawio', type: 'file', repo: props.repo, path: props.path }
       }
 
-      return [
+      const isBase64 = props.content && props.content.startsWith('data:')
+
+      const vnode = [
         h('div', { class: 'drawio-wrapper reduce-brightness', style: 'position: relative' }, [
           h(
             'div',
@@ -116,6 +125,7 @@ const DrawioComponent = defineComponent({
                     }),
                   ]
                 : [
+                    ...(isBase64 ? [button(_$t.value('edit'), () => { fullScreenEditorContent.value = props.content! })] : []),
                     button(_$t.value('open-in-new-window'), () => openWindow(buildSrc(srcdoc.value, _t('view-figure')))),
                   ]
               ),
@@ -123,7 +133,7 @@ const DrawioComponent = defineComponent({
           ),
           h(IFrame, {
             html: srcdoc.value,
-            'data-xml': xml.value,
+            'data-content': drawioContent.value,
             ref: refIFrame,
             onLoad: () => {
               resize()
@@ -136,12 +146,59 @@ const DrawioComponent = defineComponent({
           })
         ])
       ]
+
+      if (fullScreenEditorContent.value && !drawioFile && props.content) {
+        vnode.unshift(h(Mask, {
+          show: true,
+          maskCloseable: false,
+          escCloseable: false,
+          style: { paddingTop: topOffset }
+        }, [
+          h('iframe', {
+            src: buildEditorUrl(fullScreenEditorContent.value),
+            ref: refFullIFrame,
+            onLoad: (event) => {
+              const iframe: HTMLIFrameElement = event.target as any
+              iframe.contentWindow!.close = () => {
+                fullScreenEditorContent.value = ''
+              }
+
+              (iframe.contentWindow as any)!.saveBase64ContentUrl = (content: string) => {
+                if (!ctx.doc.isSameFile(ctx.store.state.currentFile, ctx.view.getRenderEnv()?.file) || !ctx.editor.isDefault()) {
+                  ctx.ui.useToast().show('warning', 'Can not save the file in full screen mode')
+                  return
+                }
+
+                if (!props.sourceMap || props.sourceMap.length < 2) {
+                  return
+                }
+
+                const startLine = props.sourceMap[0] + 2
+                const endLine = props.sourceMap[1] - 1
+
+                const editor = ctx.editor.getEditor()
+                const monaco = ctx.editor.getMonaco()
+                const model = editor.getModel()
+                const text = content.slice(content.indexOf(',') + 1)
+                const range = new monaco.Range(startLine, 1, endLine, model!.getLineLength(endLine) + 1)
+
+                editor.executeEdits('drawio', [{ range, text }])
+              }
+            },
+            class: 'drawio-editor skip-print',
+            style: { background: 'rgba(255, 255, 255, 0.5)', position: 'absolute', zIndex: 1, margin: 0, display: 'block', height: `calc(100vh - ${topOffset})` },
+            width: '100%'
+          }),
+        ]))
+      }
+
+      return vnode
     }
   }
 })
 
 export function MarkdownItPlugin (md: Markdown) {
-  const render = ({ url, content, page = 1, env }: any) => {
+  const render = ({ url, content, page = 1, env, sourceMap }: any) => {
     const currentFile = (env as RenderEnv).file
     if (url && currentFile) {
       let path: string
@@ -157,7 +214,7 @@ export function MarkdownItPlugin (md: Markdown) {
       return h(DrawioComponent, { repo, path, name: basename(path), content, page })
     }
 
-    return h(DrawioComponent, { content, page })
+    return h(DrawioComponent, { content, page, sourceMap })
   }
 
   const linkTemp = md.renderer.rules.link_open!.bind(md.renderer.rules)
@@ -183,6 +240,15 @@ export function MarkdownItPlugin (md: Markdown) {
     const token = tokens[idx]
 
     const code = token.content.trim()
+
+    if (token.info === 'diagram') { // for wiki.js
+      let content = code
+      if (content && !content.startsWith('data:')) {
+        content = 'data:image/svg+xml;base64,' + content
+      }
+      return render({ content, env, sourceMap: token.map }) as any
+    }
+
     const firstLine = code.split(/\n/)[0].trim()
     if (token.info !== 'xml' || !firstLine.includes('--drawio--')) {
       return fenceTemp(tokens, idx, options, env, slf)
@@ -207,6 +273,8 @@ export async function buildSrcdoc ({ repo, path, content, page }: F): Promise<{ 
 
   content = content.replace(/<!--.*?-->/gs, '').trim()
 
+  const isBase64 = content.startsWith('data:')
+
   const div = document.createElement('div')
   div.className = 'mxgraph'
   div.dataset.mxgraph = JSON.stringify({
@@ -216,7 +284,8 @@ export async function buildSrcdoc ({ repo, path, content, page }: F): Promise<{ 
     resize: true,
     toolbar: 'pages zoom layers',
     page: page - 1, // page start from 0
-    xml: content,
+    xml: isBase64 ? undefined : content,
+    url: isBase64 ? content : undefined,
   })
 
   const html = `

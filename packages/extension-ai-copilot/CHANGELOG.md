@@ -1,3 +1,48 @@
+## [1.27.4](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.27.3...extension-ai-copilot-1.27.4) (2024-10-16)
+
+
+
+## [1.27.3](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.27.2...extension-ai-copilot-1.27.3) (2024-10-16)
+
+
+
+## [1.27.2](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.27.1...extension-ai-copilot-1.27.2) (2024-09-20)
+
+
+
+## [1.27.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.27.0...extension-ai-copilot-1.27.1) (2024-09-20)
+
+
+
+# [1.27.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.26.1...extension-ai-copilot-1.27.0) (2024-09-20)
+
+
+
+## [1.26.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.26.0...extension-ai-copilot-1.26.1) (2024-09-18)
+
+
+
+# [1.26.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.25.1...extension-ai-copilot-1.26.0) (2024-09-17)
+
+
+
+## [1.25.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.25.0...extension-ai-copilot-1.25.1) (2024-09-16)
+
+
+
+# [1.25.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.24.1...extension-ai-copilot-1.25.0) (2024-09-16)
+
+
+### Features
+
+* **extension:** add dify-workflow adapter ([1ff6d49](https://github.com/purocean/yank-note-extension/commit/1ff6d4979cb2b0f27b48e6ec9377c89807c2036e))
+
+
+
+## [1.24.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.24.0...extension-ai-copilot-1.24.1) (2024-08-16)
+
+
+
 # [1.24.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.23.4...extension-ai-copilot-1.24.0) (2024-08-05)
 
 

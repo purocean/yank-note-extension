@@ -20,7 +20,7 @@ function encode (str: string) {
   return btoa(String.fromCharCode.apply(null, compressed)).replace(/\+/g, '-').replace(/\//g, '_')
 }
 
-const Mermaid = defineComponent({
+const Kroki = defineComponent({
   name: 'extension-kroki',
   props: {
     attrs: Object,
@@ -75,7 +75,7 @@ export const MarkdownItPlugin = (md: Markdown) => {
       if (type) {
         // remove first line
         const code = content.substring(content.indexOf('\n') + 1)
-        return h(Mermaid, { attrs: token.meta?.attrs, code, type }) as any
+        return h(Kroki, { attrs: token.meta?.attrs, code, type }) as any
       }
     }
 
@@ -85,7 +85,7 @@ export const MarkdownItPlugin = (md: Markdown) => {
       if (type) {
         // remove first line
         const code = content.substring(content.indexOf('\n') + 1)
-        return h(Mermaid, { attrs: token.meta?.attrs, code, type }) as any
+        return h(Kroki, { attrs: token.meta?.attrs, code, type }) as any
       }
     }
 

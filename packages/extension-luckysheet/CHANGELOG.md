@@ -1,3 +1,12 @@
+## [1.1.4](https://github.com/purocean/yank-note-extension/compare/extension-luckysheet-1.1.3...extension-luckysheet-1.1.4) (2024-08-15)
+
+
+### Features
+
+* **extension-luckysheet:** handle missing href attribute in MarkdownItPlugin ([18998d7](https://github.com/purocean/yank-note-extension/commit/18998d796f1a92e54649267f0b6999a9196b314a))
+
+
+
 ## [1.1.3](https://github.com/purocean/yank-note-extension/compare/extension-luckysheet-1.1.2...extension-luckysheet-1.1.3) (2024-01-11)
 
 

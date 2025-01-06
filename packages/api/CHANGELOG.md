@@ -1,3 +1,27 @@
+## [3.79.1](https://github.com/purocean/yank-note-extension/compare/api-3.79.0...api-3.79.1) (2025-01-02)
+
+
+
+# [3.79.0](https://github.com/purocean/yank-note-extension/compare/api-3.78.0...api-3.79.0) (2025-01-02)
+
+
+
+# [3.78.0](https://github.com/purocean/yank-note-extension/compare/api-3.77.1...api-3.78.0) (2024-12-18)
+
+
+
+## [3.77.1](https://github.com/purocean/yank-note-extension/compare/api-3.76.1...api-3.77.1) (2024-12-03)
+
+
+
+## [3.76.1](https://github.com/purocean/yank-note-extension/compare/api-3.75.4...api-3.76.1) (2024-09-08)
+
+
+
+## [3.75.4](https://github.com/purocean/yank-note-extension/compare/api-3.75.3...api-3.75.4) (2024-09-04)
+
+
+
 ## [3.75.3](https://github.com/purocean/yank-note-extension/compare/api-3.75.2...api-3.75.3) (2024-08-05)
 
 

@@ -39,7 +39,7 @@ function focusIframe () {
   })
 }
 
-async function saveState() {
+async function saveState () {
   const currentFile = ctx.store.state.currentFile
 
   if (!currentFile || !iframeRef.value) {
@@ -54,7 +54,9 @@ async function saveState() {
 
     const state = win.nes.toJSON()
     const content = ctx.utils.strToBase64(JSON.stringify(state))
-    await ctx.api.upload(currentFile.repo, content, filePath)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await ctx.api.upload(currentFile.repo, content, filePath, 'overwrite')
     ctx.tree.refreshTree()
     ctx.ui.useToast().show('info', 'State saved')
   } catch (error) {
@@ -65,7 +67,7 @@ async function saveState() {
   }
 }
 
-async function loadState() {
+async function loadState () {
   const currentFile = ctx.store.state.currentFile
 
   if (!currentFile || !iframeRef.value) {
@@ -83,7 +85,7 @@ async function loadState() {
 
   try {
     const filePath = currentFile.path + '.state'
-    const stateFile: Doc = { type: 'file', name: filePath + '.state', repo: currentFile.repo, path: filePath}
+    const stateFile: Doc = { type: 'file', name: filePath + '.state', repo: currentFile.repo, path: filePath }
     const content = await fetch(ctx.base.getAttachmentURL(stateFile)).then(res => res.text())
     const state = JSON.parse(content)
     const win: any = iframeRef.value.contentWindow
@@ -98,7 +100,7 @@ async function loadState() {
   }
 }
 
-async function resetState() {
+async function resetState () {
   const currentFile = ctx.store.state.currentFile
 
   if (!currentFile || !iframeRef.value) {

@@ -70,7 +70,7 @@
     </template>
   </template>
   <div v-if="hasAdvancedFormItem" class="advanced-toggle">
-    <label>
+    <label tabindex="-1">
       <input type="checkbox" v-model="showAdvanced" />
       {{ i18n.$t.value('show-advanced-settings') }}
     </label>
@@ -83,9 +83,9 @@
 
 <script lang="ts" setup>
 import { computed, ref, unref, defineProps, watchEffect, onBeforeUnmount, watch, onMounted } from 'vue'
-import { CURSOR_PLACEHOLDER, buildAdapterStateKey, i18n, showInstructionHistoryMenu, state } from './core'
 import { ctx } from '@yank-note/runtime-api'
-import { Adapter, AdapterType, FormItem } from './adapter'
+import { CURSOR_PLACEHOLDER, buildAdapterStateKey, i18n, showInstructionHistoryMenu, state } from '@/lib/core'
+import { Adapter, AdapterType, FormItem } from '@/lib/adapter'
 
 const SvgIcon = ctx.components.SvgIcon
 
@@ -250,7 +250,6 @@ watchEffect(() => {
   }
 
   .label {
-    margin-bottom: 4px;
     margin-right: 8px;
     flex: none;
     width: 80px;
@@ -325,7 +324,6 @@ watchEffect(() => {
     justify-content: flex-end;
     align-items: center;
     font-size: 13px;
-    cursor: pointer;
 
     input {
       margin-right: 3px;

@@ -10,8 +10,10 @@ export function getEditorPath (path?: string) {
   return ctx.utils.path.join(getExtensionBasePath(__EXTENSION_ID__), 'editor', path || '')
 }
 
-export function buildEditorUrl (file: Doc) {
-  const search = new URLSearchParams({ name: file.name, path: file.path, repo: file.repo })
+export function buildEditorUrl (fileOrBase64Url: Doc | string) {
+  const search = typeof fileOrBase64Url !== 'string'
+    ? new URLSearchParams({ name: fileOrBase64Url.name, path: fileOrBase64Url.path, repo: fileOrBase64Url.repo })
+    : new URLSearchParams({ base64ContentUrl: fileOrBase64Url })
   return getEditorPath('index.html') + '?' + search.toString()
 }
 

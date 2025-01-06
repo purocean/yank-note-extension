@@ -19,7 +19,7 @@ registerPlugin({
 
         if (token.info === 'markmap') {
           const source = token.content.trim()
-          return ctx.lib.vue.h(MarkmapPreview, { source, fence: true })
+          return ctx.lib.vue.h(MarkmapPreview, { source, file: env?.file, fence: true })
         }
 
         return temp(tokens, idx, options, env, slf)
@@ -35,7 +35,7 @@ registerPlugin({
             .replace(/\{.markmap[^}]*\}/gm, '')
             .trim()
 
-          return ctx.lib.vue.h(MarkmapPreview, { source: content, fence: true }) as any
+          return ctx.lib.vue.h(MarkmapPreview, { source: content, file: env?.file, fence: true }) as any
         }
 
         if (bulletListRule) {

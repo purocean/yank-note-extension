@@ -1,3 +1,12 @@
+## [1.2.4](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.2.3...extension-pop-preview-1.2.4) (2024-10-09)
+
+
+### Bug Fixes
+
+* **extension-popup-preview:** fix openWindow options ([31123fb](https://github.com/purocean/yank-note-extension/commit/31123fb3f66907a4f4b98b64e88d0bff8336ead0))
+
+
+
 ## [1.2.3](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.2.2...extension-pop-preview-1.2.3) (2024-07-02)
 
 

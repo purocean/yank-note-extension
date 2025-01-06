@@ -7,6 +7,28 @@ import { BaseCustomEditorContent } from '@yank-note/runtime-api'
 import { LIBRARY_FILE, LIBRARY_RETURN_URL, SETTING_KEY_FONT_HANDWRITING } from './lib'
 import i18n from './i18n'
 
+function validateEmbeddable (link: string) {
+  if (!link) {
+    return false
+  }
+
+  if (!/^https?:\/\//.test(link)) {
+    return false
+  }
+
+  try {
+    const url = new URL(link)
+    if (url.origin === window.location.origin) {
+      return false
+    }
+  } catch (error) {
+    console.error(error)
+    return false
+  }
+
+  return true
+}
+
 class EditorContent extends BaseCustomEditorContent {
   logger = this.ctx.utils.getLogger('excalidraw-editor')
 
@@ -14,6 +36,8 @@ class EditorContent extends BaseCustomEditorContent {
   lastSceneVersion = -1
   currentSceneVersion = -1
   save = () => Promise.resolve(undefined)
+
+  inElectron = navigator.userAgent.includes('Electron/')
 
   async readFile () {
     const isPng = this.io.file.path.toLowerCase().endsWith('.png')
@@ -255,6 +279,7 @@ class EditorContent extends BaseCustomEditorContent {
             langCode,
             onLibraryChange,
             libraryReturnUrl: LIBRARY_RETURN_URL,
+            validateEmbeddable,
             UIOptions: {
               canvasActions: {
                 loadScene: false,
@@ -276,6 +301,45 @@ class EditorContent extends BaseCustomEditorContent {
   }
 
   init () {
+    if (this.inElectron) {
+      const _open = (url: string) => {
+        if (!validateEmbeddable(url)) {
+          this.ctx.ui.useToast().show('warning', 'Invalid URL')
+          throw new Error('Invalid URL')
+        }
+
+        this.ctx.base.openExternal(url)
+      }
+
+      ;(window as any)._open = window.open
+      ;(window as any).open = (url: string) => {
+        if (url) {
+          return _open(url)
+        } else {
+          const newWindow = {}
+          Object.defineProperty(newWindow, 'location', {
+            get () {
+              return {
+                href: '',
+              }
+            },
+            set (val) {
+              if (val) {
+                _open(val)
+              }
+            },
+          })
+
+          return newWindow
+        }
+      }
+    } else {
+      const _open = window.open.bind(window)
+      ;(window as any).open = (url: string) => {
+        return _open(url, '_blank') // force open in new tab
+      }
+    }
+
     const excalidrawWrapper = document.getElementById('app')
     const root = ReactDOM.createRoot(excalidrawWrapper)
     root.render(React.createElement(this.App))

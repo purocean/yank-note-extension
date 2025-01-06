@@ -1,3 +1,12 @@
+# [2.5.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.4.0...extension-drawio-2.5.0) (2024-08-17)
+
+
+### Features
+
+* **extension-drawio:** add support for base64 content URLs in buildEditorUrl ([574e92c](https://github.com/purocean/yank-note-extension/commit/574e92c9ec9d5fc3111ba0dd0e6fae28af6a6479))
+
+
+
 # [2.4.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.3.0...extension-drawio-2.4.0) (2024-07-05)
 
 

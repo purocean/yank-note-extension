@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-nes-emulator",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "displayName": "NES Emulator",
   "description": "Run NES games in Yank Note",
   "displayName_ZH-CN": "NES 模拟器",
@@ -47,7 +47,7 @@
     "@vitejs/plugin-vue": "^3.2.0",
     "@vue/eslint-config-standard": "^6.1.0",
     "@vue/eslint-config-typescript": "^10.0.0",
-    "@yank-note/runtime-api": "workspace:^3.75.3",
+    "@yank-note/runtime-api": "workspace:^3.79.1",
     "conventional-changelog-cli": "^2.2.2",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.26.0",

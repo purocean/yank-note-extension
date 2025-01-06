@@ -43,6 +43,8 @@ declare const data: {
     'file-readonly-desc': string;
     'can-not-edit-this-file-type': string;
     'read-only-mode-desc': string;
+    'trigger-suggestions': string;
+    'table-of-contents': string;
     premium: {
         confetti: string;
         'need-purchase': string;
@@ -207,6 +209,10 @@ declare const data: {
             title: string;
             content: string;
         };
+        'force-delete-dialog': {
+            title: string;
+            content: string;
+        };
         'move-dialog': {
             title: string;
             content: string;
@@ -269,6 +275,7 @@ declare const data: {
             readme: string;
             features: string;
             shortcuts: string;
+            guide: string;
             plugin: string;
         };
         terminal: string;
@@ -348,6 +355,7 @@ declare const data: {
             zoom: string;
             'use-browser': string;
             'include-bg': string;
+            'generate-document-outline': string;
         };
         'use-html': string;
         'use-markdown': string;
@@ -365,6 +373,9 @@ declare const data: {
         'delete-warning': string;
         'error-choose-repo-path': string;
         'change-keyboard-shortcuts': string;
+        'reset-title': string;
+        'reset-confirm-title': string;
+        'reset-confirm-desc': string;
         tabs: {
             repos: string;
             appearance: string;
@@ -383,6 +394,7 @@ declare const data: {
                 'name-placeholder': string;
                 path: string;
                 'path-placeholder': string;
+                'enable-indexing': string;
             };
             editor: {
                 'mouse-wheel-zoom': string;
@@ -400,6 +412,7 @@ declare const data: {
                 'sticky-scroll-enabled': string;
                 'quick-suggestions': string;
                 'enable-ai-copilot-action': string;
+                'enable-trigger-suggest-bulb': string;
             };
             render: {
                 'md-html': string;
@@ -451,7 +464,6 @@ declare const data: {
             proxy: {
                 enabled: string;
                 server: string;
-                'server-hint': string;
                 'bypass-list': string;
                 'pac-url': string;
             };
@@ -615,6 +627,7 @@ declare const data: {
         type: string;
         'inline-style': string;
         'include-style': string;
+        'include-toc': string;
         'inline-image': string;
         'upload-image': string;
         'highlight-code': string;
@@ -713,6 +726,7 @@ declare const data: {
         'plugin_document-history-stack_forward': string;
         'plugin_editor_focus-editor': string;
         'plugin_switch-todo_switch': string;
+        'plugin_view-links_view-document-links': string;
         'view_enter-presentation': string;
         'workbench_show-quick-open': string;
         'workbench_toggle-outline': string;
@@ -764,6 +778,29 @@ declare const data: {
         'copy-image': string;
         'delete-image': string;
         'open-in-new-tab': string;
+    };
+    'index-status': {
+        'switch-repository-html': string;
+        'enable-indexing-html': string;
+        indexing: string;
+        indexed: string;
+    };
+    'view-links': {
+        'view-links': string;
+        links: string;
+        resources: string;
+        'back-links': string;
+        'no-result': string;
+        'links-in': string;
+        'resources-in': string;
+        'back-links-for': string;
+        're-index': string;
+        'disable-index': string;
+    };
+    'insert-table': {
+        'insert-table': string;
+        insert: string;
+        compact: string;
     };
 };
 export type BaseLanguage = typeof data;

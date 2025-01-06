@@ -55,9 +55,10 @@ export declare function copyFile(file: FileItem, newPath: string): Promise<ApiRe
 /**
  * Delete a file or dir.
  * @param file
+ * @param trash Move to trash or not, default is true.
  * @returns
  */
-export declare function deleteFile(file: PathItem): Promise<ApiResult<any>>;
+export declare function deleteFile(file: PathItem, trash?: boolean): Promise<ApiResult<any>>;
 export declare function fetchHistoryList(file: PathItem): Promise<{
     size: number;
     list: {
@@ -71,9 +72,12 @@ export declare function commentHistoryVersion(file: PathItem, version: string, m
 /**
  * Fetch file tree from a repository.
  * @param repo
+ * @param sort
+ * @param include
+ * @param noEmptyDir
  * @returns
  */
-export declare function fetchTree(repo: string, sort: FileSort): Promise<Components.Tree.Node[]>;
+export declare function fetchTree(repo: string, sort: FileSort, include?: string, noEmptyDir?: boolean): Promise<Components.Tree.Node[]>;
 /**
  * Fetch custom styles.
  * @returns
@@ -99,7 +103,7 @@ export declare function choosePath(options: Record<string, any>): Promise<{
     canceled: boolean;
     filePaths: string[];
 }>;
-type SearchReturn = (onResult: (result: ISerializedFileMatch[]) => void, onMessage?: (message: IProgressMessage) => void) => Promise<ISerializedSearchSuccess | null>;
+type SearchReturn = (onResult: (result: ISerializedFileMatch[]) => void | Promise<void>, onMessage?: (message: IProgressMessage) => void | Promise<void>) => Promise<ISerializedSearchSuccess | null>;
 /**
  * Search files.
  * @param controller
@@ -113,10 +117,16 @@ export declare function search(controller: AbortController, query: ITextQuery): 
  * @param query
  * @returns
  */
-export declare function watchFs(repo: string, path: string, options: WatchOptions, onResult: (result: {
+export declare function watchFs(repo: string, path: string | string[], options: WatchOptions & {
+    mdContent?: boolean;
+    mdFilesOnly?: boolean;
+}, onResult: (result: {
     eventName: 'add' | 'change' | 'unlink' | 'addDir' | 'unlinkDir';
     path: string;
+    content?: string | null;
     stats?: Stats;
+} | {
+    eventName: 'ready';
 }) => void, onError: (error: Error) => void): Promise<{
     result: Promise<string | null>;
     abort: () => void;
@@ -126,8 +136,12 @@ export declare function watchFs(repo: string, path: string, options: WatchOption
  * @param repo
  * @param fileBase64Url
  * @param filePath
+ * @param ifExists
  */
-export declare function upload(repo: string, fileBase64Url: string, filePath: string): Promise<ApiResult<any>>;
+export declare function upload(repo: string, fileBase64Url: string, filePath: string, ifExists?: 'rename' | 'overwrite' | 'skip' | 'error'): Promise<ApiResult<{
+    path: string;
+    hash: string;
+}>>;
 /**
  * Write temporary file.
  * @param name
@@ -150,6 +164,18 @@ export declare function readTmpFile(name: string): Promise<Response>;
  * @returns
  */
 export declare function deleteTmpFile(name: string): Promise<ApiResult<any>>;
+/**
+ * List user dir.
+ * @param name
+ * @returns
+ */
+export declare function listUserDir(name: string, recursive?: boolean): Promise<{
+    name: string;
+    path: string;
+    parent: string;
+    isFile: boolean;
+    isDir: boolean;
+}[]>;
 /**
  * Write user file.
  * @param name

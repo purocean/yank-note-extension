@@ -63,7 +63,7 @@ registerPlugin({
 
           const url = new URL(location.origin)
           url.searchParams.set('mode', 'share-preview')
-          _win = ctx.env.openWindow(url.toString(), '_blank', { alwaysOnTop: false })
+          _win = ctx.env.openWindow(url.toString(), '_blank', { alwaysOnTop: false, webSecurity: false })
           ctx.layout.toggleView(false)
 
           if (_win) {

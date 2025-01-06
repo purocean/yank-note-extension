@@ -1,10 +1,12 @@
-# Yank Note 扩展
+# Yank Note Extension
 
-Yank Note 支持 “**JavaScript 插件**” 和 “**自定义 CSS 样式**” 功能。如果你想将自己编写的插件和样式分享给其他人使用，那么你可以将它们制作成**扩展**的形式分享出去。
+English | [简体中文](./README_ZH-CN.md)
 
-## 扩展结构
+Yank Note supports "**JavaScript plugins**" and "**custom CSS styles**". If you want to share your own plugins and styles with others, you can package them into an **extension** for distribution.
 
-扩展是由基础信息、JavaScript 插件、Css 样式和资源组合在一起构成，使用 NPM 包的形式进行分发。
+## Extension Structure
+
+An extension is composed of basic information, JavaScript plugins, CSS styles, and resources, and is distributed in the form of an NPM package.
 
 ```mermaid
 graph TB
@@ -15,82 +17,80 @@ Themes[Themes: a.css, b.css] --> Extension
 Resources[Resources: a.png, b.ttf] --> Extension
 ```
 
-插件相关开发可参考[插件开发指南](https://github.com/purocean/yn/blob/develop/help/PLUGIN.md)，自定义样式可以参考[自定义样式](https://github.com/purocean/yn/blob/develop/help/FEATURES.md#custom-styles)，元信息编写规则参考本文后面的章节。
+For plugin development, you can refer to the [Plugin Development Guide](https://github.com/purocean/yn/blob/develop/help/PLUGIN.md), for custom styles, you can refer to [Custom Styles](https://github.com/purocean/yn/blob/develop/help/FEATURES.md#custom-styles), and the rules for writing metadata are in the following sections of this document.
 
-这里有一个[扩展示例仓库](https://github.com/purocean/yank-note-extension-example)，可以作为整体参考。
+There is an [example extension repository](https://github.com/purocean/yank-note-extension-example) that can be used as a reference for the whole process.
 
-### 基础信息
+### Basic Information
 
-扩展包根目录下请包含 `README.md` 和 `CHANGELOG.md` 文件，方便在扩展管理中对用户展示。
+Please include `README.md` and `CHANGELOG.md` files in the root directory of the extension package for display to users in the extension management.
 
-扩展的信息保存在 `package.json` 中。
+The extension information is saved in `package.json`.
 
-`package.json` 中字段可以参考 [package.json | npm Docs](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#homepage)，其中 `name`, `version`, `description`, `homepage`, `author`, `license` 字段是必须的。
+The fields in `package.json` can refer to [package.json | npm Docs](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#homepage), where the `name`, `version`, `description`, `homepage`, `author`, `license` fields are required.
 
-除了上述字段外，你可能还需要额外定义如下字段：
+In addition to the above fields, you may also need to define the following fields:
 
-| 字段 | 类型 | 说明 | 示例 |
+| Field | Type | Description | Example |
 | -- | -- | -- | -- |
-| `displayName` | *必须* `string` | 显示名 | `Hello World` |
-| `icon` | *必须* `string` | 图标 | `./icon.png` |
-| `engines` | *必须* `{ 'yank-note': string }` | 兼容的 Yank Note 版本范围 | `{"node": ">=14.6.0", "yank-note": "^3.30.0"}` |
-| `main` | *可选* `string` | JavasScript 插件文件 | `./dist/index.js` |
-| `style` | *可选* `string` | CSS 样式文件 | `./dist/style.css` |
-| `themes` | *可选* `Array<{ name: string, css: string }>` | 主题样式文件。 | `[{"name": "Red", "css": "./themes/demo1.css"}]` |
+| `displayName` | *Required* `string` | Display name | `Hello World` |
+| `icon` | *Required* `string` | Icon | `./icon.png` |
+| `engines` | *Required* `{ 'yank-note': string }` | Compatible Yank Note version range | `{"node": ">=14.6.0", "yank-note": "^3.30.0"}` |
+| `main` | *Optional* `string` | JavaScript plugin file | `./dist/index.js` |
+| `style` | *Optional* `string` | CSS style file | `./dist/style.css` |
+| `themes` | *Optional* `Array<{ name: string, css: string }>` | Theme style files. | `[{"name": "Red", "css": "./themes/demo1.css"}]` |
 
+**Internationalization**
 
-**国际化**
-
-如果要使 `displayName` 和 `description` 字段支持多语言，可以使用 `<key>_<LANGUAGE>` 形式定义多个。LANGUAGE 需要大写。
+If you want to support multiple languages for the `displayName` and `description` fields, you can define multiple ones in the form of `<key>_<LANGUAGE>`. LANGUAGE should be in uppercase.
 
 ```json
 {
     "displayName": "HelloWorld",
     "displayName_EN": "HelloWorld",
     "displayName_ZH-CN": "你好世界",
-    "description": "hello world!"
-    "description_ZH-CN": "你好世界！",
+    "description": "hello world!",
+    "description_ZH-CN": "你好世界！"
 }
 ```
 
-[示例 `package.json` 文件](https://github.com/purocean/yank-note-extension-example/blob/main/package.json)
+[Example `package.json` file](https://github.com/purocean/yank-note-extension-example/blob/main/package.json)
 
-### JavaScript 插件
+### JavaScript Plugins
 
-JavaScript 入口文件在 `package.json` 中的 `main` 字段中定义。
+The JavaScript entry file is defined in the `main` field of `package.json`.
 
-因为插件是在浏览器中运行，所以不支持 `require` 或 `import` 语法，需要提前打包好。
+Since plugins run in the browser, they do not support `require` or `import` syntax and need to be packaged in advance.
 
-### 样式文件
+### Style Files
 
-- 在 `package.json` 中的 `style` 中定义插件样式文件，和插件一并加载。
-- 在 `package.json` 中的 `themes` 中定义主题样式文件，用户在“设置”中选取使用。
+- Define the plugin style file in the `style` of `package.json`, and load it with the plugin.
+- Define the theme style file in the `themes` of `package.json`, and users can select and use it in the "Settings".
 
-### 静态文件目录
+### Static Files Directory
 
-[Yank Note 扩展目录] 会加入应用静态文件查找目录。
+The [Yank Note Extension Directory] will be added to the application's static file search directory.
 
-使用静态资源时候需要注意需要路径是否拼接正确。可以使用相对路径或调用 [`getExtensionBasePath`](https://github.com/purocean/yank-note-extension/blob/ef321713d4f24318dd3ad657af723325b426edb6/packages/api/src/index.ts#L24) 方法获取路径。
+When using static resources, pay attention to whether the path is correctly concatenated. You can use relative paths or call the [`getExtensionBasePath`](https://github.com/purocean/yank-note-extension/blob/ef321713d4f24318dd3ad657af723325b426edb6/packages/api/src/index.ts#L24) method to get the path.
 
-## 开发扩展
+## Developing Extensions
 
-开发插件时候建议在 Chrome 浏览器中打开 Yank Note，方便调试。打开方法：右键点击托盘图标 --> 点击“浏览器中打开”
+When developing a plugin, it is recommended to open Yank Note in the Chrome browser for easy debugging. To open it: right-click the tray icon --> click "Open in browser"
 
-1. 使用[脚手架](https://github.com/purocean/yank-note-extension/tree/main/packages/create-extension)创建项目: `yarn create yank-note-extension`。包名建议以`yank-note-extension-` 开头。
-2. 进入项目后，安装依赖: `yarn install`
-3. 链接当前目录到 [Yank Note 扩展目录]: `yarn run link-extension`
-4. 启动开发: `yarn run dev`
-5. 刷新浏览器页面
-6. 点击“工具” --> “扩展中心”，启用开发中的扩展
+1. Use the [scaffold](https://github.com/purocean/yank-note-extension/tree/main/packages/create-extension) to create a project: `yarn create yank-note-extension`. It is suggested to start the package name with `yank-note-extension-`.
+2. After entering the project, install dependencies: `yarn install`
+3. Link the current directory to the [Yank Note Extension Directory]: `yarn run link-extension`
+4. Start development: `yarn run dev`
+5. Refresh the browser page
+6. Click "Tools" --> "Extension Center" to enable the extension under development
 
-现在你应该能在“状态栏”菜单中看到“你好世界”的菜单了。
+Now you should be able to see the "Hello World" menu in the "status bar" menu.
 
-## 分发扩展
+## Distributing Extensions
 
-当你开发完成后，如果你想要将扩展给别人使用，有两种方式：
+After you have finished developing, if you want to make the extension available for others to use, there are two ways:
 
-1. 手动分发：告知用户下载方式及安装步骤。用户将扩展放置到[Yank Note 扩展目录]中，然后在扩展管理面板里面启用。
-2. 使用 Yank Note 扩展注册中心分发，用户可以直接在扩展管理面板中下载/升级。请访问 [yank-note-registry](https://github.com/purocean/yank-note-registry) 了解更多。
+1. Manual distribution: Inform users of the download method and installation steps. Users place the extension in the [Yank Note Extension Directory], and then enable it in the extension management panel.
+2. Use the Yank Note Extension Registry for distribution, where users can download/upgrade directly from the extension management panel. Please visit [yank-note-registry](https://github.com/purocean/yank-note-registry) for more information.
 
-
-[Yank Note 扩展目录]: https://github.com/purocean/yn/blob/develop/help/FEATURES.md#data-storage
+[Yank Note Extension Directory]: https://github.com/purocean/yn/blob/develop/help/FEATURES.md#data-storage

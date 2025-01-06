@@ -8,8 +8,8 @@ export class CodeActionProvider implements Monaco.languages.CodeActionProvider {
   logger = ctx.utils.getLogger(__EXTENSION_ID__ + '.CodeActionProvider')
 
   provideCodeActions (_model: Monaco.editor.ITextModel, range: Monaco.Range): Monaco.languages.ProviderResult<Monaco.languages.CodeActionList> {
-    // no selection and cursor not in end of line, no actions
-    if (range.isEmpty()) {
+    // selection is single line, no need to renumber
+    if (range.startLineNumber === range.endLineNumber) {
       return { dispose: () => 0, actions: [] }
     }
 

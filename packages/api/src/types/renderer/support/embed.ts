@@ -13,7 +13,7 @@ type BuildSrcOpts = {
  */
 export declare function buildSrc(html: string, title?: string, opts?: boolean): string;
 export declare function buildSrc(html: string, title?: string, opts?: BuildSrcOpts): string;
-export declare const IFrame: import("vue").DefineComponent<{
+export declare const IFrame: import("vue").DefineComponent<import("vue").ExtractPropTypes<{
     debounce: {
         type: NumberConstructor;
         default: number;
@@ -29,9 +29,9 @@ export declare const IFrame: import("vue").DefineComponent<{
     html: StringConstructor;
     iframeProps: PropType<IframeHTMLAttributes>;
     onLoad: PropType<(iframe: HTMLIFrameElement) => void>;
-}, () => import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+}>, () => import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
     [key: string]: any;
-}> | null, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").PublicProps, Readonly<import("vue").ExtractPropTypes<{
+}> | null, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").PublicProps, Readonly<import("vue").ExtractPropTypes<{
     debounce: {
         type: NumberConstructor;
         default: number;
@@ -47,9 +47,9 @@ export declare const IFrame: import("vue").DefineComponent<{
     html: StringConstructor;
     iframeProps: PropType<IframeHTMLAttributes>;
     onLoad: PropType<(iframe: HTMLIFrameElement) => void>;
-}>>, {
+}>> & Readonly<{}>, {
     triggerParentKeyBoardEvent: boolean;
     globalStyle: boolean;
     debounce: number;
-}, {}>;
+}, {}, {}, {}, string, import("vue").ComponentProvideOptions, true, {}, any>;
 export {};

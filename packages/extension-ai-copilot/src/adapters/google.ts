@@ -1,5 +1,5 @@
-import { CompletionAdapter, EditAdapter, Panel } from '@/adapter'
-import { i18n, proxyFetch, readReader, COMPLETION_DEFAULT_SYSTEM_MESSAGE, EDIT_DEFAULT_SYSTEM_MESSAGE } from '@/core'
+import { CompletionAdapter, EditAdapter, Panel } from '@/lib/adapter'
+import { i18n, proxyFetch, readReader, COMPLETION_DEFAULT_SYSTEM_MESSAGE, EDIT_DEFAULT_SYSTEM_MESSAGE } from '@/lib/core'
 import { ctx } from '@yank-note/runtime-api'
 import { Position, editor, languages, CancellationToken } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { reactive, watch } from 'vue'
@@ -236,6 +236,7 @@ export class GoogleAIEditAdapter extends BaseGoogleAIAdapter implements EditAdap
 
   state = reactive({
     withContext: false,
+    appendMode: false,
     selection: '',
     context: '',
     instruction: this.defaultInstruction,

@@ -1,4 +1,4 @@
-import type { Components, Doc, FileSort, Repo } from '@fe/types';
+import type { Components, Doc, FileSort, IndexStatus, Repo } from '@fe/types';
 import { watch, watchEffect } from 'vue';
 export declare const initState: {
     tree: Components.Tree.Node[] | null;
@@ -20,6 +20,10 @@ export declare const initState: {
     currentContent: string;
     inComposition: boolean;
     currentRepo: Repo | undefined;
+    currentRepoIndexStatus: {
+        repo: string;
+        status: IndexStatus;
+    } | null;
     currentFile: Doc | null | undefined;
     recentOpenTime: Record<string, number>;
     tabs: Components.FileTabs.Item[];
@@ -63,7 +67,18 @@ declare const _default: {
         currentRepo: {
             name: string;
             path: string;
+            enableIndexing: boolean;
         } | undefined;
+        currentRepoIndexStatus: {
+            repo: string;
+            status: {
+                total: number;
+                indexed: number;
+                processing: string | null;
+                cost: number;
+                ready: boolean;
+            };
+        } | null;
         currentFile: {
             type: "file" | "dir";
             name: string;

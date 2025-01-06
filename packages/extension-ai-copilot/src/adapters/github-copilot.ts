@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
-import { CompletionAdapter, Panel } from '@/adapter'
+import { CompletionAdapter, Panel } from '@/lib/adapter'
 import type { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
-import { state } from '@/core'
+import { state } from '@/lib/core'
 import { ctx } from '@yank-note/runtime-api'
 
 export class GithubCopilotCompletionAdapter implements CompletionAdapter {
