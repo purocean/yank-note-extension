@@ -407,6 +407,10 @@ async function onStatusChange (val: string) {
 
 function search () {
   ctx.action.getActionHandler('filter.choose-document')().then(doc => {
+    if (!doc) {
+      return
+    }
+
     hoverState.value = {
       node: doc.path,
       neighbors: new Set(graph!.neighbors(doc.path)),
