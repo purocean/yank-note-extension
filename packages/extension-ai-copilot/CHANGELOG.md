@@ -1,3 +1,12 @@
+## [1.27.5](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.27.4...extension-ai-copilot-1.27.5) (2025-01-07)
+
+
+### Bug Fixes
+
+* **extension-ai-copilot:** handle potential null values for model and position ([a15c604](https://github.com/purocean/yank-note-extension/commit/a15c6046f2f378dea46984145d6b75dc83d953c2))
+
+
+
 ## [1.27.4](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.27.3...extension-ai-copilot-1.27.4) (2024-10-16)
 
 
