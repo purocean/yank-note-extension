@@ -45,6 +45,7 @@ declare const data: {
     'read-only-mode-desc': string;
     'trigger-suggestions': string;
     'table-of-contents': string;
+    'text-comparator': string;
     premium: {
         confetti: string;
         'need-purchase': string;
@@ -263,6 +264,7 @@ declare const data: {
             'share-preview': string;
             print: string;
             export: string;
+            'open-text-comparator': string;
         };
         'document-info': {
             selected: string;
@@ -692,7 +694,12 @@ declare const data: {
     };
     'search-panel': {
         'search-files': string;
+        'replace-files': string;
         'placeholder-search': string;
+        'placeholder-replace': string;
+        'replace-confirm-title': string;
+        'replace-confirm-content': string;
+        'replace-all': string;
         'for-history': string;
         'files-to-include': string;
         'files-to-exclude': string;

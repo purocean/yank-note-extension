@@ -1,5 +1,5 @@
 import type * as Monaco from 'monaco-editor';
-import { CustomEditor } from '@fe/types';
+import type { CustomEditor, CustomEditorCtx } from '@fe/types';
 export type SimpleCompletionItem = {
     label: string;
     kind?: Monaco.languages.CompletionItemKind;
@@ -17,6 +17,8 @@ export type SimpleCompletionItem = {
 export type SimpleCompletionItemTappers = (items: SimpleCompletionItem[]) => void;
 declare let monaco: typeof Monaco;
 declare let editor: Monaco.editor.IStandaloneCodeEditor;
+export declare const DEFAULT_MAC_FONT_FAMILY = "MacEmoji, Menlo, Monaco, 'Courier New', monospace";
+export declare const DEFAULT_MARKDOWN_EDITOR_NAME = "default-markdown-editor";
 /**
  * Get default editor options.
  */
@@ -121,7 +123,7 @@ export declare function getSelectionInfo(): {
     selectedLength: number;
     selectedLines: number;
     selectionCount: number;
-};
+} | undefined;
 /**
  * Toggle editor word wrap.
  */
@@ -158,8 +160,9 @@ export declare function switchEditor(name: string): void;
 /**
  * Register a custom editor.
  * @param editor Editor
+ * @param override Override the existing editor
  */
-export declare function registerCustomEditor(editor: CustomEditor): void;
+export declare function registerCustomEditor(editor: CustomEditor, override?: boolean): void;
 /**
  * Remove a custom editor.
  * @param name Editor name
@@ -170,6 +173,10 @@ export declare function removeCustomEditor(name: string): void;
  * @returns Editors
  */
 export declare function getAllCustomEditors(): CustomEditor[];
+/**
+ * Get all available custom editors.
+ */
+export declare function getAvailableCustomEditors(ctx: CustomEditorCtx): Promise<CustomEditor[]>;
 /**
  * Trigger save.
  */

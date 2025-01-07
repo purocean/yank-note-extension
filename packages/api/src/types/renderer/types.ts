@@ -30,6 +30,7 @@ export type SwitchDocOpts = {
     force?: boolean;
     source?: 'markdown-link' | 'history-stack' | 'view-links';
     position?: PositionState | null;
+    extra?: any;
 };
 export type TTitle = keyof {
     [K in MsgPath as `T_${K}`]: never;
@@ -196,6 +197,7 @@ export declare namespace Components {
     }
     namespace Tree {
         interface Node extends Pick<Doc, 'type' | 'name' | 'path' | 'repo'> {
+            type: 'file' | 'dir';
             mtime?: number;
             birthtime?: number;
             marked?: boolean;
@@ -446,7 +448,7 @@ export type BuildInActions = {
     'editor.refresh-custom-editor': () => void;
     'editor.trigger-save': () => void;
     'workbench.show-quick-open': () => void;
-    'filter.choose-document': () => Promise<Doc>;
+    'filter.choose-document': () => Promise<Doc | null>;
     'file-tabs.switch-left': () => void;
     'file-tabs.switch-right': () => void;
     'file-tabs.close-current': () => void;
@@ -473,6 +475,7 @@ export type BuildInActions = {
     'plugin.electron-zoom.zoom-out': () => void;
     'plugin.electron-zoom.zoom-reset': () => void;
     'plugin.view-links.view-document-links': () => void;
+    'plugin.text-comparator.open-text-comparator': () => void;
     'premium.show': (tab?: PremiumTab) => void;
     'base.find-in-repository': (query?: FindInRepositoryQuery) => void;
     'base.switch-repository-1': () => void;
@@ -703,6 +706,7 @@ export type CustomEditor = {
     name: string;
     displayName: string;
     hiddenPreview?: boolean;
+    supportNonNormalFile?: boolean;
     when: (ctx: CustomEditorCtx) => boolean | Promise<boolean>;
     component: any;
     getIsDirty?: () => boolean | Promise<boolean>;

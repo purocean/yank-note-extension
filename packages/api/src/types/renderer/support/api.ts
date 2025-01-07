@@ -34,7 +34,7 @@ export declare function readFile(file: PathItem, asBase64?: boolean): Promise<Fi
  * @param asBase64
  * @returns
  */
-export declare function writeFile(file: Doc, content?: string, asBase64?: boolean): Promise<{
+export declare function writeFile(file: Pick<Doc, 'repo' | 'path' | 'contentHash'>, content?: string, asBase64?: boolean): Promise<{
     hash: string;
     stat: FileStat;
 }>;

@@ -1,5 +1,9 @@
 import { Optional } from 'utility-types';
 import type { DocType, Doc, DocCategory, PathItem, SwitchDocOpts } from '@fe/types';
+export declare const URI_SCHEME = "yank-note";
+type PathItemWithType = PathItem & {
+    type?: Doc['type'];
+};
 /**
  * Get absolutePath of document
  * @param doc
@@ -15,6 +19,12 @@ export declare function createCurrentDocChecker(): {
     changed: () => boolean;
     throwErrorIfChanged: () => void;
 };
+/**
+ * Get all document categories.
+ * @param doc
+ * @returns
+ */
+export declare function cloneDoc(doc?: Doc | null): Doc | null;
 /**
  * Check if the document is a markdown file.
  * @param doc
@@ -40,43 +50,51 @@ export declare function isEncrypted(doc?: Pick<Doc, 'path' | 'type'> | null): bo
  * @param docB
  * @returns
  */
-export declare function isSameRepo(docA: Doc | null | undefined, docB: Doc | null | undefined): boolean | null | undefined;
+export declare function isSameRepo(docA: PathItemWithType | null | undefined, docB: PathItemWithType | null | undefined): boolean | null | undefined;
 /**
  * Determine if it is the same document.
  * @param docA
  * @param docB
  * @returns
  */
-export declare function isSameFile(docA: PathItem | null | undefined, docB: PathItem | null | undefined): boolean | null | undefined;
+export declare function isSameFile(docA: PathItemWithType | null | undefined, docB: PathItemWithType | null | undefined): boolean | null | undefined;
 /**
  * Determine whether document B is the same as document A or a subordinate to directory A.
  * @param docA
  * @param docB
  * @returns
  */
-export declare function isSubOrSameFile(docA: PathItem | null | undefined, docB?: PathItem | null | undefined): boolean | null | undefined;
+export declare function isSubOrSameFile(docA: PathItemWithType | null | undefined, docB?: PathItemWithType | null | undefined): boolean | null | undefined;
 /**
  * Get file URI.
  * @param doc
  * @returns
  */
-export declare function toUri(doc?: PathItem | null): string;
+export declare function toUri(doc?: PathItemWithType | null): string;
 /**
  * Create a document.
  * @param doc
  * @param baseDoc
  * @returns
  */
-export declare function createDoc(doc: Pick<Doc, 'repo' | 'path' | 'content'>, baseDoc: Doc): Promise<Doc>;
-export declare function createDoc(doc: Optional<Pick<Doc, 'repo' | 'path' | 'content'>, 'path'>, baseDoc?: Doc): Promise<Doc>;
+export declare function createDoc(doc: Pick<Doc, 'repo' | 'path' | 'content'>, baseDoc: Doc & {
+    type: 'file' | 'dir';
+}): Promise<Doc>;
+export declare function createDoc(doc: Optional<Pick<Doc, 'repo' | 'path' | 'content'>, 'path'>, baseDoc?: Doc & {
+    type: 'file' | 'dir';
+}): Promise<Doc>;
 /**
  * Create a dir.
  * @param doc
  * @param baseDoc
  * @returns
  */
-export declare function createDir(doc: Pick<Doc, 'repo' | 'path' | 'content'>, baseDoc: Doc): Promise<Doc>;
-export declare function createDir(doc: Optional<Pick<Doc, 'repo' | 'path' | 'content'>, 'path'>, baseDoc?: Doc): Promise<Doc>;
+export declare function createDir(doc: Pick<Doc, 'repo' | 'path' | 'content'>, baseDoc: Doc & {
+    type: 'file' | 'dir';
+}): Promise<Doc>;
+export declare function createDir(doc: Optional<Pick<Doc, 'repo' | 'path' | 'content'>, 'path'>, baseDoc?: Doc & {
+    type: 'file' | 'dir';
+}): Promise<Doc>;
 /**
  * Duplicate a document.
  * @param originDoc
@@ -170,3 +188,4 @@ export declare function resolveDocType(filename: string): {
     type: DocType;
     category: DocCategory;
 } | null | undefined;
+export {};

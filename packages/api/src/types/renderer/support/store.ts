@@ -34,6 +34,7 @@ export type AppState = typeof initState;
 declare const _default: {
     state: {
         tree: {
+            type: "file" | "dir";
             mtime?: number | undefined;
             birthtime?: number | undefined;
             marked?: boolean | undefined;
@@ -42,7 +43,6 @@ declare const _default: {
             name: string;
             repo: string;
             path: string;
-            type: "file" | "dir";
         }[] | null;
         treeSort: {
             by: "mtime" | "birthtime" | "name" | "serial";
@@ -80,7 +80,7 @@ declare const _default: {
             };
         } | null;
         currentFile: {
-            type: "file" | "dir";
+            type: "file" | "dir" | `__${string}`;
             name: string;
             content?: string | undefined;
             title?: string | undefined;
@@ -95,6 +95,7 @@ declare const _default: {
             status?: ("loaded" | "save-failed" | "saved" | "unsaved") | undefined;
             absolutePath?: string | undefined;
             plain?: boolean | undefined;
+            extra?: any;
             repo: string;
             path: string;
         } | null | undefined;
@@ -102,7 +103,7 @@ declare const _default: {
         tabs: {
             payload: {
                 file: {
-                    type: "file" | "dir";
+                    type: "file" | "dir" | `__${string}`;
                     name: string;
                     content?: string | undefined;
                     title?: string | undefined;
@@ -117,6 +118,7 @@ declare const _default: {
                     status?: ("loaded" | "save-failed" | "saved" | "unsaved") | undefined;
                     absolutePath?: string | undefined;
                     plain?: boolean | undefined;
+                    extra?: any;
                     repo: string;
                     path: string;
                 } | null;
