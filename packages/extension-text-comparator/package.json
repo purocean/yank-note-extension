@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-text-comparator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Text Comparator",
   "description": "Compare two text files side by side.",
   "displayName_ZH-CN": "文本比较器",
