@@ -323,13 +323,13 @@ onMounted(async () => {
 
   const initDoc = ctx.store.state.currentFile?.extra
 
-  if (initDoc.original) {
+  if (initDoc?.original) {
     initOriginalType('file', initDoc.original)
   } else {
     initOriginalType('text')
   }
 
-  if (initDoc.modified) {
+  if (initDoc?.modified) {
     initModifiedType('file', initDoc.modified)
   } else {
     initModifiedType('text')
