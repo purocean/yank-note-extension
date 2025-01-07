@@ -424,6 +424,7 @@ defineExpose({
   .content {
     border: 1px dashed var(--g-color-70);
     height: 100%;
+    overflow: hidden;
   }
 }
 </style>
