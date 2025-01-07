@@ -237,7 +237,7 @@ async function saveIo () {
   for (const side of ['original', 'modified'] as EditorSide[]) {
     if (io[side]?.isDirty()) {
       logger.debug(`Saving ${side}...`)
-      await io[side].save()
+      await io[side]?.save()
     }
   }
 }

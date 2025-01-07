@@ -11,7 +11,7 @@ registerPlugin({
     ctx.editor.registerCustomEditor({
       name: 'text-comparator',
       displayName: 'Text Comparator',
-      component: () => ctx.lib.vue.h(TextComparator, { ref: comparatorRef }),
+      component: () => ctx.lib.vue.h(TextComparator, { ref: comparatorRef as any }),
       hiddenPreview: true,
       supportNonNormalFile: true,
       when ({ doc }) {
