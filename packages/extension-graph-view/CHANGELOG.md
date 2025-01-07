@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.2.0...extension-graph-view-1.2.1) (2025-01-07)
+
+
+### Bug Fixes
+
+* **extension-graph-view:** handle null document in search function ([91881e3](https://github.com/purocean/yank-note-extension/commit/91881e3a60795e3e541c2e874ae0c6888343ad63))
+
+
+
 # [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.1.1...extension-graph-view-1.2.0) (2024-12-22)
 
 
