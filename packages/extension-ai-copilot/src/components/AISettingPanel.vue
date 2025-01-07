@@ -123,8 +123,13 @@ function buildContent () {
     return
   }
 
-  const model = editor.getModel()!
-  const position = editor.getPosition()!
+  const model = editor.getModel()
+  const position = editor.getPosition()
+
+  if (!model || !position) {
+    return
+  }
+
   const contentPrefix = model.getValueInRange(new monaco.Range(
     1,
     1,
