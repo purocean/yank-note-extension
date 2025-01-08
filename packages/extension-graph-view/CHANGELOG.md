@@ -1,3 +1,7 @@
+## [1.2.2](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.2.1...extension-graph-view-1.2.2) (2025-01-08)
+
+
+
 ## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.2.0...extension-graph-view-1.2.1) (2025-01-07)
 
 
