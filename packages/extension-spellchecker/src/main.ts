@@ -15,6 +15,10 @@ registerPlugin({
 
       let spellchecker: IDisposable | null = null
 
+      function when () {
+        return ctx.editor.isDefault()
+      }
+
       const reloadSpellchecker = () => {
         spellchecker?.dispose()
         spellchecker = enabled.value ? initSpellchecker(monaco, editor) : null
@@ -31,12 +35,15 @@ registerPlugin({
         forUser: true,
         keys: [ctx.keybinding.CtrlCmd, ctx.keybinding.Alt, 'x'],
         description: i18n.t('enable-or-disable-check-spelling-desc'),
+        when,
         handler: () => {
           enabled.value = !enabled.value
         }
       })
 
       ctx.statusBar.tapMenus(menus => {
+        if (!when()) return
+
         menus['status-bar-tool']?.list?.push(
           { type: 'separator' },
           {
