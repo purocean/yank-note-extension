@@ -406,7 +406,7 @@ async function onStatusChange (val: string) {
 }
 
 function search () {
-  ctx.action.getActionHandler('filter.choose-document')().then(doc => {
+  ctx.routines.chooseDocument().then(doc => {
     if (!doc) {
       return
     }
