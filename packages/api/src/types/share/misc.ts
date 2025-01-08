@@ -15,3 +15,4 @@ export declare function getDefaultApplicationAccelerators(platform: NodeJS.Platf
     accelerator: string | null;
     description: string;
 }[];
+export declare function isNormalRepoName(repoName: string): boolean;

@@ -1,7 +1,7 @@
 import type { VNode } from 'vue';
 import type { OpenDialogOptions, PrintToPDFOptions } from 'electron';
 import type { Language, MsgPath } from '@share/i18n';
-import type { Doc, FileItem, PathItem, Repo } from '@share/types';
+import type { BaseDoc, Doc, PathItem, Repo } from '@share/types';
 import type MarkdownIt from 'markdown-it';
 import type Token from 'markdown-it/lib/token';
 import type * as Monaco from 'monaco-editor';
@@ -403,7 +403,9 @@ export interface BuildInSettings {
     'plugin.image-hosting-picgo.server-url': string;
     'plugin.image-hosting-picgo.enable-paste-image': boolean;
     'license': string;
-    'mark': FileItem[];
+    'mark': (BaseDoc & {
+        name: string;
+    })[];
     'updater.source': 'auto' | 'github' | 'yank-note';
     'doc-history.number-limit': number;
     'search.number-limit': number;
@@ -448,7 +450,7 @@ export type BuildInActions = {
     'editor.refresh-custom-editor': () => void;
     'editor.trigger-save': () => void;
     'workbench.show-quick-open': () => void;
-    'filter.choose-document': () => Promise<Doc | null>;
+    'filter.choose-document': (filter?: (item: BaseDoc) => boolean) => Promise<Doc | null>;
     'file-tabs.switch-left': () => void;
     'file-tabs.switch-right': () => void;
     'file-tabs.close-current': () => void;
@@ -640,7 +642,7 @@ export type BuildInHookTypes = {
         opts?: SwitchDocOpts;
     };
     DOC_CHANGED: {
-        doc: Doc;
+        doc: BaseDoc;
     };
     DOC_PRE_ENSURE_CURRENT_FILE_SAVED: never;
     I18N_CHANGE_LANGUAGE: {

@@ -94,7 +94,6 @@ declare const ctx: Readonly<{
                 };
             } | null;
             currentFile: {
-                type: "file" | "dir" | `__${string}`;
                 name: string;
                 content?: string | undefined;
                 title?: string | undefined;
@@ -110,6 +109,7 @@ declare const ctx: Readonly<{
                 absolutePath?: string | undefined;
                 plain?: boolean | undefined;
                 extra?: any;
+                type: "file" | "dir" | `__${string}`;
                 repo: string;
                 path: string;
             } | null | undefined;
@@ -117,7 +117,6 @@ declare const ctx: Readonly<{
             tabs: {
                 payload: {
                     file: {
-                        type: "file" | "dir" | `__${string}`;
                         name: string;
                         content?: string | undefined;
                         title?: string | undefined;
@@ -133,6 +132,7 @@ declare const ctx: Readonly<{
                         absolutePath?: string | undefined;
                         plain?: boolean | undefined;
                         extra?: any;
+                        type: "file" | "dir" | `__${string}`;
                         repo: string;
                         path: string;
                     } | null;
@@ -191,6 +191,7 @@ declare const ctx: Readonly<{
     showExtensionManager: typeof extension.showManager;
     getExtensionLoadStatus: typeof extension.getLoadStatus;
     getExtensionInitialized: typeof extension.getInitialized;
+    whenExtensionInitialized: typeof extension.whenInitialized;
     getPluginApi: typeof plugin.getApi;
     version: string;
 }>;

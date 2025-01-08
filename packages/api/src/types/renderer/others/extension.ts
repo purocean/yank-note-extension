@@ -17,6 +17,7 @@ export declare function uninstall(extension: Pick<Extension, 'id'>): Promise<voi
 export declare function abortInstallation(): Promise<void>;
 export declare function install(extension: Extension, registry?: RegistryHostname): Promise<void>;
 export declare function getInitialized(): boolean;
+export declare function whenInitialized(): Promise<void>;
 /**
  * Initialization extension system
  */

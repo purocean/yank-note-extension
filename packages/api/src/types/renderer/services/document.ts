@@ -1,9 +1,7 @@
 import { Optional } from 'utility-types';
-import type { DocType, Doc, DocCategory, PathItem, SwitchDocOpts } from '@fe/types';
+import type { DocType, Doc, DocCategory, PathItem, SwitchDocOpts, BaseDoc } from '@fe/types';
 export declare const URI_SCHEME = "yank-note";
-type PathItemWithType = PathItem & {
-    type?: Doc['type'];
-};
+type PathItemWithType = Optional<Omit<BaseDoc, 'name'>, 'type'>;
 /**
  * Get absolutePath of document
  * @param doc
@@ -22,15 +20,23 @@ export declare function createCurrentDocChecker(): {
 /**
  * Get all document categories.
  * @param doc
+ * @param opts
  * @returns
  */
-export declare function cloneDoc(doc?: Doc | null): Doc | null;
+export declare function cloneDoc(doc?: Doc | null, opts?: {
+    includeExtra?: boolean;
+}): Doc | null;
 /**
  * Check if the document is a markdown file.
  * @param doc
  * @returns
  */
 export declare function isMarkdownFile(doc: Doc): boolean;
+/**
+ * Check if the document is supported.
+ * @param doc
+ * @returns
+ */
 export declare function supported(doc: Doc): boolean;
 /**
  * Check if the document is out of a repository.
@@ -50,7 +56,7 @@ export declare function isEncrypted(doc?: Pick<Doc, 'path' | 'type'> | null): bo
  * @param docB
  * @returns
  */
-export declare function isSameRepo(docA: PathItemWithType | null | undefined, docB: PathItemWithType | null | undefined): boolean | null | undefined;
+export declare function isSameRepo(docA: PathItem | null | undefined, docB: PathItem | null | undefined): boolean | null | undefined;
 /**
  * Determine if it is the same document.
  * @param docA
@@ -130,18 +136,34 @@ export declare function ensureCurrentFileSaved(): Promise<void>;
  * @param opts
  */
 export declare function switchDoc(doc: Doc | null, opts?: SwitchDocOpts): Promise<void>;
+/**
+ * Switch document by path.
+ * @param path
+ * @returns
+ */
 export declare function switchDocByPath(path: string): Promise<void>;
 /**
  * Mark document.
  * @param doc
  */
-export declare function markDoc(doc: Doc): Promise<void>;
+export declare function markDoc(doc: BaseDoc): Promise<void>;
 /**
  * Unmark document.
  * @param doc
  */
-export declare function unmarkDoc(doc: Doc): Promise<void>;
-export declare function getMarkedFiles(): import("@fe/types").FileItem[];
+export declare function unmarkDoc(doc: BaseDoc): Promise<void>;
+/**
+ *  Get marked files.
+ * @returns
+ */
+export declare function getMarkedFiles(): (BaseDoc & {
+    name: string;
+})[];
+/**
+ * Check if document is marked.
+ * @param doc
+ * @returns
+ */
 export declare function isMarked(doc: PathItem & {
     type?: Doc['type'];
 }): boolean;

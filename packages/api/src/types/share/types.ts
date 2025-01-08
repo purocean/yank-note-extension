@@ -20,8 +20,11 @@ export interface FileReadResult {
     hash: string;
     writeable: boolean;
 }
-export interface Doc extends PathItem {
+export interface BaseDoc extends PathItem {
     type: 'file' | 'dir' | `__${string}`;
+    name?: string;
+}
+export interface Doc extends BaseDoc {
     name: string;
     content?: string;
     title?: string;

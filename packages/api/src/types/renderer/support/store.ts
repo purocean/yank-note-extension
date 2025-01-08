@@ -80,7 +80,6 @@ declare const _default: {
             };
         } | null;
         currentFile: {
-            type: "file" | "dir" | `__${string}`;
             name: string;
             content?: string | undefined;
             title?: string | undefined;
@@ -96,6 +95,7 @@ declare const _default: {
             absolutePath?: string | undefined;
             plain?: boolean | undefined;
             extra?: any;
+            type: "file" | "dir" | `__${string}`;
             repo: string;
             path: string;
         } | null | undefined;
@@ -103,7 +103,6 @@ declare const _default: {
         tabs: {
             payload: {
                 file: {
-                    type: "file" | "dir" | `__${string}`;
                     name: string;
                     content?: string | undefined;
                     title?: string | undefined;
@@ -119,6 +118,7 @@ declare const _default: {
                     absolutePath?: string | undefined;
                     plain?: boolean | undefined;
                     extra?: any;
+                    type: "file" | "dir" | `__${string}`;
                     repo: string;
                     path: string;
                 } | null;
