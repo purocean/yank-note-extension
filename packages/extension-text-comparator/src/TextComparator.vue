@@ -185,7 +185,7 @@ async function setModel (side: EditorSide, model: Monaco.editor.ITextModel) {
 
 async function buildFileIo (side: EditorSide, doc?: Doc | null): Promise<boolean> {
   try {
-    doc ??= await ctx.action.getActionHandler('filter.choose-document')()
+    doc ??= await ctx.routines.chooseDocument(item => ctx.doc.isPlain(item))
 
     logger.debug(`Choosing ${side} file...`, doc)
 
