@@ -4,8 +4,8 @@
       <fieldset class="left">
         <legend>{{ $t('left') }}</legend>
         <div class="row">
-          <label>
-            <input type="radio" :disabled="isDirty" v-model="originalType" value="text" />
+          <label @click.capture.stop.prevent="initOriginalType('text')">
+            <input type="radio" :disabled="isDirty" :checked="originalType === 'text'" value="text" />
             {{ $t('text') }}
           </label>
           <label style="margin-left: auto">
@@ -14,8 +14,8 @@
           </label>
         </div>
         <div class="row">
-          <label>
-            <input type="radio" :disabled="isDirty" v-model="originalType" value="file" />
+          <label @click.capture.stop.prevent="initOriginalType('file')">
+            <input type="radio" :disabled="isDirty" :checked="originalType === 'file'" value="file" />
             {{ $t('file') }}
             <template v-if="originalType === 'file' &&  io.original?.file">
               <span class="filename">{{ io.original.file.path }}</span>
@@ -47,8 +47,8 @@
       <fieldset class="right">
         <legend>{{ $t('right') }}</legend>
         <div class="row">
-          <label>
-            <input type="radio" :disabled="isDirty" v-model="modifiedType" value="text" />
+          <label @click.capture.stop.prevent="initModifiedType('text')">
+            <input type="radio" :disabled="isDirty" :checked="modifiedType === 'text'" value="text" />
             {{ $t('text') }}
           </label>
           <label style="margin-left: auto">
@@ -57,8 +57,8 @@
           </label>
         </div>
         <div class="row">
-          <label>
-            <input type="radio" :disabled="isDirty" v-model="modifiedType" value="file" />
+          <label @click.capture.stop.prevent="initModifiedType('file')">
+            <input type="radio" :disabled="isDirty" :checked="modifiedType === 'file'" value="file" />
             {{ $t('file') }}
             <template v-if="modifiedType === 'file' && io.modified?.file">
               <span class="filename">{{ io.modified.file.path }}</span>
@@ -90,10 +90,14 @@ const logger = ctx.utils.getLogger('TextComparator')
 
 let monaco: typeof Monaco
 let editor: Monaco.editor.IStandaloneDiffEditor | null = null
-let enableWatchType = false
 
 type DiffType = 'file' | 'text'
 type EditorSide = 'original' | 'modified'
+
+const tmpFiles = {
+  original: 'original.txt',
+  modified: 'modified.txt',
+}
 
 const contentRef = ref<HTMLElement>()
 const originalType = ref<DiffType>('text')
@@ -164,12 +168,7 @@ async function setModel (side: EditorSide, model: Monaco.editor.ITextModel) {
   if (!editor) return
 
   const models = editor.getModel()
-
-  if (side === 'original') {
-    models?.original?.dispose()
-  } else {
-    models?.modified?.dispose()
-  }
+  models?.[side]?.dispose()
 
   editor.setModel({
     original: side === 'original' ? model : (models?.original as any),
@@ -183,38 +182,34 @@ async function setModel (side: EditorSide, model: Monaco.editor.ITextModel) {
   }
 }
 
-async function buildFileIo (side: EditorSide, doc?: Doc | null): Promise<boolean> {
+async function buildFileIo (side: EditorSide, doc?: Doc | null): Promise<void> {
   try {
     doc ??= await ctx.routines.chooseDocument(item => ctx.doc.isPlain(item))
-
     logger.debug(`Choosing ${side} file...`, doc)
+    if (!doc) throw new Error('Canceled')
 
-    if (doc) {
-      const editorIo = new XCustomEditorIO(ctx, doc, getAndSyncIsDirty)
-      const model = await editorIo.getModel()
-      setModel(side, model)
-      io[side] = editorIo
-
-      return true
-    } else {
-      return false
-    }
+    const editorIo = new XCustomEditorIO(ctx, doc, getAndSyncIsDirty)
+    const model = await editorIo.getModel()
+    setModel(side, model)
+    io[side] = editorIo
   } catch (error) {
-    if (String(error).includes('ModelService')) {
+    if (String(error).includes('Model already exists')) {
       ctx.ui.useToast().show('warning', 'Can not open the same file in both sides')
+    } else if (!String(error).includes('Canceled')) {
+      ctx.ui.useToast().show('warning', String(error))
     }
 
-    console.error(error)
+    throw error
   }
-
-  return false
 }
 
 async function buildTextIo (side: EditorSide) {
+  const name = tmpFiles[side]
+
   const editorIo = new XCustomEditorIO(ctx, {
     type: 'file',
-    name: side + '.txt',
-    path: '/' + side + '.txt',
+    name,
+    path: '/' + name,
     repo: editorDocType,
   }, getAndSyncIsDirty)
   const model = await editorIo.getModel()
@@ -262,60 +257,46 @@ async function swap () {
     originalReadonly.value = modifiedReadonly.value
     modifiedReadonly.value = originalReadonlyValue
 
-    enableWatchType = false
     const originalTypeValue = originalType.value
     originalType.value = modifiedType.value
     modifiedType.value = originalTypeValue
 
+    const originalFile = tmpFiles.original
+    tmpFiles.original = tmpFiles.modified
+    tmpFiles.modified = originalFile
+
     await nextTick()
-    enableWatchType = true
   }
 }
 
-function initOriginalType (type: DiffType, doc?: Doc | null) {
-  originalType.value = type
-
+async function initOriginalType (type: DiffType, doc?: Doc | null) {
   if (type === 'file') {
+    await buildFileIo('original', doc)
     originalReadonly.value = true
-    buildFileIo('original', doc).then(success => {
-      if (!success) {
-        originalType.value = 'text'
-      }
-    })
   } else if (type === 'text') {
+    await buildTextIo('original')
     originalReadonly.value = false
-    buildTextIo('original')
   }
+
+  originalType.value = type
 }
 
-function initModifiedType (type: DiffType, doc?: Doc | null) {
-  modifiedType.value = type
-
+async function initModifiedType (type: DiffType, doc?: Doc | null) {
   if (type === 'file') {
+    await buildFileIo('modified', doc)
     modifiedReadonly.value = true
-    buildFileIo('modified', doc).then(success => {
-      if (!success) {
-        modifiedType.value = 'text'
-      }
-    })
   } else if (type === 'text') {
+    await buildTextIo('modified')
     modifiedReadonly.value = false
-    buildTextIo('modified')
   }
+
+  modifiedType.value = type
 }
 
 watch(originalReadonly, updateOriginalEditorOptions)
 watch(modifiedReadonly, updateModifiedEditorOptions)
 watch(renderSideBySide, updateDiffEditorOptions)
 watch(wordWrap, updateDiffEditorOptions)
-
-watch(originalType, type => {
-  enableWatchType && initOriginalType(type)
-})
-
-watch(modifiedType, type => {
-  enableWatchType && initModifiedType(type)
-})
 
 onMounted(async () => {
   await createEditor()
@@ -336,7 +317,6 @@ onMounted(async () => {
   }
 
   await nextTick()
-  enableWatchType = true
 })
 
 onUnmounted(() => {

@@ -37,16 +37,22 @@ export class XCustomEditorIO extends CustomEditorFileIO {
   private onStatusChanged: () => void
   private tempTextDir = __EXTENSION_ID__.replaceAll('/', '$')
 
-  constructor (ctx: Ctx, file: Doc, onStatusChanged: () => void) {
+  constructor (ctx: Ctx, file: Doc, onStatusChanged: () => void, ) {
     super(ctx, file)
     this.onStatusChanged = onStatusChanged
     this.isReady = this.init()
   }
 
-  async init () {
+  private async init () {
     const content = await this.read()
+
     const monaco = this.ctx.editor.getMonaco()
-    this.model = monaco.editor.createModel(content, undefined, monaco.Uri.parse(this.getDiffFileUri(this.file)))
+    const uri = monaco.Uri.parse(this.getDiffFileUri(this.file))
+    if (monaco.editor.getModel(uri)) {
+      throw new Error('Model already exists')
+    }
+
+    this.model = monaco.editor.createModel(content, undefined, uri)
     this.model.onDidChangeContent(() => {
       this.setStatus('unsaved')
       this.triggerAutoSave()
