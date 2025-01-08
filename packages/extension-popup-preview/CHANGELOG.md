@@ -1,3 +1,12 @@
+## [1.2.5](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.2.4...extension-pop-preview-1.2.5) (2025-01-08)
+
+
+### Bug Fixes
+
+* **extension-popup-preview:** refactor onClick handler ([b02f88e](https://github.com/purocean/yank-note-extension/commit/b02f88ec5fae45f4d92b798145451550135e4162))
+
+
+
 ## [1.2.4](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.2.3...extension-pop-preview-1.2.4) (2024-10-09)
 
 
