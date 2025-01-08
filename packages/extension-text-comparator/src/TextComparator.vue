@@ -293,10 +293,10 @@ async function initModifiedType (type: DiffType, doc?: Doc | null) {
   modifiedType.value = type
 }
 
-watch(originalReadonly, updateOriginalEditorOptions)
-watch(modifiedReadonly, updateModifiedEditorOptions)
-watch(renderSideBySide, updateDiffEditorOptions)
-watch(wordWrap, updateDiffEditorOptions)
+watch(originalReadonly, updateOriginalEditorOptions, { immediate: true })
+watch(modifiedReadonly, updateModifiedEditorOptions, { immediate: true })
+watch(renderSideBySide, updateDiffEditorOptions, { immediate: true })
+watch(wordWrap, updateDiffEditorOptions, { immediate: true })
 
 onMounted(async () => {
   await createEditor()
