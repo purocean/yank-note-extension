@@ -41,72 +41,76 @@ registerPlugin({
       return false
     }
 
+    const onClick = () => {
+      if (!ctx.getPremium()) {
+        ctx.ui.useToast().show('info', ctx.i18n.t('premium.need-purchase', extensionId))
+        ctx.showPremium()
+        throw new Error('Extension requires premium')
+      }
+
+      if (getWin()) {
+        try {
+          getWin().close()
+        } catch {
+          // do nothing
+        }
+      }
+
+      const url = new URL(location.origin)
+      url.searchParams.set('mode', 'share-preview')
+      _win = ctx.env.openWindow(url.toString(), '_blank', { alwaysOnTop: false, webSecurity: false })
+      ctx.layout.toggleView(false)
+
+      if (_win) {
+        _win.opener = null
+        _win.parent = null
+        _win.fetch = (...args: any[]) => {
+          if (args[1]?.method?.toUpperCase() === 'POST') {
+            throw new Error('[PopupPreview] POST request is not supported')
+          }
+
+          return fetch.apply(_win.window, args)
+        }
+
+        _win.window.addEventListener('load', () => {
+          setTimeout(updateContent, 0)
+          setTimeout(updateCurrentFile, 0)
+          setTimeout(updateCurrentRepo, 0)
+          setTimeout(() => {
+            let clickTimer: number | null = null
+            _win.ctx.registerHook('VIEW_ELEMENT_CLICK', async ({ e }) => {
+              if (clickTimer) {
+                clearTimeout(clickTimer)
+                clickTimer = null
+              } else {
+                const target: HTMLElement | null = e.target as HTMLElement
+                const line = parseInt(target?.dataset?.sourceLine || '0', 10)
+                if (line) {
+                  clickTimer = setTimeout(() => {
+                    _win.ctx.view.disableSyncScrollAwhile(() => {
+                      clickScroll(line)
+                    })
+
+                    clickTimer = null
+                  }, 200) as any
+                }
+              }
+            })
+          }, 800)
+        })
+      } else {
+        console.error('open popup preview window failed')
+      }
+    }
+
     ctx.statusBar.tapMenus(menus => {
+      if (!ctx.editor.isDefault()) return
+
       menus['status-bar-tool']?.list?.push({
         id: extensionId,
         type: 'normal',
         title: i18n.t('popup-preview'),
-        onClick: () => {
-          if (!ctx.getPremium()) {
-            ctx.ui.useToast().show('info', ctx.i18n.t('premium.need-purchase', extensionId))
-            ctx.showPremium()
-            throw new Error('Extension requires premium')
-          }
-
-          if (getWin()) {
-            try {
-              getWin().close()
-            } catch {
-              // do nothing
-            }
-          }
-
-          const url = new URL(location.origin)
-          url.searchParams.set('mode', 'share-preview')
-          _win = ctx.env.openWindow(url.toString(), '_blank', { alwaysOnTop: false, webSecurity: false })
-          ctx.layout.toggleView(false)
-
-          if (_win) {
-            _win.opener = null
-            _win.parent = null
-            _win.fetch = (...args: any[]) => {
-              if (args[1]?.method?.toUpperCase() === 'POST') {
-                throw new Error('[PopupPreview] POST request is not supported')
-              }
-
-              return fetch.apply(_win.window, args)
-            }
-
-            _win.window.addEventListener('load', () => {
-              setTimeout(updateContent, 0)
-              setTimeout(updateCurrentFile, 0)
-              setTimeout(updateCurrentRepo, 0)
-              setTimeout(() => {
-                let clickTimer: number | null = null
-                _win.ctx.registerHook('VIEW_ELEMENT_CLICK', async ({ e }) => {
-                  if (clickTimer) {
-                    clearTimeout(clickTimer)
-                    clickTimer = null
-                  } else {
-                    const target: HTMLElement | null = e.target as HTMLElement
-                    const line = parseInt(target?.dataset?.sourceLine || '0', 10)
-                    if (line) {
-                      clickTimer = setTimeout(() => {
-                        _win.ctx.view.disableSyncScrollAwhile(() => {
-                          clickScroll(line)
-                        })
-
-                        clickTimer = null
-                      }, 200) as any
-                    }
-                  }
-                })
-              }, 800)
-            })
-          } else {
-            console.error('open popup preview window failed')
-          }
-        }
+        onClick,
       })
     })
 
