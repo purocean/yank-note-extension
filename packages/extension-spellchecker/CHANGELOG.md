@@ -1,3 +1,12 @@
+## [1.0.5](https://github.com/purocean/yank-note-extension/compare/extension-spellchecker-1.0.4...extension-spellchecker-1.0.5) (2025-01-08)
+
+
+### Bug Fixes
+
+* **extension-spellchecker:** add conditional check for default editor state ([04f40b0](https://github.com/purocean/yank-note-extension/commit/04f40b0bb927df33dce5965fcf8faf88bb7f225d))
+
+
+
 ## [1.0.4](https://github.com/purocean/yank-note-extension/compare/extension-spellchecker-1.0.3...extension-spellchecker-1.0.4) (2025-01-02)
 
 
