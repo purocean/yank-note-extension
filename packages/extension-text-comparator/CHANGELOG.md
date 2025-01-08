@@ -1,3 +1,7 @@
+## [1.0.2](https://github.com/purocean/yank-note-extension/compare/extension-text-comparator-1.0.1...extension-text-comparator-1.0.2) (2025-01-08)
+
+
+
 ## [1.0.1](https://github.com/purocean/yank-note-extension/compare/extension-text-comparator-1.0.0...extension-text-comparator-1.0.1) (2025-01-07)
 
 
