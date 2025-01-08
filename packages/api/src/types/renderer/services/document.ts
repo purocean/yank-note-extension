@@ -51,6 +51,12 @@ export declare function isOutOfRepo(doc?: Doc | null): boolean;
  */
 export declare function isEncrypted(doc?: Pick<Doc, 'path' | 'type'> | null): boolean;
 /**
+ * Check if the document is a plain file.
+ * @param doc
+ * @returns
+ */
+export declare function isPlain(doc?: PathItemWithType): boolean;
+/**
  * Determine if it is in the same repository.
  * @param docA
  * @param docB
