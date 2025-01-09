@@ -1,3 +1,13 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-text-comparator-1.1.0...extension-text-comparator-1.2.0) (2025-01-09)
+
+
+### Features
+
+* **extension-text-comparator:** change diff algorithm to legacy ([5eb8ddd](https://github.com/purocean/yank-note-extension/commit/5eb8ddd083d3b95811f30aeded4bd40638d5143d))
+* **extension-text-comparator:** ensure editors focus when not read-only ([6799989](https://github.com/purocean/yank-note-extension/commit/6799989fe986bce23a1a35ac402df5355f414d9c))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-text-comparator-1.0.4...extension-text-comparator-1.1.0) (2025-01-09)
 
 
