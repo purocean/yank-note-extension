@@ -26,12 +26,6 @@
       </fieldset>
       <div class="center">
         <div class="row">
-          <button class="small" @click="swap" :disabled="isDirty">
-            <svg-icon name="arrow-right-arrow-left-solid" width="10px" height="10px" />
-            {{ $t('swap') }}
-          </button>
-        </div>
-        <div class="row">
           <label>
             <input type="checkbox" v-model="renderSideBySide" />
             {{ $t('side-by-side') }}
@@ -42,6 +36,18 @@
             <input type="checkbox" v-model="wordWrap" />
             {{ $t('word-wrap') }}
           </label>
+        </div>
+        <div class="row">
+          <label>
+            <input type="checkbox" v-model="ignoreTrimWhitespace" />
+            {{ $t('ignore-trim-whitespace') }}
+          </label>
+        </div>
+        <div class="row">
+          <button class="small" @click="swap" :disabled="isDirty">
+            <svg-icon name="arrow-right-arrow-left-solid" width="10px" height="10px" />
+            {{ $t('swap') }}
+          </button>
         </div>
       </div>
       <fieldset class="right">
@@ -106,6 +112,7 @@ const originalReadonly = ref(true)
 const modifiedReadonly = ref(true)
 const renderSideBySide = ref(true)
 const wordWrap = ref(false)
+const ignoreTrimWhitespace = ref(true)
 const isDirty = ref(false)
 
 const io = shallowReactive({
@@ -134,6 +141,11 @@ async function createEditor () {
     renderSideBySide: renderSideBySide.value,
     renderSideBySideInlineBreakpoint: 200,
     wordWrap: wordWrap.value ? 'on' : 'off',
+    ignoreTrimWhitespace: ignoreTrimWhitespace.value,
+    diffAlgorithm: 'advanced',
+    hideUnchangedRegions: {
+      enabled: true,
+    },
   })
 
   editor.getOriginalEditor().addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, saveIo)
@@ -161,6 +173,7 @@ function updateDiffEditorOptions () {
   editor?.updateOptions({
     renderSideBySide: renderSideBySide.value,
     wordWrap: wordWrap.value ? 'on' : 'off',
+    ignoreTrimWhitespace: ignoreTrimWhitespace.value,
   })
 }
 
@@ -297,6 +310,7 @@ watch(originalReadonly, updateOriginalEditorOptions, { immediate: true })
 watch(modifiedReadonly, updateModifiedEditorOptions, { immediate: true })
 watch(renderSideBySide, updateDiffEditorOptions, { immediate: true })
 watch(wordWrap, updateDiffEditorOptions, { immediate: true })
+watch(ignoreTrimWhitespace, updateDiffEditorOptions, { immediate: true })
 
 onMounted(async () => {
   await createEditor()
@@ -358,6 +372,7 @@ defineExpose({
       padding: 10px;
       border: 1px dashed var(--g-color-70);
       align-self: start;
+      min-height: 72px;
 
       legend {
         font-weight: 500;
@@ -393,7 +408,7 @@ defineExpose({
 
     .center {
       margin: 0 1rem;
-      width: 150px;
+      width: 186px;
       flex: none;
       display: flex;
       flex-direction: column;

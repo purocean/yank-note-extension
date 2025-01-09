@@ -13,7 +13,8 @@ export const i18n = ctx.i18n.createI18n({
     'readonly': 'Read Only',
     'file': 'File in Repository',
     'text': 'Temporary Text',
-    'change': 'Change'
+    'change': 'Change',
+    'ignore-trim-whitespace': 'Ignore Trim Whitespace',
   },
   'zh-CN': {
     'left': '左侧',
@@ -24,7 +25,8 @@ export const i18n = ctx.i18n.createI18n({
     'readonly': '只读模式',
     'file': '仓库的文件',
     'text': '临时文本',
-    'change': '更改'
+    'change': '更改',
+    'ignore-trim-whitespace': '忽略首尾空白',
   }
 })
 
