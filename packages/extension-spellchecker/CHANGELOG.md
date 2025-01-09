@@ -1,3 +1,12 @@
+## [1.0.6](https://github.com/purocean/yank-note-extension/compare/extension-spellchecker-1.0.5...extension-spellchecker-1.0.6) (2025-01-09)
+
+
+### Bug Fixes
+
+* **extension-spellchecker:** correct regex for word matching to include apostrophes ([852f15b](https://github.com/purocean/yank-note-extension/commit/852f15bb476e162c7b3a9a3e7b468809621d2383))
+
+
+
 ## [1.0.5](https://github.com/purocean/yank-note-extension/compare/extension-spellchecker-1.0.4...extension-spellchecker-1.0.5) (2025-01-08)
 
 
