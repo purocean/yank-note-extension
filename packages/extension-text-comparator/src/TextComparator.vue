@@ -161,12 +161,20 @@ function updateOriginalEditorOptions () {
   editor?.getOriginalEditor()?.updateOptions({
     readOnly: originalReadonly.value,
   })
+
+  if (!originalReadonly.value) {
+    editor?.getOriginalEditor()?.focus()
+  }
 }
 
 function updateModifiedEditorOptions () {
   editor?.getModifiedEditor()?.updateOptions({
     readOnly: modifiedReadonly.value,
   })
+
+  if (!modifiedReadonly.value) {
+    editor?.getModifiedEditor()?.focus()
+  }
 }
 
 function updateDiffEditorOptions () {
