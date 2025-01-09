@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-text-comparator-1.0.4...extension-text-comparator-1.1.0) (2025-01-09)
+
+
+### Features
+
+* **extension-text-comparator:** add 'ignore trim whitespace' option and improve layout ([762f7ba](https://github.com/purocean/yank-note-extension/commit/762f7bafff6094be479484b0787576d014314471))
+
+
+
 ## [1.0.4](https://github.com/purocean/yank-note-extension/compare/extension-text-comparator-1.0.3...extension-text-comparator-1.0.4) (2025-01-08)
 
 
