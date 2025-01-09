@@ -15,7 +15,7 @@ const USER_DICT_FILE = 'user-dic.txt'
 export const settingKeyDicName = 'plugin.spellchecker.dictionary'
 export const settingKeyWordRegex = 'plugin.spellchecker.alphabet'
 export const defaultDicName = 'en'
-export const defaultWordRegex = '[a-zA-Z]+(?:\'[a-zA-Z])?'
+export const defaultWordRegex = '[a-zA-Z]+(?:\'[a-zA-Z]+)?'
 
 export const i18n = ctx.i18n.createI18n({
   en: {
