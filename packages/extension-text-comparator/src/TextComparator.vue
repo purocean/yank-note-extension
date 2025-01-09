@@ -142,7 +142,7 @@ async function createEditor () {
     renderSideBySideInlineBreakpoint: 200,
     wordWrap: wordWrap.value ? 'on' : 'off',
     ignoreTrimWhitespace: ignoreTrimWhitespace.value,
-    diffAlgorithm: 'advanced',
+    diffAlgorithm: 'legacy',
     hideUnchangedRegions: {
       enabled: true,
     },
