@@ -1,9 +1,17 @@
 import React from 'react'
 import * as ReactDOM from 'react-dom/client'
 import { BaseCustomEditorContent, ctx } from '@yank-note/runtime-api'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { Tldraw, createTLStore, TLStore, serializeTldrawJson, parseAndLoadDocument, useDefaultHelpers, useEditor } from 'tldraw'
+import {
+  Tldraw,
+  createTLStore,
+  serializeTldrawJson,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  parseAndLoadDocument,
+  useDefaultHelpers,
+  useEditor,
+  Editor
+} from 'tldraw'
 import { getAssetUrls } from '@tldraw/assets/selfHosted'
 // import i18n from './i18n'
 
@@ -27,9 +35,9 @@ class EditorContent extends BaseCustomEditorContent {
   }
 
   async writeFile (
-    store: TLStore
+    editor: Editor
   ): Promise<void> {
-    const content = await serializeTldrawJson(store)
+    const content = await serializeTldrawJson(editor)
     const isBase64 = false
     this.io.setStatus('unsaved')
     await this.io.write(content, isBase64).catch(err => {
@@ -44,18 +52,18 @@ class EditorContent extends BaseCustomEditorContent {
     const editor = useEditor()
     const { msg, addToast } = useDefaultHelpers()
 
-    const onChange = (store: TLStore) => {
+    const onChange = (editor: Editor) => {
       this.logger.debug('change', this.contentType)
 
       this.io.setStatus('unsaved')
-      this.save = this.writeFile.bind(this, store)
+      this.save = this.writeFile.bind(this, editor)
       this.triggerAutoSave()
     }
 
     React.useEffect(() => {
       parseAndLoadDocument(editor, props.json, msg, addToast, undefined, ctx.theme.getColorScheme() === 'dark').then(() => {
         const store = editor.store
-        store.listen(() => onChange(store), { scope: 'document' })
+        store.listen(() => onChange(editor), { scope: 'document' })
       })
     }, [props.json])
 

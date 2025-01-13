@@ -58,7 +58,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^8.7.1",
     "rollup-plugin-copy": "^3.4.0",
-    "tldraw": "^2.2.0",
+    "tldraw": "^3.7.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.3",
     "vue": "^3.2.33",
