@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-tldraw",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "displayName": "tldraw",
   "description": "tldraw integration",
   "displayName_ZH-CN": "tldraw",
