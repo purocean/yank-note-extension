@@ -2,7 +2,7 @@
 
 English | [简体中文](./README_ZH-CN.md)
 
-[Yank Note](https://yank-note.com/zh-CN) supports "**JavaScript plugins**" and "**custom CSS styles**". If you want to share your own plugins and styles with others, you can package them into an **extension** for distribution.
+[Yank Note](https://yank-note.com/) supports "**JavaScript plugins**" and "**custom CSS styles**". If you want to share your own plugins and styles with others, you can package them into an **extension** for distribution.
 
 ## Extension Structure
 
