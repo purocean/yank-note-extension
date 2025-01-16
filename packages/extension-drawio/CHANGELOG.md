@@ -1,3 +1,12 @@
+## [2.6.1](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.6.0...extension-drawio-2.6.1) (2025-01-16)
+
+
+### Bug Fixes
+
+* **extension-drawio:** conditionally render edit button based on drawioFile and mode ([11d8355](https://github.com/purocean/yank-note-extension/commit/11d83558745ad7bc2e9f637b5bc81469bbac5a19))
+
+
+
 # [2.6.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.5.0...extension-drawio-2.6.0) (2025-01-13)
 
 
