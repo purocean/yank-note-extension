@@ -114,7 +114,7 @@ const DrawioComponent = defineComponent({
             [
               button($t.value('fit-height'), resize),
               button(_$t.value('reload'), reload),
-              ...(drawioFile
+              ...(drawioFile && ctx.args.MODE === 'normal'
                 ? [
                     button(_$t.value('edit'), () => {
                       ctx.doc.switchDoc(drawioFile!)
