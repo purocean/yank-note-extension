@@ -1,3 +1,12 @@
+## [1.0.7](https://github.com/purocean/yank-note-extension/compare/extension-spellchecker-1.0.6...extension-spellchecker-1.0.7) (2025-01-23)
+
+
+### Bug Fixes
+
+* **extension-spellchecker:** skip processing when editor is in composition ([17e10a4](https://github.com/purocean/yank-note-extension/commit/17e10a49ace39009c34b0e11efd11db708a62a4d))
+
+
+
 ## [1.0.6](https://github.com/purocean/yank-note-extension/compare/extension-spellchecker-1.0.5...extension-spellchecker-1.0.6) (2025-01-09)
 
 
