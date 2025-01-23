@@ -227,6 +227,9 @@ export function initSpellchecker (monaco: typeof Monaco, editor: Monaco.editor.I
   })
 
   const process = ctx.lib.lodash.debounce(() => {
+    // skip processing when the editor is in composition
+    if (ctx.store.state.inComposition) return
+
     checker.process()
   }, 500)
 
