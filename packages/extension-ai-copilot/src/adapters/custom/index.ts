@@ -357,6 +357,7 @@ export class CustomEditAdapter implements EditAdapter {
       return text
     } else {
       let text = ''
+      let think = ''
 
       await fetchEventSource(url, {
         fetch: () => ctx.api.proxyFetch(url, { method, headers, body: body, proxy: this.state.proxy, signal: controller.signal }),
@@ -374,7 +375,7 @@ export class CustomEditAdapter implements EditAdapter {
         },
         onmessage: async (e) => {
           const data = e.data
-          const { delta, done, text: _text } = await handleResultFn.apply(this, [{ res: data, sse: true }, env])
+          const { delta, done, text: _text, think: _think, thinkDelta } = await handleResultFn.apply(this, [{ res: data, sse: true }, env])
 
           if (done) {
             throw new FatalError('DONE')
@@ -382,6 +383,15 @@ export class CustomEditAdapter implements EditAdapter {
 
           if (_text) {
             text = _text
+          }
+
+          if (_think) {
+            think = _think
+          }
+
+          if (thinkDelta) {
+            think += thinkDelta
+            updateStatus(think)
           }
 
           if (delta) {

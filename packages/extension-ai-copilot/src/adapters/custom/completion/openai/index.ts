@@ -20,6 +20,14 @@ export class CompletionOpenAIPreset implements CustomAdapterPreset {
         displayName: 'Ollama',
         params: { model: 'llama3.1', endpoint: 'http://127.0.0.1:11434/v1/chat/completions' },
       },
+      deepseek: {
+        displayName: 'DeepSeek',
+        params: { model: 'deepseek-chat', endpoint: 'https://api.deepseek.com/v1/chat/completions' },
+      },
+      siliconcloud: {
+        displayName: 'SiliconCloud',
+        params: { model: 'deepseek-ai/DeepSeek-R1', endpoint: 'https://api.siliconflow.cn/v1/chat/completions' },
+      },
       kimi: {
         displayName: 'Kimi',
         params: { model: 'moonshot-v1-8k', endpoint: 'https://api.moonshot.cn/v1/chat/completions' },

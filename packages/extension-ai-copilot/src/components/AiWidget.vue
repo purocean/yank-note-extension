@@ -63,7 +63,7 @@
         </template>
       </div>
       <div v-else>{{ $t('no-adapters') }}</div>
-      <div v-if="status" class="status">{{ status }}</div>
+      <div v-if="status" ref="refStatus" class="status" @wheel="onStatusShell">{{ status }}</div>
     </div>
   </div>
 </template>
@@ -90,6 +90,7 @@ const props = defineProps<{
 
 const image = shallowRef<{ src: string, blob: Blob }>()
 const status = ref('')
+const refStatus = ref<HTMLElement>()
 
 const adapter = computed(() => getAdapter(props.adapterType, state.adapter[props.adapterType]))
 const finished = ref(false)
@@ -272,6 +273,14 @@ function toggleSetting () {
   }
 }
 
+function onStatusShell (e: WheelEvent) {
+  if (!refStatus.value) return
+
+  if (refStatus.value.scrollHeight > refStatus.value.clientHeight) {
+    e.stopPropagation()
+  }
+}
+
 watch(() => adapter.value?.state?.instruction, async () => {
   layout()
 })
@@ -281,6 +290,12 @@ watch(() => adapter.value, (val, oldValue) => {
     val.state.instruction = oldValue.state.instruction
   }
 }, { flush: 'post' })
+
+watch(status, () => {
+  if (refStatus.value && refStatus.value.scrollHeight - refStatus.value.scrollTop - refStatus.value.clientHeight < 20) {
+    refStatus.value.scrollTop = refStatus.value.scrollHeight
+  }
+})
 
 onMounted(() => {
   layout()
@@ -453,6 +468,8 @@ onBeforeUnmount(() => {
     margin-top: 8px;
     white-space: pre-line;
     overflow-wrap: break-word;
+    max-height: 100px;
+    overflow-y: auto;
   }
 
   @keyframes rotate {
