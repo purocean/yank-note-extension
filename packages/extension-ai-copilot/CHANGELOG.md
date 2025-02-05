@@ -1,3 +1,12 @@
+# [1.28.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.27.5...extension-ai-copilot-1.28.0) (2025-02-05)
+
+
+### Features
+
+* **extension-ai-copilot:** add DeepSeek adapter and enhance response handling ([8cfc773](https://github.com/purocean/yank-note-extension/commit/8cfc77320feccd57667153f9e18dd2d972eb5165))
+
+
+
 ## [1.27.5](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.27.4...extension-ai-copilot-1.27.5) (2025-01-07)
 
 
