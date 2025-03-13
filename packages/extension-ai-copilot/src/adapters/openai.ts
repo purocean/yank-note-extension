@@ -265,7 +265,7 @@ export class OpenAIEditAdapter implements EditAdapter {
     await fetchEventSource(url, {
       fetch: () => proxyFetch(url, { sse: true, headers, body: body, method: 'post' }, signal),
       async onopen (response) {
-        if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
+        if (response.ok && response.headers.get('content-type')?.includes(EventStreamContentType)) {
           return
         }
 
@@ -283,6 +283,10 @@ export class OpenAIEditAdapter implements EditAdapter {
         }
 
         const res = JSON.parse(data)
+        if (res.choices?.length === 0) {
+          return
+        }
+
         if (!res.choices[0]?.delta) {
           console.error(res)
           ctx.ui.useToast().show('warning', JSON.stringify(res), 5000)
