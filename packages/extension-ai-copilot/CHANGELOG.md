@@ -1,3 +1,12 @@
+## [1.28.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.28.0...extension-ai-copilot-1.28.1) (2025-03-13)
+
+
+### Bug Fixes
+
+* **extension-ai-copilot:** improve content-type check in OpenAIEditAdapter ([9258e47](https://github.com/purocean/yank-note-extension/commit/9258e478b5b4b56900f71d7e7a4618a88bdcc166))
+
+
+
 # [1.28.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.27.5...extension-ai-copilot-1.28.0) (2025-02-05)
 
 
