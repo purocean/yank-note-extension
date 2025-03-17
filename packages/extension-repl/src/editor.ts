@@ -177,7 +177,7 @@ class Previewer {
     provide('preview-options', previewOptions)
     provide('clear-console', ref(false))
 
-    return () => h(Preview, { show: true })
+    return () => h(Preview, { ssr: false, show: true })
   })
 
   init () {
