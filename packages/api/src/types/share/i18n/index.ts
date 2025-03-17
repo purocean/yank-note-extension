@@ -435,6 +435,7 @@ declare const languages: {
                 view: {
                     'default-previewer-max-width': string;
                     'default-previewer-max-width-desc': string;
+                    'default-previewer-font-family': string;
                 };
                 theme: string;
                 language: string;
@@ -1247,6 +1248,7 @@ declare const languages: {
                 view: {
                     'default-previewer-max-width': string;
                     'default-previewer-max-width-desc': string;
+                    'default-previewer-font-family': string;
                 };
                 theme: string;
                 language: string;
@@ -2059,6 +2061,7 @@ declare const languages: {
                 view: {
                     'default-previewer-max-width': string;
                     'default-previewer-max-width-desc': string;
+                    'default-previewer-font-family': string;
                 };
                 theme: string;
                 language: string;
@@ -2871,6 +2874,7 @@ declare const languages: {
                 view: {
                     'default-previewer-max-width': string;
                     'default-previewer-max-width-desc': string;
+                    'default-previewer-font-family': string;
                 };
                 theme: string;
                 language: string;

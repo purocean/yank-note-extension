@@ -1,4 +1,4 @@
-import { Flat, Language, MsgPath } from '@share/i18n';
+import { Language, MsgPath } from '@share/i18n';
 import { LanguageName } from '@fe/types';
 /**
  * Get current used language.
@@ -48,15 +48,11 @@ export declare function useI18n(): {
  * create i18n
  * @param data - language data
  * @param defaultLanguage - default language
- * @returns
+ * @returns { t, $t, $$t }, t is translate function, $t is ref of t, $$t is dynamic translate function
  */
 export declare function createI18n<T extends Record<string, any>>(data: {
     [lang in Language]?: T;
-}, defaultLanguage?: Language): {
-    t: (path: keyof Flat<T, "">, ...args: string[]) => string;
-    $t: import("vue").Ref<(path: keyof Flat<T, "">, ...args: string[]) => string, (path: keyof Flat<T, "">, ...args: string[]) => string>;
-    $$t: (path: keyof Flat<T, "">, ...args: string[]) => string;
-};
+}, defaultLanguage?: Language): {};
 declare module '@vue/runtime-core' {
     interface ComponentCustomProperties {
         $t: typeof t;

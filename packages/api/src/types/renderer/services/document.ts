@@ -7,7 +7,7 @@ type PathItemWithType = Optional<Omit<BaseDoc, 'name'>, 'type'>;
  * @param doc
  * @returns
  */
-export declare function getAbsolutePath(doc: Doc): string;
+export declare function getAbsolutePath(doc: PathItem): string;
 /**
  * Create a checker to check if a document is current activated document.
  * @returns
@@ -31,19 +31,19 @@ export declare function cloneDoc(doc?: Doc | null, opts?: {
  * @param doc
  * @returns
  */
-export declare function isMarkdownFile(doc: Doc): boolean;
+export declare function isMarkdownFile(doc: PathItemWithType): boolean;
 /**
  * Check if the document is supported.
  * @param doc
  * @returns
  */
-export declare function supported(doc: Doc): boolean;
+export declare function supported(doc: PathItemWithType): boolean;
 /**
  * Check if the document is out of a repository.
  * @param doc
  * @returns
  */
-export declare function isOutOfRepo(doc?: Doc | null): boolean;
+export declare function isOutOfRepo(doc?: PathItem | null): boolean;
 /**
  * Determine if the document is encrypted.
  * @param doc
@@ -55,7 +55,7 @@ export declare function isEncrypted(doc?: Pick<Doc, 'path' | 'type'> | null): bo
  * @param doc
  * @returns
  */
-export declare function isPlain(doc?: PathItemWithType): boolean;
+export declare function isPlain(doc?: Omit<PathItemWithType, 'repo'>): boolean;
 /**
  * Determine if it is in the same repository.
  * @param docA
@@ -89,10 +89,10 @@ export declare function toUri(doc?: PathItemWithType | null): string;
  * @param baseDoc
  * @returns
  */
-export declare function createDoc(doc: Pick<Doc, 'repo' | 'path' | 'content'>, baseDoc: Doc & {
+export declare function createDoc(doc: Pick<Doc, 'repo' | 'path' | 'content'>, baseDoc: BaseDoc & {
     type: 'file' | 'dir';
 }): Promise<Doc>;
-export declare function createDoc(doc: Optional<Pick<Doc, 'repo' | 'path' | 'content'>, 'path'>, baseDoc?: Doc & {
+export declare function createDoc(doc: Optional<Pick<Doc, 'repo' | 'path' | 'content'>, 'path'>, baseDoc?: BaseDoc & {
     type: 'file' | 'dir';
 }): Promise<Doc>;
 /**
@@ -101,10 +101,10 @@ export declare function createDoc(doc: Optional<Pick<Doc, 'repo' | 'path' | 'con
  * @param baseDoc
  * @returns
  */
-export declare function createDir(doc: Pick<Doc, 'repo' | 'path' | 'content'>, baseDoc: Doc & {
+export declare function createDir(doc: Pick<Doc, 'repo' | 'path' | 'content'>, baseDoc: BaseDoc & {
     type: 'file' | 'dir';
 }): Promise<Doc>;
-export declare function createDir(doc: Optional<Pick<Doc, 'repo' | 'path' | 'content'>, 'path'>, baseDoc?: Doc & {
+export declare function createDir(doc: Optional<Pick<Doc, 'repo' | 'path' | 'content'>, 'path'>, baseDoc?: BaseDoc & {
     type: 'file' | 'dir';
 }): Promise<Doc>;
 /**
@@ -162,17 +162,18 @@ export declare function unmarkDoc(doc: BaseDoc): Promise<void>;
  *  Get marked files.
  * @returns
  */
-export declare function getMarkedFiles(): (BaseDoc & {
+export declare function getMarkedFiles(): {
+    type: "file" | "dir" | `__${string}`;
     name: string;
-})[];
+    repo: string;
+    path: string;
+}[];
 /**
  * Check if document is marked.
  * @param doc
  * @returns
  */
-export declare function isMarked(doc: PathItem & {
-    type?: Doc['type'];
-}): boolean;
+export declare function isMarked(doc: PathItemWithType): boolean;
 /**
  * Open in OS.
  * @param doc

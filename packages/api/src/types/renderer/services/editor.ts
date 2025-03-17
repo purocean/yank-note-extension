@@ -3,6 +3,7 @@ import type { CustomEditor, CustomEditorCtx } from '@fe/types';
 export type SimpleCompletionItem = {
     label: string;
     kind?: Monaco.languages.CompletionItemKind;
+    language?: string;
     insertText: string;
     detail?: string;
     block?: boolean;
@@ -47,6 +48,13 @@ export declare function highlightLine(line: number | [number, number], reveal?: 
  * @returns
  */
 export declare function getOneIndent(): string;
+/**
+ * Get language id of line.
+ * @param line
+ * @param model
+ * @returns
+ */
+export declare function getLineLanguageId(line: number, model?: Monaco.editor.ITextModel | null): string;
 /**
  * Ensure editor is ready.
  * @returns

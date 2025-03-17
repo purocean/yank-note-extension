@@ -399,6 +399,7 @@ export interface BuildInSettings {
     'render.multimd-headerless': boolean;
     'render.multimd-multibody': boolean;
     'view.default-previewer-max-width': number;
+    'view.default-previewer-font-family': string;
     'assets.path-type': 'relative' | 'absolute' | 'auto';
     'plugin.image-hosting-picgo.server-url': string;
     'plugin.image-hosting-picgo.enable-paste-image': boolean;
@@ -602,8 +603,16 @@ export type BuildInHookTypes = {
     DOC_CREATED: {
         doc: Doc;
     };
+    DOC_BEFORE_DELETE: {
+        doc: PathItem;
+        force: boolean;
+    };
     DOC_DELETED: {
         doc: PathItem;
+    };
+    DOC_BEFORE_MOVE: {
+        doc: Doc;
+        newDoc: Doc;
     };
     DOC_MOVED: {
         oldDoc: Doc;
@@ -734,6 +743,11 @@ export type DocCategory = {
     displayName: string;
     types: DocType[];
 };
+export type CodeRunnerResultType = 'html' | 'plain';
+export type CodeRunnerRunOptions = {
+    signal: AbortSignal;
+    flusher: (type: CodeRunnerResultType, value: string) => void;
+};
 export interface CodeRunner {
     name: string;
     order?: number;
@@ -743,10 +757,8 @@ export interface CodeRunner {
         start: string;
         exit: string;
     } | null;
-    run: (language: string, code: string, opts?: {
-        signal?: AbortSignal;
-    }) => Promise<{
-        type: 'html' | 'plain';
+    run(language: string, code: string, opts: CodeRunnerRunOptions): Promise<null | {
+        type: CodeRunnerResultType;
         value: ReadableStreamDefaultReader | string;
     }>;
 }
