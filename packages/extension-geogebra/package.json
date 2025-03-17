@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-geogebra",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "displayName": "GeoGebra",
   "description": "GeoGebra integration.",
   "displayName_ZH-CN": "GeoGebra",
