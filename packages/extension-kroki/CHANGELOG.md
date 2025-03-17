@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-kroki-1.1.2...extension-kroki-1.2.0) (2025-03-17)
+
+
+### Features
+
+* support runtime 3.82.0 ([8cae39b](https://github.com/purocean/yank-note-extension/commit/8cae39b3de3c5288441004f90944dde0f812eb84))
+
+
+
 ## <small>1.1.2 (2024-06-22)</small>
 
 * chore: bump @yank-note/runtime-api to ([710dfee](https://github.com/purocean/yank-note-extension/commit/710dfee))
