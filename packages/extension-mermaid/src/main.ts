@@ -87,7 +87,7 @@ C -->|Two| E[Result 2]
       /* eslint-disable no-template-curly-in-string */
 
       items.push(
-        { label: '/ []() Mermaid Link', insertText: '[${2:Mermaid}]($1){link-type="mermaid"}', block: true },
+        { language: 'markdown', label: '/ []() Mermaid Link', insertText: '[${2:Mermaid}]($1){link-type="mermaid"}', block: true },
       )
     })
 

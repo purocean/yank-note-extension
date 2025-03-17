@@ -61,8 +61,8 @@ registerPlugin({
       /* eslint-disable no-template-curly-in-string */
 
       items.push(
-        { label: '/ + Markmap', insertText: '+ ${1:Subject}{.markmap}\n    + ${2:Topic}\n', block: true },
-        { label: '/ ``` Markmap', insertText: '```markmap\n+ ${1:Subject}\n    + ${2:Topic}\n```\n', block: true },
+        { language: 'markdown', label: '/ + Markmap', insertText: '+ ${1:Subject}{.markmap}\n    + ${2:Topic}\n', block: true },
+        { language: 'markdown', label: '/ ``` Markmap', insertText: '```markmap\n+ ${1:Subject}\n    + ${2:Topic}\n```\n', block: true },
       )
     })
   }

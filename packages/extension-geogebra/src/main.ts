@@ -93,7 +93,7 @@ registerPlugin({
       /* eslint-disable no-template-curly-in-string */
 
       items.push(
-        { label: '/ []() GeoGebra Link', insertText: '[${2:GeoGebra}]($1){link-type="geogebra"}', block: true },
+        { language: 'markdown', label: '/ []() GeoGebra Link', insertText: '[${2:GeoGebra}]($1){link-type="geogebra"}', block: true },
       )
     })
 
