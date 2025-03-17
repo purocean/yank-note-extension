@@ -452,6 +452,7 @@ importers:
       eslint-plugin-node: ^11.1.0
       eslint-plugin-promise: ^6.0.0
       eslint-plugin-vue: ^8.7.1
+      terser: ^5.26.0
       typescript: ^4.6.4
       vite: ^3.2.3
       vue: ^3.2.33
@@ -469,8 +470,9 @@ importers:
       eslint-plugin-node: 11.1.0_eslint@7.32.0
       eslint-plugin-promise: 6.0.0_eslint@7.32.0
       eslint-plugin-vue: 8.7.1_eslint@7.32.0
+      terser: 5.26.0
       typescript: 4.6.4
-      vite: 3.2.3
+      vite: 3.2.3_terser@5.26.0
       vue: 3.4.10_typescript@4.6.4
       vue-tsc: 0.34.11_typescript@4.6.4
 
@@ -1793,7 +1795,7 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       '@jridgewell/set-array': 1.1.2
-      '@jridgewell/sourcemap-codec': 1.4.15
+      '@jridgewell/sourcemap-codec': 1.5.0
       '@jridgewell/trace-mapping': 0.3.20
     dev: true
 
@@ -1826,7 +1828,7 @@ packages:
     resolution: {integrity: sha512-R8LcPeWZol2zR8mmH3JeKQ6QRCFb7XgUhV9ZlGhHLGyg4wpPiPZNQOOWhFZhxKw8u//yTbNGI42Bx/3paXEQ+Q==}
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
-      '@jridgewell/sourcemap-codec': 1.4.15
+      '@jridgewell/sourcemap-codec': 1.5.0
     dev: true
 
   /@mermaid-js/layout-elk/0.1.7_mermaid@11.4.1:
@@ -3870,8 +3872,8 @@ packages:
       vite: ^3.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 3.2.3_sass@1.56.1
-      vue: 3.4.10_typescript@5.7.2
+      vite: 3.2.3_terser@5.26.0
+      vue: 3.4.10_typescript@4.6.4
     dev: true
 
   /@vitejs/plugin-vue/4.6.2_vite@3.2.3+vue@3.4.10:
@@ -11109,7 +11111,7 @@ packages:
     hasBin: true
     dependencies:
       '@jridgewell/source-map': 0.3.5
-      acorn: 8.11.2
+      acorn: 8.14.0
       commander: 2.20.3
       source-map-support: 0.5.21
     dev: true
