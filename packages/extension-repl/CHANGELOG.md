@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-repl-1.3.0...extension-repl-1.4.0) (2025-03-17)
+
+
+### Features
+
+* support runtime 3.82.0 ([8cae39b](https://github.com/purocean/yank-note-extension/commit/8cae39b3de3c5288441004f90944dde0f812eb84))
+
+
+
 # [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-repl-1.2.2...extension-repl-1.3.0) (2024-07-05)
 
 
