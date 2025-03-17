@@ -1,3 +1,12 @@
+# [1.8.0](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.7.1...extension-markmap-1.8.0) (2025-03-17)
+
+
+### Features
+
+* support runtime 3.82.0 ([8cae39b](https://github.com/purocean/yank-note-extension/commit/8cae39b3de3c5288441004f90944dde0f812eb84))
+
+
+
 ## [1.7.1](https://github.com/purocean/yank-note-extension/compare/extension-markmap-1.7.0...extension-markmap-1.7.1) (2024-11-08)
 
 
