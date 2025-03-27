@@ -1,3 +1,12 @@
+# [1.29.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.28.1...extension-ai-copilot-1.29.0) (2025-03-27)
+
+
+### Features
+
+* **extension-ai-copilot:** standardize OpenAI chat completion URL ([8aa515d](https://github.com/purocean/yank-note-extension/commit/8aa515d94da6c464dc5dc9f3bfcc2a7a30bfdece))
+
+
+
 ## [1.28.1](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.28.0...extension-ai-copilot-1.28.1) (2025-03-13)
 
 
