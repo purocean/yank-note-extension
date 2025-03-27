@@ -18,7 +18,7 @@ messages.unshift({
   content: systemMessage || 'ATTENTION: OUTPUT THE CONTENT DIRECTLY, NO SURROUNDING OR OTHER CONTENT.'
 })
 
-const url = state.endpoint
+const url = env.fixOpenAiChatCompletionUrl(state.endpoint)
 
 const headers = {
   'Authorization': `Bearer ${state.apiToken}`,

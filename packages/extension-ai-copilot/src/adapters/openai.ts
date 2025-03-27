@@ -1,5 +1,5 @@
 import { CompletionAdapter, EditAdapter, Panel } from '@/lib/adapter'
-import { i18n, proxyFetch, COMPLETION_DEFAULT_SYSTEM_MESSAGE, EDIT_DEFAULT_SYSTEM_MESSAGE, FatalError } from '@/lib/core'
+import { i18n, proxyFetch, COMPLETION_DEFAULT_SYSTEM_MESSAGE, EDIT_DEFAULT_SYSTEM_MESSAGE, FatalError, fixOpenAiChatCompletionUrl } from '@/lib/core'
 import { fetchEventSource, EventStreamContentType } from '@microsoft/fetch-event-source'
 import { ctx } from '@yank-note/runtime-api'
 import { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
@@ -149,7 +149,7 @@ export class OpenAICompletionAdapter implements CompletionAdapter {
       messages.unshift({ role: 'system', content: system })
     }
 
-    const url = this.state.api_url || defaultApiUrl
+    const url = fixOpenAiChatCompletionUrl(this.state.api_url || defaultApiUrl)
 
     const params = this._parseJson(this.state.paramsJson, {})
 
@@ -245,6 +245,8 @@ export class OpenAIEditAdapter implements EditAdapter {
 
   private async _requestApi (url: string, body: any, cancelToken: CancellationToken, onProgress: (text: string, delta: string) => void): Promise<string> {
     const token = this.state.api_token
+
+    url = fixOpenAiChatCompletionUrl(url)
 
     const headers = { Authorization: `Bearer ${token}` }
 

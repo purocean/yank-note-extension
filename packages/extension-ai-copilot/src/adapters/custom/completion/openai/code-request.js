@@ -11,7 +11,7 @@ const messages = [
   },
 ]
 
-const url = state.endpoint
+const url = env.fixOpenAiChatCompletionUrl(state.endpoint)
 
 const headers = {
   'Authorization': `Bearer ${state.apiToken}`,

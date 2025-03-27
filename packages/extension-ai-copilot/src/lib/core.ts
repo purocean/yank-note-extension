@@ -350,3 +350,15 @@ export function removeCustomAdapter (adapter: Pick<CustomAdapter, 'name' | 'type
   removeAdapter(adapter.type, adapter.name)
   state.customAdapters = state.customAdapters.filter(x => x.name !== adapter.name || x.type !== adapter.type)
 }
+
+export function fixOpenAiChatCompletionUrl (url: string) {
+  if (url.endsWith('/chat/completions')) {
+    return url
+  } else {
+    if (url.endsWith('/')) {
+      return url + 'chat/completions'
+    } else {
+      return url + '/chat/completions'
+    }
+  }
+}

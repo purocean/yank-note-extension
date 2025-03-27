@@ -3,7 +3,7 @@ import * as gradio from '@gradio/client'
 import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { ctx, runtimeVersionSatisfies } from '@yank-note/runtime-api'
 import { Adapter, AdapterType, CompletionAdapter, EditAdapter, getAllAdapters, Panel, TextToImageAdapter } from '@/lib/adapter'
-import { addCustomAdapters, COMPLETION_DEFAULT_SYSTEM_MESSAGE, CustomAdapter, EDIT_DEFAULT_SYSTEM_MESSAGE, FatalError, i18n } from '@/lib/core'
+import { addCustomAdapters, COMPLETION_DEFAULT_SYSTEM_MESSAGE, CustomAdapter, EDIT_DEFAULT_SYSTEM_MESSAGE, FatalError, fixOpenAiChatCompletionUrl, i18n } from '@/lib/core'
 import { CompletionDefaultPreset } from './completion/default/index'
 import type { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { CompletionOpenAIPreset } from './completion/openai'
@@ -157,9 +157,11 @@ export class CustomCompletionAdapter implements CompletionAdapter {
       return { items: [] }
     }
 
+    const env = { fixOpenAiChatCompletionUrl }
+
     let res: string[] = []
-    const buildRequestFn = new AsyncFunction('data', this.state.buildRequestCode)
-    const handleResponseFn = new AsyncFunction('data', this.state.handleResponseCode)
+    const buildRequestFn = new AsyncFunction('data', 'env', this.state.buildRequestCode)
+    const handleResponseFn = new AsyncFunction('data', 'env', this.state.handleResponseCode)
 
     const data = {
       context: this.state.context,
@@ -168,7 +170,7 @@ export class CustomCompletionAdapter implements CompletionAdapter {
       state: this.state,
     }
 
-    const request = await buildRequestFn.apply(this, [data])
+    const request = await buildRequestFn.apply(this, [data, env])
     this.logger.debug('Request:', request)
 
     if (!request) {
@@ -332,7 +334,7 @@ export class CustomEditAdapter implements EditAdapter {
       })
     })
 
-    const env = { signal: controller.signal, updateStatus }
+    const env = { signal: controller.signal, updateStatus, fixOpenAiChatCompletionUrl }
 
     const data = {
       selectedText,
