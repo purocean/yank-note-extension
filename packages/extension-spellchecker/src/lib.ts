@@ -142,7 +142,6 @@ class SpellWorkerChannel implements JSONRPCClientChannel {
 
 class SpellService extends JSONRPCClient<WorkerMainModule> {
   worker: Worker
-  logger = ctx.utils.getLogger('SpellService')
 
   dispose () {
     logger.debug('dispose')

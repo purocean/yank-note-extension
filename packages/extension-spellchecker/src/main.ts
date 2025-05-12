@@ -61,6 +61,10 @@ registerPlugin({
       })
 
       ctx.setting.changeSchema((schema) => {
+        if (!schema.groups.some((x: any) => x.value === 'plugin')) {
+          schema.groups.push({ value: 'plugin', label: 'Plugin' } as any)
+        }
+
         schema.properties[settingKeyDicName] = {
           title: i18n.$$t('setting-dictionary'),
           type: 'string',
