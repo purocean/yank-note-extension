@@ -20,7 +20,7 @@
     "yank-note": "^3.66.0"
   },
   "requirements": {
-    "terminal": true
+    "premium": true
   },
   "files": [
     "*.md",
