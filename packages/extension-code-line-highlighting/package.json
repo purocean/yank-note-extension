@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-code-line-highlighting",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "displayName": "Code Line Highlighting",
   "displayName_ZH-CN": "代码行高亮",
   "description": "Focus on specific code lines.",
