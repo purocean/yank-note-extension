@@ -32,7 +32,7 @@ codeBlocks?.forEach((codeBlock) => {
 
 This will highlight lines 1, 4 to 6, and 11 in the code block.
 
-![](https://github.com/user-attachments/assets/791f1e40-89b5-4968-b8aa-a5b7268c5e3f)
+![](https://github.com/user-attachments/assets/1c62ec9d-e3d8-4963-be21-dda18b26a01a)
 
 You Can also use the [revealjs style](https://revealjs.com/code/#line-numbers-%26-highlights) to highlight specific lines:
 
