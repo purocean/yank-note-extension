@@ -1,3 +1,7 @@
+## [1.0.1](https://github.com/purocean/yank-note-extension/compare/extension-code-line-highlighting-1.0.0...extension-code-line-highlighting-1.0.1) (2025-07-14)
+
+
+
 # 1.0.0 (2025-07-11)
 
 
