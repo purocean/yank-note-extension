@@ -65,6 +65,10 @@ registerPlugin({
         _win.opener = null
         _win.parent = null
         _win.fetch = (...args: any[]) => {
+          if (args[0] === '/api/run') {
+            return fetch.apply(_win.window, args)
+          }
+
           if (args[1]?.method?.toUpperCase() === 'POST') {
             throw new Error('[PopupPreview] POST request is not supported')
           }
