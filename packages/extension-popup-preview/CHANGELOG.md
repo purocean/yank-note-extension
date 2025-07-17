@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.2.5...extension-pop-preview-1.3.0) (2025-07-17)
+
+
+### Bug Fixes
+
+* **extension-popup-preview:** allow requests to /api/run in popup window ([968d30f](https://github.com/purocean/yank-note-extension/commit/968d30f485724be2a36a9b7abc2fa6175b68a368))
+
+
+
 ## [1.2.5](https://github.com/purocean/yank-note-extension/compare/extension-pop-preview-1.2.4...extension-pop-preview-1.2.5) (2025-01-08)
 
 
