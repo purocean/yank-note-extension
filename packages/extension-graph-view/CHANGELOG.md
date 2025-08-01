@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.3.0...extension-graph-view-1.3.1) (2025-08-01)
+
+
+### Bug Fixes
+
+* **graph-view:** prevent switching document for invalid node keys ([a11aab8](https://github.com/purocean/yank-note-extension/commit/a11aab898256b4d72c7da5cd228f2484072293e3))
+
+
+
 # [1.3.0](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.2.2...extension-graph-view-1.3.0) (2025-08-01)
 
 
