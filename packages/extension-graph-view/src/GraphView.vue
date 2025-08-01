@@ -365,12 +365,14 @@ async function refresh () {
         instance?.refresh({ skipIndexation: true, })
       }
 
-      ctx.doc.switchDoc({
-        type: 'file',
-        repo: ctx.store.state.currentRepo!.name,
-        path: node.key,
-        name: node.label,
-      }, { position })
+      if (node.key.startsWith('/')) {
+        ctx.doc.switchDoc({
+          type: 'file',
+          repo: ctx.store.state.currentRepo!.name,
+          path: node.key,
+          name: node.label,
+        }, { position })
+      }
     }
 
     dragState = null
