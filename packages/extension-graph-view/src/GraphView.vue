@@ -33,6 +33,7 @@ import { i18n } from './lib'
 import { computed, nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 
 let _independentNodesVisible = true
+let _tagsVisible = true
 </script>
 
 <script setup lang="ts">
@@ -71,6 +72,7 @@ const loading = ref(false)
 const status = ref('')
 const expanded = ref(false)
 const independentNodesVisible = ref(_independentNodesVisible)
+const tagsVisible = ref(_tagsVisible)
 const hoverState = shallowRef<{ node: string, neighbors: Set<string>, edges: Set<string>, nodeSelected: boolean, currentNode: string } | null>(null)
 const graphTitle = computed(() => {
   return hoverState.value?.node || i18n.t('graph-view')
@@ -132,24 +134,64 @@ async function refresh () {
   })
 
   let globalZIndex = 1
-  const nodes: Node[] = []
   const edges: Edge[] = []
   let dragState: { node: string, nodeX: number, nodeY: number, x: number, y: number, moved: boolean } | null = null
 
   await dm.getTable().where({ repo }).each(doc => {
     doc.links.forEach(link => {
       if (link.internal && doc.path !== link.internal) {
-        edges.push({ source: doc.path, target: link.internal, zIndex: globalZIndex++, color: darkMode ? '#444' : '#ddd', size: 1, type: 'arrow', directed: true, position: link.position })
+        edges.push({
+          source: doc.path,
+          target: link.internal,
+          zIndex: globalZIndex++,
+          color: darkMode ? '#444' : '#ddd',
+          size: 1,
+          type: 'arrow',
+          directed: true,
+          position: link.position
+        })
       }
     })
 
     const label = /^(?:index|readme)\.md$/i.test(doc.name) ? doc.path : doc.name
+    graph!.addNode(doc.path, {
+      key: doc.path,
+      label,
+      x: 0,
+      y: 0,
+      color: '#888',
+      zIndex: globalZIndex++,
+      size: 0,
+      forceLabel: false
+    })
 
-    nodes.push({ key: doc.path, label, x: 0, y: 0, color: '#888', zIndex: globalZIndex++, size: 0, forceLabel: false })
-  })
+    if (tagsVisible.value) {
+      (doc.tags || []).forEach(tag => {
+        const key = tag
+        if (!graph!.hasNode(key)) {
+          graph!.addNode(key, {
+            key,
+            label: tag,
+            x: 0,
+            y: 0,
+            color: '#888',
+            zIndex: globalZIndex++,
+            size: 0,
+            forceLabel: false,
+          })
+        }
 
-  nodes.forEach(node => {
-    graph!.addNode(node.key, node)
+        edges.push({
+          target: key,
+          source: doc.path,
+          zIndex: globalZIndex++,
+          color: '#888',
+          size: 0,
+          type: 'arrow',
+          directed: true,
+        })
+      })
+    }
   })
 
   edges.forEach(edge => {
@@ -441,6 +483,15 @@ function triggerMenu () {
         independentNodesVisible.value = !independentNodesVisible.value
       },
     },
+    {
+      id: 'show-tags',
+      type: 'normal',
+      checked: tagsVisible.value,
+      label: i18n.t('show-tags'),
+      onClick () {
+        tagsVisible.value = !tagsVisible.value
+      },
+    },
   ])
 }
 
@@ -452,6 +503,11 @@ watch(expanded, () => {
 
 watch(independentNodesVisible, (val) => {
   _independentNodesVisible = val
+  refresh()
+})
+
+watch(tagsVisible, (val) => {
+  _tagsVisible = val
   refresh()
 })
 
