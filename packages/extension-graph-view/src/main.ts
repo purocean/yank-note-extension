@@ -17,6 +17,7 @@ registerPlugin({
 
     ctx.action.registerAction({
       name: openGraphViewActionName,
+      description: i18n.t('open-graph-view'),
       forUser: true,
       when,
       handler: () => {
