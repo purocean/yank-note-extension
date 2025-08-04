@@ -1,3 +1,12 @@
+## [1.3.2](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.3.1...extension-graph-view-1.3.2) (2025-08-04)
+
+
+### Bug Fixes
+
+* **extension-graph-view:** add missing description for open graph view action ([0eac4d7](https://github.com/purocean/yank-note-extension/commit/0eac4d75db05c0f003fb4bfeaa9756a41e1b65e0))
+
+
+
 ## [1.3.1](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.3.0...extension-graph-view-1.3.1) (2025-08-01)
 
 
