@@ -1,3 +1,12 @@
+# [1.30.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.29.0...extension-ai-copilot-1.30.0) (2025-08-04)
+
+
+### Features
+
+* **extension-ai-copilot:** add GitHub adapter with model and endpoint ([a0c3280](https://github.com/purocean/yank-note-extension/commit/a0c32808f34b2d7f0ce9443ab205af797b59ca46))
+
+
+
 # [1.29.0](https://github.com/purocean/yank-note-extension/compare/extension-ai-copilot-1.28.1...extension-ai-copilot-1.29.0) (2025-03-27)
 
 
