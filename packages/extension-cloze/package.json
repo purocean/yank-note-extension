@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-cloze",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "displayName": "Cloze",
   "displayName_ZH-CN": "挖空",
   "description": "A Yank Note extension that allows you to create spaced content for quizzes and learning.",
@@ -57,6 +57,5 @@
     "vue": "^3.2.33",
     "vue-tsc": "^0.34.11"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
