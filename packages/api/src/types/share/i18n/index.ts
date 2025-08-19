@@ -407,8 +407,11 @@ declare const languages: {
                     'ordered-list-completion': string;
                     minimap: string;
                     'line-numbers': string;
+                    'wrap-indent': string;
                     'enable-preview': string;
                     'font-family': string;
+                    rulers: string;
+                    'mouse-wheel-scroll-sensitivity': string;
                     'font-ligatures': string;
                     'complete-emoji': string;
                     'todo-with-time': string;
@@ -423,6 +426,7 @@ declare const languages: {
                     'md-breaks': string;
                     'md-linkify': string;
                     'md-wiki-links': string;
+                    'md-hash-tags': string;
                     'md-typographer': string;
                     'md-sup': string;
                     'md-sub': string;
@@ -431,6 +435,7 @@ declare const languages: {
                     'multimd-rowspan': string;
                     'multimd-headerless': string;
                     'multimd-multibody': string;
+                    'extra-css-style': string;
                 };
                 view: {
                     'default-previewer-max-width': string;
@@ -488,6 +493,7 @@ declare const languages: {
             empty: string;
             files: string;
             marked: string;
+            tags: string;
         };
         editor: {
             'context-menu': {
@@ -1220,8 +1226,11 @@ declare const languages: {
                     'ordered-list-completion': string;
                     minimap: string;
                     'line-numbers': string;
+                    'wrap-indent': string;
                     'enable-preview': string;
                     'font-family': string;
+                    rulers: string;
+                    'mouse-wheel-scroll-sensitivity': string;
                     'font-ligatures': string;
                     'complete-emoji': string;
                     'todo-with-time': string;
@@ -1236,6 +1245,7 @@ declare const languages: {
                     'md-breaks': string;
                     'md-linkify': string;
                     'md-wiki-links': string;
+                    'md-hash-tags': string;
                     'md-typographer': string;
                     'md-sup': string;
                     'md-sub': string;
@@ -1244,6 +1254,7 @@ declare const languages: {
                     'multimd-rowspan': string;
                     'multimd-headerless': string;
                     'multimd-multibody': string;
+                    'extra-css-style': string;
                 };
                 view: {
                     'default-previewer-max-width': string;
@@ -1301,6 +1312,7 @@ declare const languages: {
             empty: string;
             files: string;
             marked: string;
+            tags: string;
         };
         editor: {
             'context-menu': {
@@ -2033,8 +2045,11 @@ declare const languages: {
                     'ordered-list-completion': string;
                     minimap: string;
                     'line-numbers': string;
+                    'wrap-indent': string;
                     'enable-preview': string;
                     'font-family': string;
+                    rulers: string;
+                    'mouse-wheel-scroll-sensitivity': string;
                     'font-ligatures': string;
                     'complete-emoji': string;
                     'todo-with-time': string;
@@ -2049,6 +2064,7 @@ declare const languages: {
                     'md-breaks': string;
                     'md-linkify': string;
                     'md-wiki-links': string;
+                    'md-hash-tags': string;
                     'md-typographer': string;
                     'md-sup': string;
                     'md-sub': string;
@@ -2057,6 +2073,7 @@ declare const languages: {
                     'multimd-rowspan': string;
                     'multimd-headerless': string;
                     'multimd-multibody': string;
+                    'extra-css-style': string;
                 };
                 view: {
                     'default-previewer-max-width': string;
@@ -2114,6 +2131,7 @@ declare const languages: {
             empty: string;
             files: string;
             marked: string;
+            tags: string;
         };
         editor: {
             'context-menu': {
@@ -2846,8 +2864,11 @@ declare const languages: {
                     'ordered-list-completion': string;
                     minimap: string;
                     'line-numbers': string;
+                    'wrap-indent': string;
                     'enable-preview': string;
                     'font-family': string;
+                    rulers: string;
+                    'mouse-wheel-scroll-sensitivity': string;
                     'font-ligatures': string;
                     'complete-emoji': string;
                     'todo-with-time': string;
@@ -2862,6 +2883,7 @@ declare const languages: {
                     'md-breaks': string;
                     'md-linkify': string;
                     'md-wiki-links': string;
+                    'md-hash-tags': string;
                     'md-typographer': string;
                     'md-sup': string;
                     'md-sub': string;
@@ -2870,6 +2892,7 @@ declare const languages: {
                     'multimd-rowspan': string;
                     'multimd-headerless': string;
                     'multimd-multibody': string;
+                    'extra-css-style': string;
                 };
                 view: {
                     'default-previewer-max-width': string;
@@ -2927,6 +2950,7 @@ declare const languages: {
             empty: string;
             files: string;
             marked: string;
+            tags: string;
         };
         editor: {
             'context-menu': {

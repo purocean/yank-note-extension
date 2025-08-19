@@ -96,7 +96,6 @@ declare const ctx: Readonly<{
             currentFile: {
                 name: string;
                 content?: string | undefined;
-                title?: string | undefined;
                 passwordHash?: string | undefined;
                 contentHash?: string | undefined;
                 stat?: {
@@ -119,7 +118,6 @@ declare const ctx: Readonly<{
                     file: {
                         name: string;
                         content?: string | undefined;
-                        title?: string | undefined;
                         passwordHash?: string | undefined;
                         contentHash?: string | undefined;
                         stat?: {

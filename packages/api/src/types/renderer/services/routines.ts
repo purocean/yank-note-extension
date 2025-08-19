@@ -1,4 +1,4 @@
-import type { BaseDoc, Doc, PositionState } from '@fe/types';
+import type { BaseDoc, PositionState } from '@fe/types';
 /**
  * Change position.
  * @param position
@@ -9,4 +9,4 @@ export declare function changePosition(position: PositionState): Promise<void>;
  * @param filter
  * @returns
  */
-export declare function chooseDocument(filter?: (item: BaseDoc) => boolean): Promise<Doc | null>;
+export declare function chooseDocument(filter?: (item: BaseDoc) => boolean): Promise<BaseDoc | null>;

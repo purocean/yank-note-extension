@@ -82,7 +82,6 @@ declare const _default: {
         currentFile: {
             name: string;
             content?: string | undefined;
-            title?: string | undefined;
             passwordHash?: string | undefined;
             contentHash?: string | undefined;
             stat?: {
@@ -105,7 +104,6 @@ declare const _default: {
                 file: {
                     name: string;
                     content?: string | undefined;
-                    title?: string | undefined;
                     passwordHash?: string | undefined;
                     contentHash?: string | undefined;
                     stat?: {

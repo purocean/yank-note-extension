@@ -27,7 +27,6 @@ export interface BaseDoc extends PathItem {
 export interface Doc extends BaseDoc {
     name: string;
     content?: string;
-    title?: string;
     passwordHash?: string;
     contentHash?: string;
     stat?: FileStat;

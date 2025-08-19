@@ -45,8 +45,10 @@ export declare const DOM_ATTR_NAME: {
     WIKI_RESOURCE: string;
     IS_ANCHOR: string;
     SKIP_EXPORT: string;
+    DATA_HASHTAG: string;
 };
 export declare const DOM_CLASS_NAME: {
+    HASH_TAG: string;
     PREVIEW_HIGHLIGHT: string;
     PREVIEW_MARKDOWN_BODY: string;
     MARK_OPEN: string;
