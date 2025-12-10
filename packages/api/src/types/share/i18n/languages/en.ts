@@ -433,6 +433,7 @@ declare const data: {
                 'multimd-rowspan': string;
                 'multimd-headerless': string;
                 'multimd-multibody': string;
+                'text-autospace': string;
                 'extra-css-style': string;
             };
             view: {

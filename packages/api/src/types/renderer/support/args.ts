@@ -67,4 +67,5 @@ export declare const DOM_CLASS_NAME: {
     TASK_LIST_ITEM_CHECKBOX: string;
     NEW_PAGE: string;
     AVOID_PAGE_BREAK: string;
+    CODE_SYNTAX_HIGHLIGHT_FONT: string;
 };

@@ -5,6 +5,8 @@ import type { BaseDoc, Doc, PathItem, Repo } from '@share/types';
 import type MarkdownIt from 'markdown-it';
 import type Token from 'markdown-it/lib/token';
 import type * as Monaco from 'monaco-editor';
+import type { ITerminalOptions, Terminal } from 'xterm';
+import type { Socket } from 'socket.io-client';
 export * from '@share/types';
 export type ResourceTagName = 'audio' | 'img' | 'source' | 'video' | 'track' | 'iframe' | 'embed';
 export type PositionScrollState = {
@@ -295,6 +297,21 @@ export declare namespace Components {
     namespace IndexStatus {
         type Status = 'not-open-file' | 'not-open-repo' | 'not-same-repo' | 'index-disabled' | 'indexing' | 'indexed';
     }
+    namespace XTerm {
+        type InitOpts = {
+            cwd?: string;
+            onDisconnect?: () => void;
+        } & ITerminalOptions;
+        interface Ref {
+            domRef: any;
+            init: (opts?: InitOpts) => void;
+            input: (data: string) => void;
+            fit: () => void;
+            dispose: () => void;
+            getXterm: () => Terminal | null;
+            getSocket: () => Socket | null;
+        }
+    }
 }
 export type FileSort = {
     by: 'mtime' | 'birthtime' | 'name' | 'serial';
@@ -431,6 +448,7 @@ export interface BuildInSettings {
     'render.multimd-rowspan': boolean;
     'render.multimd-headerless': boolean;
     'render.multimd-multibody': boolean;
+    'render.text-autospace': boolean;
     'render.extra-css-style': string;
     'view.default-previewer-max-width': number;
     'view.default-previewer-font-family': string;
@@ -500,9 +518,7 @@ export type BuildInActions = {
         start: string;
         exit?: string;
     } | string) => void;
-    'xterm.init': (opts?: {
-        cwd?: string;
-    }) => void;
+    'xterm.init': (opts?: Components.XTerm.InitOpts) => void;
     'plugin.document-history-stack.back': () => void;
     'plugin.document-history-stack.forward': () => void;
     'plugin.image-hosting-picgo.upload': (file: File) => Promise<string | undefined>;

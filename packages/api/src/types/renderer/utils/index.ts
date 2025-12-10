@@ -9,3 +9,15 @@ export declare function md5(content: any): string;
 export declare function binMd5(data: any): string;
 export declare function strToBase64(str: string): string;
 export declare function copyText(text?: string): void;
+/**
+ * create a text highlighter
+ * @param container
+ * @param highlightName
+ * @param css
+ * @returns
+ */
+export declare function createTextHighlighter(container: HTMLElement | undefined | null | (() => HTMLElement | undefined | null), highlightName: string, css?: string | undefined | null | ((colorScheme: 'light' | 'dark') => string)): {
+    dispose: () => void;
+    remove: () => void;
+    highlight: (keyword: string | RegExp) => (() => void) | undefined;
+};

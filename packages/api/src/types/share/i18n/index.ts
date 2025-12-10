@@ -435,6 +435,7 @@ declare const languages: {
                     'multimd-rowspan': string;
                     'multimd-headerless': string;
                     'multimd-multibody': string;
+                    'text-autospace': string;
                     'extra-css-style': string;
                 };
                 view: {
@@ -1254,6 +1255,7 @@ declare const languages: {
                     'multimd-rowspan': string;
                     'multimd-headerless': string;
                     'multimd-multibody': string;
+                    'text-autospace': string;
                     'extra-css-style': string;
                 };
                 view: {
@@ -2073,6 +2075,7 @@ declare const languages: {
                     'multimd-rowspan': string;
                     'multimd-headerless': string;
                     'multimd-multibody': string;
+                    'text-autospace': string;
                     'extra-css-style': string;
                 };
                 view: {
@@ -2892,6 +2895,7 @@ declare const languages: {
                     'multimd-rowspan': string;
                     'multimd-headerless': string;
                     'multimd-multibody': string;
+                    'text-autospace': string;
                     'extra-css-style': string;
                 };
                 view: {
