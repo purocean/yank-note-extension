@@ -5,7 +5,7 @@ import type { BaseDoc, Doc, PathItem, Repo } from '@share/types';
 import type MarkdownIt from 'markdown-it';
 import type Token from 'markdown-it/lib/token';
 import type * as Monaco from 'monaco-editor';
-import type { ITerminalOptions, Terminal } from 'xterm';
+import type { ITerminalOptions, Terminal } from '@xterm/xterm';
 import type { Socket } from 'socket.io-client';
 export * from '@share/types';
 export type ResourceTagName = 'audio' | 'img' | 'source' | 'video' | 'track' | 'iframe' | 'embed';

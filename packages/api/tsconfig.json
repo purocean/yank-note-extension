@@ -38,6 +38,7 @@
       "sortablejs": ["src/types/third-party/sortablejs"],
       "mime": ["src/types/third-party/mime/Mime.ts"],
       "lodash/*": ["src/types/third-party/lodash/*"],
+      "@xterm/*": ["src/types/third-party/xterm/*"],
       "@vue/*": ["src/types/third-party/vue/*"],
       "@share/*": ["src/types/share/*"],
       "@fe/*": ["src/types/renderer/*"],

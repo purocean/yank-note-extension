@@ -42,6 +42,8 @@ mkdir -p ../packages/api/src/types/third-party/juice;
 cp node_modules/juice/juice.d.ts ../packages/api/src/types/third-party/juice/index.d.ts;
 mkdir -p ../packages/api/src/types/third-party/monaco-editor;
 cp node_modules/monaco-editor/esm/vs/editor/editor.api.d.ts ../packages/api/src/types/third-party/monaco-editor/index.d.ts
+mkdir -p ../packages/api/src/types/third-party/xterm;
+cp node_modules/@xterm/*/typings/*.d.ts ../packages/api/src/types/third-party/xterm
 
 cd ../packages/api/src/types;
 rm -r main;
