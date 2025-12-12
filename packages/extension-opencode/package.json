@@ -1,0 +1,69 @@
+{
+  "name": "@yank-note/extension-opencode",
+  "version": "0.0.1",
+  "displayName": "OpenCode",
+  "description": "Invoke OpenCode - an AI coding agent built for the terminal",
+  "displayName_ZH-CN": "OpenCode",
+  "description_ZH-CN": "唤起 OpenCode - 一款为终端打造的 AI 编程助手",
+  "keywords": [
+    "opencode",
+    "ai",
+    "coding",
+    "agent",
+    "terminal"
+  ],
+  "author": "Yank Note",
+  "license": "AGPL-3.0",
+  "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/extension-opencode",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/purocean/yank-note-extension.git"
+  },
+  "main": "./dist/index.js",
+  "style": "./dist/style.css",
+  "icon": "./icon.svg",
+  "engines": {
+    "node": ">=18.20.2",
+    "yank-note": "^3.86.0"
+  },
+  "requirements": {
+    "premium": true,
+    "terminal": true
+  },
+  "files": [
+    "*.md",
+    "dist",
+    "types",
+    "icon.svg"
+  ],
+  "scripts": {
+    "link-extension": "link-yn-extension",
+    "unlink-extension": "link-yn-extension --unlink",
+    "dev": "vite build --watch --minify=false",
+    "build": "vue-tsc --noEmit && vite build",
+    "lint": "vue-tsc --noEmit && yarn run eslint '{src,__tests__}/**/*.{js,ts,tsx,vue}'",
+    "version": "conventional-changelog -t extension-opencode- --commit-path . -p angular -i CHANGELOG.md -s && npm run tag-version",
+    "tag-version": "git add . && git commit -m 'chore(release): bump extension-opencode version' && git tag extension-opencode-$npm_package_version",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@opencode-ai/sdk": "^1.0.134",
+    "@rollup/plugin-node-resolve": "^13.2.1",
+    "@rollup/plugin-replace": "^4.0.0",
+    "@vitejs/plugin-vue": "^3.2.0",
+    "@vue/eslint-config-standard": "^6.1.0",
+    "@vue/eslint-config-typescript": "^10.0.0",
+    "@yank-note/runtime-api": "workspace:*",
+    "conventional-changelog-cli": "^2.2.2",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-vue": "^8.7.1",
+    "sass": "^1.56.1",
+    "typescript": "^5.7.2",
+    "vite": "^3.2.3",
+    "vue": "^3.2.33",
+    "vue-tsc": "^0.34.11"
+  }
+}
