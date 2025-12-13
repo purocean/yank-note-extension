@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.0.3...extension-opencode-1.1.0) (2025-12-13)
+
+
+### Features
+
+* **extension-opencode:** add running state management to OpenCodePanel ([8e4bdad](https://github.com/purocean/yank-note-extension/commit/8e4bdade71745bac197875345643df01273c4390))
+
+
+
 ## [1.0.3](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.0.2...extension-opencode-1.0.3) (2025-12-13)
 
 
