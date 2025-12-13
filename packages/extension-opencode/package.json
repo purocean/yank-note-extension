@@ -2,9 +2,9 @@
   "name": "@yank-note/extension-opencode",
   "version": "1.0.0",
   "displayName": "OpenCode",
-  "description": "Invoke OpenCode - an AI coding agent built for the terminal",
+  "description": "AI document assistant powered by OpenCode",
   "displayName_ZH-CN": "OpenCode",
-  "description_ZH-CN": "唤起 OpenCode - 一款为终端打造的 AI 编程助手",
+  "description_ZH-CN": "AI 文档助手，基于 OpenCode 构建",
   "keywords": [
     "opencode",
     "ai",
