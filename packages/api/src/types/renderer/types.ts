@@ -300,12 +300,13 @@ export declare namespace Components {
     namespace XTerm {
         type InitOpts = {
             cwd?: string;
+            env?: Record<string, string>;
             onDisconnect?: () => void;
         } & ITerminalOptions;
         interface Ref {
             domRef: any;
             init: (opts?: InitOpts) => void;
-            input: (data: string) => void;
+            input: (data: string, addNewLine?: boolean) => void;
             fit: () => void;
             dispose: () => void;
             getXterm: () => Terminal | null;

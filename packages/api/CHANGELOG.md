@@ -1,3 +1,7 @@
+## [3.86.2](https://github.com/purocean/yank-note-extension/compare/api-3.86.1...api-3.86.2) (2025-12-13)
+
+
+
 ## [3.86.1](https://github.com/purocean/yank-note-extension/compare/api-3.86.0...api-3.86.1) (2025-12-11)
 
 
