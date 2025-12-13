@@ -94,6 +94,7 @@ const props = defineProps<{
 // eslint-disable-next-line no-undef, func-call-spacing
 const emit = defineEmits<{
   (e: 'update:visible', value: boolean): void
+  (e: 'update:running', value: boolean): void
 }>()
 
 const visible = computed(() => props.visible.value)
@@ -186,6 +187,7 @@ function input (data: string, addNewLine = false) {
 
 async function initTerminal () {
   terminalReady.value = true
+  emit('update:running', true)
 
   await nextTick()
 
@@ -279,6 +281,7 @@ function cleanup () {
   ctx.keybinding.enableShortcuts()
   refXterm.value?.dispose()
   terminalReady.value = false
+  emit('update:running', false)
 }
 
 async function stopTerminal () {
