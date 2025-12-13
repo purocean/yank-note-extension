@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-opencode",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "displayName": "OpenCode",
   "description": "Invoke OpenCode - an AI coding agent built for the terminal",
   "displayName_ZH-CN": "OpenCode",
