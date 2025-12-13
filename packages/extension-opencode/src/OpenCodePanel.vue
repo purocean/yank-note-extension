@@ -161,7 +161,7 @@ async function addContext () {
         body: { text },
       })
 
-      input('', true) // Add a new line after context
+      input('\n') // Add a new line after adding context
       focus()
     } catch (err) {
       console.error('Failed to add context via SDK:', err)
