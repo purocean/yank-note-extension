@@ -161,7 +161,7 @@ async function addContext () {
         body: { text },
       })
 
-      input('\n') // Add a new line after context
+      input('', true) // Add a new line after context
       focus()
     } catch (err) {
       console.error('Failed to add context via SDK:', err)
@@ -180,8 +180,8 @@ function fitXterm () {
   refXterm.value?.fit()
 }
 
-function input (data: string) {
-  refXterm.value?.input(data)
+function input (data: string, addNewLine = false) {
+  refXterm.value?.input(data, addNewLine)
 }
 
 async function initTerminal () {
@@ -229,7 +229,7 @@ async function initTerminal () {
 
   // Build opencode command with optional proxy
   const command = `opencode --port ${opencodePort}`
-  input(`${command}\n`)
+  input(command, true)
 
   // Wait for opencode to start and create client
   await new Promise(resolve => setTimeout(resolve, 2000))
