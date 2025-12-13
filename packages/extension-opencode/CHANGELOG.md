@@ -1,3 +1,12 @@
+## [1.0.3](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.0.2...extension-opencode-1.0.3) (2025-12-13)
+
+
+### Bug Fixes
+
+* **extension-opencode:** update input function to add a new line after context ([f106ff0](https://github.com/purocean/yank-note-extension/commit/f106ff0eca317d490d2685a12204bd98ef71bb5e))
+
+
+
 ## [1.0.2](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.0.1...extension-opencode-1.0.2) (2025-12-13)
 
 
