@@ -1,3 +1,7 @@
+# 1.12.0 (2026-01-13)
+
+
+
 # [1.11.0](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.10.0...extension-mermaid-1.11.0) (2025-03-17)
 
 
