@@ -1,3 +1,12 @@
+# [1.12.0](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.11.0...extension-mermaid-1.12.0) (2026-01-13)
+
+
+### Features
+
+* **extension-mermaid:** upgrade mermaid to 11.12.2 ([0a43d0a](https://github.com/purocean/yank-note-extension/commit/0a43d0a75d9c5d01bf92cdc56eec8ab3b668d7d5))
+
+
+
 # [1.11.0](https://github.com/purocean/yank-note-extension/compare/extension-mermaid-1.10.0...extension-mermaid-1.11.0) (2025-03-17)
 
 
