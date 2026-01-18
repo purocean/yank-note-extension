@@ -15,7 +15,7 @@ const body = JSON.stringify({
     role: "user",
     content: context
   }],
-  system: system.replace('{CONTEXT}', context)
+  system: system ? system.replace('{CONTEXT}', context) : ''
 })
 
 return { url, headers, body, method: 'POST' }
