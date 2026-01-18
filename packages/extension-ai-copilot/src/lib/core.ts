@@ -44,7 +44,7 @@ export class FatalError extends Error { }
 export interface CustomAdapter {
   name: string,
   type: AdapterType,
-  preset: 'openai' | 'gradio' | 'dify-workflow' | 'custom'
+  preset: 'openai' | 'anthropic' | 'gradio' | 'dify-workflow' | 'custom'
 }
 
 export const i18n = ctx.i18n.createI18n({
@@ -83,6 +83,7 @@ export const i18n = ctx.i18n.createI18n({
     'custom-adapter-type': 'Adapter type',
     'custom-adapter-params': 'Adapter params',
     'openai-compatible': 'OpenAI Compatible',
+    'anthropic-compatible': 'Anthropic Compatible',
     'custom': 'Custom',
     'endpoint': 'Endpoint',
     'model': 'Model',
@@ -136,6 +137,7 @@ export const i18n = ctx.i18n.createI18n({
     'custom-adapter-type': '适配器类型',
     'custom-adapter-params': '适配器参数',
     'openai-compatible': 'OpenAI 兼容',
+    'anthropic-compatible': 'Anthropic 兼容',
     'custom': '自定义',
     'endpoint': '端点',
     'model': '模型',

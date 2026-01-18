@@ -7,9 +7,11 @@ import { addCustomAdapters, COMPLETION_DEFAULT_SYSTEM_MESSAGE, CustomAdapter, ED
 import { CompletionDefaultPreset } from './completion/default/index'
 import type { CancellationToken, Position, editor, languages } from '@yank-note/runtime-api/types/types/third-party/monaco-editor'
 import { CompletionOpenAIPreset } from './completion/openai'
+import { CompletionAnthropicPreset } from './completion/anthropic'
 import { CompletionDifyWorkflowPreset } from './completion/dify-workflow'
 import { EditDefaultPreset } from './edit/default'
 import { EditOpenAIPreset } from './edit/openai'
+import { EditAnthropicPreset } from './edit/anthropic'
 import { EditDifyWorkflowPreset } from './edit/dify-workflow'
 import { Text2ImageDefaultPreset } from './text2image/default'
 import { Text2ImageGradioPreset } from './text2image/gradio'
@@ -31,11 +33,13 @@ export interface CustomAdapterPreset {
 const customAdapterPresets: Record<AdapterType, Partial<Record<CustomAdapterPresetName, CustomAdapterPreset>>> = {
   completion: {
     openai: new CompletionOpenAIPreset(),
+    anthropic: new CompletionAnthropicPreset(),
     'dify-workflow': new CompletionDifyWorkflowPreset(),
     custom: new CompletionDefaultPreset(),
   },
   edit: {
     openai: new EditOpenAIPreset(),
+    anthropic: new EditAnthropicPreset(),
     'dify-workflow': new EditDifyWorkflowPreset(),
     custom: new EditDefaultPreset(),
   },
