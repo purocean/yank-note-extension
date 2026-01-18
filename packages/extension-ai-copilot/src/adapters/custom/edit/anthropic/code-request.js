@@ -1,7 +1,7 @@
 const { selectedText, instruction, context, system, state } = data
 
 // if context is not provided, system message will be empty
-const systemMessage = context ? system.replace('{CONTEXT}', context) : ''
+const systemMessage = context ? (system || '').replace('{CONTEXT}', context) : ''
 const userMessage = `
 Instruction: ${instruction}
 

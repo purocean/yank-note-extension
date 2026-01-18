@@ -8,7 +8,7 @@ const headers = {
   'Content-Type': 'application/json',
 }
 
-const systemMessage = (system && context) ? system.replace('{CONTEXT}', context) : (system || '')
+const systemMessage = context ? (system || '').replace('{CONTEXT}', context) : (system || '')
 
 const body = JSON.stringify({
   model: state.model,
