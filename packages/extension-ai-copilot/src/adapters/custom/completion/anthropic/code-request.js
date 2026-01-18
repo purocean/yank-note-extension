@@ -8,6 +8,8 @@ const headers = {
   'Content-Type': 'application/json',
 }
 
+const systemMessage = (system && context) ? system.replace('{CONTEXT}', context) : (system || '')
+
 const body = JSON.stringify({
   model: state.model,
   max_tokens: 4096,
@@ -15,7 +17,7 @@ const body = JSON.stringify({
     role: "user",
     content: context
   }],
-  system: system ? system.replace('{CONTEXT}', context) : ''
+  system: systemMessage
 })
 
 return { url, headers, body, method: 'POST' }
