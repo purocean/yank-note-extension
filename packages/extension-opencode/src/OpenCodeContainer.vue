@@ -69,14 +69,10 @@ export interface UpdatePayload {
   actions: ActionButton[]
 }
 
-// eslint-disable-next-line no-undef
-const props = defineProps<{
-  visible: boolean
-}>()
-
 // eslint-disable-next-line no-undef, func-call-spacing
 const emit = defineEmits<{
   (e: 'update', payload: UpdatePayload): void
+  (e: 'ref', payload: null | { focus: () => void, fitXterm: () => void, input: (data: string, addNewLine?: boolean) => void }): void
   (e: 'update:running', value: boolean): void
 }>()
 
@@ -376,12 +372,18 @@ onMounted(() => {
     editor.onDidChangeCursorSelection(updateEditorInfo),
   ]
   emitUpdate()
+  emit('ref', {
+    focus,
+    fitXterm,
+    input,
+  })
 })
 
 onBeforeUnmount(() => {
   cleanup()
   editorDisposables.forEach(d => d.dispose())
   editorDisposables = []
+  emit('ref', null)
 })
 
 watch(() => [ctx.store.state.currentFile, ctx.store.state.currentRepo], () => {
@@ -394,7 +396,7 @@ watch([terminalReady, isSameRepo, currentFileName, selectionLines], () => {
 })
 
 watchEffect(() => {
-  if (props.visible && terminalReady.value) {
+  if (terminalReady.value) {
     nextTick(() => {
       fitXterm()
       focus()
@@ -404,12 +406,6 @@ watchEffect(() => {
 
 watchEffect(() => {
   ctx.storage.set(proxyStorageKey, proxyUrl.value)
-})
-
-// Expose methods for parent component
-defineExpose({
-  focus,
-  fitXterm,
 })
 </script>
 
@@ -478,7 +474,7 @@ defineExpose({
 
     .btn-tooltip {
       position: absolute;
-      top: calc(100% + 8px);
+      bottom: calc(100% + 8px);
       left: 50%;
       transform: translateX(-50%);
       background: var(--g-color-20);
@@ -496,11 +492,11 @@ defineExpose({
       &::before {
         content: '';
         position: absolute;
-        bottom: 100%;
+        top: 100%;
         left: 50%;
         transform: translateX(-50%);
         border: 5px solid transparent;
-        border-bottom-color: var(--g-color-20);
+        border-top-color: var(--g-color-20);
       }
     }
 

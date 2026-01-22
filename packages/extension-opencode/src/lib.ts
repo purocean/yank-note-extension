@@ -10,7 +10,7 @@ export const panelModeStorageKey = extensionId + '.panel-mode'
 export type PanelMode = 'floating' | 'maximized' | 'embedded'
 
 // Shared panel state
-export const panelMode: Ref<PanelMode> = ref(ctx.storage.get(panelModeStorageKey, 'floating') as PanelMode)
+export const panelMode: Ref<PanelMode> = ref(ctx.storage.get(panelModeStorageKey, 'embedded') as PanelMode)
 
 // Shared container element and app instance
 export const containerElement: ShallowRef<HTMLElement | null> = shallowRef(null)
