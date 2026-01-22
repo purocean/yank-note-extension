@@ -3,7 +3,7 @@ import OpenCodePanel from './OpenCodePanel.vue'
 import OpenCodeRightPanel from './OpenCodeRightPanel.vue'
 import OpenCodeContainer from './OpenCodeContainer.vue'
 import { i18n, panelMode, cyclePanelMode, containerElement, containerApp, containerInstance, containerActions, moveContainerToTarget } from './lib'
-import { createApp, ref, watch, markRaw, nextTick } from 'vue'
+import { createApp, ref, nextTick, watchEffect } from 'vue'
 import type { UpdatePayload } from './OpenCodeContainer.vue'
 
 const extensionId = __EXTENSION_ID__
@@ -52,46 +52,56 @@ registerPlugin({
       containerApp.value = app
     }
 
-    // Action buttons for right side panel
-    const cycleModeIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M0 96C0 60.7 28.7 32 64 32l384 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM64 96l0 320 160 0 0-320L64 96zm384 0L288 96l0 320 160 0c8.8 0 16-7.2 16-16l0-288c0-8.8-7.2-16-16-16z"/></svg>'
-    const rightPanelActionBtns = [
-      {
-        type: 'normal' as const,
-        key: 'cycle-panel-mode',
-        icon: cycleModeIcon,
-        title: i18n.t('panel-mode-floating'),
-        onClick: () => {
-          cyclePanelMode()
+    function buildRightPanel (actions: typeof containerActions.value) {
+      // Action buttons for right side panel
+      const cycleModeIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M200 288H88c-21.4 0-32.1 25.8-17 41l32.9 31-99.2 99.3c-6.2 6.2-6.2 16.4 0 22.6l25.4 25.4c6.2 6.2 16.4 6.2 22.6 0L152 408l31.1 33c15.1 15.1 40.9 4.4 40.9-17V312c0-13.3-10.7-24-24-24zm112-64h112c21.4 0 32.1-25.9 17-41l-33-31 99.3-99.3c6.2-6.2 6.2-16.4 0-22.6L481.9 4.7c-6.2-6.2-16.4-6.2-22.6 0L360 104l-31.1-33C313.8 55.9 288 66.6 288 88v112c0 13.3 10.7 24 24 24zm96 136l33-31.1c15.1-15.1 4.4-40.9-17-40.9H312c-13.3 0-24 10.7-24 24v112c0 21.4 25.9 32.1 41 17l31-32.9 99.3 99.3c6.2 6.2 16.4 6.2 22.6 0l25.4-25.4c6.2-6.2 6.2-16.4 0-22.6L408 360zM183 71.1L152 104 52.7 4.7c-6.2-6.2-16.4-6.2-22.6 0L4.7 30.1c-6.2 6.2-6.2 16.4 0 22.6L104 152l-33 31.1C55.9 198.2 66.6 224 88 224h112c13.3 0 24-10.7 24-24V88c0-21.3-25.9-32-41-16.9z"/></svg>'
+      const rightPanelActionBtns: any[] = [
+        {
+          type: 'normal' as 'normal' | 'separator',
+          key: 'cycle-panel-mode',
+          icon: cycleModeIcon,
+          title: i18n.t('panel-mode-floating'),
+          onClick: () => {
+            cyclePanelMode()
+          },
         },
-      },
-    ]
+      ]
 
-    // Register right side panel
-    ;(ctx.workbench as any).ContentRightSide.registerPanel({
-      name: rightPanelName,
-      displayName: i18n.t('opencode-panel'),
-      order: 100,
-      keepAlive: true,
-      component: markRaw(OpenCodeRightPanel),
-      actionBtns: rightPanelActionBtns,
-    })
+      if (actions.length > 0) {
+        rightPanelActionBtns.unshift({ type: 'separator' })
+        actions.forEach(btn => {
+          rightPanelActionBtns.unshift({
+            type: 'normal' as 'normal' | 'separator',
+            key: btn.key,
+            icon: btn.title,
+            title: btn.title,
+            onClick: btn.handler,
+          })
+        })
+      }
+
+      return {
+        name: rightPanelName,
+        displayName: i18n.t('opencode-panel'),
+        order: 100,
+        keepAlive: false,
+        component: OpenCodeRightPanel,
+        actionBtns: rightPanelActionBtns,
+      }
+    }
 
     // Watch panel mode changes to show/hide right panel
-    watch(panelMode, (mode) => {
+    watchEffect(() => {
+      const mode = panelMode.value
+      const actions = containerActions.value
+
       if (mode === 'embedded' && visible.value) {
+        // Register right side panel
+        ;(ctx.workbench as any).ContentRightSide.registerPanel(buildRightPanel(actions), true)
         ;(ctx.workbench as any).ContentRightSide.show(rightPanelName)
       } else {
         // Remove from right panel when not in embedded mode
         ;(ctx.workbench as any).ContentRightSide.removePanel(rightPanelName)
-        // Re-register for future use
-        ;(ctx.workbench as any).ContentRightSide.registerPanel({
-          name: rightPanelName,
-          displayName: i18n.t('opencode-panel'),
-          order: 100,
-          keepAlive: true,
-          component: markRaw(OpenCodeRightPanel),
-          actionBtns: rightPanelActionBtns,
-        })
       }
       // Fit terminal after mode change
       nextTick(() => {
@@ -112,6 +122,7 @@ registerPlugin({
           visible.value = true
           // If embedded mode, show right panel
           if (panelMode.value === 'embedded') {
+            ;(ctx.workbench as any).ContentRightSide.registerPanel(buildRightPanel(containerActions.value), true)
             ;(ctx.workbench as any).ContentRightSide.show(rightPanelName)
           } else {
             // Bump the panel to the front for floating modes
