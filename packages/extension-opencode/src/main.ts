@@ -1,15 +1,19 @@
 import { registerPlugin } from '@yank-note/runtime-api'
 import OpenCodePanel from './OpenCodePanel.vue'
-import { i18n } from './lib'
-import { createApp, ref } from 'vue'
+import OpenCodeRightPanel from './OpenCodeRightPanel.vue'
+import OpenCodeContainer from './OpenCodeContainer.vue'
+import { i18n, panelMode, cyclePanelMode, containerElement, containerApp, containerInstance, containerActions, moveContainerToTarget } from './lib'
+import { createApp, ref, watch, markRaw, nextTick } from 'vue'
+import type { UpdatePayload } from './OpenCodeContainer.vue'
 
 const extensionId = __EXTENSION_ID__
+const rightPanelName = extensionId + '.opencode-right-panel'
 
 registerPlugin({
   name: extensionId,
   register: ctx => {
     const openOpenCodeActionName = extensionId + '.open-opencode'
-    let container: HTMLElement | null = null
+    let panelContainer: HTMLElement | null = null
     const visible = ref(false)
     const running = ref(false)
 
@@ -18,35 +22,131 @@ registerPlugin({
         ctx.args.MODE === 'normal' // in normal mode
     }
 
+    // Create shared OpenCodeContainer instance
+    function ensureContainerCreated () {
+      if (containerElement.value) return
+
+      const el = document.createElement('div')
+      el.id = 'opencode-container-wrapper'
+      el.style.width = '100%'
+      el.style.height = '100%'
+      containerElement.value = el
+
+      const app = createApp(OpenCodeContainer, {
+        visible: true,
+        onUpdate: (payload: UpdatePayload) => {
+          // Update shared actions state
+          containerActions.value = payload.actions
+        },
+        'onUpdate:running': (val: boolean) => {
+          running.value = val
+          ctx.workbench.FileTabs.refreshActionBtns()
+        },
+        ref: (instance: any) => {
+          containerInstance.value = instance
+        }
+      })
+
+      ctx.directives.default(app as any)
+      app.mount(el)
+      containerApp.value = app
+    }
+
+    // Action buttons for right side panel
+    const cycleModeIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M0 96C0 60.7 28.7 32 64 32l384 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM64 96l0 320 160 0 0-320L64 96zm384 0L288 96l0 320 160 0c8.8 0 16-7.2 16-16l0-288c0-8.8-7.2-16-16-16z"/></svg>'
+    const rightPanelActionBtns = [
+      {
+        type: 'normal' as const,
+        key: 'cycle-panel-mode',
+        icon: cycleModeIcon,
+        title: i18n.t('panel-mode-floating'),
+        onClick: () => {
+          cyclePanelMode()
+        },
+      },
+    ]
+
+    // Register right side panel
+    ;(ctx.workbench as any).ContentRightSide.registerPanel({
+      name: rightPanelName,
+      displayName: i18n.t('opencode-panel'),
+      order: 100,
+      keepAlive: true,
+      component: markRaw(OpenCodeRightPanel),
+      actionBtns: rightPanelActionBtns,
+    })
+
+    // Watch panel mode changes to show/hide right panel
+    watch(panelMode, (mode) => {
+      if (mode === 'embedded' && visible.value) {
+        ;(ctx.workbench as any).ContentRightSide.show(rightPanelName)
+      } else {
+        // Remove from right panel when not in embedded mode
+        ;(ctx.workbench as any).ContentRightSide.removePanel(rightPanelName)
+        // Re-register for future use
+        ;(ctx.workbench as any).ContentRightSide.registerPanel({
+          name: rightPanelName,
+          displayName: i18n.t('opencode-panel'),
+          order: 100,
+          keepAlive: true,
+          component: markRaw(OpenCodeRightPanel),
+          actionBtns: rightPanelActionBtns,
+        })
+      }
+      // Fit terminal after mode change
+      nextTick(() => {
+        containerInstance.value?.fitXterm()
+      })
+    })
+
     ctx.action.registerAction({
       name: openOpenCodeActionName,
       description: i18n.t('open-opencode'),
       forUser: true,
       when,
       handler: () => {
-        if (container) {
+        // Ensure container is created
+        ensureContainerCreated()
+
+        if (panelContainer) {
           visible.value = true
-          // Bump the panel to the front
-          ;(container.children[0] as any)?.bump()
+          // If embedded mode, show right panel
+          if (panelMode.value === 'embedded') {
+            ;(ctx.workbench as any).ContentRightSide.show(rightPanelName)
+          } else {
+            // Bump the panel to the front for floating modes
+            ;(panelContainer.children[0] as any)?.bump()
+          }
+          // Move container to appropriate target
+          nextTick(() => moveContainerToTarget())
           return
         }
 
-        container = document.createElement('div')
-        container.id = 'opencode-panel-container'
-        document.body.appendChild(container)
+        panelContainer = document.createElement('div')
+        panelContainer.id = 'opencode-panel-container'
+        document.body.appendChild(panelContainer)
         visible.value = true
+
+        // If embedded mode, show right panel
+        if (panelMode.value === 'embedded') {
+          ;(ctx.workbench as any).ContentRightSide.show(rightPanelName)
+        }
+
         const app = createApp(OpenCodePanel, {
           visible,
           'onUpdate:visible': (val: boolean) => { visible.value = val },
-          'onUpdate:running': (val: boolean) => {
-            running.value = val
-            ctx.workbench.FileTabs.refreshActionBtns()
+          'onUpdate:panelMode': (mode: string) => {
+            if (mode === 'embedded') {
+              ;(ctx.workbench as any).ContentRightSide.show(rightPanelName)
+            }
           }
         })
 
         ctx.directives.default(app as any)
+        app.mount(panelContainer)
 
-        app.mount(container)
+        // Move container after panel is mounted
+        nextTick(() => moveContainerToTarget())
       },
     })
 

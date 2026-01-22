@@ -1,8 +1,72 @@
 /* eslint-disable quote-props */
 import { ctx } from '@yank-note/runtime-api'
+import { ref, shallowRef, type Ref, type ShallowRef, type App } from 'vue'
 
 export const extensionId = __EXTENSION_ID__
 export const proxyStorageKey = extensionId + '.proxy-url'
+export const panelModeStorageKey = extensionId + '.panel-mode'
+
+// Panel mode: floating, maximized, embedded
+export type PanelMode = 'floating' | 'maximized' | 'embedded'
+
+// Shared panel state
+export const panelMode: Ref<PanelMode> = ref(ctx.storage.get(panelModeStorageKey, 'floating') as PanelMode)
+
+// Shared container element and app instance
+export const containerElement: ShallowRef<HTMLElement | null> = shallowRef(null)
+export const containerApp: ShallowRef<App | null> = shallowRef(null)
+export const containerInstance: ShallowRef<{ focus: () => void, fitXterm: () => void } | null> = shallowRef(null)
+
+// Shared actions state from OpenCodeContainer
+export interface ActionButton {
+  key: 'stop' | 'open-browser' | 'restart' | 'add-context'
+  label: string
+  title: string
+  disabled?: boolean
+  handler: () => void | Promise<void>
+  meta?: {
+    fileName?: string
+    displayFileName?: string
+    selectionLines?: string
+    hint?: string
+  }
+}
+
+export const containerActions: ShallowRef<ActionButton[]> = shallowRef([])
+
+// Target containers for different modes
+export const floatingTarget: ShallowRef<HTMLElement | null> = shallowRef(null)
+export const embeddedTarget: ShallowRef<HTMLElement | null> = shallowRef(null)
+
+export function setFloatingTarget (el: HTMLElement | null) {
+  floatingTarget.value = el
+}
+
+export function setEmbeddedTarget (el: HTMLElement | null) {
+  embeddedTarget.value = el
+}
+
+export function moveContainerToTarget () {
+  if (!containerElement.value) return
+
+  const target = panelMode.value === 'embedded' ? embeddedTarget.value : floatingTarget.value
+  if (target && containerElement.value.parentElement !== target) {
+    target.appendChild(containerElement.value)
+    // Fit terminal after moving
+    setTimeout(() => {
+      containerInstance.value?.fitXterm()
+    }, 100)
+  }
+}
+
+export function cyclePanelMode () {
+  const modes: PanelMode[] = ['floating', 'maximized', 'embedded']
+  const currentIndex = modes.indexOf(panelMode.value)
+  const nextIndex = (currentIndex + 1) % modes.length
+  panelMode.value = modes[nextIndex]
+  ctx.storage.set(panelModeStorageKey, panelMode.value)
+  moveContainerToTarget()
+}
 
 export const i18n = ctx.i18n.createI18n({
   en: {
@@ -24,6 +88,9 @@ export const i18n = ctx.i18n.createI18n({
     'proxy-placeholder': 'eg. http://127.0.0.1:7890',
     'backup-warning': 'Please ensure version control and backup before use',
     'close': 'Close',
+    'panel-mode-floating': 'Floating',
+    'panel-mode-maximized': 'Maximized',
+    'panel-mode-embedded': 'Embed in Right Panel',
   },
   'zh-CN': {
     'opencode': 'OpenCode',
@@ -44,5 +111,8 @@ export const i18n = ctx.i18n.createI18n({
     'proxy-placeholder': 'eg. http://127.0.0.1:7890',
     'backup-warning': '使用前请做好文档版本管理和备份',
     'close': '关闭',
+    'panel-mode-floating': '浮动窗口',
+    'panel-mode-maximized': '最大化',
+    'panel-mode-embedded': '嵌入右侧面板',
   }
 })
