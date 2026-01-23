@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.2.0...extension-opencode-1.2.1) (2026-01-23)
+
+
+### Bug Fixes
+
+* adjust xterm-container height and margin for better layout ([118a0db](https://github.com/purocean/yank-note-extension/commit/118a0dbce3050c8aa6bb16f3736b84876f6a23a4))
+
+
+
 # [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.1.0...extension-opencode-1.2.0) (2026-01-23)
 
 

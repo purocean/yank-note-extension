@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-opencode",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "displayName": "OpenCode",
   "description": "AI document assistant powered by OpenCode",
   "displayName_ZH-CN": "OpenCode",
