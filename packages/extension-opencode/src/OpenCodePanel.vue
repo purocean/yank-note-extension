@@ -283,4 +283,9 @@ watch(panelMode, (mode) => {
     white-space: nowrap;
   }
 }
+
+.container :deep(.xterm-container) {
+  height: calc(100% - 30px);
+  margin-top: 30px;
+}
 </style>

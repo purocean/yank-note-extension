@@ -545,8 +545,7 @@ watchEffect(() => {
 
 .xterm-container {
   width: 100%;
-  height: calc(100% - 32px);
-  margin-top: 30px;
+  height: 100%;
   padding: 0;
   box-sizing: border-box;
   background: var(--g-color-98);
