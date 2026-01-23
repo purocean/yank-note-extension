@@ -42,32 +42,14 @@ import { ctx } from '@yank-note/runtime-api'
 import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch, watchEffect, shallowRef } from 'vue'
 import { createOpencodeClient, OpencodeClient } from '@opencode-ai/sdk/client'
 import logoSvg from './assets/icon.svg'
-import { i18n, proxyStorageKey } from './lib'
+import { ActionButton, i18n, proxyStorageKey } from './lib'
 import { Components } from '@yank-note/runtime-api/types/types/renderer/types'
+import type { UpdatePayload } from './main'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const { XTerm } = ctx.components
 const logger = ctx.utils.getLogger('OpenCodeContainer')
-
-export interface ActionButton {
-  key: 'stop' | 'open-browser' | 'restart' | 'add-context'
-  label: string
-  title: string
-  disabled?: boolean
-  handler: () => void | Promise<void>
-  meta?: {
-    fileName?: string
-    displayFileName?: string
-    selectionLines?: string
-    hint?: string
-  }
-}
-
-export interface UpdatePayload {
-  terminalReady: boolean
-  actions: ActionButton[]
-}
 
 // eslint-disable-next-line no-undef, func-call-spacing
 const emit = defineEmits<{

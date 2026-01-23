@@ -2,6 +2,25 @@
 import { ctx } from '@yank-note/runtime-api'
 import { ref, shallowRef, type Ref, type ShallowRef, type App } from 'vue'
 
+export interface UpdatePayload {
+  terminalReady: boolean
+  actions: ActionButton[]
+}
+
+export interface ActionButton {
+  key: 'stop' | 'open-browser' | 'restart' | 'add-context'
+  label: string
+  title: string
+  disabled?: boolean
+  handler: () => void | Promise<void>
+  meta?: {
+    fileName?: string
+    displayFileName?: string
+    selectionLines?: string
+    hint?: string
+  }
+}
+
 export const extensionId = __EXTENSION_ID__
 export const proxyStorageKey = extensionId + '.proxy-url'
 export const panelModeStorageKey = extensionId + '.panel-mode'

@@ -2,9 +2,8 @@ import { registerPlugin } from '@yank-note/runtime-api'
 import OpenCodePanel from './OpenCodePanel.vue'
 import OpenCodeRightPanel from './OpenCodeRightPanel.vue'
 import OpenCodeContainer from './OpenCodeContainer.vue'
-import { i18n, panelMode, cyclePanelMode, containerElement, containerApp, containerInstance, containerActions, moveContainerToTarget } from './lib'
+import { i18n, panelMode, cyclePanelMode, containerElement, containerApp, containerInstance, containerActions, moveContainerToTarget, UpdatePayload } from './lib'
 import { createApp, ref, nextTick, watchEffect, h } from 'vue'
-import type { UpdatePayload } from './OpenCodeContainer.vue'
 import { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 
 const extensionId = __EXTENSION_ID__
@@ -236,3 +235,5 @@ registerPlugin({
     })
   }
 })
+export { UpdatePayload }
+
