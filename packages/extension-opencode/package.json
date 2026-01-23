@@ -24,7 +24,7 @@
   "icon": "./icon.svg",
   "engines": {
     "node": ">=18.20.2",
-    "yank-note": "^3.86.0"
+    "yank-note": "^3.87.0"
   },
   "requirements": {
     "premium": true,
