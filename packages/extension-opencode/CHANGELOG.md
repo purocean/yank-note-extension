@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.1.0...extension-opencode-1.2.0) (2026-01-23)
+
+
+### Features
+
+* add OpenCode right panel and enhance panel mode management ([2c7c6c0](https://github.com/purocean/yank-note-extension/commit/2c7c6c0675937119e0f3d95ceb3a058c94a812ca))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.0.3...extension-opencode-1.1.0) (2025-12-13)
 
 
