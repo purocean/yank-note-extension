@@ -1,3 +1,7 @@
+## [1.2.2](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.2.1...extension-opencode-1.2.2) (2026-01-23)
+
+
+
 ## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.2.0...extension-opencode-1.2.1) (2026-01-23)
 
 
