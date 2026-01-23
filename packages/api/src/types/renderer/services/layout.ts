@@ -23,6 +23,11 @@ export declare function toggleEditor(visible?: boolean): void;
  */
 export declare function toggleXterm(visible?: boolean): void;
 /**
+ * Toggle content right side bar visible.
+ * @param visible
+ */
+export declare function toggleContentRightSide(visible?: boolean): void;
+/**
  * Toggle editor preview exclusive.
  * @param exclusive
  */

@@ -67,6 +67,8 @@ declare const ctx: Readonly<{
             showSide: boolean;
             showView: boolean;
             showEditor: boolean;
+            showContentRightSide: boolean;
+            currentRightSidePanel: string | null;
             editorPreviewExclusive: boolean;
             showXterm: boolean;
             showOutline: boolean;

@@ -43,6 +43,11 @@ declare const data: {
     'file-readonly-desc': string;
     'can-not-edit-this-file-type': string;
     'read-only-mode-desc': string;
+    'external-file-readonly': {
+        'readonly-desc': string;
+        'enable-edit': string;
+        'open-setting': string;
+    };
     'trigger-suggestions': string;
     'table-of-contents': string;
     'text-comparator': string;
@@ -234,6 +239,7 @@ declare const data: {
             preview: string;
             editor: string;
             'side-bar': string;
+            'content-right-side': string;
             'word-wrap': string;
             'typewriter-mode': string;
             'editor-preview-exclusive': string;
@@ -418,6 +424,7 @@ declare const data: {
                 'quick-suggestions': string;
                 'enable-ai-copilot-action': string;
                 'enable-trigger-suggest-bulb': string;
+                'external-file-readonly': string;
             };
             render: {
                 'md-html': string;
@@ -429,6 +436,7 @@ declare const data: {
                 'md-sup': string;
                 'md-sub': string;
                 'md-emoji': string;
+                'list-collapsible': string;
                 'multimd-multiline': string;
                 'multimd-rowspan': string;
                 'multimd-headerless': string;
@@ -736,6 +744,7 @@ declare const data: {
         'layout_toggle-side': string;
         'layout_toggle-view': string;
         'layout_toggle-xterm': string;
+        'layout_toggle-content-right-side': string;
         'plugin_copy-content_copy-content': string;
         'plugin_document-history-stack_back': string;
         'plugin_document-history-stack_forward': string;

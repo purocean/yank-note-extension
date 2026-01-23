@@ -8,6 +8,8 @@ export declare const initState: {
     showSide: boolean;
     showView: boolean;
     showEditor: boolean;
+    showContentRightSide: boolean;
+    currentRightSidePanel: string | null;
     editorPreviewExclusive: boolean;
     showXterm: boolean;
     showOutline: boolean;
@@ -53,6 +55,8 @@ declare const _default: {
         showSide: boolean;
         showView: boolean;
         showEditor: boolean;
+        showContentRightSide: boolean;
+        currentRightSidePanel: string | null;
         editorPreviewExclusive: boolean;
         showXterm: boolean;
         showOutline: boolean;

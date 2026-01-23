@@ -1,4 +1,4 @@
-import type { Components } from '@fe/types';
+import type { Components, RightSidePanel } from '@fe/types';
 /**
  * Toggle outline visible.
  * @param visible
@@ -58,6 +58,43 @@ export declare const ControlCenter: {
     getSchema(): Components.ControlCenter.Schema;
     /**
      * Toggle visible
+     * @param visible
+     */
+    toggle(visible?: boolean): void;
+};
+export declare const ContentRightSide: {
+    /**
+     * Register a right side panel.
+     * @param panel Panel
+     * @param override Override the existing panel
+     */
+    registerPanel(panel: RightSidePanel, override?: boolean): void;
+    /**
+     * Remove a right side panel.
+     * @param name Panel name
+     */
+    removePanel(name: string): void;
+    /**
+     * Get all registered panels.
+     * @returns Panels
+     */
+    getAllPanels(): RightSidePanel[];
+    /**
+     * Switch to a panel by name.
+     * @param name Panel name
+     */
+    switchPanel(name: string): void;
+    /**
+     * Show right side panel with a specific panel.
+     * @param name Panel name, if not provided, show the current or first panel
+     */
+    show(name?: string): void;
+    /**
+     * Hide right side panel.
+     */
+    hide(): void;
+    /**
+     * Toggle right side panel visibility.
      * @param visible
      */
     toggle(visible?: boolean): void;
