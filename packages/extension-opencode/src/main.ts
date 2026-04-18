@@ -2,7 +2,7 @@ import { registerPlugin } from '@yank-note/runtime-api'
 import OpenCodePanel from './OpenCodePanel.vue'
 import OpenCodeRightPanel from './OpenCodeRightPanel.vue'
 import OpenCodeContainer from './OpenCodeContainer.vue'
-import { i18n, panelMode, cyclePanelMode, containerElement, containerApp, containerInstance, containerActions, moveContainerToTarget, UpdatePayload } from './lib'
+import { i18n, panelMode, cyclePanelMode, containerElement, containerApp, containerInstance, containerActions, moveContainerToTarget, type UpdatePayload } from './lib'
 import { createApp, ref, nextTick, watchEffect, h } from 'vue'
 import { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 
@@ -14,6 +14,8 @@ registerPlugin({
   register: ctx => {
     const openOpenCodeActionName = extensionId + '.open-opencode'
     let panelContainer: HTMLElement | null = null
+    let panelAppMounted = false
+    let rightPanelSignature = ''
     const visible = ref(false)
     const running = ref(false)
 
@@ -144,25 +146,99 @@ registerPlugin({
       }
     }
 
-    // Watch panel mode changes to show/hide right panel
-    watchEffect(() => {
-      const mode = panelMode.value
-      const actions = containerActions.value
-
-      if (mode === 'embedded' && visible.value) {
-        // Register right side panel
-        ctx.workbench.ContentRightSide.registerPanel(buildRightPanel(actions), true)
-        ctx.workbench.ContentRightSide.show(rightPanelName)
-      } else {
-        // Remove from right panel when not in embedded mode
-        ctx.workbench.ContentRightSide.removePanel(rightPanelName)
-      }
-
-      // Fit terminal after mode change
+    function focusContainer () {
       nextTick(() => {
         containerInstance.value?.focus()
         containerInstance.value?.fitXterm()
       })
+    }
+
+    function getRightPanelSignature (actions: typeof containerActions.value) {
+      return JSON.stringify(actions.map(action => ({
+        key: action.key,
+        title: action.title,
+        label: action.label,
+        disabled: action.disabled,
+        meta: action.meta,
+      })))
+    }
+
+    function syncEmbeddedPanel (options?: { show?: boolean }) {
+      const actions = containerActions.value
+      const panel = buildRightPanel(actions)
+      const signature = getRightPanelSignature(actions)
+      const exists = ctx.workbench.ContentRightSide.getAllPanels().some(item => item.name === rightPanelName)
+      const shouldShow = !!options?.show || (
+        ctx.store.state.showContentRightSide &&
+        ctx.store.state.currentRightSidePanel === rightPanelName
+      )
+
+      if (!exists) {
+        ctx.workbench.ContentRightSide.registerPanel(panel)
+      } else if (signature !== rightPanelSignature) {
+        ctx.workbench.ContentRightSide.registerPanel(panel, true)
+      }
+
+      rightPanelSignature = signature
+
+      if (shouldShow) {
+        ctx.workbench.ContentRightSide.show(rightPanelName)
+      }
+    }
+
+    function ensureFloatingPanelCreated () {
+      if (panelAppMounted) {
+        return
+      }
+
+      if (!panelContainer) {
+        panelContainer = document.createElement('div')
+        panelContainer.id = 'opencode-panel-container'
+        document.body.appendChild(panelContainer)
+      }
+
+      const app = createApp(OpenCodePanel, {
+        visible,
+        'onUpdate:visible': (val: boolean) => { visible.value = val },
+        'onUpdate:panelMode': (mode: string) => {
+          if (mode === 'embedded') {
+            activateEmbeddedPanel()
+          }
+        }
+      })
+
+      ctx.directives.default(app as any)
+      app.mount(panelContainer)
+      panelAppMounted = true
+    }
+
+    function activateEmbeddedPanel () {
+      syncEmbeddedPanel({ show: true })
+      nextTick(() => {
+        containerInstance.value?.focus()
+        containerInstance.value?.fitXterm()
+      })
+    }
+
+    // Watch panel mode changes to show/hide right panel
+    watchEffect(() => {
+      const mode = panelMode.value
+      containerActions.value
+
+      if (mode === 'embedded' && visible.value) {
+        syncEmbeddedPanel()
+      } else {
+        ctx.workbench.ContentRightSide.removePanel(rightPanelName)
+        rightPanelSignature = ''
+      }
+
+      if (mode !== 'embedded' && visible.value) {
+        ensureFloatingPanelCreated()
+        nextTick(() => {
+          moveContainerToTarget()
+          focusContainer()
+        })
+      }
     })
 
     ctx.action.registerAction({
@@ -173,47 +249,23 @@ registerPlugin({
       handler: () => {
         // Ensure container is created
         ensureContainerCreated()
+        visible.value = true
 
-        if (panelContainer) {
-          visible.value = true
-          // If embedded mode, show right panel
-          if (panelMode.value === 'embedded') {
-            ctx.workbench.ContentRightSide.registerPanel(buildRightPanel(containerActions.value), true)
-            ctx.workbench.ContentRightSide.show(rightPanelName)
-          } else {
-            // Bump the panel to the front for floating modes
-            ;(panelContainer.children[0] as any)?.bump()
-          }
-          // Move container to appropriate target
-          nextTick(() => moveContainerToTarget())
+        if (panelMode.value === 'embedded') {
+          activateEmbeddedPanel()
+          nextTick(() => {
+            moveContainerToTarget()
+          })
           return
         }
 
-        panelContainer = document.createElement('div')
-        panelContainer.id = 'opencode-panel-container'
-        document.body.appendChild(panelContainer)
-        visible.value = true
+        ensureFloatingPanelCreated()
 
-        // If embedded mode, show right panel
-        if (panelMode.value === 'embedded') {
-          ctx.workbench.ContentRightSide.show(rightPanelName)
-        }
-
-        const app = createApp(OpenCodePanel, {
-          visible,
-          'onUpdate:visible': (val: boolean) => { visible.value = val },
-          'onUpdate:panelMode': (mode: string) => {
-            if (mode === 'embedded') {
-              ctx.workbench.ContentRightSide.show(rightPanelName)
-            }
-          }
+        nextTick(() => {
+          ;(panelContainer?.children[0] as any)?.bump?.()
+          moveContainerToTarget()
+          focusContainer()
         })
-
-        ctx.directives.default(app as any)
-        app.mount(panelContainer)
-
-        // Move container after panel is mounted
-        nextTick(() => moveContainerToTarget())
       },
     })
 
@@ -236,4 +288,3 @@ registerPlugin({
   }
 })
 export { UpdatePayload }
-
