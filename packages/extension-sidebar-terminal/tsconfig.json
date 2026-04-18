@@ -19,7 +19,7 @@
     "skipLibCheck": true,
     "paths": {
       "@/*": ["src/*"]
-    },
+    }
   },
   "exclude": ["node_modules", "lib", "types", "docs"],
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

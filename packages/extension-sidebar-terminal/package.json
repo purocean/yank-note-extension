@@ -1,18 +1,19 @@
 {
-  "name": "@yank-note/extension-terminal",
-  "version": "0.1.0",
-  "displayName": "Terminal",
+  "name": "@yank-note/extension-sidebar-terminal",
+  "version": "1.2.2",
+  "displayName": "Sidebar Terminal",
   "description": "Run shell commands in a dedicated sidebar terminal",
-  "displayName_ZH-CN": "终端",
+  "displayName_ZH-CN": "侧栏终端",
   "description_ZH-CN": "在独立侧栏终端中运行 Shell 命令",
   "keywords": [
     "terminal",
     "shell",
-    "command"
+    "command",
+    "sidebar"
   ],
   "author": "Yank Note",
   "license": "AGPL-3.0",
-  "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/extension-terminal",
+  "homepage": "https://github.com/purocean/yank-note-extension/tree/main/packages/extension-sidebar-terminal",
   "repository": {
     "type": "git",
     "url": "https://github.com/purocean/yank-note-extension.git"

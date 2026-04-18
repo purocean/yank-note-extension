@@ -1,22 +1,9 @@
 import * as path from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { YN_LIBS } from '@yank-note/runtime-api'
 
-const YN_LIBS = {
-  vue: 'ctx.lib.vue',
-  semver: 'ctx.lib.semver',
-  dayjs: 'ctx.lib.dayjs',
-  'crypto-js': 'ctx.lib.cryptojs',
-  turndown: 'ctx.lib.turndown',
-  juice: 'ctx.lib.juice',
-  sortablejs: 'ctx.lib.sortablejs',
-  'filenamify/browser': 'ctx.lib.filenamify',
-  mime: 'ctx.lib.mime',
-  'markdown-it': 'ctx.lib.markdownit',
-  'dom-to-image': 'ctx.lib.domtoimage',
-  pako: 'ctx.lib.pako',
-}
-
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
   define: {
@@ -26,6 +13,7 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: /^@\//, replacement: path.resolve(__dirname, 'src') + '/' },
+      { find: /^socket.io-client$/, replacement: 'socket.io-client/dist/socket.io.js' },
     ],
   },
   build: {
@@ -42,8 +30,8 @@ export default defineConfig({
         globals: {
           window: 'window',
           ...YN_LIBS,
-        },
-      },
-    },
+        }
+      }
+    }
   },
 })

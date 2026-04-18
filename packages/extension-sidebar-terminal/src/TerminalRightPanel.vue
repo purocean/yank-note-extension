@@ -1,10 +1,12 @@
 <template>
-  <div ref="containerRef" class="terminal-right-panel" />
+  <div class="terminal-right-panel" ref="containerRef">
+    <!-- TerminalContainer will be moved here when in embedded mode -->
+  </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { moveContainerToTarget, panelMode, setEmbeddedTarget } from './lib'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { setEmbeddedTarget, panelMode, moveContainerToTarget } from './lib'
 
 const containerRef = ref<HTMLElement | null>(null)
 
@@ -26,6 +28,8 @@ onBeforeUnmount(() => {
 .terminal-right-panel {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
   background: var(--g-color-backdrop);
   overflow: hidden;
 }
