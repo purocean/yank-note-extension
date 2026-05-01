@@ -4,6 +4,10 @@ const extensionId = __EXTENSION_ID__
 
 const defaultPushCommand = 'git add . && git commit -m update && git push'
 const defaultPullCommand = 'git pull'
+const codexPushCommand = 'codex exec --sandbox workspace-write "检查当前仓库改动，按合适粒度暂存并提交，然后推送当前分支；不要改动与提交无关的内容。"'
+const claudePushCommand = 'claude -p "检查当前仓库改动，按合适粒度暂存并提交，然后推送当前分支；不要改动与提交无关的内容。" --allowedTools "Bash,Read" --permission-mode acceptEdits'
+const codexPullCommand = 'codex exec --sandbox workspace-write "拉取当前分支的远端更新；如有冲突，停止并说明，不要覆盖用户改动。"'
+const claudePullCommand = 'claude -p "拉取当前分支的远端更新；如有冲突，停止并说明，不要覆盖用户改动。" --allowedTools "Bash,Read" --permission-mode acceptEdits'
 const settingKeyPushCommand = 'plugin.git-push.push-command'
 const settingKeyPullCommand = 'plugin.git-push.pull-command'
 
@@ -17,6 +21,9 @@ registerPlugin({
         'git-push-command': 'Git Push Command',
         'git-pull-command': 'Git Pull Command',
         'git-command-desc': 'Run in the current repository directory.',
+        'suggestion-default': 'Default',
+        'suggestion-codex': 'Codex',
+        'suggestion-claude': 'Claude Code',
         'not-support': 'Yank Note downloaded from the Mac Apple Store does not support this extension.'
       },
       'zh-CN': {
@@ -25,6 +32,9 @@ registerPlugin({
         'git-push-command': 'Git 推送命令',
         'git-pull-command': 'Git 拉取命令',
         'git-command-desc': '在当前仓库目录中执行。',
+        'suggestion-default': '默认',
+        'suggestion-codex': 'Codex',
+        'suggestion-claude': 'Claude Code',
         'not-support': '从 Mac Apple Store 中下载的应用不支持此拓展。'
       }
     })
@@ -39,6 +49,11 @@ registerPlugin({
         type: 'string',
         defaultValue: defaultPushCommand,
         description: i18n.$$t('git-command-desc'),
+        suggestions: [
+          { label: i18n.t('suggestion-default'), value: defaultPushCommand },
+          { label: i18n.t('suggestion-codex'), value: codexPushCommand },
+          { label: i18n.t('suggestion-claude'), value: claudePushCommand },
+        ],
         group: 'plugin',
         required: true,
       }
@@ -48,6 +63,11 @@ registerPlugin({
         type: 'string',
         defaultValue: defaultPullCommand,
         description: i18n.$$t('git-command-desc'),
+        suggestions: [
+          { label: i18n.t('suggestion-default'), value: defaultPullCommand },
+          { label: i18n.t('suggestion-codex'), value: codexPullCommand },
+          { label: i18n.t('suggestion-claude'), value: claudePullCommand },
+        ],
         group: 'plugin',
         required: true,
       }
