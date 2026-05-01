@@ -21,6 +21,8 @@ export interface ActionButton {
 }
 
 export const extensionId = __EXTENSION_ID__
+export const openCodeExtensionId = '@yank-note/extension-opencode'
+export const requiredOpenCodeVersion = '>=1.2.2'
 export const proxyStorageKey = extensionId + '.proxy-url'
 export const panelModeStorageKey = extensionId + '.panel-mode'
 export const customCommandsStorageKey = extensionId + '.custom-commands'
@@ -86,6 +88,8 @@ export const i18n = ctx.i18n.createI18n({
     'panel-mode-floating': 'Floating',
     'panel-mode-maximized': 'Maximized',
     'panel-mode-embedded': 'Embed in Right Panel',
+    'opencode-version-unknown': 'not installed or not loaded',
+    'opencode-incompatible': 'Sidebar Terminal is incompatible with OpenCode extension (%s). Please upgrade OpenCode to %s.',
   },
   'zh-CN': {
     'terminal': '侧栏终端',
@@ -108,5 +112,22 @@ export const i18n = ctx.i18n.createI18n({
     'panel-mode-floating': '浮动窗口',
     'panel-mode-maximized': '最大化',
     'panel-mode-embedded': '嵌入右侧面板',
+    'opencode-version-unknown': '未安装或未加载',
+    'opencode-incompatible': '侧栏终端与当前 OpenCode 扩展（%s）不兼容，请升级 OpenCode 到 %s。',
   }
 })
+
+export function ensureOpenCodeCompatible () {
+  const version = ctx.getExtensionLoadStatus(openCodeExtensionId)?.version
+
+  if (version && ctx.lib.semver.satisfies(version, requiredOpenCodeVersion)) {
+    return true
+  }
+
+  ctx.ui.useToast().show(
+    'warning',
+    i18n.t('opencode-incompatible', version || i18n.t('opencode-version-unknown'), requiredOpenCodeVersion),
+    5000
+  )
+  return false
+}

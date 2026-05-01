@@ -72,7 +72,7 @@
 import { ctx } from '@yank-note/runtime-api'
 import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch, watchEffect, shallowRef } from 'vue'
 import logoSvg from './assets/icon.svg'
-import { i18n, proxyStorageKey, customCommandsStorageKey, type ActionButton, type UpdatePayload } from './lib'
+import { i18n, proxyStorageKey, customCommandsStorageKey, ensureOpenCodeCompatible, type ActionButton, type UpdatePayload } from './lib'
 import { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -236,6 +236,10 @@ function handleCommandMouseLeave (id: string) {
 }
 
 async function initTerminal (initialCommand = '') {
+  if (!ensureOpenCodeCompatible()) {
+    return
+  }
+
   const normalizedCommand = initialCommand.replace(/[\r\n]+/g, ' ').trim()
 
   terminalReady.value = true

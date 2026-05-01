@@ -4,7 +4,7 @@ import { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 import TerminalPanel from './TerminalPanel.vue'
 import TerminalRightPanel from './TerminalRightPanel.vue'
 import TerminalContainer from './TerminalContainer.vue'
-import { i18n, panelMode, cyclePanelMode, containerElement, containerApp, containerInstance, containerActions, moveContainerToTarget, type UpdatePayload } from './lib'
+import { i18n, panelMode, cyclePanelMode, containerElement, containerApp, containerInstance, containerActions, moveContainerToTarget, ensureOpenCodeCompatible, type UpdatePayload } from './lib'
 
 const extensionId = __EXTENSION_ID__
 const rightPanelName = extensionId + '.terminal-right-panel'
@@ -210,6 +210,10 @@ registerPlugin({
       forUser: true,
       when,
       handler: () => {
+        if (!ensureOpenCodeCompatible()) {
+          return
+        }
+
         ensureContainerCreated()
         visible.value = true
 
