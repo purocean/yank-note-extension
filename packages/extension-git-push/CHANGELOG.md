@@ -1,3 +1,13 @@
+# [1.5.0](https://github.com/purocean/yank-note-extension/compare/extension-git-push-1.4.0...extension-git-push-1.5.0) (2026-05-01)
+
+
+### Features
+
+* add custom git sync commands ([2f5ecf9](https://github.com/purocean/yank-note-extension/commit/2f5ecf94b0b98142d1cf8ccef9ba9c33ff69cf7a))
+* add git command suggestions ([a1a5114](https://github.com/purocean/yank-note-extension/commit/a1a51142ea09fcf2aa0dc1308883c6be1f5416e9))
+
+
+
 # [1.4.0](https://github.com/purocean/yank-note-extension/compare/extension-git-push-1.3.0...extension-git-push-1.4.0) (2024-01-23)
 
 
