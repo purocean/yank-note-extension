@@ -22,7 +22,7 @@ export interface ActionButton {
 
 export const extensionId = __EXTENSION_ID__
 export const openCodeExtensionId = '@yank-note/extension-opencode'
-export const requiredOpenCodeVersion = '>=1.2.2'
+export const requiredOpenCodeVersion = '>=1.2.4'
 export const proxyStorageKey = extensionId + '.proxy-url'
 export const panelModeStorageKey = extensionId + '.panel-mode'
 export const customCommandsStorageKey = extensionId + '.custom-commands'
@@ -76,19 +76,20 @@ export const i18n = ctx.i18n.createI18n({
     'stop-terminal': 'Stop Terminal',
     'stop-terminal-confirm': 'Are you sure you want to stop the current terminal session?',
     'add-context': 'Insert current document',
-    'context-added': 'Context added successfully',
     'proxy-label': 'Proxy:',
     'proxy-placeholder': 'eg. http://127.0.0.1:7890',
     'custom-command-add': 'Add custom command',
+    'custom-command-edit': 'Edit command',
+    'custom-command-title-input': 'Enter a button title',
     'custom-command-input': 'Enter a shell command',
     'custom-command-remove': 'Remove command',
-    'workspace': 'Workspace',
-    'workspace-empty': 'No repository selected. Commands run from the default shell location.',
+    'custom-command-manage': 'Manage',
+    'custom-command-done': 'Done',
+    'custom-command-drag': 'Drag to reorder',
     'close': 'Close',
     'panel-mode-floating': 'Floating',
     'panel-mode-maximized': 'Maximized',
     'panel-mode-embedded': 'Embed in Right Panel',
-    'opencode-version-unknown': 'not installed or not loaded',
     'opencode-incompatible': 'Sidebar Terminal is incompatible with OpenCode extension (%s). Please upgrade OpenCode to %s.',
   },
   'zh-CN': {
@@ -100,19 +101,20 @@ export const i18n = ctx.i18n.createI18n({
     'stop-terminal': '停止终端',
     'stop-terminal-confirm': '确定要停止当前终端会话吗？',
     'add-context': '插入当前文档',
-    'context-added': '上下文添加成功',
     'proxy-label': '代理：',
     'proxy-placeholder': 'eg. http://127.0.0.1:7890',
     'custom-command-add': '添加自定义命令',
+    'custom-command-edit': '编辑命令',
+    'custom-command-title-input': '输入按钮标题',
     'custom-command-input': '输入一条 Shell 命令',
     'custom-command-remove': '删除命令',
-    'workspace': '工作区',
-    'workspace-empty': '当前未选择仓库，命令会从默认 Shell 位置运行。',
+    'custom-command-manage': '管理',
+    'custom-command-done': '完成',
+    'custom-command-drag': '拖动排序',
     'close': '关闭',
     'panel-mode-floating': '浮动窗口',
     'panel-mode-maximized': '最大化',
     'panel-mode-embedded': '嵌入右侧面板',
-    'opencode-version-unknown': '未安装或未加载',
     'opencode-incompatible': '侧栏终端与当前 OpenCode 扩展（%s）不兼容，请升级 OpenCode 到 %s。',
   }
 })
@@ -120,13 +122,17 @@ export const i18n = ctx.i18n.createI18n({
 export function ensureOpenCodeCompatible () {
   const version = ctx.getExtensionLoadStatus(openCodeExtensionId)?.version
 
+  if (!version) {
+    return true
+  }
+
   if (version && ctx.lib.semver.satisfies(version, requiredOpenCodeVersion)) {
     return true
   }
 
   ctx.ui.useToast().show(
     'warning',
-    i18n.t('opencode-incompatible', version || i18n.t('opencode-version-unknown'), requiredOpenCodeVersion),
+    i18n.t('opencode-incompatible', version, requiredOpenCodeVersion),
     5000
   )
   return false
