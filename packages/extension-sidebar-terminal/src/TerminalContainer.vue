@@ -7,11 +7,49 @@
       <h2 class="name">Sidebar Terminal</h2>
       <p class="description">{{ i18n.t('terminal-description') }}</p>
       <div class="actions">
-        <button class="btn primary" @click="initTerminal">
+        <button class="btn primary" @click="initTerminal()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor" width="16" height="16">
             <path d="M73.4 182.6C60.9 170.1 60.9 149.8 73.4 137.3C85.9 124.8 106.2 124.8 118.7 137.3L278.7 297.3C291.2 309.8 291.2 330.1 278.7 342.6L118.7 502.6C106.2 515.1 85.9 515.1 73.4 502.6C60.9 490.1 60.9 469.8 73.4 457.3L210.7 320L73.4 182.6zM288 448L544 448C561.7 448 576 462.3 576 480C576 497.7 561.7 512 544 512L288 512C270.3 512 256 497.7 256 480C256 462.3 270.3 448 288 448z"/>
           </svg>
           {{ i18n.t('start-terminal') }}
+        </button>
+        <div
+          v-for="(command, index) in customCommands"
+          :key="command.id"
+          class="command-item"
+          @mouseenter="handleCommandMouseEnter(command.id)"
+          @mouseleave="handleCommandMouseLeave(command.id)"
+        >
+          <button
+            class="btn command-btn"
+            :style="getCommandStyle(index)"
+            @click="initTerminal(command.command)"
+            :title="command.command"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor" width="16" height="16">
+              <path d="M73.4 182.6C60.9 170.1 60.9 149.8 73.4 137.3C85.9 124.8 106.2 124.8 118.7 137.3L278.7 297.3C291.2 309.8 291.2 330.1 278.7 342.6L118.7 502.6C106.2 515.1 85.9 515.1 73.4 502.6C60.9 490.1 60.9 469.8 73.4 457.3L210.7 320L73.4 182.6zM288 448L544 448C561.7 448 576 462.3 576 480C576 497.7 561.7 512 544 512L288 512C270.3 512 256 497.7 256 480C256 462.3 270.3 448 288 448z"/>
+            </svg>
+            <span class="btn-text">{{ command.command }}</span>
+          </button>
+          <button
+            v-if="deleteVisibleId === command.id"
+            class="remove-btn"
+            :title="i18n.t('custom-command-remove')"
+            @click.stop="removeCustomCommand(command.id)"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor" width="10" height="10">
+              <path d="M55.1 73.4C67.6 60.9 87.9 60.9 100.4 73.4L192 164.9 283.6 73.4C296.1 60.9 316.4 60.9 328.9 73.4C341.4 85.9 341.4 106.2 328.9 118.7L237.3 210.3 328.9 301.9C341.4 314.4 341.4 334.7 328.9 347.2C316.4 359.7 296.1 359.7 283.6 347.2L192 255.6 100.4 347.2C87.9 359.7 67.6 359.7 55.1 347.2C42.6 334.7 42.6 314.4 55.1 301.9L146.7 210.3 55.1 118.7C42.6 106.2 42.6 85.9 55.1 73.4z"/>
+            </svg>
+          </button>
+        </div>
+        <button
+          class="btn add-btn"
+          :title="i18n.t('custom-command-add')"
+          @click="addCustomCommand"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="16" height="16">
+            <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
+          </svg>
         </button>
       </div>
       <div class="proxy-config">
@@ -34,12 +72,17 @@
 import { ctx } from '@yank-note/runtime-api'
 import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch, watchEffect, shallowRef } from 'vue'
 import logoSvg from './assets/icon.svg'
-import { i18n, proxyStorageKey, type ActionButton, type UpdatePayload } from './lib'
+import { i18n, proxyStorageKey, customCommandsStorageKey, type ActionButton, type UpdatePayload } from './lib'
 import { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const { XTerm } = ctx.components
+
+interface CustomCommand {
+  id: string
+  command: string
+}
 
 // eslint-disable-next-line no-undef, func-call-spacing
 const emit = defineEmits<{
@@ -55,6 +98,18 @@ const currentFileName = ref('')
 const selectionLines = ref('')
 const currentRepo = shallowRef(ctx.store.state.currentRepo)
 const proxyUrl = ref(ctx.storage.get(proxyStorageKey, ''))
+const customCommands = ref<CustomCommand[]>(normalizeCustomCommands(ctx.storage.get(customCommandsStorageKey, [])))
+const deleteVisibleId = ref('')
+
+const commandPalettes = [
+  { bg: '#1d4ed8', hover: '#1e40af', shadow: 'rgba(29, 78, 216, 0.22)' },
+  { bg: '#0f766e', hover: '#115e59', shadow: 'rgba(15, 118, 110, 0.22)' },
+  { bg: '#b45309', hover: '#92400e', shadow: 'rgba(180, 83, 9, 0.22)' },
+  { bg: '#7c3aed', hover: '#6d28d9', shadow: 'rgba(124, 58, 237, 0.22)' },
+  { bg: '#be123c', hover: '#9f1239', shadow: 'rgba(190, 18, 60, 0.22)' },
+]
+
+let deleteHoverTimer: ReturnType<typeof setTimeout> | null = null
 
 const isSameRepo = computed(() => ctx.store.state.currentRepo?.path === currentRepo.value?.path)
 const displayFileName = computed(() => {
@@ -97,7 +152,92 @@ function input (data: string, addNewLine = false) {
   refXterm.value?.input(data, addNewLine)
 }
 
-async function initTerminal () {
+function normalizeCustomCommands (value: unknown): CustomCommand[] {
+  if (!Array.isArray(value)) {
+    return []
+  }
+
+  return value.flatMap(item => {
+    if (!item || typeof item !== 'object') {
+      return []
+    }
+
+    const command = String((item as any).command || '').replace(/[\r\n]+/g, ' ').trim()
+    if (!command) {
+      return []
+    }
+
+    const id = String((item as any).id || createCommandId())
+    return [{ id, command }]
+  })
+}
+
+function createCommandId () {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8)
+}
+
+function getCommandStyle (index: number) {
+  const palette = commandPalettes[index % commandPalettes.length]
+  return {
+    '--command-bg': palette.bg,
+    '--command-hover': palette.hover,
+    '--command-shadow': palette.shadow,
+  }
+}
+
+async function addCustomCommand () {
+  const command = await ctx.ui.useModal().input({
+    title: i18n.t('custom-command-add'),
+    hint: i18n.t('custom-command-input'),
+    value: '',
+    select: true,
+  })
+
+  const normalized = String(command || '').replace(/[\r\n]+/g, ' ').trim()
+  if (!normalized) {
+    return
+  }
+
+  customCommands.value = [
+    ...customCommands.value,
+    {
+      id: createCommandId(),
+      command: normalized,
+    },
+  ]
+}
+
+function removeCustomCommand (id: string) {
+  customCommands.value = customCommands.value.filter(item => item.id !== id)
+  if (deleteVisibleId.value === id) {
+    deleteVisibleId.value = ''
+  }
+}
+
+function handleCommandMouseEnter (id: string) {
+  if (deleteHoverTimer) {
+    clearTimeout(deleteHoverTimer)
+  }
+
+  deleteHoverTimer = setTimeout(() => {
+    deleteVisibleId.value = id
+  }, 2000)
+}
+
+function handleCommandMouseLeave (id: string) {
+  if (deleteHoverTimer) {
+    clearTimeout(deleteHoverTimer)
+    deleteHoverTimer = null
+  }
+
+  if (deleteVisibleId.value === id) {
+    deleteVisibleId.value = ''
+  }
+}
+
+async function initTerminal (initialCommand = '') {
+  const normalizedCommand = initialCommand.replace(/[\r\n]+/g, ' ').trim()
+
   terminalReady.value = true
   emit('update:running', true)
   emitUpdate()
@@ -141,6 +281,12 @@ async function initTerminal () {
 
   fitXterm()
   updateEditorInfo()
+
+  if (normalizedCommand) {
+    await ctx.utils.sleep(80)
+    input(normalizedCommand, true)
+    focus()
+  }
 }
 
 function cleanup () {
@@ -238,6 +384,10 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  if (deleteHoverTimer) {
+    clearTimeout(deleteHoverTimer)
+    deleteHoverTimer = null
+  }
   cleanup()
   editorDisposables.forEach(d => d.dispose())
   editorDisposables = []
@@ -265,6 +415,10 @@ watchEffect(() => {
 watchEffect(() => {
   ctx.storage.set(proxyStorageKey, proxyUrl.value)
 })
+
+watch(customCommands, value => {
+  ctx.storage.set(customCommandsStorageKey, value)
+}, { deep: true })
 </script>
 
 <style lang="scss" scoped>
@@ -315,6 +469,8 @@ watchEffect(() => {
     gap: 12px;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
+    max-width: 640px;
   }
 
   .btn {
@@ -329,6 +485,7 @@ watchEffect(() => {
     cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
+    max-width: 240px;
 
     &.primary {
       background: var(--g-color-accent);
@@ -337,6 +494,65 @@ watchEffect(() => {
       &:hover {
         filter: brightness(1.1);
       }
+    }
+  }
+
+  .btn-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .command-item {
+    position: relative;
+  }
+
+  .command-btn {
+    background: var(--command-bg);
+    color: #fff;
+    box-shadow: 0 10px 24px -16px var(--command-shadow);
+
+    &:hover {
+      background: var(--command-hover);
+      transform: translateY(-1px);
+    }
+  }
+
+  .add-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    justify-content: center;
+    border: 1px dashed var(--g-color-60);
+    background: transparent;
+    color: var(--g-color-20);
+
+    &:hover {
+      border-color: var(--g-color-accent);
+      color: var(--g-color-accent);
+      background: rgba(var(--g-color-accent-rgb), 0.08);
+    }
+  }
+
+  .remove-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.86);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 24px -18px rgba(15, 23, 42, 0.9);
+    cursor: pointer;
+    animation: remove-btn-in 0.18s ease-out;
+
+    &:hover {
+      background: rgba(190, 24, 93, 0.95);
     }
   }
 
@@ -366,5 +582,17 @@ watchEffect(() => {
   padding: 0;
   box-sizing: border-box;
   background: var(--g-color-98);
+}
+
+@keyframes remove-btn-in {
+  from {
+    opacity: 0;
+    transform: scale(0.84);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 </style>

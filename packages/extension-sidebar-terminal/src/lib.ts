@@ -23,6 +23,7 @@ export interface ActionButton {
 export const extensionId = __EXTENSION_ID__
 export const proxyStorageKey = extensionId + '.proxy-url'
 export const panelModeStorageKey = extensionId + '.panel-mode'
+export const customCommandsStorageKey = extensionId + '.custom-commands'
 
 export type PanelMode = 'floating' | 'maximized' | 'embedded'
 
@@ -76,6 +77,9 @@ export const i18n = ctx.i18n.createI18n({
     'context-added': 'Context added successfully',
     'proxy-label': 'Proxy:',
     'proxy-placeholder': 'eg. http://127.0.0.1:7890',
+    'custom-command-add': 'Add custom command',
+    'custom-command-input': 'Enter a shell command',
+    'custom-command-remove': 'Remove command',
     'workspace': 'Workspace',
     'workspace-empty': 'No repository selected. Commands run from the default shell location.',
     'close': 'Close',
@@ -95,6 +99,9 @@ export const i18n = ctx.i18n.createI18n({
     'context-added': '上下文添加成功',
     'proxy-label': '代理：',
     'proxy-placeholder': 'eg. http://127.0.0.1:7890',
+    'custom-command-add': '添加自定义命令',
+    'custom-command-input': '输入一条 Shell 命令',
+    'custom-command-remove': '删除命令',
     'workspace': '工作区',
     'workspace-empty': '当前未选择仓库，命令会从默认 Shell 位置运行。',
     'close': '关闭',
