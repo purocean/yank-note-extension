@@ -124,6 +124,18 @@ const defaultCustomCommands: CustomCommand[] = [
   },
 ]
 
+const noProxyHosts = [
+  'localhost',
+  '127.0.0.1',
+  '::1',
+  '0.0.0.0',
+  '10.0.0.0/8',
+  '172.16.0.0/12',
+  '192.168.0.0/16',
+  '169.254.0.0/16',
+  '.local',
+]
+
 // eslint-disable-next-line no-undef, func-call-spacing
 const emit = defineEmits<{
   (e: 'update', payload: UpdatePayload): void
@@ -457,6 +469,8 @@ async function initTerminal (initialCommand = '') {
     env.https_proxy = proxy
     env.HTTP_PROXY = proxy
     env.HTTPS_PROXY = proxy
+    env.no_proxy = noProxyHosts.join(',')
+    env.NO_PROXY = env.no_proxy
   }
 
   refXterm.value.init({
