@@ -4,10 +4,10 @@ const extensionId = __EXTENSION_ID__
 
 const defaultPushCommand = 'git add . && git commit -m update && git push'
 const defaultPullCommand = 'git pull'
-const codexPushCommand = 'codex exec --sandbox workspace-write "检查当前仓库改动，按合适粒度暂存并提交，然后推送当前分支；不要改动与提交无关的内容。"'
-const claudePushCommand = 'claude -p "检查当前仓库改动，按合适粒度暂存并提交，然后推送当前分支；不要改动与提交无关的内容。" --allowedTools "Bash,Read" --permission-mode acceptEdits'
-const codexPullCommand = 'codex exec --sandbox workspace-write "拉取当前分支的远端更新；如有冲突，停止并说明，不要覆盖用户改动。"'
-const claudePullCommand = 'claude -p "拉取当前分支的远端更新；如有冲突，停止并说明，不要覆盖用户改动。" --allowedTools "Bash,Read" --permission-mode acceptEdits'
+const codexPushCommand = 'codex exec --sandbox workspace-write "Commit current changes and push the branch."'
+const claudePushCommand = 'claude -p "Commit current changes and push the branch." --allowedTools "Bash,Read" --permission-mode acceptEdits'
+const codexPullCommand = 'codex exec --sandbox workspace-write "Pull remote updates; stop on conflicts."'
+const claudePullCommand = 'claude -p "Pull remote updates; stop on conflicts." --allowedTools "Bash,Read" --permission-mode acceptEdits'
 const settingKeyPushCommand = 'plugin.git-push.push-command'
 const settingKeyPullCommand = 'plugin.git-push.pull-command'
 
