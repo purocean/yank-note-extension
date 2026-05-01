@@ -109,10 +109,7 @@ interface CustomCommand {
   command: string
 }
 
-interface CustomCommandDraft {
-  title: string
-  command: string
-}
+type CustomCommandDraft = Omit<CustomCommand, 'id'>
 
 const defaultCustomCommands: CustomCommand[] = [
   {
@@ -200,7 +197,7 @@ function input (data: string, addNewLine = false) {
 function loadCustomCommands (): CustomCommand[] {
   const value = ctx.storage.get(customCommandsStorageKey)
   if (value === undefined) {
-    return defaultCustomCommands
+    return defaultCustomCommands.map(item => ({ ...item }))
   }
 
   if (!Array.isArray(value)) {
@@ -214,7 +211,7 @@ function loadCustomCommands (): CustomCommand[] {
 
     const title = normalizeTitle(item.title)
     const command = normalizeCommand(item.command)
-    if (!command) {
+    if (!title || !command) {
       return []
     }
 
@@ -474,6 +471,10 @@ async function initTerminal (initialCommand = '') {
   await ctx.utils.sleep(100)
 
   const xterm = refXterm.value.getXterm()
+  if (!xterm) {
+    cleanup()
+    return
+  }
 
   xterm.textarea?.addEventListener('focus', () => {
     ctx.keybinding.disableShortcuts()

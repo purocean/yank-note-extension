@@ -126,7 +126,7 @@ export function ensureOpenCodeCompatible () {
     return true
   }
 
-  if (version && ctx.lib.semver.satisfies(version, requiredOpenCodeVersion)) {
+  if (ctx.lib.semver.satisfies(version, requiredOpenCodeVersion)) {
     return true
   }
 
