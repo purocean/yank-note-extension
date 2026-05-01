@@ -39,6 +39,8 @@
     "dev": "vite build --watch --minify=false",
     "build": "vue-tsc --noEmit && vite build",
     "lint": "vue-tsc --noEmit && yarn run eslint '{src,__tests__}/**/*.{js,ts,tsx,vue}'",
+    "version": "conventional-changelog -t extension-sidebar-terminal- --commit-path . -p angular -i CHANGELOG.md -s && pnpm run tag-version",
+    "tag-version": "git add . && git commit -m 'chore(release): bump extension-sidebar-terminal version' && git tag extension-sidebar-terminal-$npm_package_version",
     "prepublish": "npm run build"
   },
   "devDependencies": {
@@ -48,6 +50,7 @@
     "@vue/eslint-config-standard": "^6.1.0",
     "@vue/eslint-config-typescript": "^10.0.0",
     "@yank-note/runtime-api": "workspace:*",
+    "conventional-changelog-cli": "^2.2.2",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",

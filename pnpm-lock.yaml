@@ -1574,6 +1574,9 @@ importers:
       '@yank-note/runtime-api':
         specifier: workspace:*
         version: link:../api
+      conventional-changelog-cli:
+        specifier: ^2.2.2
+        version: 2.2.2
       eslint:
         specifier: ^7.32.0
         version: 7.32.0
