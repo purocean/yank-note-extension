@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/purocean/yank-note-extension/compare/extension-sidebar-terminal-1.0.0...extension-sidebar-terminal-1.0.1) (2026-05-01)
+
+
+### Bug Fixes
+
+* bypass local network for sidebar terminal proxy ([09085b5](https://github.com/purocean/yank-note-extension/commit/09085b52e659b1b016991253a031cb128b5c4e2e))
+
+
+
 # 1.0.0 (2026-05-01)
 
 
