@@ -1,3 +1,12 @@
+## [1.2.4](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.2.2...extension-opencode-1.2.4) (2026-05-01)
+
+
+### Bug Fixes
+
+* stabilize opencode sidebar panel interactions ([de8bc6f](https://github.com/purocean/yank-note-extension/commit/de8bc6f89a3e2488a4bd16743c2bed7d72981645))
+
+
+
 ## [1.2.2](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.2.1...extension-opencode-1.2.2) (2026-01-23)
 
 
