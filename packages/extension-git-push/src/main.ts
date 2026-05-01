@@ -2,6 +2,11 @@ import { registerPlugin } from '@yank-note/runtime-api'
 
 const extensionId = __EXTENSION_ID__
 
+const defaultPushCommand = 'git add . && git commit -m update && git push'
+const defaultPullCommand = 'git pull'
+const settingKeyPushCommand = 'plugin.git-push.push-command'
+const settingKeyPullCommand = 'plugin.git-push.pull-command'
+
 registerPlugin({
   name: extensionId,
   register (ctx) {
@@ -9,16 +14,50 @@ registerPlugin({
       en: {
         'git-push': 'Git Push',
         'git-pull': 'Git Pull',
+        'git-push-command': 'Git Push Command',
+        'git-pull-command': 'Git Pull Command',
+        'git-command-desc': 'Run in the current repository directory.',
         'not-support': 'Yank Note downloaded from the Mac Apple Store does not support this extension.'
       },
       'zh-CN': {
         'git-push': 'Git 推送',
         'git-pull': 'Git 拉取',
+        'git-push-command': 'Git 推送命令',
+        'git-pull-command': 'Git 拉取命令',
+        'git-command-desc': '在当前仓库目录中执行。',
         'not-support': '从 Mac Apple Store 中下载的应用不支持此拓展。'
       }
     })
 
-    async function doAction (xcmd) {
+    ctx.setting.changeSchema(schema => {
+      if (!schema.groups.some((x: any) => x.value === 'plugin')) {
+        schema.groups.push({ value: 'plugin', label: 'Plugin' } as any)
+      }
+
+      schema.properties[settingKeyPushCommand] = {
+        title: i18n.$$t('git-push-command'),
+        type: 'string',
+        defaultValue: defaultPushCommand,
+        description: i18n.$$t('git-command-desc'),
+        group: 'plugin',
+        required: true,
+      }
+
+      schema.properties[settingKeyPullCommand] = {
+        title: i18n.$$t('git-pull-command'),
+        type: 'string',
+        defaultValue: defaultPullCommand,
+        description: i18n.$$t('git-command-desc'),
+        group: 'plugin',
+        required: true,
+      }
+    })
+
+    function getCommand (key: string, defaultCommand: string) {
+      return ctx.setting.getSetting<string>(key, defaultCommand).trim() || defaultCommand
+    }
+
+    async function doAction (xcmd: string) {
       if (ctx.args.FLAG_MAS) {
         if (await ctx.ui.useModal().confirm({
           content: i18n.t('not-support'),
@@ -42,11 +81,11 @@ registerPlugin({
     }
 
     function gitPush () {
-      doAction('git add . && git commit -m update && git push')
+      doAction(getCommand(settingKeyPushCommand, defaultPushCommand))
     }
 
     function gitPull () {
-      doAction('git pull')
+      doAction(getCommand(settingKeyPullCommand, defaultPullCommand))
     }
 
     ctx.action.registerAction({
