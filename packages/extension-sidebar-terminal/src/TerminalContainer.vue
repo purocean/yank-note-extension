@@ -1,115 +1,90 @@
 <template>
   <div class="terminal-container">
-    <div v-if="!terminalReady" class="content" @click="handleContentClick">
-      <div class="logo">
-        <img :src="logoSvg" alt="Sidebar Terminal Logo" />
-      </div>
-      <h2 class="name">Sidebar Terminal</h2>
-      <p class="description">{{ i18n.t('terminal-description') }}</p>
-      <div :class="{ 'actions-area': true, editing: manageMode }">
-        <div ref="actionsRef" :class="{ actions: true, editing: manageMode }">
-          <button class="btn primary" @click.stop="handlePrimaryClick">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor" width="16" height="16">
-              <path d="M73.4 182.6C60.9 170.1 60.9 149.8 73.4 137.3C85.9 124.8 106.2 124.8 118.7 137.3L278.7 297.3C291.2 309.8 291.2 330.1 278.7 342.6L118.7 502.6C106.2 515.1 85.9 515.1 73.4 502.6C60.9 490.1 60.9 469.8 73.4 457.3L210.7 320L73.4 182.6zM288 448L544 448C561.7 448 576 462.3 576 480C576 497.7 561.7 512 544 512L288 512C270.3 512 256 497.7 256 480C256 462.3 270.3 448 288 448z"/>
-            </svg>
-            {{ i18n.t('start-terminal') }}
-          </button>
-          <div
-            v-for="(command, index) in customCommands"
-            :key="command.id"
-            :data-command-id="command.id"
-            :class="{ 'command-item': true, editing: manageMode, dragging: draggingCommandId === command.id }"
-          >
-            <button
-              class="btn command-btn"
-              :style="getCommandStyle(index)"
-              @click.stop="handleCommandClick(command.command)"
-              :title="command.command"
-            >
-              <span v-if="manageMode" class="drag-handle" :title="i18n.t('custom-command-drag')" @click.stop>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="10" height="14">
-                  <path d="M7 4.5C7 5.3 6.3 6 5.5 6S4 5.3 4 4.5 4.7 3 5.5 3 7 3.7 7 4.5zM16 4.5C16 5.3 15.3 6 14.5 6S13 5.3 13 4.5 13.7 3 14.5 3 16 3.7 16 4.5zM7 10C7 10.8 6.3 11.5 5.5 11.5S4 10.8 4 10 4.7 8.5 5.5 8.5 7 9.2 7 10zM16 10C16 10.8 15.3 11.5 14.5 11.5S13 10.8 13 10 13.7 8.5 14.5 8.5 16 9.2 16 10zM7 15.5C7 16.3 6.3 17 5.5 17S4 16.3 4 15.5 4.7 14 5.5 14 7 14.7 7 15.5zM16 15.5C16 16.3 15.3 17 14.5 17S13 16.3 13 15.5 13.7 14 14.5 14 16 14.7 16 15.5z"/>
-                </svg>
-              </span>
-              <svg v-if="!manageMode" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor" width="16" height="16">
-                <path d="M73.4 182.6C60.9 170.1 60.9 149.8 73.4 137.3C85.9 124.8 106.2 124.8 118.7 137.3L278.7 297.3C291.2 309.8 291.2 330.1 278.7 342.6L118.7 502.6C106.2 515.1 85.9 515.1 73.4 502.6C60.9 490.1 60.9 469.8 73.4 457.3L210.7 320L73.4 182.6zM288 448L544 448C561.7 448 576 462.3 576 480C576 497.7 561.7 512 544 512L288 512C270.3 512 256 497.7 256 480C256 462.3 270.3 448 288 448z"/>
-              </svg>
-              <span class="btn-text">{{ command.title }}</span>
-            </button>
-            <button
-              v-if="manageMode"
-              class="edit-btn"
-              :title="i18n.t('custom-command-edit')"
-              @click.stop="editCustomCommand(command)"
-            >
-              <svg-icon class="edit-icon" name="pen-solid" width="8px" height="8px" />
-            </button>
-            <button
-              v-if="manageMode"
-              class="remove-btn"
-              :title="i18n.t('custom-command-remove')"
-              @click.stop="removeCustomCommand(command.id)"
-            >
-              <svg-icon class="remove-icon" name="times" width="11px" height="11px" />
-            </button>
-          </div>
-        </div>
-        <div class="command-controls">
+    <TerminalLauncher
+      v-if="!terminalReady"
+      v-model:proxy-url="proxyUrl"
+      :custom-commands="customCommands"
+      :manage-mode="manageMode"
+      @add-command="addCustomCommand"
+      @command-click="handleCommandClick"
+      @edit-command="editCustomCommand"
+      @leave-manage="manageMode = false"
+      @primary-click="handlePrimaryClick"
+      @remove-command="removeCustomCommand"
+      @reorder-command="reorderCustomCommand"
+      @toggle-manage="toggleManageMode"
+    />
+    <div v-if="terminalReady" class="terminal-workspace">
+      <div class="terminal-tabs">
+        <div
+          v-for="tab in terminalTabs"
+          :key="tab.id"
+          :class="{ 'terminal-tab': true, active: tab.id === activeTabId }"
+          :title="tab.title"
+          @click="setActiveTab(tab.id)"
+        >
+          <span class="terminal-tab-title">{{ tab.title }}</span>
           <button
-            v-if="!manageMode"
-            class="btn add-btn"
-            :title="i18n.t('custom-command-add')"
-            @click.stop="addCustomCommand"
+            class="terminal-tab-close"
+            :title="i18n.t('close-tab')"
+            @click.stop="closeTerminalTab(tab.id)"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="16" height="16">
-              <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
-            </svg>
-          </button>
-          <button
-            v-if="customCommands.length"
-            class="manage-btn"
-            :class="{ active: manageMode }"
-            @click.stop="toggleManageMode"
-          >
-            {{ manageMode ? i18n.t('custom-command-done') : i18n.t('custom-command-manage') }}
+            <svg-icon name="times" width="8px" height="8px" />
           </button>
         </div>
+        <button v-if="!showLauncher" class="terminal-tab-add" :title="i18n.t('new-tab')" @click="showNewTabLauncher">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="10" height="10">
+            <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
+          </svg>
+        </button>
       </div>
-      <div class="proxy-config">
-        <label class="proxy-label" for="proxy-input">{{ i18n.t('proxy-label') }}</label>
-        <input
-          id="proxy-input"
-          v-model="proxyUrl"
-          type="text"
-          :placeholder="i18n.t('proxy-placeholder')"
-        />
+      <TerminalLauncher
+        v-if="showLauncher"
+        v-model:proxy-url="proxyUrl"
+        class="tab-launcher"
+        :custom-commands="customCommands"
+        :manage-mode="manageMode"
+        @add-command="addCustomCommand"
+        @command-click="handleCommandClick"
+        @edit-command="editCustomCommand"
+        @leave-manage="manageMode = false"
+        @primary-click="handlePrimaryClick"
+        @remove-command="removeCustomCommand"
+        @reorder-command="reorderCustomCommand"
+        @toggle-manage="toggleManageMode"
+      />
+      <div v-show="!showLauncher" class="xterm-container">
+        <div
+          v-for="tab in terminalTabs"
+          :key="tab.id"
+          v-show="tab.id === activeTabId"
+          class="xterm-pane"
+        >
+          <XTerm :ref="bindTerminalRef(tab.id)" @fit="onFit(tab.id)" />
+        </div>
       </div>
-    </div>
-    <div v-else class="xterm-container">
-      <XTerm ref="refXterm" @fit="onFit" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ctx } from '@yank-note/runtime-api'
-import { ref, computed, defineComponent, h, onMounted, onBeforeUnmount, nextTick, watch, watchEffect, shallowRef } from 'vue'
-import logoSvg from './assets/icon.svg'
-import { i18n, proxyStorageKey, customCommandsStorageKey, ensureOpenCodeCompatible, type ActionButton, type UpdatePayload } from './lib'
+import { ref, computed, defineComponent, h, onMounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'
+import TerminalLauncher from './TerminalLauncher.vue'
+import { i18n, proxyStorageKey, customCommandsStorageKey, ensureOpenCodeCompatible, type ActionButton, type CustomCommand, type UpdatePayload } from './lib'
 import type { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const { XTerm, SvgIcon } = ctx.components
-const Sortable = ctx.lib.sortablejs
+type CustomCommandDraft = Omit<CustomCommand, 'id'>
 
-interface CustomCommand {
+interface TerminalTab {
   id: string
   title: string
-  command: string
+  repoName: string
+  repoPath: string
 }
-
-type CustomCommandDraft = Omit<CustomCommand, 'id'>
 
 const defaultCustomCommands: CustomCommand[] = [
   {
@@ -144,28 +119,22 @@ const emit = defineEmits<{
 }>()
 
 const editor = ctx.editor.getEditor()
-const terminalReady = ref(false)
-const refXterm = ref<Components.XTerm.Ref | null>(null)
-const actionsRef = ref<HTMLElement | null>(null)
+const terminalTabs = ref<TerminalTab[]>([])
+const activeTabId = ref('')
+const launcherVisible = ref(true)
 const currentFileName = ref('')
 const selectionLines = ref('')
-const currentRepo = shallowRef(ctx.store.state.currentRepo)
 const proxyUrl = ref(ctx.storage.get(proxyStorageKey, ''))
 const customCommands = ref<CustomCommand[]>(loadCustomCommands())
 const manageMode = ref(false)
-const draggingCommandId = ref('')
 
-const commandPalettes = [
-  { bg: '#1e40af', hover: '#1e3a8a', shadow: 'rgba(30, 64, 175, 0.24)' },
-  { bg: '#115e59', hover: '#134e4a', shadow: 'rgba(17, 94, 89, 0.24)' },
-  { bg: '#92400e', hover: '#78350f', shadow: 'rgba(146, 64, 14, 0.24)' },
-  { bg: '#6d28d9', hover: '#5b21b6', shadow: 'rgba(109, 40, 217, 0.24)' },
-  { bg: '#9f1239', hover: '#881337', shadow: 'rgba(159, 18, 57, 0.24)' },
-]
+const terminalRefs = new Map<string, Components.XTerm.Ref>()
+const closingTabIds = new Set<string>()
 
-let commandSortable: ReturnType<typeof Sortable.create> | null = null
-
-const isSameRepo = computed(() => ctx.store.state.currentRepo?.path === currentRepo.value?.path)
+const terminalReady = computed(() => terminalTabs.value.length > 0)
+const showLauncher = computed(() => !terminalReady.value || launcherVisible.value)
+const activeTab = computed(() => terminalTabs.value.find(tab => tab.id === activeTabId.value) || null)
+const isSameRepo = computed(() => !!activeTab.value && ctx.store.state.currentRepo?.path === activeTab.value.repoPath)
 const displayFileName = computed(() => {
   const name = currentFileName.value
   if (name.length > 20) {
@@ -176,7 +145,7 @@ const displayFileName = computed(() => {
 
 function updateEditorInfo () {
   const currentFile = ctx.store.state.currentFile
-  if (currentFile && currentFile.plain && currentRepo.value?.name === currentFile.repo) {
+  if (currentFile && currentFile.plain && activeTab.value?.repoName === currentFile.repo) {
     currentFileName.value = currentFile.name
   } else {
     currentFileName.value = ''
@@ -195,15 +164,19 @@ function updateEditorInfo () {
 }
 
 function focus () {
-  refXterm.value?.getXterm()?.focus()
+  getActiveXtermRef()?.getXterm()?.focus()
 }
 
 function fitXterm () {
-  refXterm.value?.fit()
+  getActiveXtermRef()?.fit()
 }
 
 function input (data: string, addNewLine = false) {
-  refXterm.value?.input(data, addNewLine)
+  getActiveXtermRef()?.input(data, addNewLine)
+}
+
+function getActiveXtermRef () {
+  return activeTabId.value ? terminalRefs.get(activeTabId.value) || null : null
 }
 
 function loadCustomCommands (): CustomCommand[] {
@@ -250,13 +223,17 @@ function createCommandId () {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8)
 }
 
-function getCommandStyle (index: number) {
-  const palette = commandPalettes[index % commandPalettes.length]
-  return {
-    '--command-bg': palette.bg,
-    '--command-hover': palette.hover,
-    '--command-shadow': palette.shadow,
-  }
+function createTerminalTitle (baseTitle: string) {
+  const title = normalizeTitle(baseTitle) || 'Shell'
+  const duplicateTitles = terminalTabs.value
+    .map(tab => tab.title)
+    .filter(tabTitle => tabTitle === title || new RegExp(`^${escapeRegExp(title)} \\d+$`).test(tabTitle))
+
+  return duplicateTitles.length ? `${title} ${duplicateTitles.length + 1}` : title
+}
+
+function escapeRegExp (value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
 function normalizeTitle (value: unknown) {
@@ -278,6 +255,7 @@ async function showCustomCommandDialog (title: string, value?: CustomCommandDraf
           h('span', i18n.t('custom-command-title-input')),
           h('input', {
             value: titleValue.value,
+            maxlength: 10,
             placeholder: i18n.t('custom-command-title-input'),
             onInput: (event: Event) => {
               titleValue.value = (event.target as HTMLInputElement).value
@@ -367,24 +345,13 @@ function toggleManageMode () {
   manageMode.value = !manageMode.value
 }
 
-function handleContentClick (event: MouseEvent) {
-  if (!manageMode.value) {
-    return
-  }
-
-  const target = event.target as HTMLElement
-  if (!target.closest('.actions')) {
-    manageMode.value = false
-  }
-}
-
-function handleCommandClick (command: string) {
+function handleCommandClick (command: CustomCommand) {
   if (manageMode.value) {
     manageMode.value = false
     return
   }
 
-  initTerminal(command)
+  initTerminal(command.title, command.command)
 }
 
 function handlePrimaryClick () {
@@ -393,7 +360,7 @@ function handlePrimaryClick () {
     return
   }
 
-  initTerminal()
+  initTerminal('Shell')
 }
 
 function handleKeydown (event: KeyboardEvent) {
@@ -402,65 +369,93 @@ function handleKeydown (event: KeyboardEvent) {
   }
 }
 
-function setupCommandSortable () {
-  if (!actionsRef.value) {
+function reorderCustomCommand (oldIndex: number, newIndex: number) {
+  if (oldIndex === newIndex) {
     return
   }
 
-  if (!commandSortable) {
-    commandSortable = Sortable.create(actionsRef.value, {
-      animation: 180,
-      easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-      draggable: '.command-item',
-      handle: '.command-btn',
-      ghostClass: 'sortable-ghost',
-      chosenClass: 'sortable-chosen',
-      dragClass: 'sortable-drag',
-      disabled: !manageMode.value,
-      onStart: event => {
-        draggingCommandId.value = (event.item as HTMLElement).dataset.commandId || ''
-      },
-      onEnd: event => {
-        draggingCommandId.value = ''
-        const oldIndex = event.oldDraggableIndex
-        const newIndex = event.newDraggableIndex
-        if (oldIndex === undefined || newIndex === undefined || oldIndex === newIndex) {
-          return
-        }
+  const next = [...customCommands.value]
+  const [source] = next.splice(oldIndex, 1)
+  next.splice(newIndex, 0, source)
+  customCommands.value = next
+}
 
-        const next = [...customCommands.value]
-        const [source] = next.splice(oldIndex, 1)
-        next.splice(newIndex, 0, source)
-        customCommands.value = next
-      },
-    })
+function setTerminalRef (tabId: string, instance: Components.XTerm.Ref | null) {
+  if (instance) {
+    terminalRefs.set(tabId, instance)
+  } else {
+    terminalRefs.delete(tabId)
+  }
+}
+
+function bindTerminalRef (tabId: string) {
+  return (instance: Components.XTerm.Ref | null) => {
+    setTerminalRef(tabId, instance)
+  }
+}
+
+function setActiveTab (tabId: string) {
+  if (activeTabId.value === tabId) {
+    launcherVisible.value = false
+    return
   }
 
-  commandSortable.option('disabled', !manageMode.value)
+  activeTabId.value = tabId
+  launcherVisible.value = false
+  updateEditorInfo()
+  emitUpdate()
+  nextTick(() => {
+    fitXterm()
+    focus()
+  })
 }
 
-function destroyCommandSortable () {
-  commandSortable?.destroy()
-  commandSortable = null
+function showNewTabLauncher () {
+  activeTabId.value = ''
+  launcherVisible.value = true
+  emitUpdate()
 }
 
-async function initTerminal (initialCommand = '') {
+async function closeTerminalTab (tabId: string) {
+  const res = await ctx.ui.useModal().confirm({
+    title: i18n.t('stop-terminal'),
+    content: i18n.t('stop-terminal-confirm'),
+  })
+
+  if (res) {
+    cleanupTab(tabId)
+  }
+}
+
+async function initTerminal (title = 'Shell', initialCommand = '') {
   if (!ensureOpenCodeCompatible()) {
     return
   }
 
   const normalizedCommand = normalizeCommand(initialCommand)
+  const currentRepo = ctx.store.state.currentRepo
+  const tab: TerminalTab = {
+    id: createCommandId(),
+    title: createTerminalTitle(title),
+    repoName: currentRepo?.name || '',
+    repoPath: currentRepo?.path || '',
+  }
 
-  terminalReady.value = true
+  terminalTabs.value = [...terminalTabs.value, tab]
+  activeTabId.value = tab.id
+  launcherVisible.value = false
   emit('update:running', true)
   emitUpdate()
 
   await nextTick()
 
-  if (!refXterm.value) return
+  const refXterm = terminalRefs.get(tab.id)
+  if (!refXterm) {
+    cleanupTab(tab.id)
+    return
+  }
 
-  currentRepo.value = ctx.store.state.currentRepo
-  const workDir = currentRepo.value?.path || ''
+  const workDir = tab.repoPath
   const env: Record<string, string> = {}
 
   if (proxyUrl.value.trim()) {
@@ -473,63 +468,108 @@ async function initTerminal (initialCommand = '') {
     env.NO_PROXY = env.no_proxy
   }
 
-  refXterm.value.init({
-    cwd: workDir,
-    fontSize: 13,
-    env,
-    onDisconnect () {
-      cleanup()
-    },
-  })
+  try {
+    refXterm.init({
+      cwd: workDir,
+      fontSize: 13,
+      env,
+      onDisconnect () {
+        cleanupTab(tab.id)
+      },
+    })
 
-  await ctx.utils.sleep(100)
+    await ctx.utils.sleep(100)
 
-  const xterm = refXterm.value.getXterm()
-  if (!xterm) {
-    cleanup()
-    return
-  }
+    const xterm = refXterm.getXterm()
+    if (!xterm) {
+      cleanupTab(tab.id)
+      return
+    }
 
-  xterm.textarea?.addEventListener('focus', () => {
-    ctx.keybinding.disableShortcuts()
-  })
+    xterm.textarea?.addEventListener('focus', () => {
+      ctx.keybinding.disableShortcuts()
+    })
 
-  xterm.textarea?.addEventListener('blur', () => {
-    ctx.keybinding.enableShortcuts()
-  })
+    xterm.textarea?.addEventListener('blur', () => {
+      ctx.keybinding.enableShortcuts()
+    })
 
-  fitXterm()
-  updateEditorInfo()
+    if (activeTabId.value === tab.id) {
+      fitXterm()
+      focus()
+    }
+    updateEditorInfo()
 
-  if (normalizedCommand) {
-    await ctx.utils.sleep(80)
-    input(normalizedCommand, true)
-    focus()
+    if (normalizedCommand) {
+      await ctx.utils.sleep(80)
+      refXterm.input(normalizedCommand, true)
+      if (activeTabId.value === tab.id) {
+        focus()
+      }
+    }
+  } catch (error) {
+    console.error('[sidebar-terminal] failed to initialize terminal', error)
+    cleanupTab(tab.id)
   }
 }
 
 function cleanup () {
+  terminalTabs.value.forEach(tab => {
+    closingTabIds.add(tab.id)
+    terminalRefs.get(tab.id)?.dispose()
+    closingTabIds.delete(tab.id)
+  })
+  terminalRefs.clear()
+  terminalTabs.value = []
+  activeTabId.value = ''
+  launcherVisible.value = true
   ctx.keybinding.enableShortcuts()
-  refXterm.value?.dispose()
-  terminalReady.value = false
   emit('update:running', false)
   emitUpdate()
 }
 
-async function stopTerminal () {
-  const res = await ctx.ui.useModal().confirm({
-    title: i18n.t('stop-terminal'),
-    content: i18n.t('stop-terminal-confirm'),
-  })
-
-  if (res) {
-    cleanup()
+function cleanupTab (tabId: string) {
+  if (!tabId || closingTabIds.has(tabId)) {
+    return
   }
+
+  closingTabIds.add(tabId)
+  terminalRefs.get(tabId)?.dispose()
+  terminalRefs.delete(tabId)
+  closingTabIds.delete(tabId)
+
+  const index = terminalTabs.value.findIndex(tab => tab.id === tabId)
+  if (index < 0) {
+    return
+  }
+
+  terminalTabs.value = terminalTabs.value.filter(tab => tab.id !== tabId)
+
+  if (!terminalTabs.value.length) {
+    activeTabId.value = ''
+    launcherVisible.value = true
+    ctx.keybinding.enableShortcuts()
+  } else {
+    if (activeTabId.value === tabId) {
+      const nextTab = terminalTabs.value[Math.min(index, terminalTabs.value.length - 1)] || terminalTabs.value[terminalTabs.value.length - 1] || null
+      activeTabId.value = nextTab?.id || ''
+    }
+    launcherVisible.value = activeTabId.value ? false : launcherVisible.value
+  }
+
+  emit('update:running', terminalTabs.value.length > 0)
+  updateEditorInfo()
+  emitUpdate()
+
+  nextTick(() => {
+    fitXterm()
+    focus()
+  })
 }
 
 async function addContext () {
   const currentFile = ctx.store.state.currentFile
-  if (!currentFile || !terminalReady.value) return
+  if (!currentFile || !activeTab.value) return
 
   const path = currentFile.path.replace(/^\//, '')
   const text = JSON.stringify(path + (selectionLines.value ? `#L${selectionLines.value}` : '')) + ' '
@@ -537,8 +577,8 @@ async function addContext () {
   focus()
 }
 
-function onFit () {
-  const element = refXterm.value?.getXterm()?.element as HTMLElement
+function onFit (tabId = activeTabId.value) {
+  const element = terminalRefs.get(tabId)?.getXterm()?.element as HTMLElement
   if (!element) return
 
   const width = element?.offsetWidth || 0
@@ -555,17 +595,13 @@ function buildActions (): ActionButton[] {
     return actions
   }
 
-  actions.push({
-    key: 'stop',
-    label: i18n.t('stop-terminal'),
-    title: i18n.t('stop-terminal'),
-    handler: stopTerminal,
-  })
+  if (!activeTab.value) {
+    return actions
+  }
 
   if (isSameRepo.value && currentFileName.value) {
     actions.push({
       key: 'add-context',
-      label: i18n.t('add-context'),
       title: i18n.t('add-context'),
       handler: addContext,
       meta: {
@@ -600,12 +636,10 @@ onMounted(() => {
     fitXterm,
     input,
   })
-  nextTick(setupCommandSortable)
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKeydown)
-  destroyCommandSortable()
   cleanup()
   editorDisposables.forEach(d => d.dispose())
   editorDisposables = []
@@ -636,20 +670,7 @@ watchEffect(() => {
 
 watch(customCommands, value => {
   ctx.storage.set(customCommandsStorageKey, value)
-  nextTick(setupCommandSortable)
 }, { deep: true })
-
-watch(manageMode, () => {
-  nextTick(setupCommandSortable)
-})
-
-watch(terminalReady, value => {
-  if (value) {
-    destroyCommandSortable()
-  } else {
-    nextTick(setupCommandSortable)
-  }
-})
 </script>
 
 <style lang="scss" scoped>
@@ -663,371 +684,133 @@ watch(terminalReady, value => {
   overflow: auto;
 }
 
-.content {
+.terminal-workspace {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
+  background: var(--g-color-98);
+}
+
+.terminal-tabs {
+  position: relative;
+  z-index: 2;
+  height: 28px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 5px 2px;
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-bottom: 1px solid var(--g-color-85);
+  background: rgba(var(--g-color-90-rgb), 0.94);
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--g-color-70);
+    border-radius: 999px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+.terminal-tab {
+  height: 22px;
+  min-width: 58px;
+  max-width: 128px;
+  padding: 0 3px 0 7px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 6px;
+  color: var(--g-color-35);
+  cursor: default;
+  user-select: none;
+  border: 1px solid transparent;
+  background: transparent;
+
+  &:hover {
+    color: var(--g-color-10);
+    background: var(--g-color-80);
+  }
+
+  &.active {
+    color: var(--g-color-5);
+    background: var(--g-color-80);
+    border-color: var(--g-color-75);
+  }
+}
+
+.terminal-tab-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.terminal-tab-close,
+.terminal-tab-add {
+  flex: none;
+  border: none;
+  padding: 0;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px 70px;
-  text-align: center;
+  color: inherit;
+  cursor: default;
+}
 
-  .logo {
-    color: var(--g-color-anchor);
-    margin-bottom: 16px;
+.terminal-tab-close {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: transparent;
+  opacity: 0.6;
 
-    img {
-      width: 64px;
-      height: 64px;
-    }
-  }
-
-  .name {
-    margin: 0 0 8px 0;
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--g-color-10);
-  }
-
-  .description {
-    margin: 0 0 22px 0;
-    font-size: 14px;
-    color: var(--g-color-40);
-    max-width: 300px;
-  }
-
-  .actions-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 7px;
-  }
-
-  .actions {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    max-width: 500px;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    height: 32px;
-    padding: 0 12px;
-    border: none;
-    border-radius: 7px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-    max-width: 156px;
-
-    &.primary {
-      background: var(--g-color-accent);
-      color: #fff;
-
-      &:hover {
-        filter: brightness(1.1);
-      }
-    }
-
-    > svg {
-      width: 14px;
-      height: 14px;
-      flex: none;
-    }
-  }
-
-  .btn-text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .command-item {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    transition: opacity 0.16s ease, transform 0.16s ease;
-
-    &.dragging {
-      opacity: 0.62;
-    }
-  }
-
-  .command-btn {
-    background: var(--command-bg);
-    color: #fff;
-    box-shadow: 0 10px 24px -16px var(--command-shadow);
-
-    &:hover {
-      background: var(--command-hover);
-    }
-  }
-
-  .command-item.editing .command-btn {
-    padding-left: 22px;
-    cursor: grab !important;
-
-    &:active {
-      cursor: grabbing !important;
-    }
-
-    * {
-      cursor: inherit !important;
-    }
-  }
-
-  .add-btn {
-    width: 32px;
-    min-width: 32px;
-    height: 32px;
-    padding: 0;
-    border: 1px dashed var(--g-color-60);
-    background: transparent;
-    color: var(--g-color-20);
-    border-radius: 8px;
-    transition: color 0.16s ease, background 0.16s ease, border-color 0.16s ease, opacity 0.16s ease;
-
-    &:hover {
-      border-color: var(--g-color-accent);
-      color: var(--g-color-accent);
-      background: rgba(var(--g-color-accent-rgb), 0.08);
-    }
-  }
-
-  .command-controls {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    min-height: 32px;
-
-    .add-btn,
-    .manage-btn {
-      opacity: 0;
-      transition-delay: 0s;
-    }
-  }
-
-  .drag-handle {
-    position: absolute;
-    left: 7px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: rgba(255, 255, 255, 0.72);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.9;
-    touch-action: none;
-
-    pointer-events: none;
-  }
-
-  .edit-btn,
-  .remove-btn {
-    position: absolute;
-    top: -6px;
-    width: 18px;
-    height: 18px;
-    padding: 0;
-    box-sizing: border-box;
-    border: none;
-    border-radius: 999px;
-    background: rgba(31, 41, 55, 0.92);
-    color: rgba(255, 255, 255, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 0;
-    box-shadow: 0 7px 16px -10px rgba(15, 23, 42, 0.95);
-    cursor: default;
-    opacity: 0;
-    pointer-events: none;
-    animation: remove-btn-in 0.18s ease-out;
-
-    * {
-      cursor: default;
-    }
-
-    &:hover {
-      color: #fff;
-    }
-  }
-
-  .edit-btn {
-    right: 14px;
-
-    &:hover {
-      background: rgba(37, 99, 235, 0.96);
-    }
-
-    :deep(.edit-icon) {
-      width: 8px !important;
-      height: 8px !important;
-      min-width: 8px;
-      display: block;
-      line-height: 0;
-    }
-  }
-
-  .remove-btn {
-    right: -6px;
-
-    &:hover {
-      background: rgba(220, 38, 38, 0.96);
-    }
-
-    :deep(.remove-icon) {
-      width: 10px !important;
-      height: 10px !important;
-      min-width: 10px;
-      display: block;
-      line-height: 0;
-    }
-  }
-
-  .command-item:hover {
-    .edit-btn,
-    .remove-btn {
-      opacity: 1;
-      pointer-events: auto;
-    }
-  }
-
-  .sortable-chosen .command-btn {
-    cursor: grabbing !important;
-    filter: brightness(1.04);
-
-    * {
-      cursor: inherit !important;
-    }
-  }
-
-  .sortable-ghost {
-    opacity: 0.28;
-
-    .command-btn {
-      box-shadow: none;
-    }
-  }
-
-  .sortable-drag {
-    cursor: grabbing !important;
-    opacity: 0.9;
-    filter: drop-shadow(0 12px 18px rgba(15, 23, 42, 0.18));
-
-    .command-btn,
-    .command-btn * {
-      cursor: grabbing !important;
-    }
-  }
-
-  .proxy-config {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-
-    .proxy-label {
-      font-size: 12px;
-      color: var(--g-color-30);
-      white-space: nowrap;
-    }
-
-    input {
-      font-size: 12px;
-    }
-  }
-
-  .manage-btn {
-    border: none;
-    background: transparent;
-    color: var(--g-color-45);
-    font-size: 12px;
-    line-height: 1;
-    padding: 0 2px;
-    height: 32px;
-    cursor: pointer;
-    transition: color 0.16s ease, opacity 0.16s ease;
-
-    &:hover,
-    &.active {
-      color: var(--g-color-20);
-    }
-  }
-
-  .actions-area:hover .command-controls,
-  .command-controls:focus-within {
-    .add-btn,
-    .manage-btn {
-      opacity: 1;
-      transition-delay: 0.5s;
-    }
-  }
-
-  .actions-area.editing .command-controls {
-    .add-btn,
-    .manage-btn {
-      opacity: 1;
-      transition-delay: 0s;
-    }
+  &:hover {
+    opacity: 1;
+    background: var(--g-color-70);
   }
 }
 
-:global(.custom-command-form) {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  text-align: left;
-  padding: 2px 0 4px;
-}
+.terminal-tab-add {
+  width: 20px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--g-color-35);
 
-:global(.custom-command-field) {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--g-color-30);
-}
-
-:global(.custom-command-field input),
-:global(.custom-command-field textarea) {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-:global(.custom-command-field input) {
-  height: 32px;
-}
-
-:global(.custom-command-field textarea) {
-  min-height: 112px;
-  resize: vertical;
+  &:hover {
+    background: var(--g-color-85);
+  }
 }
 
 .xterm-container {
   width: 100%;
   height: 100%;
+  flex: 1;
+  min-height: 0;
   padding: 0;
   box-sizing: border-box;
   background: var(--g-color-98);
 }
 
-@keyframes remove-btn-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+.xterm-pane {
+  width: 100%;
+  height: 100%;
 }
+
 </style>

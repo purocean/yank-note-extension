@@ -1,5 +1,5 @@
 import { registerPlugin } from '@yank-note/runtime-api'
-import { createApp, ref, nextTick, watchEffect, h } from 'vue'
+import { createApp, ref, nextTick, watch, h } from 'vue'
 import { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 import TerminalPanel from './TerminalPanel.vue'
 import TerminalRightPanel from './TerminalRightPanel.vue'
@@ -52,7 +52,6 @@ registerPlugin({
 
     function buildRightPanel (actions: typeof containerActions.value) {
       const cycleModeIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M200 288H88c-21.4 0-32.1 25.8-17 41l32.9 31-99.2 99.3c-6.2 6.2-6.2 16.4 0 22.6l25.4 25.4c6.2 6.2 16.4 6.2 22.6 0L152 408l31.1 33c15.1 15.1 40.9 4.4 40.9-17V312c0-13.3-10.7-24-24-24zm112-64h112c21.4 0 32.1-25.9 17-41l-33-31 99.3-99.3c6.2-6.2 6.2-16.4 0-22.6L481.9 4.7c-6.2-6.2-16.4-6.2-22.6 0L360 104l-31.1-33C313.8 55.9 288 66.6 288 88v112c0 13.3 10.7 24 24 24zm96 136l33-31.1c15.1-15.1 4.4-40.9-17-40.9H312c-13.3 0-24 10.7-24 24v112c0 21.4 25.9 32.1 41 17l31-32.9 99.3 99.3c6.2 6.2 16.4 6.2 22.6 0l25.4-25.4c6.2-6.2 6.2-16.4 0-22.6L408 360zM183 71.1L152 104 52.7 4.7c-6.2-6.2-16.4-6.2-22.6 0L4.7 30.1c-6.2 6.2-6.2 16.4 0 22.6L104 152l-33 31.1C55.9 198.2 66.6 224 88 224h112c13.3 0 24-10.7 24-24V88c0-21.3-25.9-32-41-16.9z"/></svg>'
-      const stopIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z"/></svg>'
       const addContextIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>'
 
       const rightPanelActionBtns: Components.RightSidePanel.ActionBtn[] = [
@@ -66,19 +65,7 @@ registerPlugin({
         },
       ]
 
-      const stopAction = actions.find(a => a.key === 'stop')
       const addContextAction = actions.find(a => a.key === 'add-context')
-
-      if (stopAction) {
-        rightPanelActionBtns.unshift({
-          type: 'normal' as const,
-          key: 'stop',
-          order: 100,
-          icon: stopIcon,
-          title: stopAction.title,
-          onClick: () => stopAction.handler(),
-        })
-      }
 
       if (addContextAction) {
         const displayText = addContextAction.meta?.displayFileName
@@ -121,8 +108,6 @@ registerPlugin({
       return JSON.stringify(actions.map(action => ({
         key: action.key,
         title: action.title,
-        label: action.label,
-        disabled: action.disabled,
         meta: action.meta,
       })))
     }
@@ -184,25 +169,22 @@ registerPlugin({
       })
     }
 
-    watchEffect(() => {
-      const mode = panelMode.value
-      containerActions.value
-
-      if (mode === 'embedded' && visible.value) {
+    watch([panelMode, visible, containerActions], ([mode, isVisible]) => {
+      if (mode === 'embedded' && isVisible) {
         syncEmbeddedPanel()
       } else {
         ctx.workbench.ContentRightSide.removePanel(rightPanelName)
         rightPanelSignature = ''
       }
 
-      if (mode !== 'embedded' && visible.value) {
+      if (mode !== 'embedded' && isVisible) {
         ensureFloatingPanelCreated()
         nextTick(() => {
           moveContainerToTarget()
           focusContainer()
         })
       }
-    })
+    }, { immediate: true })
 
     ctx.action.registerAction({
       name: openTerminalActionName,

@@ -15,9 +15,6 @@
     <div :class="{ wrapper: true, expanded: panelMode === 'maximized' }">
       <div class="container-wrapper">
         <div class="title" @dblclick="cyclePanelMode">{{ i18n.t('terminal-panel') }}</div>
-        <div v-if="stopAction" class="action-btn" @click="stopAction.handler" :title="stopAction.title">
-          <svg-icon name='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z"/></svg>' width="10px" height="10px" />
-        </div>
         <div v-if="addContextAction" class="context-btn" @click="addContextAction.handler" :title="addContextAction.title">
           <span class="context-info">{{ addContextAction.meta?.displayFileName }}<template v-if="addContextAction.meta?.selectionLines">#{{ addContextAction.meta.selectionLines }}</template></span>
           <svg-icon name='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 0 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>' width="10px" height="10px" />
@@ -56,7 +53,6 @@ const emit = defineEmits<{
 
 const visible = computed(() => props.visible.value)
 const floatingContainerRef = ref<HTMLElement | null>(null)
-const stopAction = computed(() => containerActions.value.find(a => a.key === 'stop'))
 const addContextAction = computed(() => containerActions.value.find(a => a.key === 'add-context'))
 
 function handleClose () {
@@ -242,8 +238,8 @@ watch(panelMode, (mode) => {
   }
 }
 
-.container :deep(.xterm-container) {
-  height: calc(100% - 30px);
-  margin-top: 30px;
+.container :deep(.terminal-workspace) {
+  height: calc(100% - 28px);
+  margin-top: 28px;
 }
 </style>

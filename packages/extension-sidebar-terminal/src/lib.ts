@@ -8,16 +8,20 @@ export interface UpdatePayload {
 }
 
 export interface ActionButton {
-  key: 'stop' | 'add-context'
-  label: string
+  key: 'add-context'
   title: string
-  disabled?: boolean
   handler: () => void | Promise<void>
   meta?: {
     fileName?: string
     displayFileName?: string
     selectionLines?: string
   }
+}
+
+export interface CustomCommand {
+  id: string
+  title: string
+  command: string
 }
 
 export const extensionId = __EXTENSION_ID__
@@ -75,6 +79,8 @@ export const i18n = ctx.i18n.createI18n({
     'start-terminal': 'Start Terminal',
     'stop-terminal': 'Stop Terminal',
     'stop-terminal-confirm': 'Are you sure you want to stop the current terminal session?',
+    'new-tab': 'New Terminal Tab',
+    'close-tab': 'Close Terminal Tab',
     'add-context': 'Insert current document',
     'proxy-label': 'Proxy:',
     'proxy-placeholder': 'eg. http://127.0.0.1:7890',
@@ -100,6 +106,8 @@ export const i18n = ctx.i18n.createI18n({
     'start-terminal': '启动终端',
     'stop-terminal': '停止终端',
     'stop-terminal-confirm': '确定要停止当前终端会话吗？',
+    'new-tab': '新建终端标签',
+    'close-tab': '关闭终端标签',
     'add-context': '插入当前文档',
     'proxy-label': '代理：',
     'proxy-placeholder': 'eg. http://127.0.0.1:7890',
