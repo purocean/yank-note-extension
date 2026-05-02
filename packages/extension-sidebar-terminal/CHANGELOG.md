@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-sidebar-terminal-1.0.1...extension-sidebar-terminal-1.1.0) (2026-05-02)
+
+
+### Features
+
+* **sidebar-terminal:** support multiple terminal tabs ([25f1196](https://github.com/purocean/yank-note-extension/commit/25f1196931bbd977051b3da2e7f79d0fb1767aaa))
+
+
+
 ## [1.0.1](https://github.com/purocean/yank-note-extension/compare/extension-sidebar-terminal-1.0.0...extension-sidebar-terminal-1.0.1) (2026-05-01)
 
 
