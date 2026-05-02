@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-sidebar-terminal-1.1.0...extension-sidebar-terminal-1.1.1) (2026-05-02)
+
+
+### Bug Fixes
+
+* **sidebar-terminal:** align launcher proxy position ([2bfa49a](https://github.com/purocean/yank-note-extension/commit/2bfa49a361476ba5f9fca1e5b448f62ae2bf2bf4))
+
+
+
 # [1.1.0](https://github.com/purocean/yank-note-extension/compare/extension-sidebar-terminal-1.0.1...extension-sidebar-terminal-1.1.0) (2026-05-02)
 
 
