@@ -1536,7 +1536,7 @@ importers:
         specifier: ^8.7.1
         version: 8.7.1(eslint@7.32.0)
       reveal.js:
-        specifier: ^5.1.0
+        specifier: 5.2.1
         version: 5.2.1
       rollup-plugin-copy:
         specifier: ^3.4.0

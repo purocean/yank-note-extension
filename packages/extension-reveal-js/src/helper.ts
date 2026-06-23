@@ -8,12 +8,14 @@ export const i18n = ctx.i18n.createI18n({
   en: {
     present: 'Present with Reveal.js',
     print: 'Print with Reveal.js',
+    'export-html': 'Export HTML',
     fullscreen: 'Fullscreen',
     'reload-current': 'Reload (Keep Current Slide)',
   },
   'zh-CN': {
     present: '使用 Reveal.js 演示',
     print: '使用 Reveal.js 打印',
+    'export-html': '导出 HTML',
     fullscreen: '全屏',
     'reload-current': '重载 (保持当前页)',
   }
@@ -49,6 +51,132 @@ export function getContentHtml (forExport = false) {
     inlineLocalImage: forExport,
     includeStyle: true,
   })
+}
+
+function escapeHtml (value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+function escapeStyle (value: string) {
+  return value.replace(/<\/style/gi, '<\\/style')
+}
+
+function escapeScript (value: string) {
+  return value.replace(/<\/script/gi, '<\\/script')
+}
+
+async function readAssetText (path: string) {
+  const baseUrl = getExtensionBasePath(extensionId)
+  const res = await fetch(`${baseUrl}/${path}`)
+  if (!res.ok) {
+    throw new Error(`Failed to read asset: ${path}`)
+  }
+  return res.text()
+}
+
+function getFileName (ext: string) {
+  const name = ctx.store.state.currentFile?.name || 'reveal'
+  const oldExt = ctx.utils.path.extname(name)
+  return `${ctx.utils.path.basename(name, oldExt)}.${ext}`
+}
+
+function getSlidesHtml (content: string) {
+  const tmp = document.createElement('div')
+  tmp.innerHTML = content
+  return tmp.firstElementChild?.innerHTML || content
+}
+
+export async function buildStandaloneHTML () {
+  const title = ctx.store.state.currentFile?.name || 'Reveal.js'
+  const opts = getOpts()
+  const theme = opts.theme || 'black'
+  const content = await getContentHtml(true)
+  const slidesHtml = getSlidesHtml(content)
+
+  const themeCss = await readAssetText(`dist/theme/${theme}.css`).catch(() => readAssetText('dist/theme/black.css'))
+  const [
+    resetCss,
+    revealCss,
+    highlightCss,
+    revealJs,
+    highlightJs,
+    mathJs,
+  ] = await Promise.all([
+    readAssetText('dist/reset.css'),
+    readAssetText('dist/reveal.css'),
+    readAssetText('dist/plugin/highlight/monokai.css'),
+    readAssetText('dist/reveal.js'),
+    readAssetText('dist/plugin/highlight/highlight.js'),
+    readAssetText('dist/plugin/math/math.js'),
+  ])
+
+  const revealOpts = {
+    hash: true,
+    controls: true,
+    center: true,
+    ...opts,
+  }
+  const revealOptsJson = JSON.stringify(revealOpts)
+
+  return `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Yank Note Reveal.js">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(title)}</title>
+  <style>
+${escapeStyle(resetCss)}
+${escapeStyle(revealCss)}
+${escapeStyle(themeCss)}
+${escapeStyle(highlightCss)}
+  </style>
+  <style id="reveal-custom-style">
+${escapeStyle(opts.customStyle || '')}
+  </style>
+</head>
+<body style="min-height: 100vh;">
+  <style>
+    html,
+    body {
+      min-height: 100vh;
+    }
+
+    .reveal {
+      min-height: 100vh;
+      height: 100vh;
+    }
+  </style>
+  <div class="reveal">
+    <div class="slides">
+${slidesHtml}
+    </div>
+  </div>
+  <script>
+${escapeScript(revealJs)}
+  </script>
+  <script>
+${escapeScript(highlightJs)}
+  </script>
+  <script>
+${escapeScript(mathJs)}
+  </script>
+  <script>
+    const revealOptions = ${escapeScript(revealOptsJson)};
+    revealOptions.plugins = [RevealHighlight, RevealMath.KaTeX];
+    Reveal.initialize(revealOptions);
+  </script>
+</body>
+</html>`
+}
+
+export async function exportHTML () {
+  const html = await buildStandaloneHTML()
+  ctx.utils.downloadContent(getFileName('html'), html, 'text/html')
 }
 
 export function getState (win: Window) {

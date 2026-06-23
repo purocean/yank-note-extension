@@ -5,6 +5,7 @@
         <button class="btn small" @click="init">{{_$t('reload')}}</button>
         <button class="btn small" @click="initWithState">{{$t('reload-current')}}</button>
         <button class="btn small" @click="fullscreen">{{$t('fullscreen')}}</button>
+        <button class="btn small" @click="exportHTML">{{$t('export-html')}}</button>
         <button class="btn small" @click="present(true)">{{_$t('print')}}</button>
         <button class="btn small" @click="present(false)">{{_$t('open-in-new-window')}}</button>
       </div>
@@ -15,7 +16,7 @@
 
 <script lang="ts" setup>
 import { ctx } from '@yank-note/runtime-api'
-import { buildHTML, processReveal, getContentHtml, getOpts, present, i18n, getState } from './helper'
+import { buildHTML, processReveal, getContentHtml, getOpts, present, i18n, getState, exportHTML } from './helper'
 
 const logger = ctx.utils.getLogger('reveal-previewer')
 
