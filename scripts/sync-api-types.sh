@@ -1,14 +1,16 @@
 #!/bin/bash
 
-set -e
+set -euo pipefail
 
-cd yn;
-git checkout develop;
-git pull;
-yarn;
-rm -r ../packages/api/src/types || true;
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-yarn tsc --esModuleInterop true --declaration true --emitDeclarationOnly true --declarationDir ../packages/api/src/types;
+cd "$ROOT_DIR/yn"
+git checkout develop
+git pull --ff-only
+ELECTRON_SKIP_BINARY_DOWNLOAD=1 yarn install --frozen-lockfile --ignore-scripts
+rm -rf ../packages/api/src/types
+
+yarn tsc --esModuleInterop true --declaration true --emitDeclarationOnly true --declarationDir ../packages/api/src/types
 
 mkdir -p ../packages/api/src/types/third-party
 
@@ -36,8 +38,6 @@ mkdir -p ../packages/api/src/types/third-party/dayjs;
 cp node_modules/dayjs/index.d.ts ../packages/api/src/types/third-party/dayjs/index.d.ts;
 mkdir -p ../packages/api/src/types/third-party/chokidar;
 cp node_modules/chokidar/types/index.d.ts ../packages/api/src/types/third-party/chokidar/index.d.ts;
-mkdir -p ../packages/api/src/types/third-party/dayjs;
-cp node_modules/dayjs/index.d.ts ../packages/api/src/types/third-party/dayjs/index.d.ts;
 mkdir -p ../packages/api/src/types/third-party/juice;
 cp node_modules/juice/juice.d.ts ../packages/api/src/types/third-party/juice/index.d.ts;
 mkdir -p ../packages/api/src/types/third-party/monaco-editor;
@@ -45,13 +45,11 @@ cp node_modules/monaco-editor/esm/vs/editor/editor.api.d.ts ../packages/api/src/
 mkdir -p ../packages/api/src/types/third-party/xterm;
 cp node_modules/@xterm/*/typings/*.d.ts ../packages/api/src/types/third-party/xterm
 
-cd ../packages/api/src/types;
-rm -r main;
-rm -r renderer/__tests__;
-rm -r renderer/plugins;
-rm third-party/*/package.json;
+cd ../packages/api/src/types
+rm -rf main renderer/__tests__ renderer/plugins
+rm -f third-party/*/package.json
 
 find ./ -depth -name "*.d.ts" -exec sh -c 'mv "$1" "${1%.d.ts}.ts"' _ {} \;
 
-cd ../../;
-pnpm run build;
+cd ../../
+pnpm run build

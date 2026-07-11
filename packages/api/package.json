@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "lint": "yarn run eslint '{src,__tests__}/**/*.{js,ts,tsx}'",
-    "build": "rm -r lib/* types/*; yarn run rollup -c",
+    "build": "rm -rf lib types && mkdir -p lib types && yarn run rollup -c",
     "version": "conventional-changelog -t api- --commit-path . -p angular -i CHANGELOG.md -s && npm run tag-version",
     "tag-version": "git add . && git commit -m 'chore(release): bump api version'; git tag api-$npm_package_version",
     "prepublish": "npm run build"
@@ -49,7 +49,7 @@
     "rollup-plugin-typescript2": "^0.32.0",
     "tslib": "^2.2.0",
     "ttypescript": "^1.5.15",
-    "typescript": "^4.2.4"
+    "typescript": "4.6.4"
   },
   "dependencies": {
     "fs-extra": "^10.1.0"

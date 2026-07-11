@@ -7,6 +7,7 @@ export default {
   input: 'src/index.ts',
   plugins: [
     typescript({
+      include: ['*.ts', '*.tsx', '**/*.ts', '**/*.tsx'],
       useTsconfigDeclarationDir: true,
       tsconfigOverride: {
         exclude: ['node_modules', 'lib', 'types', '__tests__']
