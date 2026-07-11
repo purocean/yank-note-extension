@@ -10,6 +10,7 @@ export declare function readInfoFromJson(json: any): Omit<Extension, 'installed'
 export declare function getInstalledExtension(id: string): Promise<Extension | null>;
 export declare function getInstalledExtensions(): Promise<Extension[]>;
 export declare function getRegistryExtensions(registry?: RegistryHostname): Promise<Extension[]>;
+export declare function getRegistryExtensionVersions(id: string, registry?: RegistryHostname): Promise<Extension[]>;
 export declare function showManager(id?: string): void;
 export declare function enable(extension: Extension): Promise<void>;
 export declare function disable(extension: Pick<Extension, 'id'>): Promise<void>;

@@ -31,6 +31,8 @@ export declare function writeSettings(settings: Record<string, any>): Promise<an
  * @returns settings
  */
 export declare function getSettings(): any;
+export declare function getSchemaForMcp(): Promise<SettingSchema>;
+export declare function getSettingsForMcp(): Promise<any>;
 /**
  * get setting val by key
  * @param key

@@ -1,3 +1,12 @@
+# [3.92.0](https://github.com/purocean/yank-note-extension/compare/api-3.87.0...api-3.92.0) (2026-07-11)
+
+
+### Bug Fixes
+
+* **api:** stabilize type sync and release scripts ([a7e5f3d](https://github.com/purocean/yank-note-extension/commit/a7e5f3daef4a0268aabcfbfa166ae8f39fe36784))
+
+
+
 # [3.87.0](https://github.com/purocean/yank-note-extension/compare/api-3.86.2...api-3.87.0) (2026-01-23)
 
 

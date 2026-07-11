@@ -20,4 +20,5 @@ export declare function createTextHighlighter(container: HTMLElement | undefined
     dispose: () => void;
     remove: () => void;
     highlight: (keyword: string | RegExp) => (() => void) | undefined;
+    highlightRanges: (ranges: Range[]) => () => void;
 };

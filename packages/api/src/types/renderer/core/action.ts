@@ -28,6 +28,15 @@ export declare function registerAction<T extends string>(action: Action<T>): Act
 export declare function getActionHandler<T extends BuildInActionName>(name: T): ActionHandler<T>;
 export declare function getActionHandler<T extends string>(name: T): ActionHandler<T>;
 /**
+ * Execute an action directly by name with arguments.
+ * This is used for RPC calls where functions cannot be passed.
+ * @param name Action name
+ * @param args Arguments to pass to the action
+ * @returns Result of the action execution
+ */
+export declare function executeAction<T extends BuildInActionName>(name: T, ...args: Parameters<ActionHandler<T>>): ReturnType<ActionHandler<T>>;
+export declare function executeAction<T extends string>(name: T, ...args: Parameters<ActionHandler<T>>): ReturnType<ActionHandler<T>>;
+/**
  * Get an action.
  * @param name
  */

@@ -1,3 +1,16 @@
+export type LayoutContainerName = 'layout' | 'aside' | 'right' | 'content' | 'editor' | 'preview' | 'terminal' | 'contentRightSide';
+/**
+ * Set layout container dom.
+ * @param name
+ * @param dom
+ */
+export declare function setContainerDom(name: LayoutContainerName, dom: HTMLElement | null): void;
+/**
+ * Get layout container dom.
+ * @param name
+ * @returns
+ */
+export declare function getContainerDom(name: LayoutContainerName): HTMLElement | null;
 /**
  * Trigger resize hook after next tick.
  */

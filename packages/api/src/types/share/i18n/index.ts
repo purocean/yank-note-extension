@@ -10,6 +10,7 @@ declare const languages: {
         ok: string;
         'demo-tips': string;
         more: string;
+        copy: string;
         copied: string;
         others: string;
         'insert-different-repo-doc': string;
@@ -49,6 +50,11 @@ declare const languages: {
             'readonly-desc': string;
             'enable-edit': string;
             'open-setting': string;
+        };
+        'floating-editor': {
+            'show-editor': string;
+            'preview-hint': string;
+            resize: string;
         };
         'trigger-suggestions': string;
         'table-of-contents': string;
@@ -437,6 +443,7 @@ declare const languages: {
                     'md-typographer': string;
                     'md-sup': string;
                     'md-sub': string;
+                    'md-cj-friendly': string;
                     'md-emoji': string;
                     'list-collapsible': string;
                     'multimd-multiline': string;
@@ -458,6 +465,8 @@ declare const languages: {
                 'assets-desc': string;
                 assets: {
                     'path-type': string;
+                    'image-name': string;
+                    'image-name-desc': string;
                 };
                 shell: string;
                 envs: string;
@@ -496,6 +505,9 @@ declare const languages: {
                 'hide-main-window-on-startup': string;
                 'keep-running-after-closing-window': string;
             };
+        };
+        'plugin-mcp-server': {
+            enable: string;
         };
         'quick-open': {
             'input-placeholder': string;
@@ -651,6 +663,7 @@ declare const languages: {
             'inline-image': string;
             'upload-image': string;
             'highlight-code': string;
+            'line-numbers': string;
             rt: string;
             complete: string;
             'copy-tips': string;
@@ -839,6 +852,7 @@ declare const languages: {
         ok: string;
         'demo-tips': string;
         more: string;
+        copy: string;
         copied: string;
         others: string;
         'insert-different-repo-doc': string;
@@ -878,6 +892,11 @@ declare const languages: {
             'readonly-desc': string;
             'enable-edit': string;
             'open-setting': string;
+        };
+        'floating-editor': {
+            'show-editor': string;
+            'preview-hint': string;
+            resize: string;
         };
         'trigger-suggestions': string;
         'table-of-contents': string;
@@ -1266,6 +1285,7 @@ declare const languages: {
                     'md-typographer': string;
                     'md-sup': string;
                     'md-sub': string;
+                    'md-cj-friendly': string;
                     'md-emoji': string;
                     'list-collapsible': string;
                     'multimd-multiline': string;
@@ -1287,6 +1307,8 @@ declare const languages: {
                 'assets-desc': string;
                 assets: {
                     'path-type': string;
+                    'image-name': string;
+                    'image-name-desc': string;
                 };
                 shell: string;
                 envs: string;
@@ -1325,6 +1347,9 @@ declare const languages: {
                 'hide-main-window-on-startup': string;
                 'keep-running-after-closing-window': string;
             };
+        };
+        'plugin-mcp-server': {
+            enable: string;
         };
         'quick-open': {
             'input-placeholder': string;
@@ -1480,6 +1505,7 @@ declare const languages: {
             'inline-image': string;
             'upload-image': string;
             'highlight-code': string;
+            'line-numbers': string;
             rt: string;
             complete: string;
             'copy-tips': string;
@@ -1668,6 +1694,7 @@ declare const languages: {
         ok: string;
         'demo-tips': string;
         more: string;
+        copy: string;
         copied: string;
         others: string;
         'insert-different-repo-doc': string;
@@ -1707,6 +1734,11 @@ declare const languages: {
             'readonly-desc': string;
             'enable-edit': string;
             'open-setting': string;
+        };
+        'floating-editor': {
+            'show-editor': string;
+            'preview-hint': string;
+            resize: string;
         };
         'trigger-suggestions': string;
         'table-of-contents': string;
@@ -2095,6 +2127,7 @@ declare const languages: {
                     'md-typographer': string;
                     'md-sup': string;
                     'md-sub': string;
+                    'md-cj-friendly': string;
                     'md-emoji': string;
                     'list-collapsible': string;
                     'multimd-multiline': string;
@@ -2116,6 +2149,8 @@ declare const languages: {
                 'assets-desc': string;
                 assets: {
                     'path-type': string;
+                    'image-name': string;
+                    'image-name-desc': string;
                 };
                 shell: string;
                 envs: string;
@@ -2154,6 +2189,9 @@ declare const languages: {
                 'hide-main-window-on-startup': string;
                 'keep-running-after-closing-window': string;
             };
+        };
+        'plugin-mcp-server': {
+            enable: string;
         };
         'quick-open': {
             'input-placeholder': string;
@@ -2309,6 +2347,7 @@ declare const languages: {
             'inline-image': string;
             'upload-image': string;
             'highlight-code': string;
+            'line-numbers': string;
             rt: string;
             complete: string;
             'copy-tips': string;
@@ -2497,6 +2536,7 @@ declare const languages: {
         ok: string;
         'demo-tips': string;
         more: string;
+        copy: string;
         copied: string;
         others: string;
         'insert-different-repo-doc': string;
@@ -2536,6 +2576,11 @@ declare const languages: {
             'readonly-desc': string;
             'enable-edit': string;
             'open-setting': string;
+        };
+        'floating-editor': {
+            'show-editor': string;
+            'preview-hint': string;
+            resize: string;
         };
         'trigger-suggestions': string;
         'table-of-contents': string;
@@ -2924,6 +2969,7 @@ declare const languages: {
                     'md-typographer': string;
                     'md-sup': string;
                     'md-sub': string;
+                    'md-cj-friendly': string;
                     'md-emoji': string;
                     'list-collapsible': string;
                     'multimd-multiline': string;
@@ -2945,6 +2991,8 @@ declare const languages: {
                 'assets-desc': string;
                 assets: {
                     'path-type': string;
+                    'image-name': string;
+                    'image-name-desc': string;
                 };
                 shell: string;
                 envs: string;
@@ -2983,6 +3031,9 @@ declare const languages: {
                 'hide-main-window-on-startup': string;
                 'keep-running-after-closing-window': string;
             };
+        };
+        'plugin-mcp-server': {
+            enable: string;
         };
         'quick-open': {
             'input-placeholder': string;
@@ -3138,6 +3189,7 @@ declare const languages: {
             'inline-image': string;
             'upload-image': string;
             'highlight-code': string;
+            'line-numbers': string;
             rt: string;
             complete: string;
             'copy-tips': string;

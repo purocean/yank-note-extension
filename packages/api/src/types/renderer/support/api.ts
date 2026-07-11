@@ -28,6 +28,12 @@ export declare function proxyFetch(url: RequestInfo | URL, init?: Omit<RequestIn
  */
 export declare function readFile(file: PathItem, asBase64?: boolean): Promise<FileReadResult>;
 /**
+ * Check whether a file exists.
+ * @param file
+ * @returns
+ */
+export declare function existsFile(file: PathItem): Promise<boolean>;
+/**
  * Write content to a file.
  * @param file
  * @param content
