@@ -200,7 +200,7 @@ export const reviewStyles = `
 .yn-review-composer-title {
   min-height: 20px;
   box-sizing: border-box;
-  padding: 2px 26px 5px 3px;
+  padding: 2px 50px 5px 3px;
   color: var(--g-color-30);
   font-size: 12px;
   line-height: 18px;
@@ -249,6 +249,25 @@ export const reviewStyles = `
 .yn-review-composer-close {
   top: 4px;
   right: 4px;
+}
+
+.yn-review-composer-remove {
+  top: 4px;
+  right: 28px;
+}
+
+.yn-review-composer-icon-button.yn-review-delete-armed,
+.yn-review-composer-icon-button.yn-review-delete-armed:hover {
+  width: auto;
+  gap: 5px;
+  padding: 0 7px 0 5px;
+  border-radius: var(--g-border-radius);
+  background: #d74343;
+  color: white;
+}
+
+.yn-review-composer-icon-button .yn-review-delete-label {
+  line-height: 22px;
 }
 
 .yn-review-composer-send {

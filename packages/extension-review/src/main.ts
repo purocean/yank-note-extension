@@ -402,6 +402,7 @@ registerPlugin({
         value: review.comment,
         rect: rect || snapshotElementRect(review.root),
         onSave: comment => updateReview(review.id, review.anchor, comment),
+        onRemove: () => removeReview(review.id),
       })
     }
 
@@ -410,6 +411,7 @@ registerPlugin({
       value: string
       rect: RectSnapshot
       onSave: (comment: string) => boolean
+      onRemove?: () => void
     }) {
       const doc = currentDocument
       if (!doc) {
@@ -426,6 +428,22 @@ registerPlugin({
       title.textContent = options.title
       const close = createIconButton(doc, i18n.t('close'), icons.close, () => removeComposer())
       close.className = 'yn-review-composer-icon-button yn-review-composer-close'
+      const onRemove = options.onRemove
+      let remove: HTMLButtonElement | null = null
+      if (onRemove) {
+        remove = createIconButton(doc, i18n.t('remove'), icons.remove, () => {
+          if (!remove) {
+            return
+          }
+          if (armedDeleteButton === remove) {
+            onRemove()
+            removeComposer()
+          } else {
+            armDelete(remove)
+          }
+        })
+        remove.className = 'yn-review-composer-icon-button yn-review-composer-remove'
+      }
       const textarea = doc.createElement('textarea')
       textarea.placeholder = i18n.t('placeholder')
       textarea.value = options.value
@@ -435,7 +453,11 @@ registerPlugin({
       const send = createIconButton(doc, `${i18n.t('save')} ${saveShortcut}`, icons.send, () => saveComment())
       send.className = 'yn-review-composer-icon-button yn-review-composer-send'
       input.append(textarea, send)
-      panel.append(title, close, input)
+      panel.append(title)
+      if (remove) {
+        panel.append(remove)
+      }
+      panel.append(close, input)
       panel.addEventListener('mousedown', event => event.stopPropagation())
       panel.addEventListener('click', event => event.stopPropagation())
       panel.addEventListener('focusout', () => {
@@ -709,6 +731,9 @@ registerPlugin({
     }
 
     function removeComposer () {
+      if (armedDeleteButton && composer?.contains(armedDeleteButton)) {
+        disarmDelete()
+      }
       composer?.remove()
       composer = null
       pendingSelection = null
