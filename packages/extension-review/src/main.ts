@@ -45,6 +45,7 @@ interface RangeHighlighter {
 registerPlugin({
   name: extensionId,
   register (ctx) {
+    const logger = ctx.utils.getLogger('extension:review')
     const i18n = ctx.i18n.createI18n({
       en: {
         reviewTitle: 'Review comment',
@@ -157,19 +158,24 @@ registerPlugin({
       const startPosition = model.getPositionAt(start)
       const endPosition = model.getPositionAt(sourceEnd)
 
-      editor.pushUndoStop()
-      editor.executeEdits(addActionName, [{
-        range: {
-          startLineNumber: startPosition.lineNumber,
-          startColumn: startPosition.column,
-          endLineNumber: endPosition.lineNumber,
-          endColumn: endPosition.column,
-        },
-        text: nextSource.slice(start, nextEnd),
-      }])
-      editor.pushUndoStop()
-      ctx.view.render()
-      return true
+      let replaced = false
+      void ctx.view.disableSyncScrollAwhile(() => {
+        editor.pushUndoStop()
+        replaced = editor.executeEdits(addActionName, [{
+          range: {
+            startLineNumber: startPosition.lineNumber,
+            startColumn: startPosition.column,
+            endLineNumber: endPosition.lineNumber,
+            endColumn: endPosition.column,
+          },
+          text: nextSource.slice(start, nextEnd),
+        }])
+        editor.pushUndoStop()
+        if (replaced) {
+          ctx.view.render()
+        }
+      }).catch(error => logger.error('replace source failed', error))
+      return replaced
     }
 
     function refresh () {
