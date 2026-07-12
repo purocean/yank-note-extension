@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-change-gutter",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "displayName": "Change Gutter",
   "displayName_ZH-CN": "编辑装订线",
   "description": "Show added, modified, and deleted lines in the Monaco editor gutter, using Git HEAD or the content captured when a tab opens as the baseline.",
