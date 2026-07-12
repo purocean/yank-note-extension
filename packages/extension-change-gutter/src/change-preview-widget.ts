@@ -27,6 +27,22 @@ export function getPreviewLayout (originalLineCount: number, currentLineCount: n
   }
 }
 
+interface PreviewHeightOptions {
+  horizontalScrollbarHeight?: number
+  wrappedContentHeight?: number
+}
+
+export function getPreviewHeight (visibleRows: number, options: PreviewHeightOptions = {}) {
+  const baseContentHeight = visibleRows * rowHeight
+  const contentHeight = options.wrappedContentHeight === undefined
+    ? baseContentHeight
+    : Math.min(
+      maxVisibleRows * rowHeight,
+      Math.max(baseContentHeight, options.wrappedContentHeight)
+    )
+  return headerHeight + contentHeight + Math.max(0, options.horizontalScrollbarHeight || 0)
+}
+
 export class ChangePreviewWidget {
   private zoneId: string | null = null
   private hunkId: string | null = null
@@ -110,12 +126,6 @@ export class ChangePreviewWidget {
     if (layout.scrollable) {
       body.classList.add('yn-change-gutter-preview-body-scrollable')
     }
-    const updateWordWrap = () => {
-      this.wordWrap = wordWrapInput.checked
-      body.classList.toggle('yn-change-gutter-preview-body-word-wrap', this.wordWrap)
-    }
-    wordWrapInput.addEventListener('change', updateWordWrap)
-    updateWordWrap()
     body.addEventListener('wheel', event => {
       if (body.scrollHeight > body.clientHeight || body.scrollWidth > body.clientWidth) {
         event.stopPropagation()
@@ -127,27 +137,74 @@ export class ChangePreviewWidget {
 
     const modelLineCount = this.editor.getModel()?.getLineCount() || 1
     const afterLineNumber = Math.min(modelLineCount, Math.max(0, hunk.currentStartLine - 1))
+    const viewZone: editor.IViewZone = {
+      afterLineNumber,
+      heightInPx: getPreviewHeight(layout.visibleRows),
+      domNode,
+    }
     let zoneId = ''
     this.editor.changeViewZones(accessor => {
-      zoneId = accessor.addZone({
-        afterLineNumber,
-        heightInPx: headerHeight + layout.visibleRows * rowHeight,
-        domNode,
-      })
+      zoneId = accessor.addZone(viewZone)
     })
     this.zoneId = zoneId
     this.hunkId = hunk.id
 
+    let layoutFrame: number | null = null
+    const scheduleZoneLayout = () => {
+      if (layoutFrame !== null) {
+        cancelAnimationFrame(layoutFrame)
+      }
+      layoutFrame = requestAnimationFrame(() => {
+        layoutFrame = null
+        if (this.zoneId !== zoneId) {
+          return
+        }
+        const horizontalScrollbarHeight = this.wordWrap
+          ? 0
+          : Math.max(0, body.offsetHeight - body.clientHeight)
+        const heightInPx = getPreviewHeight(layout.visibleRows, {
+          horizontalScrollbarHeight,
+          wrappedContentHeight: this.wordWrap ? body.scrollHeight : undefined,
+        })
+        if (viewZone.heightInPx === heightInPx) {
+          return
+        }
+        viewZone.heightInPx = heightInPx
+        this.editor.changeViewZones(accessor => accessor.layoutZone(zoneId))
+        scheduleZoneLayout()
+      })
+    }
+    this.viewDisposables.push({
+      dispose: () => {
+        if (layoutFrame !== null) {
+          cancelAnimationFrame(layoutFrame)
+          layoutFrame = null
+        }
+      },
+    })
+
+    const updateWordWrap = () => {
+      this.wordWrap = wordWrapInput.checked
+      body.classList.toggle('yn-change-gutter-preview-body-word-wrap', this.wordWrap)
+      scheduleZoneLayout()
+    }
+    wordWrapInput.addEventListener('change', updateWordWrap)
+    updateWordWrap()
+
+    const updatePosition = () => {
+      domNode.style.transform = `translateX(${this.editor.getScrollLeft()}px)`
+    }
     const updateWidth = () => {
       domNode.style.width = `${this.editor.getLayoutInfo().contentWidth}px`
-      domNode.style.transform = `translateX(${this.editor.getScrollLeft()}px)`
+      updatePosition()
+      scheduleZoneLayout()
     }
     updateWidth()
     this.viewDisposables.push(
       this.editor.onDidLayoutChange(updateWidth),
       this.editor.onDidScrollChange(event => {
         if (event.scrollLeftChanged) {
-          updateWidth()
+          updatePosition()
         }
       })
     )
