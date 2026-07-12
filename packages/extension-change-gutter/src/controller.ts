@@ -293,6 +293,7 @@ export class ChangeGutterController {
     const expectedVersion = rendered.modelVersion
     this.preview?.show(
       hunk,
+      target.position.lineNumber,
       rendered.source,
       this.getLabels().preview,
       () => this.setCurrentAsBaseline(expectedUri, expectedVersion),

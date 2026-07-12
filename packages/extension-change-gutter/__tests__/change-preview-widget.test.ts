@@ -1,6 +1,16 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { getPreviewHeight, getPreviewLayout } from '../src/change-preview-widget'
+import {
+  getPreviewAfterLineNumber,
+  getPreviewHeight,
+  getPreviewLayout,
+} from '../src/change-preview-widget'
+
+test('anchors the preview at the clicked gutter line', () => {
+  assert.equal(getPreviewAfterLineNumber(500, 1000), 499)
+  assert.equal(getPreviewAfterLineNumber(1, 1000), 0)
+  assert.equal(getPreviewAfterLineNumber(1200, 1000), 1000)
+})
 
 test('does not enable vertical scrolling for short previews', () => {
   assert.deepEqual(getPreviewLayout(1, 0), {

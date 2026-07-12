@@ -162,7 +162,9 @@ Tab 基线沿用相同的新增、修改语义色，只改变纹理：
 
 ### `change-preview-widget.ts` 与 `restore-change.ts`
 
-点击装订线后，`ChangePreviewWidget` 在 Hunk 的当前起始位置前插入 Monaco ViewZone：
+点击装订线后，`ChangePreviewWidget` 在用户实际点击行前插入 Monaco ViewZone：
+
+- ViewZone 的界面锚点使用点击行，展示和还原的数据范围仍使用完整 Hunk。两者分离后，即使 Hunk 很大、用户点击靠下的标记，面板也不会被插入到视口之外的 Hunk 起始位置。该定位方式与 AI Copilot 按当前选区插入 ViewZone 的做法一致。
 
 - 标题明确显示“相对 HEAD”或“相对 Tab 打开时”。
 - 原始行以淡删除底色和 `-` 显示，当前行以新增色和 `+` 显示；删除正文底色只混入少量语义红色，避免大块变更时颜色过重。

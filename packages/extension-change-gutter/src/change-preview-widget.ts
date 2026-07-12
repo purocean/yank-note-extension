@@ -43,6 +43,10 @@ export function getPreviewHeight (visibleRows: number, options: PreviewHeightOpt
   return headerHeight + contentHeight + Math.max(0, options.horizontalScrollbarHeight || 0)
 }
 
+export function getPreviewAfterLineNumber (anchorLineNumber: number, modelLineCount: number) {
+  return Math.min(Math.max(1, modelLineCount), Math.max(0, anchorLineNumber - 1))
+}
+
 export class ChangePreviewWidget {
   private zoneId: string | null = null
   private hunkId: string | null = null
@@ -60,6 +64,7 @@ export class ChangePreviewWidget {
 
   show (
     hunk: ChangeHunk,
+    anchorLineNumber: number,
     source: BaselineSource,
     labels: ChangePreviewLabels,
     onSetBaseline: () => void,
@@ -136,7 +141,7 @@ export class ChangePreviewWidget {
     domNode.appendChild(body)
 
     const modelLineCount = this.editor.getModel()?.getLineCount() || 1
-    const afterLineNumber = Math.min(modelLineCount, Math.max(0, hunk.currentStartLine - 1))
+    const afterLineNumber = getPreviewAfterLineNumber(anchorLineNumber, modelLineCount)
     const viewZone: editor.IViewZone = {
       afterLineNumber,
       heightInPx: getPreviewHeight(layout.visibleRows),
