@@ -1,3 +1,12 @@
+## [1.0.3](https://github.com/purocean/yank-note-extension/compare/extension-review-1.0.2...extension-review-1.0.3) (2026-07-12)
+
+
+### Features
+
+* **extension-review:** delete comments from editor ([127c5e5](https://github.com/purocean/yank-note-extension/commit/127c5e52c4dacc688b6eaa32bb1083f87117fa29))
+
+
+
 ## [1.0.2](https://github.com/purocean/yank-note-extension/compare/extension-review-1.0.1...extension-review-1.0.2) (2026-07-12)
 
 
