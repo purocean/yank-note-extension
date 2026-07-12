@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "displayName": "Change Gutter",
   "displayName_ZH-CN": "编辑装订线",
-  "description": "Show added, modified, and deleted lines in the Monaco editor gutter, using Git HEAD or the content captured when a tab opens as the baseline.",
-  "description_ZH-CN": "在 Monaco 编辑器装订线中显示新增、修改和删除的行；优先使用 Git HEAD，无 Git 时使用 Tab 打开时的内容作为基线。",
+  "description": "Show added, modified, and deleted lines in the Monaco editor gutter.",
+  "description_ZH-CN": "在 Monaco 编辑器装订线中显示新增、修改和删除的行。",
   "keywords": [
     "editor",
     "git",
