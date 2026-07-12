@@ -1,3 +1,12 @@
+## [1.0.2](https://github.com/purocean/yank-note-extension/compare/extension-change-gutter-1.0.1...extension-change-gutter-1.0.2) (2026-07-12)
+
+
+### Bug Fixes
+
+* **extension-change-gutter:** anchor previews at clicked lines ([922d65f](https://github.com/purocean/yank-note-extension/commit/922d65fd7d7020f4f2202ae9cf837590a7a4543f))
+
+
+
 ## [1.0.1](https://github.com/purocean/yank-note-extension/compare/extension-change-gutter-1.0.0...extension-change-gutter-1.0.1) (2026-07-12)
 
 
