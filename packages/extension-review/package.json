@@ -1,6 +1,6 @@
 {
   "name": "@yank-note/extension-review",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "displayName": "Review Comments",
   "displayName_ZH-CN": "审阅批注",
   "description": "Select rendered text, leave review comments, and keep the review data readable in Markdown.",

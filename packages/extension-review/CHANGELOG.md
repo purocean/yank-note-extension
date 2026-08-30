@@ -1,3 +1,12 @@
+## [1.0.4](https://github.com/purocean/yank-note-extension/compare/extension-review-1.0.3...extension-review-1.0.4) (2026-08-30)
+
+
+### Bug Fixes
+
+* **extension-review:** preserve unsaved comment drafts ([8c5f6bf](https://github.com/purocean/yank-note-extension/commit/8c5f6bf25f3ee96b4284665b4b7d2558650c44f9))
+
+
+
 ## [1.0.3](https://github.com/purocean/yank-note-extension/compare/extension-review-1.0.2...extension-review-1.0.3) (2026-07-12)
 
 
