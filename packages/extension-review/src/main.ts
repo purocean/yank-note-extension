@@ -124,6 +124,7 @@ registerPlugin({
     let activeReviewId: string | null = null
     let floatingButton: HTMLButtonElement | null = null
     let composer: HTMLElement | null = null
+    let composerHasUnsavedChanges: (() => boolean) | null = null
     let selectionTimer: ReturnType<typeof setTimeout> | null = null
     let armedDeleteButton: HTMLButtonElement | null = null
     let deleteArmTimer: ReturnType<typeof setTimeout> | null = null
@@ -239,12 +240,12 @@ registerPlugin({
     function handleDocumentMouseDown (event: Event) {
       const target = event.target as Node | null
       if (composer && target && !composer.contains(target)) {
-        removeComposer()
+        removeComposer(false)
       }
     }
 
     function handleWindowBlur () {
-      removeComposer()
+      removeComposer(false)
     }
 
     function handleMouseUp (event: Event) {
@@ -286,6 +287,7 @@ registerPlugin({
       }
       if (
         !textIndex ||
+        composer ||
         pendingSelection ||
         target?.closest('a, button, input, textarea, select, summary, .yn-review-composer, ' + reviewSelector)
       ) {
@@ -418,7 +420,9 @@ registerPlugin({
         return
       }
 
-      removeComposer()
+      if (!removeComposer(false)) {
+        return
+      }
       removeFloatingButton()
 
       const panel = doc.createElement('div')
@@ -463,7 +467,7 @@ registerPlugin({
       panel.addEventListener('focusout', () => {
         setTimeout(() => {
           if (composer === panel && !panel.contains(doc.activeElement)) {
-            removeComposer()
+            removeComposer(false)
           }
         }, 0)
       })
@@ -491,6 +495,7 @@ registerPlugin({
 
       doc.body.appendChild(panel)
       composer = panel
+      composerHasUnsavedChanges = () => textarea.value !== options.value
       positionFloating(panel, options.rect)
       setTimeout(() => textarea.focus(), 0)
     }
@@ -730,13 +735,18 @@ registerPlugin({
       floatingButton = null
     }
 
-    function removeComposer () {
+    function removeComposer (force = true) {
+      if (!force && composerHasUnsavedChanges?.()) {
+        return false
+      }
       if (armedDeleteButton && composer?.contains(armedDeleteButton)) {
         disarmDelete()
       }
       composer?.remove()
       composer = null
+      composerHasUnsavedChanges = null
       pendingSelection = null
+      return true
     }
 
     function removeFloatingUi () {
