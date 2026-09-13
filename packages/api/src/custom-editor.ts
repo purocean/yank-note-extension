@@ -72,7 +72,7 @@ export abstract class BaseCustomEditor implements CustomEditor {
       onClick: () => {
         const { repo, path, name, type } = node
         const url = this.buildEditorUrl({ doc: { repo, path, name, type } })
-        ctx.env.openWindow(url, '_blank', { alwaysOnTop: false })
+        ctx.env.openWindow(url, '_blank', { alwaysOnTop: false, webSecurity: false })
       }
     }
 

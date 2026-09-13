@@ -121,12 +121,12 @@ const DrawioComponent = defineComponent({
                       ctx.editor.switchEditor('drawio')
                     }),
                     button(_$t.value('open-in-new-window'), () => {
-                      openWindow(buildEditorUrl(drawioFile!), '_blank', { alwaysOnTop: false })
+                      openWindow(buildEditorUrl(drawioFile!), '_blank', { alwaysOnTop: false, webSecurity: false })
                     }),
                   ]
                 : [
                     ...(isBase64 ? [button(_$t.value('edit'), () => { fullScreenEditorContent.value = props.content! })] : []),
-                    button(_$t.value('open-in-new-window'), () => openWindow(buildSrc(srcdoc.value, _t('view-figure')))),
+                    button(_$t.value('open-in-new-window'), () => openWindow(buildSrc(srcdoc.value, _t('view-figure')), '_blank', { alwaysOnTop: false, webSecurity: false })),
                   ]
               ),
             ]
