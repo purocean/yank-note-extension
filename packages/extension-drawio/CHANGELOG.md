@@ -1,3 +1,19 @@
+# [2.7.0](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.6.0...extension-drawio-2.7.0) (2026-09-13)
+
+
+### Bug Fixes
+
+* disable web security for extension windows ([593e3d8](https://github.com/purocean/yank-note-extension/commit/593e3d8c440e4003e1f0f8601d0b16c74d76c08f))
+* **extension-drawio:** conditionally render edit button based on drawioFile and mode ([c33a8d9](https://github.com/purocean/yank-note-extension/commit/c33a8d99d5adeb7b3d0a7b5b7715a5ec26bc8f31))
+* **extension-drawio:** ignore non-string editor messages ([b35c1b7](https://github.com/purocean/yank-note-extension/commit/b35c1b704ed6ae92457b9f7714162287bc0a6fcc))
+
+
+### Features
+
+* **extension-drawio:** upgrade drawio to 31.4.5 ([200170d](https://github.com/purocean/yank-note-extension/commit/200170d968407eed3089ebaf7603e2233672e3b6))
+
+
+
 ## [2.6.1](https://github.com/purocean/yank-note-extension/compare/extension-drawio-2.6.0...extension-drawio-2.6.1) (2025-01-16)
 
 
