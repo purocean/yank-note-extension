@@ -1,3 +1,12 @@
+## [3.92.1](https://github.com/purocean/yank-note-extension/compare/api-3.92.0...api-3.92.1) (2026-09-13)
+
+
+### Bug Fixes
+
+* disable web security for extension windows ([593e3d8](https://github.com/purocean/yank-note-extension/commit/593e3d8c440e4003e1f0f8601d0b16c74d76c08f))
+
+
+
 # [3.92.0](https://github.com/purocean/yank-note-extension/compare/api-3.87.0...api-3.92.0) (2026-07-11)
 
 
