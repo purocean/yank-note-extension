@@ -26,9 +26,21 @@ function init (this: EditorDoc, noExitBtn?: boolean) {
   const asPng = path.endsWith('.png')
   const asSvg = path.endsWith('.svg')
 
-  const receive = async (evt: { data: string }) => {
+  const receive = async (evt: MessageEvent) => {
     const win: any = iframe.contentWindow!
     try {
+      if (evt.source !== win) {
+        return
+      }
+
+      if (evt.data == null) {
+        return
+      }
+
+      if (typeof evt.data !== 'string') {
+        return
+      }
+
       if (evt.data.length < 1) {
         return
       }
@@ -121,9 +133,8 @@ function init (this: EditorDoc, noExitBtn?: boolean) {
         this.logger.debug('exit')
         window.close()
       }
-    } catch (error) {
-      this.io.file.repo !== '__help__' && alert(error.message)
-      throw error
+    } catch {
+      return
     }
   }
 
