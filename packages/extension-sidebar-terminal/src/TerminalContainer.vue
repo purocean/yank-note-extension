@@ -20,10 +20,17 @@
           v-for="tab in terminalTabs"
           :key="tab.id"
           :class="{ 'terminal-tab': true, active: tab.id === activeTabId }"
-          :title="tab.title"
+          :title="tab.id === activeTabId && isTerminalRepoMismatch(tab) ? i18n.t('repo-mismatch', tab.repoName, ctx.store.state.currentRepo?.name || '-') : tab.title"
           @click="setActiveTab(tab.id)"
         >
           <span class="terminal-tab-title">{{ tab.title }}</span>
+          <svg-icon
+            v-if="tab.id === activeTabId && isTerminalRepoMismatch(tab)"
+            class="terminal-tab-warning"
+            name="triangle-exclamation-solid"
+            width="11px"
+            height="11px"
+          />
           <button
             class="terminal-tab-close"
             :title="i18n.t('close-tab')"
@@ -53,7 +60,14 @@
         @reorder-command="reorderCustomCommand"
         @toggle-manage="toggleManageMode"
       />
-      <div v-show="!showLauncher" class="xterm-container">
+      <div
+        v-show="!showLauncher"
+        class="xterm-container"
+        :class="{ 'drag-over': terminalDragOver }"
+        @dragover.capture="onTerminalDragOver"
+        @dragleave.capture="onTerminalDragLeave"
+        @drop.capture="onTerminalDrop"
+      >
         <div
           v-for="tab in terminalTabs"
           :key="tab.id"
@@ -71,7 +85,7 @@
 import { ctx } from '@yank-note/runtime-api'
 import { ref, computed, defineComponent, h, onMounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'
 import TerminalLauncher from './TerminalLauncher.vue'
-import { i18n, proxyStorageKey, customCommandsStorageKey, ensureOpenCodeCompatible, type ActionButton, type CustomCommand, type UpdatePayload } from './lib'
+import { buildTerminalDropInput, i18n, proxyStorageKey, customCommandsStorageKey, ensureOpenCodeCompatible, type ActionButton, type CustomCommand, type UpdatePayload } from './lib'
 import type { Components } from '@yank-note/runtime-api/types/types/renderer/types'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -127,6 +141,7 @@ const selectionLines = ref('')
 const proxyUrl = ref(ctx.storage.get(proxyStorageKey, ''))
 const customCommands = ref<CustomCommand[]>(loadCustomCommands())
 const manageMode = ref(false)
+const terminalDragOver = ref(false)
 
 const terminalRefs = new Map<string, Components.XTerm.Ref>()
 const closingTabIds = new Set<string>()
@@ -177,6 +192,52 @@ function input (data: string, addNewLine = false) {
 
 function getActiveXtermRef () {
   return activeTabId.value ? terminalRefs.get(activeTabId.value) || null : null
+}
+
+function isTerminalRepoMismatch (tab: TerminalTab) {
+  return ctx.store.state.currentRepo?.path !== tab.repoPath
+}
+
+function hasTerminalDropPayload (dataTransfer: DataTransfer | null) {
+  return !!dataTransfer && (dataTransfer.files.length > 0 || dataTransfer.types.includes('text/plain') || dataTransfer.types.includes('node-info'))
+}
+
+function onTerminalDragOver (e: DragEvent) {
+  if (showLauncher.value || !hasTerminalDropPayload(e.dataTransfer)) return
+
+  e.preventDefault()
+  e.stopPropagation()
+  if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy'
+  terminalDragOver.value = true
+}
+
+function onTerminalDragLeave (e: DragEvent) {
+  const container = e.currentTarget as HTMLElement
+  const relatedTarget = e.relatedTarget as Node | null
+  if (!relatedTarget || !container.contains(relatedTarget)) {
+    terminalDragOver.value = false
+  }
+}
+
+function onTerminalDrop (e: DragEvent) {
+  if (showLauncher.value || !hasTerminalDropPayload(e.dataTransfer)) return
+
+  e.preventDefault()
+  e.stopPropagation()
+  terminalDragOver.value = false
+
+  const dataTransfer = e.dataTransfer!
+  const file = dataTransfer.files[0] as (File & { path?: string }) | undefined
+  const value = buildTerminalDropInput({
+    nodeInfo: dataTransfer.getData('node-info'),
+    text: dataTransfer.getData('text/plain'),
+    filePath: file?.path
+  }, activeTab.value?.repoName || '', repoName => ctx.repo.getRepo(repoName)?.path)
+
+  if (value) {
+    input(value)
+    focus()
+  }
 }
 
 function loadCustomCommands (): CustomCommand[] {
@@ -760,6 +821,11 @@ watch(customCommands, value => {
   font-size: 12px;
 }
 
+.terminal-tab-warning {
+  flex: none;
+  color: var(--g-color-warning, #d97706);
+}
+
 .terminal-tab-close,
 .terminal-tab-add {
   flex: none;
@@ -806,6 +872,10 @@ watch(customCommands, value => {
   padding: 0;
   box-sizing: border-box;
   background: var(--g-color-98);
+
+  &.drag-over {
+    box-shadow: inset 0 0 0 2px var(--g-color-50);
+  }
 }
 
 .xterm-pane {

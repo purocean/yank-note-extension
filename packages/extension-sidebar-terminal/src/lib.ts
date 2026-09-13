@@ -24,6 +24,46 @@ export interface CustomCommand {
   command: string
 }
 
+export interface TerminalDropData {
+  nodeInfo?: string
+  text?: string
+  filePath?: string
+}
+
+interface DroppedNode {
+  repo?: string
+  path?: string
+}
+
+export function shellQuote (value: string) {
+  return `"${value}"`
+}
+
+export function buildTerminalDropInput (data: TerminalDropData, repoName: string, resolveRepoPath?: (repo: string) => string | undefined) {
+  if (data.filePath) {
+    return shellQuote(data.filePath)
+  }
+
+  if (data.nodeInfo) {
+    try {
+      const node = JSON.parse(data.nodeInfo) as DroppedNode
+      if (node.path) {
+        const relativePath = node.path.replace(/^\/+/, '')
+        const repoPath = node.repo && node.repo !== repoName ? resolveRepoPath?.(node.repo) : undefined
+        const separator = repoPath?.includes('\\') ? '\\' : '/'
+        const path = repoPath
+          ? `${repoPath.replace(/[\\/]+$/, '')}${separator}${relativePath.replace(/[\\/]+/g, separator)}`
+          : (node.repo && node.repo === repoName ? relativePath : node.path)
+        return shellQuote(path)
+      }
+    } catch {
+      // Fall back to the plain text payload when node metadata is unavailable.
+    }
+  }
+
+  return data.text || null
+}
+
 export const extensionId = __EXTENSION_ID__
 export const openCodeExtensionId = '@yank-note/extension-opencode'
 export const requiredOpenCodeVersion = '>=1.2.4'
@@ -81,6 +121,7 @@ export const i18n = ctx.i18n.createI18n({
     'stop-terminal-confirm': 'Are you sure you want to stop the current terminal session?',
     'new-tab': 'New Terminal Tab',
     'close-tab': 'Close Terminal Tab',
+    'repo-mismatch': 'Terminal repository "%s" differs from the current application repository "%s".',
     'add-context': 'Insert current document',
     'proxy-label': 'Proxy:',
     'proxy-placeholder': 'eg. http://127.0.0.1:7890',
@@ -120,6 +161,7 @@ export const i18n = ctx.i18n.createI18n({
     'custom-command-done': '完成',
     'custom-command-drag': '拖动排序',
     'close': '关闭',
+    'repo-mismatch': '此终端关联的仓库 [%s] 与应用当前仓库 [%s] 不同',
     'panel-mode-floating': '浮动窗口',
     'panel-mode-maximized': '最大化',
     'panel-mode-embedded': '嵌入右侧面板',
