@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-sidebar-terminal-1.1.1...extension-sidebar-terminal-1.2.0) (2026-09-13)
+
+
+### Features
+
+* support terminal file drag and drop ([8956e4b](https://github.com/purocean/yank-note-extension/commit/8956e4bd8f67c8ea14b0642b0654ec3e3ec41f9f))
+
+
+
 ## [1.1.1](https://github.com/purocean/yank-note-extension/compare/extension-sidebar-terminal-1.1.0...extension-sidebar-terminal-1.1.1) (2026-05-02)
 
 
