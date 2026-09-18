@@ -242,10 +242,10 @@ export abstract class BaseCustomEditorContent {
           if (result === 0) {
             await this.save()
             closeWindow = true
-            window.close()
+            remote.getCurrentWindow().close()
           } else if (result === 1) {
             closeWindow = true
-            window.close()
+            remote.getCurrentWindow().close()
           }
         }, 0)
       }
