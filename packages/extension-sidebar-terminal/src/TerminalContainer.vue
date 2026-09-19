@@ -532,7 +532,6 @@ async function initTerminal (title = 'Shell', initialCommand = '') {
   try {
     refXterm.init({
       cwd: workDir,
-      fontSize: 13,
       env,
       onDisconnect () {
         cleanupTab(tab.id)
