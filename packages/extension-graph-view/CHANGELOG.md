@@ -1,3 +1,12 @@
+## [1.3.3](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.3.2...extension-graph-view-1.3.3) (2026-09-19)
+
+
+### Bug Fixes
+
+* **graph-view:** align floating panel with workbench content ([a574de1](https://github.com/purocean/yank-note-extension/commit/a574de122ed4b0de6539ef5716df64c299727e00))
+
+
+
 ## [1.3.2](https://github.com/purocean/yank-note-extension/compare/extension-graph-view-1.3.1...extension-graph-view-1.3.2) (2025-08-04)
 
 
