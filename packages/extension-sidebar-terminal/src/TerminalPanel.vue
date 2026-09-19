@@ -5,7 +5,7 @@
     v-auto-z-index="{ layer: 'popup' }"
     @click.stop
     :style="{
-      top: ctx.env.isElectron ? '66px' : '36px',
+      top: `calc(var(--g-workbench-content-top, ${ctx.env.isElectron ? '60px' : '30px'}) + 6px)`,
       right: '20px',
     }"
   >

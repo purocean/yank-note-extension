@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/purocean/yank-note-extension/compare/extension-sidebar-terminal-1.2.0...extension-sidebar-terminal-1.2.1) (2026-09-19)
+
+
+### Bug Fixes
+
+* **sidebar-terminal:** use configured terminal font size ([375345d](https://github.com/purocean/yank-note-extension/commit/375345d49d6dd1c2b1acffa2214869aa99ae6b09))
+
+
+
 # [1.2.0](https://github.com/purocean/yank-note-extension/compare/extension-sidebar-terminal-1.1.1...extension-sidebar-terminal-1.2.0) (2026-09-13)
 
 
