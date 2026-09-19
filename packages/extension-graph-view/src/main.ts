@@ -23,7 +23,7 @@ registerPlugin({
       handler: () => {
         ctx.ui.useFixedFloat().show({
           right: '20px',
-          top: ctx.env.isElectron ? '66px' : '36px',
+          top: `calc(var(--g-workbench-content-top, ${ctx.env.isElectron ? '60px' : '30px'}) + 6px)`,
           component: GraphView,
           closeOnBlur: false,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
