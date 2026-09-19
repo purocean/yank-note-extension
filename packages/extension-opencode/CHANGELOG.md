@@ -1,3 +1,12 @@
+## [1.2.5](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.2.4...extension-opencode-1.2.5) (2026-09-19)
+
+
+### Bug Fixes
+
+* **opencode:** align floating panel with workbench content ([ce488ac](https://github.com/purocean/yank-note-extension/commit/ce488ac5db0c869b3199a332ba1676c4416b7c3d))
+
+
+
 ## [1.2.4](https://github.com/purocean/yank-note-extension/compare/extension-opencode-1.2.2...extension-opencode-1.2.4) (2026-05-01)
 
 
